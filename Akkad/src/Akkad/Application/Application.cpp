@@ -1,11 +1,12 @@
 #include "Application.h"
 #include <iostream>
 #ifdef AK_PLATFORM_WINDOWS
-	#include "Akkad/Windows/Win32Window.h"
+	#include "Akkad/Platforms/Desktop/Windows/Win32Window.h"
 #endif
 
 #include "Akkad/Input/KeyEvent.h"
 #include "Akkad/Input/KeyCodes.h"
+#include "Akkad/Graphics/RenderPlatform.h"
 namespace Akkad {
 	Application Application::s_Instance;
 	void Application::Init()
@@ -18,6 +19,9 @@ namespace Akkad {
 			window->SetEventCallback(event_cb);
 
 			m_Window = window;
+
+			Graphics::RenderPlatform* platform = Graphics::RenderPlatform::Create(Graphics::RenderAPI::OPENGL);
+			platform->Init();
 			
 		#endif 
 

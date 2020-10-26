@@ -9,10 +9,11 @@ namespace Akkad {
 		void Init();
 		void Run();
 		void OnEvent(Event& e);
+
+		Window* m_Window = nullptr;
 	private:
 		Application() {}
 		~Application();
 		static Application s_Instance;
-		Window* m_Window = nullptr;
 	};
 }

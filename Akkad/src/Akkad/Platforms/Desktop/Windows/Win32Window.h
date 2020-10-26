@@ -11,10 +11,17 @@ namespace Akkad {
 		virtual void OnUpdate() override;
 		virtual bool IsCloseRequested() override;
 		virtual void SetEventCallback(std::function<void(Event&)> func) override { m_EventCallback = func; };
+		virtual void CreateContext(Graphics::RenderAPI api) override;
+		virtual unsigned int GetWidth() { return m_Width; };
+		virtual unsigned int GetHeight() { return m_Height; };
 
 		std::function<void(Event&)> m_EventCallback;
 	private:
 		bool m_IsClosed = true;
+		HWND m_WindowHandle;
+		HDC m_DeviceContext = nullptr;
+		unsigned int m_Width;
+		unsigned int m_Height;
 	};
 
 }

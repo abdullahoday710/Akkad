@@ -5,9 +5,15 @@
 #include "Akkad/Input/KeyEvent.h"
 #include "WindowsKeyCodes.h"
 
+// compile imgui for windows
+#include "backends/imgui_impl_win32.cpp"
+
 namespace Akkad {
+
     LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
+        ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam);
+
         Win32Window* window = (Win32Window*)GetProp(hwnd, L"windowclass");
         
         switch (uMsg)
@@ -24,12 +30,18 @@ namespace Akkad {
             
             return 0;
         }
-        case WM_SIZE:
-            switch (wParam)
-            {
-            case SIZE_MINIMIZED:
-                return 0;
-            }
+        case WM_SIZING:
+        {
+            RECT* rect;
+            rect = (RECT*)lParam;
+
+            unsigned int width = rect->right - rect->left;
+            unsigned int height = rect->bottom - rect->top;
+
+            WindowResizeEvent e(width, height);
+            window->m_EventCallback(e);
+            return 0;
+        }
         }
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }

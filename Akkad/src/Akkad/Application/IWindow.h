@@ -20,5 +20,24 @@ namespace Akkad {
 		virtual void CreateContext(Graphics::RenderAPI api) = 0;
 		virtual unsigned int GetWidth() = 0;
 		virtual unsigned int GetHeight() = 0;
+		virtual void* GetNativeWindow() = 0;
+	};
+
+	class WindowResizeEvent : public Event {
+	public:
+		WindowResizeEvent(unsigned int width, unsigned int height) {
+			m_Type = EventType::WindowEvent;
+			m_Width = width;
+			m_Height = height;
+		}
+		unsigned int m_Width;
+		unsigned int m_Height;
+
+		virtual EventType GetType() override { return m_Type; };
+		EVENT_TYPE(WindowEvent);
+
+	private:
+		EventType m_Type;
+
 	};
 }

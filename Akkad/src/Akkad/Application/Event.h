@@ -3,7 +3,7 @@
 namespace Akkad {
 
 	enum class EventType {
-		KeyEvent
+		KeyEvent, WindowEvent
 	};
 
 #define EVENT_TYPE(type) static EventType GetStaticType() {return EventType::type;}
@@ -13,6 +13,8 @@ namespace Akkad {
 		virtual EventType GetType() = 0;
 		bool Handled = false;
 	};
+
+	typedef std::function<void(Event&)> EventFN;
 
 	class EventDispatcher
 	{

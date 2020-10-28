@@ -14,7 +14,7 @@ namespace Akkad {
 		virtual void CreateContext(Graphics::RenderAPI api) override;
 		virtual unsigned int GetWidth() { return m_Width; };
 		virtual unsigned int GetHeight() { return m_Height; };
-
+		virtual void* GetNativeWindow() override { return m_WindowHandle; };
 		std::function<void(Event&)> m_EventCallback;
 	private:
 		bool m_IsClosed = true;

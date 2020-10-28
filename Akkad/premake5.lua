@@ -16,13 +16,15 @@ project "Akkad"
     includedirs
 	{
         "src",
-        "%{IncludeDir.Glad}"
+        "%{IncludeDir.Glad}",
+        "%{IncludeDir.imgui}"
     }
     
     links
 	{
         "opengl32.lib",
         "Glad",
+        "imgui"
     }
     
     filter "system:windows"

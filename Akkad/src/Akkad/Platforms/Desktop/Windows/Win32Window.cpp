@@ -1,6 +1,8 @@
 #include "Win32Window.h"
 #include "Win32WindowProcedure.h"
 #include "Win32Helpers.h"
+#include "Akkad/Graphics/ImGuiHandler.h"
+#include "imgui.h"
 
 namespace Akkad {
     int Win32Window::Init(WindowSettings settings)
@@ -39,6 +41,7 @@ namespace Akkad {
         m_IsClosed = false;
         m_WindowHandle = hwnd;
         SetProp(hwnd, L"windowclass", this);
+        
         return 0;
     }
 
@@ -52,7 +55,6 @@ namespace Akkad {
         if (msg.message == WM_QUIT) {
             m_IsClosed = true;
         }
-
         SwapBuffers(m_DeviceContext);
     }
 
@@ -63,6 +65,13 @@ namespace Akkad {
 
     void Win32Window::CreateContext(Graphics::RenderAPI api)
     {
+        ImGui::CreateContext();
+
+        Graphics::ImGuiWindowHandler::Init();
+
+        auto& io = ImGui::GetIO();
+        io.DisplaySize = ImVec2(m_Width, m_Height);
+
         PIXELFORMATDESCRIPTOR pfd = {
             sizeof(PIXELFORMATDESCRIPTOR),  //  size of this pfd  
             1,                     // version number  

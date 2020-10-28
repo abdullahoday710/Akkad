@@ -14,8 +14,10 @@ workspace "Akkad"
     outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
     IncludeDir = {}
     IncludeDir["Glad"] = "%{wks.location}/3rdparty/glad/include"
+    IncludeDir["imgui"] = "%{wks.location}/3rdparty/imgui"
     group "Dependencies"
       include "3rdparty/glad"
+      include "3rdparty/imgui"
     group ""
     
     include "Akkad"

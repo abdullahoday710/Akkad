@@ -31,6 +31,7 @@ namespace Akkad {
 			Graphics::ImGuiHandler* imgui_handler = Graphics::ImGuiHandler::create(Graphics::RenderAPI::OPENGL);
 			imgui_handler->Init();
 			m_ImguiHandler = imgui_handler;
+			m_platform = platform;
 			
 		#endif 
 
@@ -41,16 +42,14 @@ namespace Akkad {
 		while (!m_Window->IsCloseRequested())
 		{
 
+			m_platform->Clear();
 			#ifdef AK_DEBUG
 				m_ImguiHandler->NewFrame();
-				Graphics::ImGuiWindowHandler::NewFrame();
-				ImGui::NewFrame();
 
-				ImGui::Render();
 				m_ImguiHandler->Render();
 			#endif
 			
-			
+			m_Window->SwapWindowBuffers();
 			m_Window->OnUpdate();
 		}
 	}

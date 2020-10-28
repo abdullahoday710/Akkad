@@ -12,10 +12,13 @@ namespace Akkad {
 		void GLImGuiHandler::NewFrame()
 		{
 			ImGui_ImplOpenGL3_NewFrame();
+			ImGuiWindowHandler::NewFrame();
+			ImGui::NewFrame();
 		}
 
 		void GLImGuiHandler::Render()
 		{
+			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		}
 

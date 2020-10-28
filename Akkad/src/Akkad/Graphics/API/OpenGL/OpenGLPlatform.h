@@ -8,6 +8,7 @@ namespace Akkad {
 		public:
 			virtual RenderAPI GetRenderAPI() override { return m_API; }
 			virtual void Init() override;
+			virtual void Clear() override;
 		private:
 			RenderAPI m_API = RenderAPI::OPENGL;
 		};

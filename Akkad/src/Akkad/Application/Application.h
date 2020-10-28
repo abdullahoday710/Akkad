@@ -19,5 +19,6 @@ namespace Akkad {
 
 		bool OnWindowResize(WindowResizeEvent& e);
 		Graphics::ImGuiHandler* m_ImguiHandler;
+		Graphics::RenderPlatform* m_platform;
 	};
 }

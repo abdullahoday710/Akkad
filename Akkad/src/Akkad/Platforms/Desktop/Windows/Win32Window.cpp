@@ -55,7 +55,7 @@ namespace Akkad {
         if (msg.message == WM_QUIT) {
             m_IsClosed = true;
         }
-        SwapBuffers(m_DeviceContext);
+        
     }
 
     bool Win32Window::IsCloseRequested()
@@ -105,6 +105,11 @@ namespace Akkad {
             wglMakeCurrent(m_DeviceContext, rc);
             break;
         }
+    }
+
+    void Win32Window::SwapWindowBuffers()
+    {
+        SwapBuffers(m_DeviceContext);
     }
 
 }

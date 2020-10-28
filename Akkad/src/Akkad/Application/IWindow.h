@@ -21,6 +21,7 @@ namespace Akkad {
 		virtual unsigned int GetWidth() = 0;
 		virtual unsigned int GetHeight() = 0;
 		virtual void* GetNativeWindow() = 0;
+		virtual void SwapWindowBuffers() = 0;
 	};
 
 	class WindowResizeEvent : public Event {

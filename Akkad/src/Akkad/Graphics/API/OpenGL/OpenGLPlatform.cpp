@@ -11,5 +11,9 @@ namespace Akkad {
 			gladLoadGL();
 			glViewport(0, 0, window->GetWidth(), window->GetHeight());
 		}
+		void OpenGLPlatform::Clear()
+		{
+			glClear(GL_COLOR_BUFFER_BIT);
+		}
 	}
 }

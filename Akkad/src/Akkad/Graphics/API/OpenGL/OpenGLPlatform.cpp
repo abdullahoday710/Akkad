@@ -6,7 +6,7 @@ namespace Akkad {
 	namespace Graphics {
 		void OpenGLPlatform::Init()
 		{
-			auto window = Application::GetInstance().m_Window;
+			auto window = Application::GetInstance().GetWindow();
 			window->CreateContext(m_API);
 			gladLoadGL();
 			glViewport(0, 0, window->GetWidth(), window->GetHeight());

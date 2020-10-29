@@ -37,6 +37,32 @@ namespace Akkad {
             return 0;
         }
 
+        // window pixel format
+        PIXELFORMATDESCRIPTOR pfd = {
+            sizeof(PIXELFORMATDESCRIPTOR),  //  size of this pfd  
+            1,                     // version number  
+            PFD_DRAW_TO_WINDOW |   // support window  
+            PFD_SUPPORT_OPENGL |   // support OpenGL  
+            PFD_DOUBLEBUFFER,      // double buffered  
+            PFD_TYPE_RGBA,         // RGBA type  
+            24,                    // 24-bit color depth  
+            0, 0, 0, 0, 0, 0,      // color bits ignored  
+            0,                     // no alpha buffer  
+            0,                     // shift bit ignored  
+            0,                     // no accumulation buffer  
+            0, 0, 0, 0,            // accum bits ignored  
+            32,                    // 32-bit z-buffer      
+            0,                     // no stencil buffer  
+            0,                     // no auxiliary buffer  
+            PFD_MAIN_PLANE,        // main layer  
+            0,                     // reserved  
+            0, 0, 0                // layer masks ignored  
+        };
+
+        m_DeviceContext = GetDC(hwnd);
+        int pf = ChoosePixelFormat(m_DeviceContext, &pfd);
+        SetPixelFormat(m_DeviceContext, pf, &pfd);
+
         ShowWindow(hwnd, 1);
         m_IsClosed = false;
         m_WindowHandle = hwnd;
@@ -65,38 +91,6 @@ namespace Akkad {
 
     void Win32Window::CreateContext(Graphics::RenderAPI api)
     {
-        ImGui::CreateContext();
-
-        Graphics::ImGuiWindowHandler::Init();
-
-        auto& io = ImGui::GetIO();
-        io.DisplaySize = ImVec2(m_Width, m_Height);
-
-        PIXELFORMATDESCRIPTOR pfd = {
-            sizeof(PIXELFORMATDESCRIPTOR),  //  size of this pfd  
-            1,                     // version number  
-            PFD_DRAW_TO_WINDOW |   // support window  
-            PFD_SUPPORT_OPENGL |   // support OpenGL  
-            PFD_DOUBLEBUFFER,      // double buffered  
-            PFD_TYPE_RGBA,         // RGBA type  
-            24,                    // 24-bit color depth  
-            0, 0, 0, 0, 0, 0,      // color bits ignored  
-            0,                     // no alpha buffer  
-            0,                     // shift bit ignored  
-            0,                     // no accumulation buffer  
-            0, 0, 0, 0,            // accum bits ignored  
-            32,                    // 32-bit z-buffer      
-            0,                     // no stencil buffer  
-            0,                     // no auxiliary buffer  
-            PFD_MAIN_PLANE,        // main layer  
-            0,                     // reserved  
-            0, 0, 0                // layer masks ignored  
-        };
-
-        m_DeviceContext = GetDC(m_WindowHandle);
-        int pf = ChoosePixelFormat(m_DeviceContext, &pfd);
-        SetPixelFormat(m_DeviceContext, pf, &pfd);
-
         switch (api)
         {
         case Graphics::RenderAPI::OPENGL:

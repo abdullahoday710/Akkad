@@ -35,7 +35,7 @@ project "Akkad"
     }
 
 filter "configurations:Debug"
-    defines "AK_DEBUG"
+    defines {"AK_DEBUG", "AK_ENABLE_IMGUI"} 
     runtime "Debug"
     symbols "on"
 

@@ -10,7 +10,7 @@ namespace Akkad {
 	namespace Graphics {
 		#ifdef AK_PLATFORM_WINDOWS
 			void Graphics::ImGuiWindowHandler::Init() {
-				ImGui_ImplWin32_Init(Application::GetInstance().m_Window->GetNativeWindow());
+				ImGui_ImplWin32_Init(Application::GetInstance().GetWindow()->GetNativeWindow());
 			}
 
 			void Graphics::ImGuiWindowHandler::ShutDown() {

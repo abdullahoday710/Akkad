@@ -11,12 +11,13 @@ namespace Akkad {
 		void Init();
 		void Run();
 		void OnEvent(Event& e);
-		Window* m_Window = nullptr;
+		Window* GetWindow() { return m_Window; }
+		
 	private:
 		Application() {}
 		~Application();
 		static Application s_Instance;
-
+		Window* m_Window = nullptr;
 		bool OnWindowResize(WindowResizeEvent& e);
 		Graphics::ImGuiHandler* m_ImguiHandler;
 		Graphics::RenderPlatform* m_platform;

@@ -28,9 +28,14 @@ namespace Akkad {
 
 			platform->Init();
 
-			Graphics::ImGuiHandler* imgui_handler = Graphics::ImGuiHandler::create(Graphics::RenderAPI::OPENGL);
-			imgui_handler->Init();
-			m_ImguiHandler = imgui_handler;
+			#ifdef AK_ENABLE_IMGUI
+				Graphics::ImGuiHandler* imgui_handler = Graphics::ImGuiHandler::create(Graphics::RenderAPI::OPENGL);
+				imgui_handler->Init();
+				m_ImguiHandler = imgui_handler;
+			#endif // AK_ENABLE_IMGUI
+
+			
+
 			m_platform = platform;
 			
 		#endif 
@@ -43,7 +48,7 @@ namespace Akkad {
 		{
 
 			m_platform->Clear();
-			#ifdef AK_DEBUG
+			#ifdef AK_ENABLE_IMGUI
 				m_ImguiHandler->NewFrame();
 
 				m_ImguiHandler->Render();

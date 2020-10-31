@@ -3,12 +3,12 @@
 
 namespace Akkad {
 	namespace Graphics {
-		RenderPlatform* RenderPlatform::Create(RenderAPI api)
+		SharedPtr<RenderPlatform> RenderPlatform::Create(RenderAPI api)
 		{
 			switch (api)
 			{
 			case RenderAPI::OPENGL:
-				return new OpenGLPlatform();
+				return CreateSharedPtr<OpenGLPlatform>();
 			default:
 				break;
 			}

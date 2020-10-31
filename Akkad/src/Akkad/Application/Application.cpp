@@ -24,12 +24,12 @@ namespace Akkad {
 
 			m_Window = window;
 
-			Graphics::RenderPlatform* platform = Graphics::RenderPlatform::Create(Graphics::RenderAPI::OPENGL);
+			SharedPtr<RenderPlatform> platform = RenderPlatform::Create(RenderAPI::OPENGL);
 
 			platform->Init();
 
 			#ifdef AK_ENABLE_IMGUI
-				Graphics::ImGuiHandler* imgui_handler = Graphics::ImGuiHandler::create(Graphics::RenderAPI::OPENGL);
+				SharedPtr<ImGuiHandler> imgui_handler = ImGuiHandler::create(RenderAPI::OPENGL);
 				imgui_handler->Init();
 				m_ImguiHandler = imgui_handler;
 			#endif // AK_ENABLE_IMGUI

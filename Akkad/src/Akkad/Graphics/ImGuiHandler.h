@@ -1,4 +1,5 @@
 #pragma once
+#include "Akkad/core.h"
 #include "RenderPlatform.h"
 namespace Akkad {
 	namespace Graphics {
@@ -10,7 +11,7 @@ namespace Akkad {
 			virtual void Render() = 0;
 			virtual void ShutDown() = 0;
 
-			static ImGuiHandler* create(RenderAPI api);
+			static SharedPtr<ImGuiHandler> create(RenderAPI api);
 		};
 
 		class ImGuiWindowHandler {

@@ -4,6 +4,7 @@
 #include "Akkad/Graphics/ImGuiHandler.h"
 
 namespace Akkad {
+	using namespace Graphics;
 	class Application {
 	public:
 		static Application& GetInstance() { return s_Instance; }
@@ -19,7 +20,7 @@ namespace Akkad {
 		static Application s_Instance;
 		Window* m_Window = nullptr;
 		bool OnWindowResize(WindowResizeEvent& e);
-		Graphics::ImGuiHandler* m_ImguiHandler;
-		Graphics::RenderPlatform* m_platform;
+		SharedPtr<ImGuiHandler> m_ImguiHandler;
+		SharedPtr<RenderPlatform> m_platform;
 	};
 }

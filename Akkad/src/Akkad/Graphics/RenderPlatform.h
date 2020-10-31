@@ -1,4 +1,6 @@
 #pragma once
+#include "Akkad/core.h"
+
 namespace Akkad {
 	namespace Graphics {
 
@@ -11,7 +13,7 @@ namespace Akkad {
 			virtual RenderAPI GetRenderAPI() = 0;
 			virtual void Init() = 0;
 			virtual void Clear() = 0;
-			static RenderPlatform* Create(RenderAPI api);
+			static SharedPtr<RenderPlatform> Create(RenderAPI api);
 		};
 	}
 }

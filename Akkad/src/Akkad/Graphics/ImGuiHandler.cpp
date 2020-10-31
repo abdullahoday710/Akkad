@@ -3,12 +3,12 @@
 namespace Akkad {
     namespace Graphics {
 
-        ImGuiHandler* ImGuiHandler::create(RenderAPI api)
+        SharedPtr<ImGuiHandler> ImGuiHandler::create(RenderAPI api)
         {
             switch (api)
             {
             case RenderAPI::OPENGL:
-                return new GLImGuiHandler();
+                return CreateSharedPtr<GLImGuiHandler>();
             }
         }
     }

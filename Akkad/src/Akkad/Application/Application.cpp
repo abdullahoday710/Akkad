@@ -6,7 +6,6 @@
 
 #include "Akkad/Input/KeyEvent.h"
 #include "Akkad/Input/KeyCodes.h"
-#include "Akkad/Graphics/RenderPlatform.h"
 #include "imgui.h"
 
 namespace Akkad {
@@ -17,26 +16,22 @@ namespace Akkad {
 		#ifdef AK_PLATFORM_WINDOWS
 			Win32Window* window = new Win32Window();
 			EventFN event_cb = std::bind(&Application::OnEvent, this, std::placeholders::_1);
+
 			window->SetEventCallback(event_cb);
-
 			window->Init({"engine", 800, 600});
-
-
 			m_Window = window;
 
 			SharedPtr<RenderPlatform> platform = RenderPlatform::Create(RenderAPI::OPENGL);
-
 			platform->Init();
+			m_platform = platform;
+
+			m_RenderCommand = RenderCommand::Create(RenderAPI::OPENGL);
 
 			#ifdef AK_ENABLE_IMGUI
 				SharedPtr<ImGuiHandler> imgui_handler = ImGuiHandler::create(RenderAPI::OPENGL);
 				imgui_handler->Init();
 				m_ImguiHandler = imgui_handler;
 			#endif // AK_ENABLE_IMGUI
-
-			
-
-			m_platform = platform;
 			
 		#endif 
 
@@ -46,8 +41,7 @@ namespace Akkad {
 	{
 		while (!m_Window->IsCloseRequested())
 		{
-
-			m_platform->Clear();
+			m_RenderCommand->ClearColorBuffer();
 			#ifdef AK_ENABLE_IMGUI
 				m_ImguiHandler->NewFrame();
 

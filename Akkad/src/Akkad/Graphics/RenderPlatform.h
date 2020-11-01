@@ -12,7 +12,6 @@ namespace Akkad {
 		public:
 			virtual RenderAPI GetRenderAPI() = 0;
 			virtual void Init() = 0;
-			virtual void Clear() = 0;
 			static SharedPtr<RenderPlatform> Create(RenderAPI api);
 		};
 	}

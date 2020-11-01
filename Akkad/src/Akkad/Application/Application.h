@@ -2,6 +2,7 @@
 #include "IWindow.h"
 #include "Event.h"
 #include "Akkad/Graphics/ImGuiHandler.h"
+#include "Akkad/Graphics/RenderCommand.h"
 
 namespace Akkad {
 	using namespace Graphics;
@@ -22,5 +23,8 @@ namespace Akkad {
 		bool OnWindowResize(WindowResizeEvent& e);
 		SharedPtr<ImGuiHandler> m_ImguiHandler;
 		SharedPtr<RenderPlatform> m_platform;
+
+		//temporary code
+		SharedPtr<RenderCommand> m_RenderCommand;
 	};
 }

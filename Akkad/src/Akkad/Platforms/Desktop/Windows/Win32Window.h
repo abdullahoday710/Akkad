@@ -19,10 +19,10 @@ namespace Akkad {
 		std::function<void(Event&)> m_EventCallback;
 	private:
 		bool m_IsClosed = true;
-		HWND m_WindowHandle;
+		HWND m_WindowHandle = nullptr;
 		HDC m_DeviceContext = nullptr;
-		unsigned int m_Width;
-		unsigned int m_Height;
+		unsigned int m_Width = 0;
+		unsigned int m_Height = 0;
 	};
 
 }

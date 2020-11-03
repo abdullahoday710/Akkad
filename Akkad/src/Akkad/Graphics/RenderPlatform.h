@@ -1,5 +1,6 @@
 #pragma once
 #include "Akkad/core.h"
+#include "Buffer.h"
 
 namespace Akkad {
 	namespace Graphics {
@@ -12,6 +13,8 @@ namespace Akkad {
 		public:
 			virtual RenderAPI GetRenderAPI() = 0;
 			virtual void Init() = 0;
+			virtual SharedPtr<VertexBuffer> CreateVertexBuffer() = 0;
+
 			static SharedPtr<RenderPlatform> Create(RenderAPI api);
 		};
 	}

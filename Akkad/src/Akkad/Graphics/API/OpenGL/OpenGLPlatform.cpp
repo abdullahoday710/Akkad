@@ -1,5 +1,6 @@
 #include "OpenGLPlatform.h"
 #include "Akkad/Application/Application.h"
+#include "GLBuffer.h"
 #include <glad/glad.h>
 
 namespace Akkad {
@@ -10,6 +11,11 @@ namespace Akkad {
 			window->CreateContext(m_API);
 			gladLoadGL();
 			glViewport(0, 0, window->GetWidth(), window->GetHeight());
+		}
+
+		SharedPtr<VertexBuffer> OpenGLPlatform::CreateVertexBuffer()
+		{
+			return CreateSharedPtr<GLVertexBuffer>();
 		}
 	}
 }

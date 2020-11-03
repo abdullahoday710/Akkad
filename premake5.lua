@@ -15,6 +15,7 @@ workspace "Akkad"
     IncludeDir = {}
     IncludeDir["Glad"] = "%{wks.location}/3rdparty/glad/include"
     IncludeDir["imgui"] = "%{wks.location}/3rdparty/imgui"
+    IncludeDir["glm"] = "%{wks.location}/3rdparty/glm/include"
     group "Dependencies"
       include "3rdparty/glad"
       include "3rdparty/imgui"

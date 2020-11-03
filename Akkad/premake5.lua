@@ -17,7 +17,8 @@ project "Akkad"
 	{
         "src",
         "%{IncludeDir.Glad}",
-        "%{IncludeDir.imgui}"
+        "%{IncludeDir.imgui}",
+        "%{IncludeDir.glm}",
     }
     
     links

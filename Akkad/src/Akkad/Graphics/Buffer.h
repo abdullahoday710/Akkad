@@ -41,6 +41,13 @@ namespace Akkad {
 			virtual void SetLayout(BufferLayout layout) = 0;
 			virtual BufferLayout& GetLayout() = 0;
 		};
+
+		class IndexBuffer {
+		public:
+			virtual void Bind() = 0;
+			virtual void Unbind() = 0;
+			virtual void SetData(const void* data, unsigned int size) = 0;
+		};
 	}
 }
 

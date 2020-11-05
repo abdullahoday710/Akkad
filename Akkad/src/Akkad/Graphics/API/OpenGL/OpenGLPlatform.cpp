@@ -17,5 +17,9 @@ namespace Akkad {
 		{
 			return CreateSharedPtr<GLVertexBuffer>();
 		}
+		SharedPtr<IndexBuffer> OpenGLPlatform::CreateIndexBuffer()
+		{
+			return CreateSharedPtr<GLIndexBuffer>();
+		}
 	}
 }

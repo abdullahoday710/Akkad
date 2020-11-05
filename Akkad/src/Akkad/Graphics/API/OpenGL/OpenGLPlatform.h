@@ -9,6 +9,7 @@ namespace Akkad {
 			virtual RenderAPI GetRenderAPI() override { return m_API; }
 			virtual void Init() override;
 			virtual SharedPtr<VertexBuffer> CreateVertexBuffer() override;
+			virtual SharedPtr<IndexBuffer> CreateIndexBuffer() override;
 
 		private:
 			RenderAPI m_API = RenderAPI::OPENGL;

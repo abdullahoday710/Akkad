@@ -4,7 +4,7 @@
 namespace Akkad {
 	namespace Graphics {
 
-		void GLRenderCommand::ClearColorBuffer()
+		void GLRenderCommand::Clear()
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
 		}

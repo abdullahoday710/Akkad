@@ -7,7 +7,7 @@ namespace Akkad {
 		class GLRenderCommand : public RenderCommand
 		{
 		public:
-			virtual void ClearColorBuffer() override;
+			virtual void Clear() override;
 			virtual void SetClearColor(float r, float g, float b) override;
 		};
 	}

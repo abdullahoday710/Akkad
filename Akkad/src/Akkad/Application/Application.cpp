@@ -41,7 +41,7 @@ namespace Akkad {
 	{
 		while (!m_Window->IsCloseRequested())
 		{
-			m_RenderCommand->ClearColorBuffer();
+			m_RenderCommand->Clear();
 			#ifdef AK_ENABLE_IMGUI
 				m_ImguiHandler->NewFrame();
 

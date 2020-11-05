@@ -13,6 +13,11 @@ namespace Akkad {
 			glViewport(0, 0, window->GetWidth(), window->GetHeight());
 		}
 
+		void OpenGLPlatform::OnWindowResize(unsigned int width, unsigned int height)
+		{
+			glViewport(0, 0, width, height);
+		}
+
 		SharedPtr<VertexBuffer> OpenGLPlatform::CreateVertexBuffer()
 		{
 			return CreateSharedPtr<GLVertexBuffer>();

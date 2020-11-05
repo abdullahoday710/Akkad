@@ -8,6 +8,8 @@ namespace Akkad {
 		public:
 			virtual RenderAPI GetRenderAPI() override { return m_API; }
 			virtual void Init() override;
+			virtual void OnWindowResize(unsigned int width, unsigned int height) override;
+
 			virtual SharedPtr<VertexBuffer> CreateVertexBuffer() override;
 			virtual SharedPtr<IndexBuffer> CreateIndexBuffer() override;
 

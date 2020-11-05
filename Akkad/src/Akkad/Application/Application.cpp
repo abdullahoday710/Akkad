@@ -65,6 +65,7 @@ namespace Akkad {
 	}
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		m_platform->OnWindowResize(e.m_Width, e.m_Height);
 		return true;
 	}
 }

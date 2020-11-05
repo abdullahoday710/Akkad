@@ -13,6 +13,7 @@ namespace Akkad {
 		public:
 			virtual RenderAPI GetRenderAPI() = 0;
 			virtual void Init() = 0;
+			virtual void OnWindowResize(unsigned int width, unsigned int height) = 0;
 
 			virtual SharedPtr<VertexBuffer> CreateVertexBuffer() = 0;
 			virtual SharedPtr<IndexBuffer> CreateIndexBuffer() = 0;

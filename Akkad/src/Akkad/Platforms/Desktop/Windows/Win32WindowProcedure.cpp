@@ -12,7 +12,9 @@ namespace Akkad {
 
     LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-        ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam);
+        #ifdef AK_ENABLE_IMGUI
+            ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam);
+        #endif
 
         Win32Window* window = (Win32Window*)GetProp(hwnd, L"windowclass");
         

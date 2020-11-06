@@ -1,6 +1,7 @@
 #include "OpenGLPlatform.h"
 #include "Akkad/Application/Application.h"
 #include "GLBuffer.h"
+#include "GLShader.h"
 #include <glad/glad.h>
 
 namespace Akkad {
@@ -22,9 +23,15 @@ namespace Akkad {
 		{
 			return CreateSharedPtr<GLVertexBuffer>();
 		}
+
 		SharedPtr<IndexBuffer> OpenGLPlatform::CreateIndexBuffer()
 		{
 			return CreateSharedPtr<GLIndexBuffer>();
+		}
+
+		SharedPtr<Shader> OpenGLPlatform::CreateShader(const char* path)
+		{
+			return CreateSharedPtr<GLShader>(path);
 		}
 	}
 }

@@ -7,7 +7,9 @@
 #include "Akkad/Input/KeyEvent.h"
 #include "Akkad/Input/KeyCodes.h"
 #include "imgui.h"
-
+#include "Akkad/Graphics/Buffer.h"
+#include "Akkad/Graphics/Shader.h"
+#include "glad/glad.h"
 namespace Akkad {
 	Application Application::s_Instance;
 
@@ -39,6 +41,32 @@ namespace Akkad {
 
 	void Application::Run()
 	{
+		auto shader = m_platform->CreateShader("res/shaders/test.glsl");
+		float vertices[] = {
+	 0.5f,  0.5f, 0.0f,  // top right
+	 0.5f, -0.5f, 0.0f,  // bottom right
+	-0.5f, -0.5f, 0.0f,  // bottom left
+	-0.5f,  0.5f, 0.0f   // top left 
+		};
+		unsigned int indices[] = {  // note that we start from 0!
+			0, 1, 3,   // first triangle
+			1, 2, 3    // second triangle
+		};
+		auto vb = m_platform->CreateVertexBuffer();
+		auto ib = m_platform->CreateIndexBuffer();
+
+		BufferLayout layout;
+		layout.Push(ShaderDataType::FLOAT, 3);
+		vb->SetLayout(layout);
+		vb->SetData(vertices, sizeof(vertices));
+
+		ib->SetData(indices, sizeof(indices));
+
+		vb->Bind();
+		ib->Bind();
+
+		shader->Bind();
+
 		while (!m_Window->IsCloseRequested())
 		{
 			m_RenderCommand->Clear();
@@ -47,7 +75,8 @@ namespace Akkad {
 
 				m_ImguiHandler->Render();
 			#endif
-			
+				// temp code
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 			m_Window->SwapWindowBuffers();
 			m_Window->OnUpdate();
 		}

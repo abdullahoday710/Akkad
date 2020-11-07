@@ -2,6 +2,8 @@
 #include "Akkad/Application/Application.h"
 #include "GLBuffer.h"
 #include "GLShader.h"
+#include "GLTexture.h"
+
 #include <glad/glad.h>
 
 namespace Akkad {
@@ -32,6 +34,10 @@ namespace Akkad {
 		SharedPtr<Shader> OpenGLPlatform::CreateShader(const char* path)
 		{
 			return CreateSharedPtr<GLShader>(path);
+		}
+		SharedPtr<Texture> OpenGLPlatform::CreateTexture(const char* path)
+		{
+			return CreateSharedPtr<GLTexture>(path);
 		}
 	}
 }

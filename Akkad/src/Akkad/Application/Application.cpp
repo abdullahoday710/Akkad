@@ -42,12 +42,16 @@ namespace Akkad {
 	void Application::Run()
 	{
 		auto shader = m_platform->CreateShader("res/shaders/test.glsl");
+
+
 		float vertices[] = {
-	 0.5f,  0.5f, 0.0f,  // top right
-	 0.5f, -0.5f, 0.0f,  // bottom right
-	-0.5f, -0.5f, 0.0f,  // bottom left
-	-0.5f,  0.5f, 0.0f   // top left 
+			// positions          // colors           // texture coords
+			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+			-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 		};
+
 		unsigned int indices[] = {  // note that we start from 0!
 			0, 1, 3,   // first triangle
 			1, 2, 3    // second triangle
@@ -57,6 +61,9 @@ namespace Akkad {
 
 		BufferLayout layout;
 		layout.Push(ShaderDataType::FLOAT, 3);
+		layout.Push(ShaderDataType::FLOAT, 3);
+		layout.Push(ShaderDataType::FLOAT, 2);
+
 		vb->SetLayout(layout);
 		vb->SetData(vertices, sizeof(vertices));
 
@@ -65,7 +72,10 @@ namespace Akkad {
 		vb->Bind();
 		ib->Bind();
 
+		auto texture = m_platform->CreateTexture("res/textures/container.jpg");
+
 		shader->Bind();
+		texture->Bind(0);
 
 		while (!m_Window->IsCloseRequested())
 		{

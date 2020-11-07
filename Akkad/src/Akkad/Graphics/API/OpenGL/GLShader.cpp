@@ -1,6 +1,8 @@
 #include "GLShader.h"
-#include "glad/glad.h"
+
+#include <glad/glad.h>
 #include <iostream>
+
 namespace Akkad {
 	namespace Graphics {
 

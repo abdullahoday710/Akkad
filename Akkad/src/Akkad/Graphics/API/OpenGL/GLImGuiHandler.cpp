@@ -1,6 +1,7 @@
 #include "GLImGuiHandler.h"
-#include "glad/glad.h"
-#include "backends/imgui_impl_opengl3.cpp"
+#include <glad/glad.h>
+#include <backends/imgui_impl_opengl3.cpp>
+
 #include "Akkad/Application/Application.h"
 
 namespace Akkad {

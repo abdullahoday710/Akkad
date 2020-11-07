@@ -1,5 +1,5 @@
 #include "GLRenderCommand.h"
-#include "glad/glad.h"
+#include <glad/glad.h>
 
 namespace Akkad {
 	namespace Graphics {

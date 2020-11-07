@@ -13,6 +13,7 @@ namespace Akkad {
 			virtual SharedPtr<VertexBuffer> CreateVertexBuffer() override;
 			virtual SharedPtr<IndexBuffer> CreateIndexBuffer() override;
 			virtual SharedPtr<Shader> CreateShader(const char* path) override;
+			virtual SharedPtr<Texture> CreateTexture(const char* path) override;
 
 		private:
 			RenderAPI m_API = RenderAPI::OPENGL;

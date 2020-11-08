@@ -13,7 +13,7 @@
 namespace Akkad {
 	Application Application::s_Instance;
 
-	void Application::Init()
+	void Application::InitImpl()
 	{
 		#ifdef AK_PLATFORM_WINDOWS
 			Win32Window* window = new Win32Window();
@@ -34,58 +34,35 @@ namespace Akkad {
 				imgui_handler->Init();
 				m_ImguiHandler = imgui_handler;
 			#endif // AK_ENABLE_IMGUI
-			Run();
+
+			for (auto layer : m_Layers)
+			{
+				layer->OnInit();
+			}
 		#endif 
 
 	}
 
-	void Application::Run()
+	void Application::RunImpl()
 	{
-		auto shader = m_platform->CreateShader("res/shaders/test.glsl");
-
-
-		float vertices[] = {
-			// positions             // texture coords
-			 0.5f,  0.5f, 0.0f,      1.0f, 1.0f,   // top right
-			 0.5f, -0.5f, 0.0f,      1.0f, 0.0f,   // bottom right
-			-0.5f, -0.5f, 0.0f,      0.0f, 0.0f,   // bottom left
-			-0.5f,  0.5f, 0.0f,      0.0f, 1.0f    // top left 
-		};
-
-		unsigned int indices[] = {  // note that we start from 0!
-			0, 1, 3,   // first triangle
-			1, 2, 3    // second triangle
-		};
-		auto vb = m_platform->CreateVertexBuffer();
-		auto ib = m_platform->CreateIndexBuffer();
-
-		BufferLayout layout;
-		layout.Push(ShaderDataType::FLOAT, 3);
-		layout.Push(ShaderDataType::FLOAT, 2);
-
-		vb->SetLayout(layout);
-		vb->SetData(vertices, sizeof(vertices));
-
-		ib->SetData(indices, sizeof(indices));
-
-		vb->Bind();
-		ib->Bind();
-
-		auto texture = m_platform->CreateTexture("res/textures/container.jpg");
-
-		shader->Bind();
-		texture->Bind(0);
 
 		while (!m_Window->IsCloseRequested())
 		{
 			m_RenderCommand->Clear();
-			#ifdef AK_ENABLE_IMGUI
-				m_ImguiHandler->NewFrame();
 
-				m_ImguiHandler->Render();
-			#endif
+			for (auto layer : m_Layers)
+			{
+				#ifdef AK_ENABLE_IMGUI
+					m_ImguiHandler->NewFrame();
+					layer->RenderImGui();
+					m_ImguiHandler->Render();
+				#endif
+				layer->OnUpdate();
+
 				// temp code
 				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			}
+
 			m_Window->SwapWindowBuffers();
 			m_Window->OnUpdate();
 		}

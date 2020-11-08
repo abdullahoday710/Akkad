@@ -44,6 +44,19 @@ namespace Akkad {
             window->m_EventCallback(e);
             return 0;
         }
+        case WM_SIZE:
+        {
+            if (window == nullptr)
+            {
+                return 0;
+            }
+            else {
+                UINT width = LOWORD(lParam);
+                UINT height = HIWORD(lParam);
+                WindowResizeEvent e(width, height);
+                window->m_EventCallback(e);
+            }
+        }
         }
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }

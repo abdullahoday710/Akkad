@@ -9,16 +9,17 @@ namespace Akkad {
 	class Application {
 	public:
 		static Application& GetInstance() { return s_Instance; }
-
-		void Init();
-		void Run();
 		void OnEvent(Event& e);
 		Window* GetWindow() { return m_Window; }
 		
 	private:
-		Application() {}
+		Application() { Init(); }
 		~Application();
 		static Application s_Instance;
+
+		void Init();
+		void Run();
+
 		Window* m_Window = nullptr;
 		bool OnWindowResize(WindowResizeEvent& e);
 		SharedPtr<ImGuiHandler> m_ImguiHandler;

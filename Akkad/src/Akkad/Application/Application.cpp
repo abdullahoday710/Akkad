@@ -34,7 +34,7 @@ namespace Akkad {
 				imgui_handler->Init();
 				m_ImguiHandler = imgui_handler;
 			#endif // AK_ENABLE_IMGUI
-			
+			Run();
 		#endif 
 
 	}

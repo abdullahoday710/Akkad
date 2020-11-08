@@ -6,7 +6,4 @@ using namespace Graphics;
 int main()
 {
 	Akkad::Application& app = Akkad::Application::GetInstance();
-
-	app.Init();
-	app.Run();
 }

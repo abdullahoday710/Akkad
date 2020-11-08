@@ -27,7 +27,7 @@ namespace Akkad {
         case WM_KEYDOWN:
         {
             unsigned int code = MapVirtualKeyW(wParam, MAPVK_VK_TO_VSC);
-            KeyPressEvent e(Win32KeyCodeToAkkadKeyCode(code));
+            KeyPressEvent e(keyCodes[code]);
             window->m_EventCallback(e);
             
             return 0;

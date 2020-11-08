@@ -3,6 +3,7 @@
 #include "Win32Helpers.h"
 #include "Akkad/Graphics/ImGuiHandler.h"
 #include "imgui.h"
+#include "WindowsKeyCodes.h"
 
 namespace Akkad {
     int Win32Window::Init(WindowSettings settings)
@@ -22,7 +23,8 @@ namespace Akkad {
         wc.lpszClassName = CLASS_NAME;
 
         RegisterClass(&wc);
-
+        // create the key codes table
+        MakeWindowskeyCodes();
         // Create the window.
         RECT wr = { 0, 0, settings.width, settings.height };
         HWND hwnd = CreateWindow(CLASS_NAME, convertCharArrayToLPCWSTR(settings.title),

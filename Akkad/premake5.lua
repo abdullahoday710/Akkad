@@ -12,6 +12,12 @@ project "Akkad"
 		"src/**.h",
 		"src/**.cpp",
     }
+
+    excludes
+    {
+     "src/Akkad/Platforms/**.h",
+     "src/Akkad/Platforms/**.cpp",
+    }
     
     includedirs
 	{
@@ -30,11 +36,19 @@ project "Akkad"
     }
     
     filter "system:windows"
-    systemversion "latest"
+        systemversion "latest"
+        
+        files
+        {
+            "src/Akkad/Platforms/Desktop/Windows/**.h",
+            "src/Akkad/Platforms/Desktop/Windows/**.cpp",
+        }
 
-    defines
-    {
-    }
+        defines
+        {
+        }
+
+
 
 filter "configurations:Debug"
     defines {"AK_DEBUG", "AK_ENABLE_IMGUI"} 

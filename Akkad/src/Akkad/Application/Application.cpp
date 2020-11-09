@@ -1,14 +1,9 @@
 #include "Application.h"
-#include <iostream>
 #ifdef AK_PLATFORM_WINDOWS
 	#include "Akkad/Platforms/Desktop/Windows/Win32Window.h"
 #endif
 
-#include "Akkad/Input/KeyEvent.h"
-#include "Akkad/Input/KeyCodes.h"
 #include "imgui.h"
-#include "Akkad/Graphics/Buffer.h"
-#include "Akkad/Graphics/Shader.h"
 #include "glad/glad.h"
 namespace Akkad {
 	Application Application::s_Instance;

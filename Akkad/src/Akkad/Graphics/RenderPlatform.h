@@ -3,6 +3,7 @@
 #include "Buffer.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "RenderCommand.h"
 
 namespace Akkad {
 	namespace Graphics {
@@ -14,6 +15,8 @@ namespace Akkad {
 		class RenderPlatform {
 		public:
 			virtual RenderAPI GetRenderAPI() = 0;
+			virtual RenderCommand* GetRenderCommand() = 0;
+
 			virtual void Init() = 0;
 			virtual void OnWindowResize(unsigned int width, unsigned int height) = 0;
 

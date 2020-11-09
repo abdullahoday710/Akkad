@@ -3,17 +3,25 @@
 #include "GLBuffer.h"
 #include "GLShader.h"
 #include "GLTexture.h"
+#include "GLRenderCommand.h"
 
 #include <glad/glad.h>
 
 namespace Akkad {
 	namespace Graphics {
+		OpenGLPlatform::~OpenGLPlatform()
+		{
+			delete m_Command;
+		}
 		void OpenGLPlatform::Init()
 		{
 			auto window = Application::GetInstance().GetWindow();
 			window->CreateContext(m_API);
 			gladLoadGL();
 			glViewport(0, 0, window->GetWidth(), window->GetHeight());
+
+			RenderCommand* command = new GLRenderCommand();
+			m_Command = command;
 		}
 
 		void OpenGLPlatform::OnWindowResize(unsigned int width, unsigned int height)

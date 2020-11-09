@@ -6,7 +6,11 @@ namespace Akkad {
 		class OpenGLPlatform : public RenderPlatform
 		{
 		public:
+			~OpenGLPlatform();
+
 			virtual RenderAPI GetRenderAPI() override { return m_API; }
+			virtual RenderCommand* GetRenderCommand() override { return m_Command; }
+
 			virtual void Init() override;
 			virtual void OnWindowResize(unsigned int width, unsigned int height) override;
 
@@ -17,6 +21,7 @@ namespace Akkad {
 
 		private:
 			RenderAPI m_API = RenderAPI::OPENGL;
+			RenderCommand* m_Command;
 		};
 	}
 }

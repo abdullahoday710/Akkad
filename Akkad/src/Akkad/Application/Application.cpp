@@ -3,8 +3,7 @@
 	#include "Akkad/Platforms/Desktop/Windows/Win32Window.h"
 #endif
 
-#include "imgui.h"
-#include "glad/glad.h"
+#include "Akkad/Graphics/Renderer2D.h"
 
 namespace Akkad {
 	Application Application::s_Instance;
@@ -23,14 +22,12 @@ namespace Akkad {
 			platform->Init();
 			m_platform = platform;
 
-			m_RenderCommand = RenderCommand::Create(RenderAPI::OPENGL);
-
 			#ifdef AK_ENABLE_IMGUI
 				SharedPtr<ImGuiHandler> imgui_handler = ImGuiHandler::create(RenderAPI::OPENGL);
 				imgui_handler->Init();
 				m_ImguiHandler = imgui_handler;
 			#endif // AK_ENABLE_IMGUI
-
+			Renderer2D::Init();
 			for (auto layer : m_Layers)
 			{
 				layer->OnInit();
@@ -44,13 +41,10 @@ namespace Akkad {
 
 		while (!m_Window->IsCloseRequested())
 		{
-			m_RenderCommand->Clear();
+			m_platform->GetRenderCommand()->Clear();
 			
 			for (auto layer : m_Layers)
 			{
-				// temp code
-				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
 				#ifdef AK_ENABLE_IMGUI
 					m_ImguiHandler->NewFrame();
 					layer->RenderImGui();

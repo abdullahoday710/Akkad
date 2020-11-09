@@ -48,7 +48,6 @@ public:
 	};
 	virtual void OnDetach() override {};
 	virtual void OnUpdate() override {
-
 		m_vb->Bind();
 		m_ib->Bind();
 

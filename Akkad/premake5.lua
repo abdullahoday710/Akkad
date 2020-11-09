@@ -26,13 +26,15 @@ project "Akkad"
         "%{IncludeDir.imgui}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb}",
+        "%{IncludeDir.spdlog}"
     }
     
     links
 	{
         "opengl32.lib",
         "Glad",
-        "imgui"
+        "imgui",
+        "spdlog"
     }
     
     filter "system:windows"

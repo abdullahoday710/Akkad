@@ -17,10 +17,12 @@ workspace "Akkad"
     IncludeDir["imgui"] = "%{wks.location}/3rdparty/imgui"
     IncludeDir["glm"] = "%{wks.location}/3rdparty/glm/include"
     IncludeDir["stb"] = "%{wks.location}/3rdparty/stb/include"
+    IncludeDir["spdlog"] = "%{wks.location}/3rdparty/spdlog/include"
 
     group "Dependencies"
       include "3rdparty/glad"
       include "3rdparty/imgui"
+      include "3rdparty/spdlog"
     group ""
     
     include "Akkad"

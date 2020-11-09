@@ -20,5 +20,5 @@ SharedPtr<T> CreateSharedPtr(Args&& ... args) {
         } \
     } while (false)
 #else
-#   define ASSERT(condition, message) do { } while (false)
+#   define AK_ASSERT(condition, message) do { } while (false)
 #endif

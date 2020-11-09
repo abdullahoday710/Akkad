@@ -5,6 +5,7 @@
 
 #include "imgui.h"
 #include "glad/glad.h"
+
 namespace Akkad {
 	Application Application::s_Instance;
 
@@ -44,9 +45,12 @@ namespace Akkad {
 		while (!m_Window->IsCloseRequested())
 		{
 			m_RenderCommand->Clear();
-
+			
 			for (auto layer : m_Layers)
 			{
+				// temp code
+				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
 				#ifdef AK_ENABLE_IMGUI
 					m_ImguiHandler->NewFrame();
 					layer->RenderImGui();
@@ -54,10 +58,7 @@ namespace Akkad {
 				#endif
 				layer->OnUpdate();
 
-				// temp code
-				glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 			}
-
 			m_Window->SwapWindowBuffers();
 			m_Window->OnUpdate();
 		}

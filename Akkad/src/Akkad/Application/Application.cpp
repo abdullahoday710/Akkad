@@ -4,6 +4,7 @@
 #endif
 
 #include "Akkad/Graphics/Renderer2D.h"
+#include "Time.h"
 
 namespace Akkad {
 	Application Application::s_Instance;
@@ -28,6 +29,7 @@ namespace Akkad {
 				m_ImguiHandler = imgui_handler;
 			#endif // AK_ENABLE_IMGUI
 			Renderer2D::Init();
+			Time::Init();
 			for (auto layer : m_Layers)
 			{
 				layer->OnInit();
@@ -53,6 +55,7 @@ namespace Akkad {
 				layer->OnUpdate();
 
 			}
+			Time::CalculateDeltaTime();
 			m_Window->SwapWindowBuffers();
 			m_Window->OnUpdate();
 		}

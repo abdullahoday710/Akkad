@@ -4,6 +4,7 @@
 #include "Akkad/Graphics/ImGuiHandler.h"
 #include "imgui.h"
 #include "WindowsKeyCodes.h"
+#include "wglext.h"
 
 namespace Akkad {
     int Win32Window::Init(WindowSettings settings)
@@ -96,9 +97,18 @@ namespace Akkad {
         switch (api)
         {
         case Graphics::RenderAPI::OPENGL:
+            PFNWGLSWAPINTERVALEXTPROC       wglSwapIntervalEXT = NULL;
+            PFNWGLGETSWAPINTERVALEXTPROC    wglGetSwapIntervalEXT = NULL;
             HGLRC rc;
             rc = wglCreateContext(m_DeviceContext);
             wglMakeCurrent(m_DeviceContext, rc);
+            wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+
+            // this is another function from WGL_EXT_swap_control extension
+            wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)wglGetProcAddress("wglGetSwapIntervalEXT");
+
+            wglSwapIntervalEXT(1);
+            std::cout << wglGetSwapIntervalEXT() << std::endl;
             break;
         }
     }

@@ -16,6 +16,7 @@ namespace Akkad {
 		virtual unsigned int GetHeight() { return m_Height; };
 		virtual void* GetNativeWindow() override { return m_WindowHandle; };
 		virtual void SwapWindowBuffers() override;
+		virtual void SetVsync(bool status) override;
 		std::function<void(Event&)> m_EventCallback;
 	private:
 		bool m_IsClosed = true;
@@ -23,6 +24,8 @@ namespace Akkad {
 		HDC m_DeviceContext = nullptr;
 		unsigned int m_Width = 0;
 		unsigned int m_Height = 0;
+		bool m_VsyncEnabled = true;
+		Graphics::RenderAPI m_RenderAPI;
 	};
 
 }

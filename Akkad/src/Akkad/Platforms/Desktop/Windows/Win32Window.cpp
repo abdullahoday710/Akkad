@@ -97,25 +97,53 @@ namespace Akkad {
         switch (api)
         {
         case Graphics::RenderAPI::OPENGL:
-            PFNWGLSWAPINTERVALEXTPROC       wglSwapIntervalEXT = NULL;
-            PFNWGLGETSWAPINTERVALEXTPROC    wglGetSwapIntervalEXT = NULL;
+        {
             HGLRC rc;
             rc = wglCreateContext(m_DeviceContext);
             wglMakeCurrent(m_DeviceContext, rc);
-            wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
-
-            // this is another function from WGL_EXT_swap_control extension
-            wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)wglGetProcAddress("wglGetSwapIntervalEXT");
-
-            wglSwapIntervalEXT(1);
-            std::cout << wglGetSwapIntervalEXT() << std::endl;
+            m_RenderAPI = api;
             break;
+        }
+
         }
     }
 
     void Win32Window::SwapWindowBuffers()
     {
         SwapBuffers(m_DeviceContext);
+    }
+
+    bool WGLExtensionSupported(const char* extension_name)
+    {
+        // this is pointer to function which returns pointer to string with list of all wgl extensions
+        PFNWGLGETEXTENSIONSSTRINGEXTPROC _wglGetExtensionsStringEXT = NULL;
+
+        _wglGetExtensionsStringEXT = (PFNWGLGETEXTENSIONSSTRINGEXTPROC)wglGetProcAddress("wglGetExtensionsStringEXT");
+
+        if (strstr(_wglGetExtensionsStringEXT(), extension_name) == NULL)
+        {
+            // extension is not supported
+            return false;
+        }
+
+        // extension is supported
+        return true;
+    }
+
+    void Win32Window::SetVsync(bool status)
+    {
+        m_VsyncEnabled = status;
+
+        if (m_RenderAPI == Graphics::RenderAPI::OPENGL)
+        {
+            
+            if (WGLExtensionSupported("WGL_EXT_swap_control"))
+            {
+                PFNWGLSWAPINTERVALEXTPROC       wglSwapIntervalEXT = NULL;
+                wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+                wglSwapIntervalEXT(status);
+            }
+        }
     }
 
 }

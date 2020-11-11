@@ -45,13 +45,16 @@ namespace Akkad {
 		{
 			m_platform->GetRenderCommand()->Clear();
 			
-			for (auto layer : m_Layers)
+			for (std::vector<Layer*>::reverse_iterator it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
 			{
+				auto layer = *it;
+
 				#ifdef AK_ENABLE_IMGUI
 					m_ImguiHandler->NewFrame();
 					layer->RenderImGui();
 					m_ImguiHandler->Render();
 				#endif
+
 				layer->OnUpdate();
 
 			}

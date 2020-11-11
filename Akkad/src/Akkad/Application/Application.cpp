@@ -45,7 +45,7 @@ namespace Akkad {
 		{
 			m_platform->GetRenderCommand()->Clear();
 			
-			for (std::vector<Layer*>::reverse_iterator it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
+			for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
 			{
 				auto layer = *it;
 				layer->OnUpdate();

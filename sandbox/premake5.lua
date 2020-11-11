@@ -13,6 +13,7 @@ project "sandbox"
 	}
 	includedirs {
 		"%{wks.location}/Akkad/src",
+		"%{IncludeDir.imgui}",
 	}
 
 	links {

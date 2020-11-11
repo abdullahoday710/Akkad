@@ -1,5 +1,6 @@
 #include <iostream>
 #include <Akkad/Akkad.h>
+#include <imgui.h>
 
 using namespace Akkad;
 using namespace Graphics;
@@ -24,7 +25,9 @@ public:
 		Renderer2D::DrawQuad(m_Shader, m_Texture);
 	};
 
-	virtual void RenderImGui() override {};
+	virtual void RenderImGui() override {
+		ImGui::Text("test");
+	};
 private:
 	SharedPtr<Shader> m_Shader;
 	SharedPtr<Texture> m_Texture;

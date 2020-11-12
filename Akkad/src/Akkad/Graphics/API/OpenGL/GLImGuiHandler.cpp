@@ -11,10 +11,14 @@ namespace Akkad {
 		{
 			auto window = Application::GetInstance().GetWindow();
 			ImGui::CreateContext();
-			Graphics::ImGuiWindowHandler::Init();
 
 			auto& io = ImGui::GetIO();
 			io.DisplaySize = ImVec2(window->GetWidth(), window->GetHeight());
+			io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+			io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+			Graphics::ImGuiWindowHandler::Init();
 
 			ImGui_ImplOpenGL3_Init();
 		}
@@ -35,6 +39,10 @@ namespace Akkad {
 		void GLImGuiHandler::ShutDown()
 		{
 			ImGui_ImplOpenGL3_Shutdown();
+		}
+		void GLImGuiHandler::UpdateRenderPlatforms()
+		{
+			ImGuiWindowHandler::UpdateRenderPlatforms();
 		}
 	}
 }

@@ -55,8 +55,25 @@ namespace Akkad {
                 UINT height = HIWORD(lParam);
                 WindowResizeEvent e(width, height);
                 window->m_EventCallback(e);
+                return 0;
             }
         }
+
+        case WM_DPICHANGED:
+        {
+            if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports)
+            {
+                const RECT* suggested_rect = (RECT*)lParam;
+                ::SetWindowPos(hwnd, NULL, suggested_rect->left, suggested_rect->top, suggested_rect->right - suggested_rect->left, suggested_rect->bottom - suggested_rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
+            }
+            return 0;
+        }
+
+        case WM_ERASEBKGND: 
+        {
+            break;
+        }
+
         }
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }

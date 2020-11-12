@@ -10,6 +10,8 @@ namespace Akkad {
 			virtual void NewFrame() override;
 			virtual void Render() override;
 			virtual void ShutDown() override;
+
+			virtual void UpdateRenderPlatforms() override;
 		};
 	}
 }

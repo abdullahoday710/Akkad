@@ -11,6 +11,8 @@ namespace Akkad {
 			virtual void Render() = 0;
 			virtual void ShutDown() = 0;
 
+			virtual void UpdateRenderPlatforms() = 0; // docking
+
 			static SharedPtr<ImGuiHandler> create(RenderAPI api);
 		};
 
@@ -19,6 +21,8 @@ namespace Akkad {
 			static void Init();
 			static void NewFrame();
 			static void ShutDown();
+
+			static void UpdateRenderPlatforms();
 		};
 	}
 }

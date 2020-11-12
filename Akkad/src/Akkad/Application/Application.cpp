@@ -54,6 +54,7 @@ namespace Akkad {
 					m_ImguiHandler->NewFrame();
 					layer->RenderImGui();
 					m_ImguiHandler->Render();
+					m_ImguiHandler->UpdateRenderPlatforms();
 				#endif
 
 

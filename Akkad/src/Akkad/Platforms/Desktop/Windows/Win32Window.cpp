@@ -102,6 +102,7 @@ namespace Akkad {
             rc = wglCreateContext(m_DeviceContext);
             wglMakeCurrent(m_DeviceContext, rc);
             m_RenderAPI = api;
+            m_GLContext = rc;
             break;
         }
 

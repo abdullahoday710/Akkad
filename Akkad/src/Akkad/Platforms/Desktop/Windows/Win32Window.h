@@ -19,9 +19,12 @@ namespace Akkad {
 		virtual void SetVsync(bool status) override;
 		std::function<void(Event&)> m_EventCallback;
 	private:
+		friend class ImGuiWindowHandler;
+
 		bool m_IsClosed = true;
 		HWND m_WindowHandle = nullptr;
 		HDC m_DeviceContext = nullptr;
+		HGLRC m_GLContext = nullptr;
 		unsigned int m_Width = 0;
 		unsigned int m_Height = 0;
 		bool m_VsyncEnabled = true;

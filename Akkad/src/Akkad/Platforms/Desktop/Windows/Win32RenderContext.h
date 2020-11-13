@@ -15,8 +15,8 @@ namespace Akkad {
 
 		private:
 			friend class ImGuiWindowHandler;
-			HGLRC m_GLContext;
-			HDC m_DeviceContext;
+			HGLRC m_GLContext = nullptr;
+			HDC m_DeviceContext = nullptr;
 			RenderAPI m_API;
 			bool m_VsyncEnabled = false;
 		};

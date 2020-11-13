@@ -3,6 +3,7 @@
 #include "Event.h"
 #include "Akkad/Graphics/ImGuiHandler.h"
 #include "Akkad/Graphics/RenderCommand.h"
+#include "Akkad/Graphics/RenderContext.h"
 #include "Layer.h"
 
 namespace Akkad {
@@ -17,6 +18,7 @@ namespace Akkad {
 		static void Init() { GetInstance().InitImpl(); }
 		static SharedPtr<RenderPlatform> GetRenderPlatform() { return GetInstance().m_platform; }
 		Window* GetWindow() { return m_Window; }
+		SharedPtr<RenderContext> GetContext() { return m_context; }
 		
 	private:
 		Application() {}
@@ -45,6 +47,7 @@ namespace Akkad {
 
 		SharedPtr<ImGuiHandler> m_ImguiHandler;
 		SharedPtr<RenderPlatform> m_platform;
+		SharedPtr<RenderContext> m_context;
 		//temporary code
 		SharedPtr<RenderCommand> m_RenderCommand;
 	};

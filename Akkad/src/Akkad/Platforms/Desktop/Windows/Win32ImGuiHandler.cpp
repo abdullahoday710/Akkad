@@ -6,6 +6,8 @@
 	#include "backends/imgui_impl_win32.h"
 #endif 
 #include "Win32Window.h"
+#include "Win32RenderContext.h"
+
 #include <Windows.h>
 
 namespace Akkad {
@@ -14,8 +16,10 @@ namespace Akkad {
 
 			void Graphics::ImGuiWindowHandler::Init() {
 				Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
+				SharedPtr<RenderContext> context = Application::GetInstance().GetContext();
+				SharedPtr<Win32RenderContext> win32context = std::dynamic_pointer_cast<Win32RenderContext>(context);
 				ImGui_ImplWin32_EnableDpiAwareness();
-				ImGui_ImplWin32_Init(window->GetNativeWindow(), window->m_GLContext);
+				ImGui_ImplWin32_Init(window->GetNativeWindow(), win32context->m_GLContext);
 			}
 
 			void Graphics::ImGuiWindowHandler::ShutDown() {
@@ -27,18 +31,20 @@ namespace Akkad {
 				auto io = ImGui::GetIO();
 
 				Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
+				SharedPtr<RenderContext> context = Application::GetInstance().GetContext();
+				SharedPtr<Win32RenderContext> win32context = DynamicCastPtr<Win32RenderContext>(context);
 
 				if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 				{
 					// when moving around ImGui viewports, the OpenGL context gets
 					// messed up in the process so we have to back it up before changing.
-					if (window->m_RenderAPI == RenderAPI::OPENGL)
+					if (win32context->m_API == RenderAPI::OPENGL)
 					{
-						auto backUpDC = window->m_DeviceContext;
+						auto backUpDC = win32context->m_DeviceContext;
 						ImGui::UpdatePlatformWindows();
 						ImGui::RenderPlatformWindowsDefault();
-						window->m_DeviceContext = backUpDC;
-						wglMakeCurrent(window->m_DeviceContext, window->m_GLContext);
+						win32context->m_DeviceContext = backUpDC;
+						wglMakeCurrent(win32context->m_DeviceContext, win32context->m_GLContext);	
 					}
 					
 				}

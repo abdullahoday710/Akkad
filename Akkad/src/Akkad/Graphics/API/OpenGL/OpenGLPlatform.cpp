@@ -15,11 +15,6 @@ namespace Akkad {
 		}
 		void OpenGLPlatform::Init()
 		{
-			auto window = Application::GetInstance().GetWindow();
-			window->CreateContext(m_API);
-			gladLoadGL();
-			glViewport(0, 0, window->GetWidth(), window->GetHeight());
-
 			RenderCommand* command = new GLRenderCommand();
 			m_Command = command;
 		}

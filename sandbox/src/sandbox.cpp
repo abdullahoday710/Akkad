@@ -26,7 +26,7 @@ public:
 	};
 
 	virtual void RenderImGui() override {
-		ImGui::Text("test");
+		ImGui::ShowDemoWindow();
 	};
 private:
 	SharedPtr<Shader> m_Shader;

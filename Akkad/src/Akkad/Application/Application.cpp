@@ -19,10 +19,12 @@ namespace Akkad {
 			window->Init({"engine", 800, 600});
 			m_Window = window;
 
+			SharedPtr<RenderContext> context = RenderContext::Create();
 			SharedPtr<RenderPlatform> platform = RenderPlatform::Create(RenderAPI::OPENGL);
+			context->Init(RenderAPI::OPENGL);
 			platform->Init();
 			m_platform = platform;
-
+			m_context = context;
 			#ifdef AK_ENABLE_IMGUI
 				SharedPtr<ImGuiHandler> imgui_handler = ImGuiHandler::create(RenderAPI::OPENGL);
 				imgui_handler->Init();
@@ -40,7 +42,7 @@ namespace Akkad {
 
 	void Application::RunImpl()
 	{
-
+		m_context->SetVsync(0);
 		while (!m_Window->IsCloseRequested())
 		{
 			m_platform->GetRenderCommand()->Clear();
@@ -59,8 +61,9 @@ namespace Akkad {
 
 
 			}
+
 			Time::CalculateDeltaTime();
-			m_Window->SwapWindowBuffers();
+			m_context->SwapWindowBuffers();
 			m_Window->OnUpdate();
 		}
 	}

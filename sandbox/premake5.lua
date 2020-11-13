@@ -14,6 +14,7 @@ project "sandbox"
 	includedirs {
 		"%{wks.location}/Akkad/src",
 		"%{IncludeDir.imgui}",
+		"%{IncludeDir.glm}",
 	}
 
 	links {

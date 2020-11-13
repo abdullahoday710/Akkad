@@ -51,12 +51,15 @@ namespace Akkad {
     void Win32Window::OnUpdate()
     {
         MSG msg = { };
-        GetMessage(&msg, NULL, 0, 0);
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
+        while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+        {
+            if (msg.message == WM_QUIT)
+            {
+                m_IsClosed = true;
+            }
 
-        if (msg.message == WM_QUIT) {
-            m_IsClosed = true;
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
         
     }

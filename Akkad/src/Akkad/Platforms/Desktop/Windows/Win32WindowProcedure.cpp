@@ -17,7 +17,7 @@ namespace Akkad {
         #endif
 
         Win32Window* window = (Win32Window*)GetProp(hwnd, L"windowclass");
-        
+        std::cout << "test" << std::endl;
         switch (uMsg)
         {
         case WM_DESTROY:

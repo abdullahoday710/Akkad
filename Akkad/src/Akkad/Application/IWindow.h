@@ -17,11 +17,9 @@ namespace Akkad {
 		virtual void OnUpdate() = 0;
 		virtual bool IsCloseRequested() = 0;
 		virtual void SetEventCallback(std::function<void(Event&)> func) = 0;
-		virtual void CreateContext(Graphics::RenderAPI api) = 0;
 		virtual unsigned int GetWidth() = 0;
 		virtual unsigned int GetHeight() = 0;
 		virtual void* GetNativeWindow() = 0;
-		virtual void SwapWindowBuffers() = 0;
 		virtual void SetVsync(bool status) = 0;
 	};
 

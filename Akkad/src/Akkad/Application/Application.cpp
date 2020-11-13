@@ -18,25 +18,27 @@ namespace Akkad {
 			window->SetEventCallback(event_cb);
 			window->Init({"engine", 800, 600});
 			m_Window = window;
+		#endif //AK_PLATFORM_WINDOWS
 
-			SharedPtr<RenderContext> context = RenderContext::Create();
-			SharedPtr<RenderPlatform> platform = RenderPlatform::Create(RenderAPI::OPENGL);
-			context->Init(RenderAPI::OPENGL);
-			platform->Init();
-			m_platform = platform;
-			m_context = context;
-			#ifdef AK_ENABLE_IMGUI
-				SharedPtr<ImGuiHandler> imgui_handler = ImGuiHandler::create(RenderAPI::OPENGL);
-				imgui_handler->Init();
-				m_ImguiHandler = imgui_handler;
-			#endif // AK_ENABLE_IMGUI
-			Renderer2D::Init();
-			Time::Init();
-			for (auto layer : m_Layers)
-			{
-				layer->OnInit();
-			}
-		#endif 
+		SharedPtr<RenderContext> context = RenderContext::Create();
+		SharedPtr<RenderPlatform> platform = RenderPlatform::Create(RenderAPI::OPENGL);
+		context->Init(RenderAPI::OPENGL);
+		platform->Init();
+		m_platform = platform;
+		m_context = context;
+
+		#ifdef AK_ENABLE_IMGUI
+			SharedPtr<ImGuiHandler> imgui_handler = ImGuiHandler::create(RenderAPI::OPENGL);
+			imgui_handler->Init();
+			m_ImguiHandler = imgui_handler;
+		#endif // AK_ENABLE_IMGUI
+
+		Renderer2D::Init();
+		Time::Init();
+		for (auto layer : m_Layers)
+		{
+			layer->OnInit();
+		}
 
 	}
 
@@ -58,8 +60,6 @@ namespace Akkad {
 					m_ImguiHandler->Render();
 					m_ImguiHandler->UpdateRenderPlatforms();
 				#endif
-
-
 			}
 
 			Time::CalculateDeltaTime();

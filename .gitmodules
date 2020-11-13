@@ -1,6 +1,7 @@
 [submodule "3rdparty/imgui"]
 	path = 3rdparty/imgui
 	url = https://github.com/vertexpotato/imgui
+	branch = docking
 [submodule "3rdparty/spdlog"]
 	path = 3rdparty/spdlog
 	url = https://github.com/vertexpotato/spdlog

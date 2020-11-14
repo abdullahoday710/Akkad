@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "RenderCommand.h"
+#include "FrameBuffer.h"
 
 namespace Akkad {
 	namespace Graphics {
@@ -24,6 +25,7 @@ namespace Akkad {
 			virtual SharedPtr<IndexBuffer> CreateIndexBuffer() = 0;
 			virtual SharedPtr<Shader> CreateShader(const char* path) = 0;
 			virtual SharedPtr<Texture> CreateTexture(const char* path) = 0;
+			virtual SharedPtr<FrameBuffer> CreateFrameBuffer(FrameBufferDescriptor desc) = 0;
 
 			static SharedPtr<RenderPlatform> Create(RenderAPI api);
 		};

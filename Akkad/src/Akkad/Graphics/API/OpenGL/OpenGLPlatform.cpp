@@ -4,6 +4,7 @@
 #include "GLShader.h"
 #include "GLTexture.h"
 #include "GLRenderCommand.h"
+#include "GLFrameBuffer.h"
 
 #include <glad/glad.h>
 
@@ -38,9 +39,15 @@ namespace Akkad {
 		{
 			return CreateSharedPtr<GLShader>(path);
 		}
+
 		SharedPtr<Texture> OpenGLPlatform::CreateTexture(const char* path)
 		{
 			return CreateSharedPtr<GLTexture>(path);
+		}
+
+		SharedPtr<FrameBuffer> OpenGLPlatform::CreateFrameBuffer(FrameBufferDescriptor desc)
+		{
+			return CreateSharedPtr<GLFrameBuffer>(desc);
 		}
 	}
 }

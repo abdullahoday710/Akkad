@@ -1,6 +1,7 @@
 #include "GLShader.h"
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 namespace Akkad {
@@ -64,6 +65,10 @@ namespace Akkad {
 		void GLShader::Unbind()
 		{
 			glUseProgram(0);
+		}
+		void GLShader::SetMat4(const char* location, glm::mat4& value)
+		{
+			glUniformMatrix4fv(glGetUniformLocation(m_ResourceID, location), 1, GL_FALSE, glm::value_ptr(value));
 		}
 	}
 }

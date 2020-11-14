@@ -11,6 +11,7 @@ namespace Akkad {
 
 			virtual void Bind() override;
 			virtual void Unbind() override;
+			virtual void SetMat4(const char* location, glm::mat4& value) override;
 		private:
 			unsigned int m_ResourceID;
 			unsigned int m_VertexShader = -1;

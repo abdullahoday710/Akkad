@@ -20,6 +20,7 @@ namespace Akkad {
 		public:
 			virtual void Bind(unsigned int unit) = 0;
 			virtual void Unbind() = 0;
+			virtual unsigned int GetID() = 0;
 
 			static TextureDescriptor LoadFile(const char* path, bool flip=false);
 		};

@@ -28,7 +28,7 @@ namespace Akkad {
 
 			void ImGuiWindowHandler::UpdateRenderPlatforms()
 			{
-				auto io = ImGui::GetIO();
+				auto& io = ImGui::GetIO();
 
 				Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
 				SharedPtr<RenderContext> context = Application::GetInstance().GetContext();

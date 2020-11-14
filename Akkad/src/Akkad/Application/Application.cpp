@@ -35,19 +35,19 @@ namespace Akkad {
 
 		Renderer2D::Init();
 		Time::Init();
-		for (auto layer : m_Layers)
-		{
-			layer->OnInit();
-		}
 
 	}
 
 	void Application::RunImpl()
 	{
-		m_context->SetVsync(0);
+		for (auto layer : m_Layers)
+		{
+			layer->OnAttach();
+		}
+
 		while (!m_Window->IsCloseRequested())
 		{
-			m_platform->GetRenderCommand()->Clear();
+			//m_platform->GetRenderCommand()->Clear();
 			
 			for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
 			{
@@ -77,6 +77,11 @@ namespace Akkad {
 	Application::~Application()
 	{
 		delete m_Window;
+
+		for (auto layer : m_Layers)
+		{
+			layer->OnDetach();
+		}
 	}
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{

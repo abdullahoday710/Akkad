@@ -32,13 +32,12 @@ namespace Akkad {
 		bool OnWindowResize(WindowResizeEvent& e);
 
 		void AttachLayerImpl(Layer* layer) {
-			layer->OnAttach();
 			m_Layers.push_back(layer);
 		}
 
 		void DetachLayerImpl(Layer* layer) {
-			layer->OnDetach();
 			m_Layers.erase(std::remove(m_Layers.begin(), m_Layers.end(), layer), m_Layers.end());
+			delete layer;
 		}
 
 		std::vector<Layer*> m_Layers;

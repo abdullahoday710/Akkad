@@ -11,6 +11,7 @@ namespace Akkad {
 			~GLTexture();
 			virtual void Bind(unsigned int unit) override;
 			virtual void Unbind() override;
+			virtual unsigned int GetID() override { return m_ResourceID; }
 		private:
 			unsigned int m_ResourceID;
 			TextureDescriptor m_desc;

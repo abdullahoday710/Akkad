@@ -3,6 +3,8 @@
 #include <imgui.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <Akkad/ECS/Entity.h>
+#include <Akkad/ECS/Components/TagComponent.h>
 
 namespace Akkad {
 
@@ -23,6 +25,8 @@ namespace Akkad {
 
 		m_Shader = shader;
 		m_Texture = texture;
+
+		m_Scene = CreateSharedPtr<Scene>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -32,7 +36,6 @@ namespace Akkad {
 
 	void EditorLayer::OnUpdate()
 	{
-		m_FrameBuffer->SetSize(Application::GetInstance().GetWindow()->GetWidth(), Application::GetInstance().GetWindow()->GetHeight());
 		auto command = Application::GetRenderPlatform()->GetRenderCommand();
 
 		command->Clear(); // clear the screen
@@ -47,6 +50,8 @@ namespace Akkad {
 		command->Clear(); // clear the framebuffer
 		Renderer2D::DrawQuad(m_Shader, m_Texture);
 		m_FrameBuffer->Unbind();
+
+		m_Scene->Update();
 	}
 
 	void EditorLayer::RenderImGui()
@@ -85,11 +90,22 @@ namespace Akkad {
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("Scene"))
+			{
+				if (ImGui::MenuItem("Create Entity"))
+				{
+					Entity e = m_Scene->AddEntity();
+				}
+
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMainMenuBar();
 		}
 
 		ImGui::Begin("Viewport");
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_FrameBuffer->SetSize(viewportPanelSize.x, viewportPanelSize.y);
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentTexture(), viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
 

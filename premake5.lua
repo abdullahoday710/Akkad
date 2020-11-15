@@ -18,6 +18,7 @@ workspace "Akkad"
     IncludeDir["glm"] = "%{wks.location}/3rdparty/glm/include"
     IncludeDir["stb"] = "%{wks.location}/3rdparty/stb/include"
     IncludeDir["spdlog"] = "%{wks.location}/3rdparty/spdlog/include"
+    IncludeDir["entt"] = "%{wks.location}/3rdparty/entt/single_include"
 
     group "Dependencies"
       include "3rdparty/glad"

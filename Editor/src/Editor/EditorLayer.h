@@ -1,5 +1,6 @@
 #pragma once
 #include <Akkad/Akkad.h>
+#include <Akkad/ECS/Scene.h>
 
 namespace Akkad {
 
@@ -13,6 +14,7 @@ namespace Akkad {
 
 		virtual void RenderImGui() override;
 	private:
+		SharedPtr<Scene> m_Scene;
 		SharedPtr<FrameBuffer> m_FrameBuffer;
 		SharedPtr<Texture> m_Texture;
 		SharedPtr<Shader> m_Shader;

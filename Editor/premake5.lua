@@ -15,6 +15,7 @@ project "Editor"
 		"%{wks.location}/Akkad/src",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}",
 	}
 
 	links {

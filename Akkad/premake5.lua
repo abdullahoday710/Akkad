@@ -26,7 +26,9 @@ project "Akkad"
         "%{IncludeDir.imgui}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb}",
-        "%{IncludeDir.spdlog}"
+        "%{IncludeDir.spdlog}",
+        "%{IncludeDir.entt}",
+
     }
     
     links

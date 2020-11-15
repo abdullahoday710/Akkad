@@ -26,6 +26,7 @@ workspace "Akkad"
     group ""
     
     include "Akkad"
+    include "Editor"
     include "sandbox"
 
     print("%{wks.location}/3rdparty/glad/include")

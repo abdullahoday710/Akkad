@@ -5,6 +5,7 @@
 
 #include "Akkad/Graphics/Renderer2D.h"
 #include "Time.h"
+#include "Akkad/Logging.h"
 
 namespace Akkad {
 	Application Application::s_Instance;
@@ -35,6 +36,7 @@ namespace Akkad {
 
 		Renderer2D::Init();
 		Time::Init();
+		m_Running = true;
 
 	}
 
@@ -45,10 +47,8 @@ namespace Akkad {
 			layer->OnAttach();
 		}
 
-		while (!m_Window->IsCloseRequested())
+		while (m_Running)
 		{
-			//m_platform->GetRenderCommand()->Clear();
-			
 			for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
 			{
 				auto layer = *it;
@@ -71,6 +71,7 @@ namespace Akkad {
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
 		dispatcher.Dispatch<WindowResizeEvent>(std::bind(&Application::OnWindowResize, this, std::placeholders::_1));
 	}
 
@@ -83,9 +84,17 @@ namespace Akkad {
 			layer->OnDetach();
 		}
 	}
+
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
 		m_platform->OnWindowResize(e.m_Width, e.m_Height);
+		return true;
+	}
+
+	bool Application::OnWindowClose(WindowCloseEvent& e)
+	{
+		m_Running = false;
+
 		return true;
 	}
 }

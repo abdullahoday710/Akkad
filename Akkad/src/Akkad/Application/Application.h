@@ -21,16 +21,22 @@ namespace Akkad {
 		SharedPtr<RenderContext> GetContext() { return m_context; }
 		
 	private:
+		friend class Window;
 		Application() {}
 		~Application();
 		static Application s_Instance;
 
 		void InitImpl();
 		void RunImpl();
+		bool m_Running = false;
 
+		// -------- Event Handlers -----------------
 		void OnEvent(Event& e);
 		bool OnWindowResize(WindowResizeEvent& e);
+		bool OnWindowClose(WindowCloseEvent& e);
+		// -------------------------------------
 
+		// -------- Layer Handlers ------------------
 		void AttachLayerImpl(Layer* layer) {
 			m_Layers.push_back(layer);
 		}
@@ -39,6 +45,7 @@ namespace Akkad {
 			m_Layers.erase(std::remove(m_Layers.begin(), m_Layers.end(), layer), m_Layers.end());
 			delete layer;
 		}
+		// -----------------------------------------
 
 		std::vector<Layer*> m_Layers;
 
@@ -47,7 +54,6 @@ namespace Akkad {
 		SharedPtr<ImGuiHandler> m_ImguiHandler;
 		SharedPtr<RenderPlatform> m_platform;
 		SharedPtr<RenderContext> m_context;
-		//temporary code
-		SharedPtr<RenderCommand> m_RenderCommand;
+
 	};
 }

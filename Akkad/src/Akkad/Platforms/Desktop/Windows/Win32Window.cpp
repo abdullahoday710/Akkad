@@ -55,18 +55,14 @@ namespace Akkad {
         {
             if (msg.message == WM_QUIT)
             {
-                m_IsClosed = true;
+                WindowCloseEvent e;
+                m_EventCallback(e);
             }
 
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
         
-    }
-
-    bool Win32Window::IsCloseRequested()
-    {
-        return m_IsClosed;
     }
 
 }

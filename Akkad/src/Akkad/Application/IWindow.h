@@ -15,18 +15,16 @@ namespace Akkad {
 	public:
 		virtual int Init(WindowSettings settings) = 0;
 		virtual void OnUpdate() = 0;
-		virtual bool IsCloseRequested() = 0;
 		virtual void SetEventCallback(std::function<void(Event&)> func) = 0;
 		virtual unsigned int GetWidth() = 0;
 		virtual unsigned int GetHeight() = 0;
 		virtual void* GetNativeWindow() = 0;
-		virtual void SetVsync(bool status) = 0;
 	};
 
 	class WindowResizeEvent : public Event {
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height) {
-			m_Type = EventType::WindowEvent;
+			m_Type = EventType::WindowResizeEvent;
 			m_Width = width;
 			m_Height = height;
 		}
@@ -34,10 +32,21 @@ namespace Akkad {
 		unsigned int m_Height;
 
 		virtual EventType GetType() override { return m_Type; };
-		EVENT_TYPE(WindowEvent);
+		EVENT_TYPE(WindowResizeEvent);
 
 	private:
 		EventType m_Type;
 
+	};
+
+	class WindowCloseEvent : public Event {
+	public:
+		WindowCloseEvent() { m_Type = EventType::WindowCloseEvent; };
+		virtual EventType GetType() override { return m_Type; };
+
+		EVENT_TYPE(WindowCloseEvent);
+
+	private:
+		EventType m_Type;
 	};
 }

@@ -3,7 +3,7 @@
 namespace Akkad {
 
 	enum class EventType {
-		KeyEvent, WindowEvent
+		KeyEvent, WindowResizeEvent, WindowCloseEvent
 	};
 
 #define EVENT_TYPE(type) static EventType GetStaticType() {return EventType::type;}

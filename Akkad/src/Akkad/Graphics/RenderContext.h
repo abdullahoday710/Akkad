@@ -1,8 +1,12 @@
 #pragma once
-#include "RenderPlatform.h"
+#include "Akkad/core.h"
 
 namespace Akkad {
 	namespace Graphics {
+
+		enum class RenderAPI {
+			OPENGL
+		};
 
 		class RenderContext
 		{

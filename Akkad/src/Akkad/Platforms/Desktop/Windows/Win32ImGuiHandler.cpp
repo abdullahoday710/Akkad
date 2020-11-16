@@ -16,7 +16,7 @@ namespace Akkad {
 
 			void Graphics::ImGuiWindowHandler::Init() {
 				Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
-				SharedPtr<RenderContext> context = Application::GetInstance().GetContext();
+				SharedPtr<RenderContext> context = Application::GetInstance().GetRenderPlatform()->GetRenderContext();
 				SharedPtr<Win32RenderContext> win32context = std::dynamic_pointer_cast<Win32RenderContext>(context);
 				ImGui_ImplWin32_EnableDpiAwareness();
 				ImGui_ImplWin32_Init(window->GetNativeWindow(), win32context->m_GLContext);
@@ -31,7 +31,7 @@ namespace Akkad {
 				auto& io = ImGui::GetIO();
 
 				Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
-				SharedPtr<RenderContext> context = Application::GetInstance().GetContext();
+				SharedPtr<RenderContext> context = Application::GetInstance().GetRenderPlatform()->GetRenderContext();
 				SharedPtr<Win32RenderContext> win32context = DynamicCastPtr<Win32RenderContext>(context);
 
 				if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

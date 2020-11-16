@@ -16,6 +16,11 @@ namespace Akkad {
 		}
 		void OpenGLPlatform::Init()
 		{
+			auto context = RenderContext::Create();
+			context->Init(m_API);
+
+			m_RenderContext = context;
+
 			RenderCommand* command = new GLRenderCommand();
 			m_Command = command;
 		}
@@ -48,6 +53,10 @@ namespace Akkad {
 		SharedPtr<FrameBuffer> OpenGLPlatform::CreateFrameBuffer(FrameBufferDescriptor desc)
 		{
 			return CreateSharedPtr<GLFrameBuffer>(desc);
+		}
+		SharedPtr<RenderContext> OpenGLPlatform::GetRenderContext()
+		{
+			return m_RenderContext;
 		}
 	}
 }

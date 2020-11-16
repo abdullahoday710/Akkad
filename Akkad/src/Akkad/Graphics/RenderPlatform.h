@@ -5,18 +5,16 @@
 #include "Texture.h"
 #include "RenderCommand.h"
 #include "FrameBuffer.h"
+#include "RenderContext.h"
 
 namespace Akkad {
 	namespace Graphics {
-
-		enum class RenderAPI {
-			OPENGL
-		};
 
 		class RenderPlatform {
 		public:
 			virtual RenderAPI GetRenderAPI() = 0;
 			virtual RenderCommand* GetRenderCommand() = 0;
+			virtual SharedPtr<RenderContext> GetRenderContext() = 0;
 
 			virtual void Init() = 0;
 			virtual void OnWindowResize(unsigned int width, unsigned int height) = 0;

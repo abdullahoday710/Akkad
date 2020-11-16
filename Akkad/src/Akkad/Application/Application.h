@@ -18,7 +18,6 @@ namespace Akkad {
 		static void Init() { GetInstance().InitImpl(); }
 		static SharedPtr<RenderPlatform> GetRenderPlatform() { return GetInstance().m_platform; }
 		Window* GetWindow() { return m_Window; }
-		SharedPtr<RenderContext> GetContext() { return m_context; }
 		
 	private:
 		friend class Window;
@@ -53,7 +52,7 @@ namespace Akkad {
 
 		SharedPtr<ImGuiHandler> m_ImguiHandler;
 		SharedPtr<RenderPlatform> m_platform;
-		SharedPtr<RenderContext> m_context;
+		
 
 	};
 }

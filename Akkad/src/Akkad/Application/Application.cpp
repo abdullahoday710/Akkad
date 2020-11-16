@@ -21,12 +21,9 @@ namespace Akkad {
 			m_Window = window;
 		#endif //AK_PLATFORM_WINDOWS
 
-		SharedPtr<RenderContext> context = RenderContext::Create();
 		SharedPtr<RenderPlatform> platform = RenderPlatform::Create(RenderAPI::OPENGL);
-		context->Init(RenderAPI::OPENGL);
 		platform->Init();
 		m_platform = platform;
-		m_context = context;
 
 		#ifdef AK_ENABLE_IMGUI
 			SharedPtr<ImGuiHandler> imgui_handler = ImGuiHandler::create(RenderAPI::OPENGL);
@@ -63,7 +60,7 @@ namespace Akkad {
 			}
 
 			Time::CalculateDeltaTime();
-			m_context->SwapWindowBuffers();
+			m_platform->GetRenderContext()->SwapWindowBuffers();
 			m_Window->OnUpdate();
 		}
 	}

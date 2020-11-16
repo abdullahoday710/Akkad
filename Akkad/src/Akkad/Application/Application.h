@@ -16,6 +16,7 @@ namespace Akkad {
 		static void DetachLayer(Layer* layer) { GetInstance().DetachLayerImpl(layer); }
 		static void Run() { GetInstance().RunImpl(); }
 		static void Init() { GetInstance().InitImpl(); }
+		static void Shutdown() { GetInstance().m_Running = false; };
 		static SharedPtr<RenderPlatform> GetRenderPlatform() { return GetInstance().m_platform; }
 		Window* GetWindow() { return m_Window; }
 		

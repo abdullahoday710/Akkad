@@ -83,7 +83,7 @@ namespace Akkad {
 
 				if (ImGui::MenuItem("Close"))
 				{
-
+					Application::Shutdown();
 				}
 				ImGui::EndMenu();
 			}

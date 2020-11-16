@@ -17,9 +17,9 @@ namespace Akkad {
 		Entity AddEntity(std::string tag = "Entity");
 
 	private:
-
 		entt::registry m_Registry;
 		friend class Entity;
+		friend class SceneHierarchyPanel;
 
 	};
 

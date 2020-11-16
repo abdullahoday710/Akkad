@@ -25,8 +25,6 @@ namespace Akkad {
 
 		m_Shader = shader;
 		m_Texture = texture;
-
-		m_Scene = CreateSharedPtr<Scene>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -100,6 +98,17 @@ namespace Akkad {
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("View"))
+			{
+				if (ImGui::MenuItem("Hirearchy"))
+				{
+					SceneHierarchyPanel* panel = new SceneHierarchyPanel(m_Scene);
+					PanelManager::AddPanel(panel);
+				}
+
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMainMenuBar();
 		}
 
@@ -108,6 +117,17 @@ namespace Akkad {
 		m_FrameBuffer->SetSize(viewportPanelSize.x, viewportPanelSize.y);
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentTexture(), viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
+
+		for (auto panel : PanelManager::GetPanels())
+		{
+			if (panel)
+			{
+				panel->DrawImGui();
+			}
+			
+		}
+
+		ImGui::ShowDemoWindow();
 
 		ImGui::End();
 	}

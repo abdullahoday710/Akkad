@@ -8,7 +8,7 @@ namespace Akkad {
 	class SceneHierarchyPanel : public Panel
 	{
 	public:
-		SceneHierarchyPanel(SharedPtr<Scene> scene);
+		SceneHierarchyPanel(Scene* scene);
 		~SceneHierarchyPanel() {}
 
 		virtual void DrawImGui() override;
@@ -17,7 +17,7 @@ namespace Akkad {
 		virtual bool IsOpen() override { return showPanel; };
 
 	private:
-		SharedPtr<Scene> m_Scene;
+		Scene* m_Scene;
 		static bool showPanel;
 		void DrawHierarchyPanel();
 	};

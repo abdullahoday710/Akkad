@@ -1,5 +1,6 @@
 #include "EditorLayer.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/PropertyEditorPanel.h"
 
 #include <Akkad/ECS/Entity.h>
 #include <Akkad/ECS/Components/TagComponent.h>
@@ -11,7 +12,8 @@
 namespace Akkad {
 	EditorLayer::EditorLayer()
 	{
-		m_Scene = CreateSharedPtr<Scene>();
+		m_Scene = new Scene();
+
 		SceneHierarchyPanel* panel = new SceneHierarchyPanel(m_Scene);
 		PanelManager::AddPanel(panel);
 	}
@@ -110,6 +112,12 @@ namespace Akkad {
 				if (ImGui::MenuItem("Hirearchy"))
 				{
 					SceneHierarchyPanel* panel = new SceneHierarchyPanel(m_Scene);
+					PanelManager::AddPanel(panel);
+				}
+
+				if (ImGui::MenuItem("Property Editor"))
+				{
+					PropertyEditorPanel* panel = new PropertyEditorPanel(m_Scene);
 					PanelManager::AddPanel(panel);
 				}
 

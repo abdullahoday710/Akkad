@@ -8,7 +8,7 @@ namespace Akkad {
 	class Entity {
 	public:
 		Entity(entt::entity handle, Scene* scene);
-
+		Entity() {};
 
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)
@@ -34,6 +34,6 @@ namespace Akkad {
 
 	private:
 		entt::entity m_Handle;
-		Scene* m_Scene;
+		Scene* m_Scene = nullptr;
 	};
 }

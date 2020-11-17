@@ -1,11 +1,12 @@
 #include "SceneHierarchyPanel.h"
+#include "PropertyEditorPanel.h"
 #include <Akkad/ECS/Components/TagComponent.h>
 #include <imgui.h>
 #include <entt/entt.hpp>
 namespace Akkad {
 	bool SceneHierarchyPanel::showPanel;
 
-	SceneHierarchyPanel::SceneHierarchyPanel(SharedPtr<Scene> scene)
+	SceneHierarchyPanel::SceneHierarchyPanel(Scene* scene)
 	{
 		m_Scene = scene;
 	}
@@ -44,7 +45,15 @@ namespace Akkad {
 			{
 				if (ImGui::IsItemToggledOpen())
 				{
-					// TODO : open a property editor
+					if (!PropertyEditorPanel::showPanel)
+					{
+						PropertyEditorPanel* panel = new PropertyEditorPanel(m_Scene);
+						PanelManager::AddPanel(panel);
+						Entity e(entity, m_Scene);
+						PropertyEditorPanel::SetActiveEntity(e);
+					}
+					Entity e(entity, m_Scene);
+					PropertyEditorPanel::SetActiveEntity(e);
 				}
 				ImGui::TreePop();
 			}

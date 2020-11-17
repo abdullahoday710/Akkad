@@ -20,6 +20,7 @@ namespace Akkad {
 		entt::registry m_Registry;
 		friend class Entity;
 		friend class SceneHierarchyPanel;
+		friend class PropertyEditorPanel;
 
 	};
 

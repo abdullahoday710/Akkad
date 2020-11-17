@@ -19,7 +19,7 @@ namespace Akkad {
 
 		virtual void RenderImGui() override;
 	private:
-		SharedPtr<Scene> m_Scene;
+		Scene* m_Scene;
 		SharedPtr<FrameBuffer> m_FrameBuffer;
 		SharedPtr<Texture> m_Texture;
 		SharedPtr<Shader> m_Shader;

@@ -20,8 +20,11 @@ namespace Akkad {
 			{
 				s_Panels.push_back(panel);
 				panel->OnOpen();
+				return;
 				
 			}
+
+			delete panel;
 		}
 
 		static void RemovePanel(Panel* panel)

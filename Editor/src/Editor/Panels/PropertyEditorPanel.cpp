@@ -36,8 +36,12 @@ namespace Akkad {
 		}
 
 		ImGui::Text("Properties: ");
-		DrawTagComponent();
-		DrawTransformComponent();
+		if (m_ActiveEntity.IsValid())
+		{
+			DrawTagComponent();
+			DrawTransformComponent();
+		}
+		
 
 		ImGui::End();
 	}

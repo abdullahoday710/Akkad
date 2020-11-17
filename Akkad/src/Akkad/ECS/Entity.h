@@ -31,9 +31,19 @@ namespace Akkad {
 			return m_Scene->m_Registry.has<T>(m_Handle);
 		}
 
+		bool IsValid()
+		{
+			if ((int)m_Handle != -1)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 
 	private:
-		entt::entity m_Handle;
+		entt::entity m_Handle = (entt::entity)-1;
 		Scene* m_Scene = nullptr;
 	};
 }

@@ -24,6 +24,8 @@ namespace Akkad {
 		SharedPtr<Texture> m_Texture;
 		SharedPtr<Shader> m_Shader;
 
+		void ApplyImGuiStyles();
+
 	};
 }
 

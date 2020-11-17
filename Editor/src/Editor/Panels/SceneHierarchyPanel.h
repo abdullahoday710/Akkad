@@ -12,11 +12,13 @@ namespace Akkad {
 		~SceneHierarchyPanel() {}
 
 		virtual void DrawImGui() override;
+		virtual void OnOpen() override { showPanel = true; }
 		virtual void OnClose() override;
+		virtual bool IsOpen() override { return showPanel; };
 
 	private:
 		SharedPtr<Scene> m_Scene;
-		bool showPanel = true;
+		static bool showPanel;
 		void DrawHierarchyPanel();
 	};
 }

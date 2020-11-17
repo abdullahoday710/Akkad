@@ -1,13 +1,20 @@
 #include "EditorLayer.h"
+#include "Panels/SceneHierarchyPanel.h"
+
+#include <Akkad/ECS/Entity.h>
+#include <Akkad/ECS/Components/TagComponent.h>
 
 #include <imgui.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <Akkad/ECS/Entity.h>
-#include <Akkad/ECS/Components/TagComponent.h>
 
 namespace Akkad {
-
+	EditorLayer::EditorLayer()
+	{
+		m_Scene = CreateSharedPtr<Scene>();
+		SceneHierarchyPanel* panel = new SceneHierarchyPanel(m_Scene);
+		PanelManager::AddPanel(panel);
+	}
 	void EditorLayer::OnAttach()
 	{
 		auto platform = Application::GetRenderPlatform();
@@ -126,8 +133,6 @@ namespace Akkad {
 			}
 			
 		}
-
-		ImGui::ShowDemoWindow();
 
 		ImGui::End();
 	}

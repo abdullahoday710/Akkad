@@ -3,6 +3,7 @@
 #include <imgui.h>
 #include <entt/entt.hpp>
 namespace Akkad {
+	bool SceneHierarchyPanel::showPanel;
 
 	SceneHierarchyPanel::SceneHierarchyPanel(SharedPtr<Scene> scene)
 	{
@@ -17,6 +18,7 @@ namespace Akkad {
 	void SceneHierarchyPanel::OnClose()
 	{
 		PanelManager::RemovePanel(this);
+
 	}
 
 	void SceneHierarchyPanel::DrawHierarchyPanel()

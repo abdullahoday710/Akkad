@@ -28,13 +28,11 @@ namespace Akkad {
 	{
 		auto command = Application::GetRenderPlatform()->GetRenderCommand();
 		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
-
+		command->Clear();
 		for (auto entity : view)
 		{
 			auto& transform = view.get<TransformComponent>(entity);
 			auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
-
-			command->Clear();
 
 			m_colorShader->Bind();
 			m_colorShader->SetMat4("transform", transform.GetTransformMatrix());

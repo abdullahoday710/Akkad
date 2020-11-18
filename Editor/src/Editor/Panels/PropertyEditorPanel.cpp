@@ -11,6 +11,7 @@
 namespace Akkad {
 	bool PropertyEditorPanel::showPanel;
 
+	bool AddComponentsOpen = false;
 	Entity PropertyEditorPanel::m_ActiveEntity;
 
 	PropertyEditorPanel::PropertyEditorPanel(Scene* scene)
@@ -46,6 +47,8 @@ namespace Akkad {
 			{
 				DrawSpriteRendererComponent();
 			}
+
+			DrawAddComponent();
 		}
 		
 
@@ -56,6 +59,32 @@ namespace Akkad {
 	void PropertyEditorPanel::OnClose()
 	{
 		PanelManager::RemovePanel(this);
+	}
+
+	void PropertyEditorPanel::DrawAddComponent()
+	{
+		if (ImGui::Button("Add component"))
+		{
+			AddComponentsOpen = !AddComponentsOpen;
+		}
+
+		if (AddComponentsOpen)
+		{
+			ImGui::Separator();
+			if (ImGui::TreeNode("2D"))
+			{
+				if (ImGui::Button("Sprite Renderer"))
+				{
+					if (!m_ActiveEntity.HasComponent<SpriteRendererComponent>())
+					{
+						m_ActiveEntity.AddComponent<SpriteRendererComponent>();
+					}
+					
+				}
+				ImGui::TreePop();
+			}
+		
+		}
 	}
 
 	void PropertyEditorPanel::DrawTagComponent()

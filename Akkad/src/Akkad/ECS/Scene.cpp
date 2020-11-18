@@ -46,7 +46,6 @@ namespace Akkad {
 		// any entity must have a tag and transform component by default !
 		auto& tag_comp = entity.AddComponent<TagComponent>();
 		auto& transform_comp = entity.AddComponent<TransformComponent>();
-		auto& spriterRenderer_comp = entity.AddComponent<SpriteRendererComponent>();
 		tag_comp.Tag = tag;
 
 		return entity;

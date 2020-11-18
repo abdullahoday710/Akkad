@@ -23,6 +23,8 @@ namespace Akkad {
 
 		static void SetActiveEntity(Entity e) { m_ActiveEntity = e; }
 
+		void DrawAddComponent();
+
 		void DrawTagComponent();
 		void DrawTransformComponent();
 		void DrawSpriteRendererComponent();

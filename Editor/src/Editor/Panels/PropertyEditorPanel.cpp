@@ -2,6 +2,7 @@
 
 #include <Akkad/ECS/Components/TagComponent.h>
 #include <Akkad/ECS/Components/TransformComponent.h>
+#include <Akkad/ECS/Components/SpriteRendererComponent.h>
 
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
@@ -40,6 +41,11 @@ namespace Akkad {
 		{
 			DrawTagComponent();
 			DrawTransformComponent();
+
+			if (m_ActiveEntity.HasComponent<SpriteRendererComponent>())
+			{
+				DrawSpriteRendererComponent();
+			}
 		}
 		
 
@@ -62,9 +68,15 @@ namespace Akkad {
 	void PropertyEditorPanel::DrawTransformComponent()
 	{
 		auto& transform = m_ActiveEntity.GetComponent<TransformComponent>();
-		auto position = transform.GetPosition();
-		ImGui::InputFloat3("Transform", glm::value_ptr(position));
-		transform.SetPostion(position);
+		ImGui::InputFloat3("Transform", glm::value_ptr(transform.GetPosition()));
+		transform.RecalculateTransformMatrix();
+
+	}
+
+	void PropertyEditorPanel::DrawSpriteRendererComponent()
+	{
+		auto& sprite = m_ActiveEntity.GetComponent<SpriteRendererComponent>();
+		ImGui::InputFloat3("Color", glm::value_ptr(sprite.color));
 	}
 
 }

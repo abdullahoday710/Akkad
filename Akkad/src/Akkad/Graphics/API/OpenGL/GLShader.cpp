@@ -70,5 +70,9 @@ namespace Akkad {
 		{
 			glUniformMatrix4fv(glGetUniformLocation(m_ResourceID, location), 1, GL_FALSE, glm::value_ptr(value));
 		}
+		void GLShader::SetVec3(const char* location, glm::vec3& value)
+		{
+			glUniform3f(glGetUniformLocation(m_ResourceID, location), value.x, value.y, value.z);
+		}
 	}
 }

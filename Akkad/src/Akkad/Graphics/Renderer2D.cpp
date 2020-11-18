@@ -51,6 +51,18 @@ namespace Akkad {
 
 			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
 		}
+
+		void Renderer2D::DrawQuadImpl(SharedPtr<Shader> shader, glm::vec3 color)
+		{
+			auto command = Application::GetRenderPlatform()->GetRenderCommand();
+
+			m_QuadVB->Bind();
+			m_QuadIB->Bind();
+			shader->Bind();
+			shader->SetVec3("color", color);
+
+			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+		}
 	}
 }
 

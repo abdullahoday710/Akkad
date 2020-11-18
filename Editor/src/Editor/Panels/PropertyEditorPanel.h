@@ -25,6 +25,7 @@ namespace Akkad {
 
 		void DrawTagComponent();
 		void DrawTransformComponent();
+		void DrawSpriteRendererComponent();
 
 	};
 }

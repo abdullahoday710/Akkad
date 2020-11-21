@@ -1,8 +1,10 @@
 #include "PropertyEditorPanel.h"
+#include "../EditorLayer.h"
 
 #include <Akkad/ECS/Components/TagComponent.h>
 #include <Akkad/ECS/Components/TransformComponent.h>
 #include <Akkad/ECS/Components/SpriteRendererComponent.h>
+#include <Akkad/ECS/Components/CameraComponent.h>
 
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
@@ -48,6 +50,11 @@ namespace Akkad {
 				DrawSpriteRendererComponent();
 			}
 
+			if (m_ActiveEntity.HasComponent<CameraComponent>())
+			{
+				DrawCameraComponent();
+			}
+
 			DrawAddComponent();
 		}
 		
@@ -79,7 +86,15 @@ namespace Akkad {
 					{
 						m_ActiveEntity.AddComponent<SpriteRendererComponent>();
 					}
-					
+				}
+
+				if (ImGui::Button("Camera"))
+				{
+
+					if (!m_ActiveEntity.HasComponent<CameraComponent>())
+					{
+						m_ActiveEntity.AddComponent<CameraComponent>(CameraType::Orthographic, EditorLayer::GetViewportAspectRatio());
+					}
 				}
 				ImGui::TreePop();
 			}
@@ -105,7 +120,15 @@ namespace Akkad {
 	void PropertyEditorPanel::DrawSpriteRendererComponent()
 	{
 		auto& sprite = m_ActiveEntity.GetComponent<SpriteRendererComponent>();
-		ImGui::InputFloat3("Color", glm::value_ptr(sprite.color));
+		//ImGui::InputFloat3("Color", glm::value_ptr(sprite.color));
+		ImGui::ColorPicker3("Color", glm::value_ptr(sprite.color));
+	}
+
+	void PropertyEditorPanel::DrawCameraComponent()
+	{
+		auto& camera = m_ActiveEntity.GetComponent<CameraComponent>();
+		ImGui::Text("Camera :");
+		ImGui::Checkbox("Active", &camera.isActive);
 	}
 
 }

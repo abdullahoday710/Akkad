@@ -7,9 +7,9 @@
 #include "Components/TagComponent.h"
 #include "Components/TransformComponent.h"
 #include "Components/SpriteRendererComponent.h"
+#include "Components/CameraComponent.h"
 
 namespace Akkad {
-
 	Scene::Scene()
 	{
 	}
@@ -26,6 +26,18 @@ namespace Akkad {
 
 	void Scene::Update()
 	{
+		auto camView = m_Registry.view<TransformComponent, CameraComponent>();
+
+		for (auto entity : camView)
+		{
+			auto& transform = camView.get<TransformComponent>(entity);
+			auto& camera = camView.get<CameraComponent>(entity);
+
+			camera.RecalculateViewProjectionMatrix(transform.GetPosition());
+			m_colorShader->Bind();
+			m_colorShader->SetMat4("viewProjection", camera.viewProjection);
+		}
+
 		auto command = Application::GetRenderPlatform()->GetRenderCommand();
 		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
 		command->Clear();
@@ -36,8 +48,10 @@ namespace Akkad {
 
 			m_colorShader->Bind();
 			m_colorShader->SetMat4("transform", transform.GetTransformMatrix());
+			
 			Renderer2D::DrawQuad(m_colorShader, spriteRenderer.color);
 		}
+		
 	}
 
 	Entity Scene::AddEntity(std::string tag)

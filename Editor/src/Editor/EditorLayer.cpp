@@ -2,6 +2,8 @@
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/PropertyEditorPanel.h"
 
+#include <Akkad/Input/Input.h>
+#include <Akkad/Input/KeyCodes.h>
 #include <Akkad/ECS/Entity.h>
 #include <Akkad/ECS/Components/TagComponent.h>
 
@@ -10,6 +12,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Akkad {
+	float EditorLayer::s_AspectRatio;
+
 	EditorLayer::EditorLayer()
 	{
 		m_Scene = new Scene();
@@ -42,10 +46,15 @@ namespace Akkad {
 
 	void EditorLayer::OnUpdate()
 	{
+		auto desc = m_FrameBuffer->GetDescriptor();
+
+		s_AspectRatio = desc.width / desc.height;
 
 		m_FrameBuffer->Bind();
 		m_Scene->Update();
 		m_FrameBuffer->Unbind();
+
+
 	}
 
 	void EditorLayer::RenderImGui()
@@ -133,6 +142,8 @@ namespace Akkad {
 	}
 
 	void EditorLayer::ApplyImGuiStyles() {
+		ImGuiIO& io = ImGui::GetIO();
+		io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Medium.ttf", 16.0f);
 		ImGuiStyle* style = &ImGui::GetStyle();
 		ImVec4* colors = style->Colors;
 

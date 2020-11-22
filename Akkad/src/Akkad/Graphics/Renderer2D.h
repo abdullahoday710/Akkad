@@ -1,5 +1,6 @@
 #pragma once
 #include "RenderPlatform.h"
+#include "Camera.h"
 
 namespace Akkad {
 
@@ -12,8 +13,9 @@ namespace Akkad {
 
 			static void Init() { GetInstance().InitImpl(); }
 
-			static void DrawQuad(SharedPtr<Shader> shader, SharedPtr<Texture> texture) { GetInstance().DrawQuadImpl(shader, texture); }
-			static void DrawQuad(SharedPtr<Shader> shader, glm::vec3 color) { GetInstance().DrawQuadImpl(shader, color); }
+			static void BeginScene(Camera& camera, glm::mat4& cameraTransform) { GetInstance().BeginSceneImpl(camera, cameraTransform); }
+			static void DrawQuad(SharedPtr<Texture> texture, glm::mat4& transform) { GetInstance().DrawQuadImpl(texture, transform); }
+			static void DrawQuad(glm::vec3 color, glm::mat4& transform) { GetInstance().DrawQuadImpl(color, transform); }
 		private:
 			Renderer2D() {};
 			~Renderer2D() {};
@@ -21,11 +23,14 @@ namespace Akkad {
 			static Renderer2D s_Instance;
 
 			void InitImpl();
-			void DrawQuadImpl(SharedPtr<Shader> shader, SharedPtr<Texture> texture);
-			void DrawQuadImpl(SharedPtr<Shader> shader, glm::vec3 color);
+			void BeginSceneImpl(Camera& camera, glm::mat4& cameraTransform);
+			void DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform);
+			void DrawQuadImpl(glm::vec3 color, glm::mat4& transform);
 
 			SharedPtr<VertexBuffer> m_QuadVB;
 			SharedPtr<IndexBuffer> m_QuadIB;
+			SharedPtr<Shader> m_TextureShader;
+			SharedPtr<Shader> m_ColorShader;
 		};
 	}
 }

@@ -48,7 +48,8 @@ namespace Akkad {
 	{
 		auto desc = m_FrameBuffer->GetDescriptor();
 
-		s_AspectRatio = desc.width / desc.height;
+		float ratio = desc.width / desc.height;
+		s_AspectRatio = ratio;
 
 		m_FrameBuffer->Bind();
 		m_Scene->Update();

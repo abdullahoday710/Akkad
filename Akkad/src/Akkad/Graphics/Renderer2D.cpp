@@ -38,28 +38,46 @@ namespace Akkad {
 
 			m_QuadVB = vertexbuffer;
 			m_QuadIB = indexbuffer;
+
+			m_ColorShader = platform->CreateShader("res/shaders/colorShader.glsl");
+			m_TextureShader = platform->CreateShader("res/shaders/textureShader.glsl");
 		}
 
-		void Renderer2D::DrawQuadImpl(SharedPtr<Shader> shader, SharedPtr<Texture> texture)
+		void Renderer2D::BeginSceneImpl(Camera& camera, glm::mat4& cameraTransform)
+		{
+			glm::mat4 view = glm::inverse(cameraTransform);
+			glm::mat4 projection = camera.GetProjection();
+			glm::mat4 viewProjection = projection * view;
+
+			m_ColorShader->Bind();
+			m_ColorShader->SetMat4("viewProjection", viewProjection);
+
+			m_TextureShader->Bind();
+			m_TextureShader->SetMat4("viewProjection", viewProjection);
+		}
+
+		void Renderer2D::DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform)
 		{
 			auto command = Application::GetRenderPlatform()->GetRenderCommand();
 
 			m_QuadVB->Bind();
 			m_QuadIB->Bind();
-			shader->Bind();
+			m_TextureShader->Bind();
+			m_TextureShader->SetMat4("transform", transform);
 			texture->Bind(0);
 
 			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
 		}
 
-		void Renderer2D::DrawQuadImpl(SharedPtr<Shader> shader, glm::vec3 color)
+		void Renderer2D::DrawQuadImpl(glm::vec3 color, glm::mat4& transform)
 		{
 			auto command = Application::GetRenderPlatform()->GetRenderCommand();
 
 			m_QuadVB->Bind();
 			m_QuadIB->Bind();
-			shader->Bind();
-			shader->SetVec3("color", color);
+			m_ColorShader->Bind();
+			m_ColorShader->SetVec3("color", color);
+			m_ColorShader->SetMat4("transform", transform);
 
 			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
 		}

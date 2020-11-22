@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "Entity.h"
 
+#include "Akkad/Logging.h"
 #include "Akkad/Application/Application.h"
 #include "Akkad/Graphics/Renderer2D.h"
 
@@ -20,8 +21,6 @@ namespace Akkad {
 
 	void Scene::Init()
 	{
-		auto platform = Application::GetRenderPlatform();
-		m_colorShader = platform->CreateShader("res/shaders/colorShader.glsl");
 	}
 
 	void Scene::Update()
@@ -33,9 +32,7 @@ namespace Akkad {
 			auto& transform = camView.get<TransformComponent>(entity);
 			auto& camera = camView.get<CameraComponent>(entity);
 
-			camera.RecalculateViewProjectionMatrix(transform.GetPosition());
-			m_colorShader->Bind();
-			m_colorShader->SetMat4("viewProjection", camera.viewProjection);
+			Renderer2D::BeginScene(camera.camera, transform.GetTransformMatrix());
 		}
 
 		auto command = Application::GetRenderPlatform()->GetRenderCommand();
@@ -45,11 +42,8 @@ namespace Akkad {
 		{
 			auto& transform = view.get<TransformComponent>(entity);
 			auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
-
-			m_colorShader->Bind();
-			m_colorShader->SetMat4("transform", transform.GetTransformMatrix());
 			
-			Renderer2D::DrawQuad(m_colorShader, spriteRenderer.color);
+			Renderer2D::DrawQuad(spriteRenderer.color, transform.GetTransformMatrix());
 		}
 		
 	}

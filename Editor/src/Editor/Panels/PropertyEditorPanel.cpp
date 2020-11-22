@@ -93,7 +93,7 @@ namespace Akkad {
 
 					if (!m_ActiveEntity.HasComponent<CameraComponent>())
 					{
-						m_ActiveEntity.AddComponent<CameraComponent>(CameraType::Orthographic, EditorLayer::GetViewportAspectRatio());
+						m_ActiveEntity.AddComponent<CameraComponent>(CameraProjection::Orthographic, EditorLayer::GetViewportAspectRatio());
 					}
 				}
 				ImGui::TreePop();

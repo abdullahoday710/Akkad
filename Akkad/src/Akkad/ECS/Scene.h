@@ -21,7 +21,6 @@ namespace Akkad {
 
 	private:
 		entt::registry m_Registry;
-		SharedPtr<Graphics::Shader> m_colorShader;
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 		friend class PropertyEditorPanel;

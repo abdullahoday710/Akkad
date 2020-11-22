@@ -8,6 +8,7 @@ namespace Akkad {
 		TransformComponent() {
 			m_Position = glm::vec3(0.0f);
 			m_TransformMatrix = glm::mat4(1.0f);
+			RecalculateTransformMatrix();
 		}
 
 		glm::vec3& GetPosition() {

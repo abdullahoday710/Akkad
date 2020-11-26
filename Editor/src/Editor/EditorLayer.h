@@ -2,6 +2,8 @@
 #include <Akkad/Akkad.h>
 #include <Akkad/ECS/Scene.h>
 
+#include "EditorCamera.h"
+
 #include <vector>
 
 namespace Akkad {
@@ -25,8 +27,14 @@ namespace Akkad {
 		SharedPtr<FrameBuffer> m_FrameBuffer;
 		SharedPtr<Texture> m_Texture;
 		SharedPtr<Shader> m_Shader;
+		EditorCamera m_EditorCamera;
+
 		static float s_AspectRatio;
+		bool m_IsPlaying = false;
 		void ApplyImGuiStyles();
+
+		void OnScenePlay();
+		void OnSceneStop();
 
 	};
 }

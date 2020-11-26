@@ -4,7 +4,7 @@ namespace Akkad {
 	namespace Graphics {
 
 		struct FrameBufferDescriptor {
-			unsigned int width, height;
+			int width, height;
 
 			bool hasColorAttachment;
 			bool hasDepthAttachment;

@@ -5,10 +5,7 @@
 #include "Akkad/Application/Application.h"
 #include "Akkad/Graphics/Renderer2D.h"
 
-#include "Components/TagComponent.h"
-#include "Components/TransformComponent.h"
-#include "Components/SpriteRendererComponent.h"
-#include "Components/CameraComponent.h"
+#include "Components/Components.h"
 
 namespace Akkad {
 	Scene::Scene()
@@ -19,7 +16,7 @@ namespace Akkad {
 	{
 	}
 
-	void Scene::Init()
+	void Scene::Start()
 	{
 	}
 

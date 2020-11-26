@@ -13,7 +13,7 @@ namespace Akkad {
 		Scene();
 		~Scene();
 
-		void Init();
+		void Start();
 
 		void Update();
 
@@ -24,6 +24,7 @@ namespace Akkad {
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 		friend class PropertyEditorPanel;
+		friend class EditorLayer;
 
 	};
 

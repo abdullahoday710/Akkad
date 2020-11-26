@@ -5,7 +5,7 @@
 #include <Akkad/Input/Input.h>
 #include <Akkad/Input/KeyCodes.h>
 #include <Akkad/ECS/Entity.h>
-#include <Akkad/ECS/Components/TagComponent.h>
+#include <Akkad/ECS/Components/Components.h>
 
 #include <imgui.h>
 #include <glm/glm.hpp>
@@ -15,12 +15,14 @@ namespace Akkad {
 	float EditorLayer::s_AspectRatio;
 
 	EditorLayer::EditorLayer()
+		:m_EditorCamera()
 	{
 		m_Scene = new Scene();
 
 		SceneHierarchyPanel* panel = new SceneHierarchyPanel(m_Scene);
 		PanelManager::AddPanel(panel);
 	}
+
 	void EditorLayer::OnAttach()
 	{
 		auto platform = Application::GetRenderPlatform();
@@ -34,14 +36,23 @@ namespace Akkad {
 		auto framebuffer = platform->CreateFrameBuffer(desc);
 		m_FrameBuffer = framebuffer;
 
-		m_Scene->Init();
-
 		ApplyImGuiStyles();
 	}
 
 	void EditorLayer::OnDetach()
 	{
 
+	}
+
+	void EditorLayer::OnScenePlay()
+	{
+		m_IsPlaying = true;
+		m_Scene->Start();
+	}
+
+	void EditorLayer::OnSceneStop()
+	{
+		m_IsPlaying = false;
 	}
 
 	void EditorLayer::OnUpdate()
@@ -52,7 +63,28 @@ namespace Akkad {
 		s_AspectRatio = ratio;
 
 		m_FrameBuffer->Bind();
-		m_Scene->Update();
+
+		if (m_IsPlaying)
+		{
+			m_Scene->Update();
+		}
+
+		else
+		{
+			auto command = Application::GetRenderPlatform()->GetRenderCommand();
+			command->Clear();
+			auto view = m_Scene->m_Registry.view<TransformComponent, SpriteRendererComponent>();
+			m_EditorCamera.Update();
+			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
+			for (auto entity : view)
+			{
+				auto& transform = view.get<TransformComponent>(entity);
+				auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
+
+				Renderer2D::DrawQuad(spriteRenderer.color, transform.GetTransformMatrix());
+			}
+		}
+		
 		m_FrameBuffer->Unbind();
 
 
@@ -125,6 +157,20 @@ namespace Akkad {
 		}
 
 		ImGui::Begin("Viewport");
+		if (!m_IsPlaying)
+		{
+			if (ImGui::Button("Play"))
+			{
+				OnScenePlay();
+			}
+		}
+		else
+		{
+			if (ImGui::Button("Stop"))
+			{
+				OnSceneStop();
+			}
+		}
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_FrameBuffer->SetSize(viewportPanelSize.x, viewportPanelSize.y);
 		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentTexture(), viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });

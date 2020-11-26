@@ -12,6 +12,11 @@ namespace Akkad {
 		Camera camera;
 		bool isActive = true;
 
+		CameraComponent(CameraProjection cameraProjection)
+			:camera(cameraProjection)
+		{
+		}
+
 		CameraComponent(CameraProjection cameraProjection, float aspectRatio)
 			:camera(cameraProjection, aspectRatio)
 		{

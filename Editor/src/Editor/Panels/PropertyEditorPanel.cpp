@@ -1,10 +1,7 @@
 #include "PropertyEditorPanel.h"
 #include "../EditorLayer.h"
 
-#include <Akkad/ECS/Components/TagComponent.h>
-#include <Akkad/ECS/Components/TransformComponent.h>
-#include <Akkad/ECS/Components/SpriteRendererComponent.h>
-#include <Akkad/ECS/Components/CameraComponent.h>
+#include <Akkad/ECS/Components/Components.h>
 
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
@@ -55,6 +52,11 @@ namespace Akkad {
 				DrawCameraComponent();
 			}
 
+			if (m_ActiveEntity.HasComponent<ScriptComponent>())
+			{
+				DrawScriptComponent();
+			}
+
 			DrawAddComponent();
 		}
 		
@@ -98,6 +100,16 @@ namespace Akkad {
 				}
 				ImGui::TreePop();
 			}
+
+			if (ImGui::TreeNode("Script"))
+			{
+				if (!m_ActiveEntity.HasComponent<ScriptComponent>())
+				{
+					m_ActiveEntity.AddComponent<ScriptComponent>("Null");
+				}
+				
+				ImGui::TreePop();
+			}
 		
 		}
 	}
@@ -129,6 +141,35 @@ namespace Akkad {
 		auto& camera = m_ActiveEntity.GetComponent<CameraComponent>();
 		ImGui::Text("Camera :");
 		ImGui::Checkbox("Active", &camera.isActive);
+	}
+
+	void PropertyEditorPanel::DrawScriptComponent()
+	{
+		std::vector<std::string> scriptNames;
+		for (auto it = ScriptFactory::GetInstance().objectmap.begin(); it != ScriptFactory::GetInstance().objectmap.end(); it++)
+		{
+			scriptNames.push_back(it->first);
+		}
+		static int item_current_idx = 0;                    // Here our selection data is an index.
+		const char* combo_label = scriptNames[item_current_idx].c_str();  // Label to preview before opening the combo (technically it could be anything)
+		if (ImGui::BeginCombo("Script", combo_label))
+		{
+			for (int i = 0; i < scriptNames.size(); i++)
+			{
+				const bool is_selected = (item_current_idx == i);
+				if (ImGui::Selectable(scriptNames[i].c_str(), is_selected))
+				{
+					item_current_idx = i;
+					auto& script = m_ActiveEntity.GetComponent<ScriptComponent>();
+					script.ScriptName = scriptNames[i];
+				}
+
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+			}
+			
+			ImGui::EndCombo();
+		}
 	}
 
 }

@@ -17,6 +17,8 @@ namespace Akkad {
 
 		void Update();
 
+		void Stop();
+
 		Entity AddEntity(std::string tag = "Entity");
 
 	private:

@@ -2,6 +2,7 @@
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/PropertyEditorPanel.h"
 
+#include <Akkad/Logging.h>
 #include <Akkad/Input/Input.h>
 #include <Akkad/Input/KeyCodes.h>
 #include <Akkad/ECS/Entity.h>
@@ -13,6 +14,8 @@
 
 namespace Akkad {
 	float EditorLayer::s_AspectRatio;
+	
+	
 
 	EditorLayer::EditorLayer()
 		:m_EditorCamera()
@@ -35,7 +38,6 @@ namespace Akkad {
 
 		auto framebuffer = platform->CreateFrameBuffer(desc);
 		m_FrameBuffer = framebuffer;
-
 		ApplyImGuiStyles();
 	}
 
@@ -53,6 +55,7 @@ namespace Akkad {
 	void EditorLayer::OnSceneStop()
 	{
 		m_IsPlaying = false;
+		m_Scene->Stop();
 	}
 
 	void EditorLayer::OnUpdate()

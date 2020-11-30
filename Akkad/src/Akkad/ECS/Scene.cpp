@@ -18,31 +18,83 @@ namespace Akkad {
 
 	void Scene::Start()
 	{
+		{
+			auto view = m_Registry.view<ScriptComponent>();
+
+			for (auto entity : view)
+			{
+				auto& script = view.get<ScriptComponent>(entity);
+
+
+				if (script.Instance == nullptr)
+				{
+					script.Instance = ScriptFactory::GetInstance().createObject(script.ScriptName);
+					Entity e(entity, this);
+					script.Instance->m_Entity = e;
+					script.Instance->OnStart();
+				}
+			}
+		}
 	}
 
 	void Scene::Update()
 	{
-		auto camView = m_Registry.view<TransformComponent, CameraComponent>();
-
-		for (auto entity : camView)
+		// Update scripts
 		{
-			auto& transform = camView.get<TransformComponent>(entity);
-			auto& camera = camView.get<CameraComponent>(entity);
+			auto view = m_Registry.view<ScriptComponent>();
 
-			Renderer2D::BeginScene(camera.camera, transform.GetTransformMatrix());
+			for (auto entity : view)
+			{
+				auto& script = view.get<ScriptComponent>(entity);
+
+				script.Instance->OnUpdate();
+			}
+
 		}
 
-		auto command = Application::GetRenderPlatform()->GetRenderCommand();
-		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
-		command->Clear();
-		for (auto entity : view)
+		// Begin scene
 		{
-			auto& transform = view.get<TransformComponent>(entity);
-			auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
-			
-			Renderer2D::DrawQuad(spriteRenderer.color, transform.GetTransformMatrix());
+			auto view = m_Registry.view<TransformComponent, CameraComponent>();
+
+			for (auto entity : view)
+			{
+				auto& transform = view.get<TransformComponent>(entity);
+				auto& camera = view.get<CameraComponent>(entity);
+
+				Renderer2D::BeginScene(camera.camera, transform.GetTransformMatrix());
+			}
+		}
+
+		// Render
+		{
+			auto command = Application::GetRenderPlatform()->GetRenderCommand();
+			auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
+			command->Clear();
+			for (auto entity : view)
+			{
+				auto& transform = view.get<TransformComponent>(entity);
+				auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
+
+				Renderer2D::DrawQuad(spriteRenderer.color, transform.GetTransformMatrix());
+			}
 		}
 		
+		
+	}
+
+	void Scene::Stop()
+	{
+		{
+			auto view = m_Registry.view<ScriptComponent>();
+
+			for (auto entity : view)
+			{
+				auto& script = view.get<ScriptComponent>(entity);
+
+				delete script.Instance;
+				script.Instance = nullptr;
+			}
+		}
 	}
 
 	Entity Scene::AddEntity(std::string tag)

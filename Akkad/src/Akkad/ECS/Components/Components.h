@@ -3,3 +3,4 @@
 #include "SpriteRendererComponent.h"
 #include "TagComponent.h"
 #include "TransformComponent.h"
+#include "ScriptComponent.h"

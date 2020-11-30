@@ -29,6 +29,7 @@ namespace Akkad {
 		void DrawTransformComponent();
 		void DrawSpriteRendererComponent();
 		void DrawCameraComponent();
+		void DrawScriptComponent();
 
 	};
 }

@@ -16,6 +16,7 @@ project "Editor"
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.entt}",
+		"%{IncludeDir.spdlog}",
 	}
 
 	links {

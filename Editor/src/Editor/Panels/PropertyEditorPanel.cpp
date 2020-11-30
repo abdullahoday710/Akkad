@@ -150,8 +150,12 @@ namespace Akkad {
 		{
 			scriptNames.push_back(it->first);
 		}
-		static int item_current_idx = 0;                    // Here our selection data is an index.
-		const char* combo_label = scriptNames[item_current_idx].c_str();  // Label to preview before opening the combo (technically it could be anything)
+		static int item_current_idx = 0;                   
+		const char* combo_label = scriptNames[item_current_idx].c_str();
+
+		auto& script = m_ActiveEntity.GetComponent<ScriptComponent>();
+		script.ScriptName = scriptNames[item_current_idx];
+
 		if (ImGui::BeginCombo("Script", combo_label))
 		{
 			for (int i = 0; i < scriptNames.size(); i++)
@@ -160,8 +164,6 @@ namespace Akkad {
 				if (ImGui::Selectable(scriptNames[i].c_str(), is_selected))
 				{
 					item_current_idx = i;
-					auto& script = m_ActiveEntity.GetComponent<ScriptComponent>();
-					script.ScriptName = scriptNames[i];
 				}
 
 				if (is_selected)

@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "Entity.h"
+#include "SceneSerializer.h"
 
 #include "Akkad/Logging.h"
 #include "Akkad/Application/Application.h"
@@ -95,6 +96,16 @@ namespace Akkad {
 				script.Instance = nullptr;
 			}
 		}
+	}
+
+	void Scene::Serialize()
+	{
+		SceneSerializer serializer(this);
+		serializer.Serialize();
+	}
+
+	void Scene::Deserialize()
+	{
 	}
 
 	Entity Scene::AddEntity(std::string tag)

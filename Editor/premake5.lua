@@ -17,6 +17,7 @@ project "Editor"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.json}",
 	}
 
 	links {

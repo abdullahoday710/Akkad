@@ -49,6 +49,7 @@ namespace Akkad {
 	void EditorLayer::OnScenePlay()
 	{
 		m_IsPlaying = true;
+		m_Scene->Serialize();
 		m_Scene->Start();
 	}
 

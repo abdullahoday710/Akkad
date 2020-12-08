@@ -28,6 +28,7 @@ project "Akkad"
         "%{IncludeDir.stb}",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.entt}",
+        "%{IncludeDir.json}",
 
     }
     

@@ -1,0 +1,38 @@
+{
+    "Scene": {
+        "Entities": {
+            "cc4b5c49-4b4f-5e90-1485-bbdc083cd7ef": {
+                "CameraComponent": {
+                    "Camera": {
+                        "Projection": "Orthographic"
+                    }
+                },
+                "Tag": "Camera",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "ecad02cb-014e-2ea1-2dc0-f86db17b2529": {
+                "SpriteRenderer": {
+                    "Color": [
+                        0.0,
+                        0.7272727489471436,
+                        0.6082645654678345
+                    ]
+                },
+                "Tag": "Square",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            }
+        }
+    }
+}

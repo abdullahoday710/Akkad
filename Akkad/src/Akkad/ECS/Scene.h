@@ -19,8 +19,6 @@ namespace Akkad {
 
 		void Stop();
 
-		void Serialize();
-		void Deserialize();
 		Entity AddEntity(std::string tag = "Entity");
 
 	private:

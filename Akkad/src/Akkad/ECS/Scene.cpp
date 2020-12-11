@@ -98,16 +98,6 @@ namespace Akkad {
 		}
 	}
 
-	void Scene::Serialize()
-	{
-		SceneSerializer serializer(this);
-		serializer.Serialize();
-	}
-
-	void Scene::Deserialize()
-	{
-	}
-
 	Entity Scene::AddEntity(std::string tag)
 	{
 		Entity entity = { m_Registry.create(), this };

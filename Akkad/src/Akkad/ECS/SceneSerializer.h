@@ -5,12 +5,8 @@ namespace Akkad {
 	class SceneSerializer
 	{
 	public:
-		SceneSerializer(Scene* scene) { m_Scene = scene; };
-		~SceneSerializer() {};
+		static void Serialize(Scene* scene);
+		static Scene* Deserialize(std::string filepath);
 
-		void Serialize();
-		void Deserialize();
-	private:
-		Scene* m_Scene;
 	};
 }

@@ -11,7 +11,7 @@ namespace Akkad {
 	void TestScript::OnUpdate()
 	{
 		auto& transform = GetComponent<TransformComponent>();
-
+		transform.SetPostion({ 0,0,0 });
 		glm::mat4& trans = transform.GetTransformMatrix();
 		trans = glm::rotate(trans, (float)Time::GetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 	}

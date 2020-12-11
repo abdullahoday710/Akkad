@@ -7,6 +7,7 @@
 #include <Akkad/Input/KeyCodes.h>
 #include <Akkad/ECS/Entity.h>
 #include <Akkad/ECS/Components/Components.h>
+#include <Akkad/ECS/SceneSerializer.h>
 
 #include <imgui.h>
 #include <glm/glm.hpp>
@@ -20,7 +21,7 @@ namespace Akkad {
 	EditorLayer::EditorLayer()
 		:m_EditorCamera()
 	{
-		m_Scene = new Scene();
+		m_Scene = SceneSerializer::Deserialize("res/scenes/test.json");
 
 		SceneHierarchyPanel* panel = new SceneHierarchyPanel(m_Scene);
 		PanelManager::AddPanel(panel);
@@ -49,7 +50,7 @@ namespace Akkad {
 	void EditorLayer::OnScenePlay()
 	{
 		m_IsPlaying = true;
-		m_Scene->Serialize();
+
 		m_Scene->Start();
 	}
 

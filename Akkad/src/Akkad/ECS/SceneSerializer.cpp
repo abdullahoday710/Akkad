@@ -28,11 +28,11 @@ namespace Akkad {
 		return res;
 	}
 
-	void SceneSerializer::Serialize()
+	void SceneSerializer::Serialize(Scene* scene)
 	{
 		json data;
 		
-		auto view = m_Scene->m_Registry.view<TagComponent, TransformComponent>();
+		auto view = scene->m_Registry.view<TagComponent, TransformComponent>();
 		std::string entityID;
 
 		for (auto entity : view)
@@ -47,7 +47,7 @@ namespace Akkad {
 			data["Scene"]["Entities"][entityID]["Tag"] = tag;
 			data["Scene"]["Entities"][entityID]["Transform"]["Position"] = { position.x, position.y, position.z };
 
-			Entity activeEntity(entity, m_Scene);
+			Entity activeEntity(entity, scene);
 
 			if (activeEntity.HasComponent<SpriteRendererComponent>())
 			{
@@ -88,8 +88,70 @@ namespace Akkad {
 		
 	}
 
-	void SceneSerializer::Deserialize()
+	Scene* SceneSerializer::Deserialize(std::string filepath)
 	{
+		std::ifstream file(filepath);
+		json data;
+		file >> data;
 
+		Scene* scene = new Scene();
+
+		for (auto& entity : data["Scene"]["Entities"].items()) {
+			Entity e = scene->AddEntity();
+
+			for (auto& component : data["Scene"]["Entities"][entity.key()].items())
+			{
+				auto componentData = component.value();
+				if (component.key() == "Transform")
+				{
+					glm::vec3 position({componentData["Position"][0],componentData["Position"][1],componentData["Position"][2]});
+					auto& transform = e.GetComponent<TransformComponent>();
+					transform.SetPostion(position);
+					continue;
+				}
+
+				else if (component.key() == "Tag")
+				{
+					auto& tag = e.GetComponent<TagComponent>();
+					std::string tagstr = componentData;
+					tag.Tag = tagstr;
+					continue;
+				}
+
+				else if (component.key() == "SpriteRenderer")
+				{
+					glm::vec3 color({componentData["Color"][0], componentData["Color"][1] ,componentData["Color"][2] });
+					auto& spriteRenderer = e.AddComponent<SpriteRendererComponent>();
+					spriteRenderer.color = color;
+					continue;
+				}
+
+				else if (component.key() == "Script")
+				{
+					auto& script = e.AddComponent<ScriptComponent>(componentData["Name"]);
+					continue;
+				}
+
+				else if (component.key() == "CameraComponent")
+				{
+					CameraProjection projtype;
+					if (componentData["Camera"]["Projection"] == "Orthographic")
+					{
+						projtype = CameraProjection::Orthographic;
+					}
+
+					else if (componentData["Camera"]["Projection"] == "Perspective")
+					{
+						projtype = CameraProjection::Perspective;
+					}
+
+					e.AddComponent<CameraComponent>(projtype);
+					continue;
+				}
+
+			}
+		}
+
+		return scene;
 	}
 }

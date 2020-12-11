@@ -1,7 +1,27 @@
 {
     "Scene": {
         "Entities": {
-            "cc4b5c49-4b4f-5e90-1485-bbdc083cd7ef": {
+            "2d112414-aa75-f1c0-d53d-1b886a4e94e6": {
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "SpriteRenderer": {
+                    "Color": [
+                        0.0,
+                        1.0,
+                        0.0
+                    ]
+                },
+                "Tag": "Square",
+                "Transform": {
+                    "Position": [
+                        0.00,
+                        0.00,
+                        0.00
+                    ]
+                }
+            },
+            "eb97f009-3dc1-bdb4-6c13-eabec8d5a924": {
                 "CameraComponent": {
                     "Camera": {
                         "Projection": "Orthographic"
@@ -10,26 +30,9 @@
                 "Tag": "Camera",
                 "Transform": {
                     "Position": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ]
-                }
-            },
-            "ecad02cb-014e-2ea1-2dc0-f86db17b2529": {
-                "SpriteRenderer": {
-                    "Color": [
-                        0.0,
-                        0.7272727489471436,
-                        0.6082645654678345
-                    ]
-                },
-                "Tag": "Square",
-                "Transform": {
-                    "Position": [
-                        0.0,
-                        0.0,
-                        0.0
+                        0.00,
+                        0.00,
+                        0.00
                     ]
                 }
             }

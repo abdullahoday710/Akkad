@@ -22,8 +22,8 @@ namespace Akkad {
 		virtual void RenderImGui() override;
 
 		static float GetViewportAspectRatio() { return s_AspectRatio; }
+		static Scene* s_ActiveScene;
 	private:
-		Scene* m_Scene;
 		SharedPtr<FrameBuffer> m_FrameBuffer;
 		SharedPtr<Texture> m_Texture;
 		SharedPtr<Shader> m_Shader;
@@ -35,6 +35,7 @@ namespace Akkad {
 
 		void OnScenePlay();
 		void OnSceneStop();
+		void LoadScene(std::string& filepath);
 
 	};
 }

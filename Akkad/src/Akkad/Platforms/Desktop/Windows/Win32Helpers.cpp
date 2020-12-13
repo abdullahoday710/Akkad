@@ -9,3 +9,15 @@ wchar_t* convertCharArrayToLPCWSTR(const char* charArray)
     return wString;
     
 }
+
+std::string convertLPCWSTRToString(const LPCWSTR lpcwstr)
+{
+    std::wstring wstr = lpcwstr;
+    std::string strTo;
+    char* szTo = new char[wstr.length() + 1];
+    szTo[wstr.size()] = '\0';
+    WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, szTo, (int)wstr.length(), NULL, NULL);
+    strTo = szTo;
+    delete[] szTo;
+    return strTo;
+}

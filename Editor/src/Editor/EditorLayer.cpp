@@ -3,6 +3,7 @@
 #include "Panels/PropertyEditorPanel.h"
 
 #include <Akkad/Logging.h>
+#include <Akkad/PlatformUtils.h>
 #include <Akkad/Input/Input.h>
 #include <Akkad/Input/KeyCodes.h>
 #include <Akkad/ECS/Entity.h>
@@ -15,16 +16,22 @@
 
 namespace Akkad {
 	float EditorLayer::s_AspectRatio;
-	
+	Scene* EditorLayer::s_ActiveScene;
 	
 
 	EditorLayer::EditorLayer()
 		:m_EditorCamera()
 	{
-		m_Scene = SceneSerializer::Deserialize("res/scenes/test.json");
+		s_ActiveScene = SceneSerializer::Deserialize("res/scenes/test.json");
 
-		SceneHierarchyPanel* panel = new SceneHierarchyPanel(m_Scene);
+		SceneHierarchyPanel* panel = new SceneHierarchyPanel();
 		PanelManager::AddPanel(panel);
+	}
+
+	void EditorLayer::LoadScene(std::string& filepath)
+	{
+		delete s_ActiveScene;
+		s_ActiveScene = SceneSerializer::Deserialize(filepath);
 	}
 
 	void EditorLayer::OnAttach()
@@ -51,13 +58,13 @@ namespace Akkad {
 	{
 		m_IsPlaying = true;
 
-		m_Scene->Start();
+		s_ActiveScene->Start();
 	}
 
 	void EditorLayer::OnSceneStop()
 	{
 		m_IsPlaying = false;
-		m_Scene->Stop();
+		s_ActiveScene->Stop();
 	}
 
 	void EditorLayer::OnUpdate()
@@ -68,17 +75,17 @@ namespace Akkad {
 		s_AspectRatio = ratio;
 
 		m_FrameBuffer->Bind();
-
+	
 		if (m_IsPlaying)
 		{
-			m_Scene->Update();
+			s_ActiveScene->Update();
 		}
 
 		else
 		{
 			auto command = Application::GetRenderPlatform()->GetRenderCommand();
 			command->Clear();
-			auto view = m_Scene->m_Registry.view<TransformComponent, SpriteRendererComponent>();
+			auto view = s_ActiveScene->m_Registry.view<TransformComponent, SpriteRendererComponent>();
 			m_EditorCamera.Update();
 			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
 			for (auto entity : view)
@@ -91,8 +98,6 @@ namespace Akkad {
 		}
 		
 		m_FrameBuffer->Unbind();
-
-
 	}
 
 	void EditorLayer::RenderImGui()
@@ -123,7 +128,16 @@ namespace Akkad {
 			if (ImGui::BeginMenu("File"))
 			{
 				ImGui::Separator();
+				if (ImGui::MenuItem("Open"))
+				{
+					std::string scenePath = PlatformUtils::OpenFileDialog();
 
+					if (!scenePath.empty())
+					{
+						LoadScene(scenePath);
+					}
+					
+				}
 				if (ImGui::MenuItem("Close"))
 				{
 					Application::Shutdown();
@@ -135,7 +149,7 @@ namespace Akkad {
 			{
 				if (ImGui::MenuItem("Create Entity"))
 				{
-					Entity e = m_Scene->AddEntity();
+					Entity e = s_ActiveScene->AddEntity();
 				}
 
 				ImGui::EndMenu();
@@ -145,13 +159,13 @@ namespace Akkad {
 			{
 				if (ImGui::MenuItem("Hirearchy"))
 				{
-					SceneHierarchyPanel* panel = new SceneHierarchyPanel(m_Scene);
+					SceneHierarchyPanel* panel = new SceneHierarchyPanel();
 					PanelManager::AddPanel(panel);
 				}
 
 				if (ImGui::MenuItem("Property Editor"))
 				{
-					PropertyEditorPanel* panel = new PropertyEditorPanel(m_Scene);
+					PropertyEditorPanel* panel = new PropertyEditorPanel();
 					PanelManager::AddPanel(panel);
 				}
 

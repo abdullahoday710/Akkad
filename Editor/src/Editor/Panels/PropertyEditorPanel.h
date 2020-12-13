@@ -9,7 +9,7 @@ namespace Akkad {
 	class PropertyEditorPanel : public Panel
 	{
 	public:
-		PropertyEditorPanel(Scene* scene);
+		PropertyEditorPanel();
 		~PropertyEditorPanel();
 		virtual void DrawImGui() override;
 		virtual void OnOpen() override { showPanel = true; }
@@ -18,7 +18,7 @@ namespace Akkad {
 	private:
 		static bool showPanel;
 		friend class SceneHierarchyPanel;
-		Scene* m_Scene;
+
 		static Entity m_ActiveEntity;
 
 		static void SetActiveEntity(Entity e) { m_ActiveEntity = e; }

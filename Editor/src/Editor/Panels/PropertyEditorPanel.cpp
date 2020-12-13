@@ -13,9 +13,8 @@ namespace Akkad {
 	bool AddComponentsOpen = false;
 	Entity PropertyEditorPanel::m_ActiveEntity;
 
-	PropertyEditorPanel::PropertyEditorPanel(Scene* scene)
+	PropertyEditorPanel::PropertyEditorPanel()
 	{
-		m_Scene = scene;
 	}
 
 	PropertyEditorPanel::~PropertyEditorPanel()

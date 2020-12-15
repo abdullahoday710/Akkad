@@ -18,6 +18,7 @@ namespace Akkad {
 	private:
 		static bool showPanel;
 		friend class SceneHierarchyPanel;
+		friend class EditorLayer;
 
 		static Entity m_ActiveEntity;
 

@@ -5,7 +5,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
-#include <misc/cpp/imgui_stdlib.cpp>
+#include <misc/cpp/imgui_stdlib.h>
 
 namespace Akkad {
 	bool PropertyEditorPanel::showPanel;

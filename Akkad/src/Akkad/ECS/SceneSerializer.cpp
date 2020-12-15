@@ -28,13 +28,13 @@ namespace Akkad {
 		return res;
 	}
 
-	void SceneSerializer::Serialize(Scene* scene)
+	void SceneSerializer::Serialize(Scene* scene, std::string& outputPath)
 	{
 		json data;
 		
 		auto view = scene->m_Registry.view<TagComponent, TransformComponent>();
 		std::string entityID;
-
+		data["Scene"]["Name"] = scene->m_Name;
 		for (auto entity : view)
 		{
 			entityID = GenerateRandomName();
@@ -82,19 +82,24 @@ namespace Akkad {
 
 			}
 		}
-		
-		std::ofstream output("res/scenes/test.json");
+
+		std::ofstream output;
+		output.open(outputPath, std::ios::trunc);
 		output << std::setw(4) << data << std::endl;
+		output.close();
 		
 	}
 
 	Scene* SceneSerializer::Deserialize(std::string filepath)
 	{
-		std::ifstream file(filepath);
+		std::ifstream file;
+		file.open(filepath);
 		json data;
 		file >> data;
 
 		Scene* scene = new Scene();
+		std::string sceneName = data["Scene"]["Name"];
+		scene->m_Name = sceneName;
 
 		for (auto& entity : data["Scene"]["Entities"].items()) {
 			Entity e = scene->AddEntity();
@@ -151,7 +156,7 @@ namespace Akkad {
 
 			}
 		}
-
+		file.close();
 		return scene;
 	}
 }

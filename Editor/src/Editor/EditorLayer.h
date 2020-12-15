@@ -36,6 +36,8 @@ namespace Akkad {
 		void OnScenePlay();
 		void OnSceneStop();
 		void LoadScene(std::string& filepath);
+		void SaveActiveScene();
+		void NewScene(std::string& sceneName);
 
 	};
 }

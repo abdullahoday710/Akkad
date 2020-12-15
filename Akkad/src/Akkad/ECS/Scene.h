@@ -11,6 +11,7 @@ namespace Akkad {
 
 	public:
 		Scene();
+		Scene(std::string& name) : m_Name(name) {}
 		~Scene();
 
 		void Start();
@@ -23,6 +24,7 @@ namespace Akkad {
 
 	private:
 		entt::registry m_Registry;
+		std::string m_Name = "Scene";
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 		friend class PropertyEditorPanel;

@@ -11,6 +11,7 @@
 #include <Akkad/ECS/SceneSerializer.h>
 
 #include <imgui.h>
+#include <misc/cpp/imgui_stdlib.cpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -22,16 +23,30 @@ namespace Akkad {
 	EditorLayer::EditorLayer()
 		:m_EditorCamera()
 	{
-		s_ActiveScene = SceneSerializer::Deserialize("res/scenes/test.json");
+		s_ActiveScene = new Scene();
 
 		SceneHierarchyPanel* panel = new SceneHierarchyPanel();
 		PanelManager::AddPanel(panel);
 	}
-
+	void EditorLayer::NewScene(std::string& sceneName)
+	{
+		// when switching scenes property editor must be empty.
+		//if its not, we will get an assertion failed from entt because the previous scene is a nullptr.
+		PropertyEditorPanel::SetActiveEntity({}); 
+		delete s_ActiveScene;
+		s_ActiveScene = new Scene(sceneName);
+	}
 	void EditorLayer::LoadScene(std::string& filepath)
 	{
+		PropertyEditorPanel::SetActiveEntity({});
 		delete s_ActiveScene;
 		s_ActiveScene = SceneSerializer::Deserialize(filepath);
+	}
+
+	void EditorLayer::SaveActiveScene()
+	{
+		std::string path = "res/scenes/" + s_ActiveScene->m_Name + ".AKSCENE";
+		SceneSerializer::Serialize(s_ActiveScene, path);
 	}
 
 	void EditorLayer::OnAttach()
@@ -123,11 +138,22 @@ namespace Akkad {
 		ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
 
+		bool NewScenepopup = false;
 		if (ImGui::BeginMainMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
 			{
 				ImGui::Separator();
+				if (ImGui::MenuItem("New"))
+				{
+					NewScenepopup = true;
+				}
+
+				if (ImGui::MenuItem("Save", "ctrl + s"))
+				{
+					SaveActiveScene();
+				}
+
 				if (ImGui::MenuItem("Open"))
 				{
 					std::string scenePath = PlatformUtils::OpenFileDialog();
@@ -138,6 +164,7 @@ namespace Akkad {
 					}
 					
 				}
+
 				if (ImGui::MenuItem("Close"))
 				{
 					Application::Shutdown();
@@ -173,6 +200,24 @@ namespace Akkad {
 			}
 
 			ImGui::EndMainMenuBar();
+
+			if (NewScenepopup)
+			{
+				ImGui::OpenPopup("New Scene");
+			}
+
+			if (ImGui::BeginPopupModal("New Scene"))
+			{
+				std::string sceneName = "";
+				if (ImGui::InputText("Scene Name", &sceneName, ImGuiInputTextFlags_EnterReturnsTrue))
+				{
+					NewScene(sceneName);
+					NewScenepopup = false;
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
 		}
 
 		ImGui::Begin("Viewport");
@@ -205,6 +250,13 @@ namespace Akkad {
 		}
 
 		ImGui::End();
+
+		// Handle keyboard shortcuts
+
+		if (Input::GetKeyDown(AK_KEY_LEFT_CONTROL) & Input::GetKeyDown(AK_KEY_S))
+		{
+			SaveActiveScene();
+		}
 	}
 
 	void EditorLayer::ApplyImGuiStyles() {

@@ -84,4 +84,9 @@ namespace Akkad {
 		ScriptableEntity* Instance = nullptr;
 	};
 
+#define RegisterScript(type,name)\
+namespace {\
+	bool registerScript = ScriptFactory::GetInstance().RegisterScriptObject<type>(name);\
+}
+
 }

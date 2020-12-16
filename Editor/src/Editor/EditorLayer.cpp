@@ -252,7 +252,7 @@ namespace Akkad {
 		ImGui::End();
 
 		// Handle keyboard shortcuts
-		ImGui::ShowDemoWindow();
+
 		if (Input::GetKeyDown(AK_KEY_LEFT_CONTROL) & Input::GetKeyDown(AK_KEY_S))
 		{
 			SaveActiveScene();

@@ -21,6 +21,23 @@ namespace Akkad {
 	{
 	}
 
+	template <typename T>
+	bool DrawComponentContextMenu(Entity e)
+	{
+		if (ImGui::BeginPopupContextItem())
+		{
+			if (ImGui::Button("Delete"))
+			{
+				e.RemoveComponent<T>();
+				ImGui::EndPopup();
+				return true;
+			}
+
+			ImGui::EndPopup();
+			return false;
+		}
+	}
+
 	void PropertyEditorPanel::DrawImGui()
 	{
 		if (!showPanel)
@@ -100,14 +117,12 @@ namespace Akkad {
 				ImGui::TreePop();
 			}
 
-			if (ImGui::TreeNode("Script"))
+			if (ImGui::Button("Script"))
 			{
 				if (!m_ActiveEntity.HasComponent<ScriptComponent>())
 				{
 					m_ActiveEntity.AddComponent<ScriptComponent>("Null");
 				}
-				
-				ImGui::TreePop();
 			}
 		
 		}
@@ -115,62 +130,105 @@ namespace Akkad {
 
 	void PropertyEditorPanel::DrawTagComponent()
 	{
-		auto& tag = m_ActiveEntity.GetComponent<TagComponent>();
-		std::string& str = tag.Tag;
-		ImGui::InputText("Tag", &str);
+		ImGui::SetNextItemOpen(true);
+		if (ImGui::TreeNode("Tag"))
+		{
+			auto& tag = m_ActiveEntity.GetComponent<TagComponent>();
+			std::string& str = tag.Tag;
+			ImGui::InputText("Tag", &str);
+
+			ImGui::TreePop();
+		}
+		
 	}
 
 	void PropertyEditorPanel::DrawTransformComponent()
 	{
-		auto& transform = m_ActiveEntity.GetComponent<TransformComponent>();
-		ImGui::InputFloat3("Transform", glm::value_ptr(transform.GetPosition()));
-		transform.RecalculateTransformMatrix();
+		ImGui::SetNextItemOpen(true);
+		if (ImGui::TreeNode("Transform"))
+		{
+			auto& transform = m_ActiveEntity.GetComponent<TransformComponent>();
+			ImGui::InputFloat3("Position", glm::value_ptr(transform.GetPosition()));
+			transform.RecalculateTransformMatrix();
+			ImGui::TreePop();
+		}
+
 
 	}
 
 	void PropertyEditorPanel::DrawSpriteRendererComponent()
 	{
-		auto& sprite = m_ActiveEntity.GetComponent<SpriteRendererComponent>();
-		//ImGui::InputFloat3("Color", glm::value_ptr(sprite.color));
-		ImGui::ColorPicker3("Color", glm::value_ptr(sprite.color));
+		ImGui::SetNextItemOpen(true);
+		if (ImGui::TreeNode("Sprite Renderer"))
+		{
+			if (DrawComponentContextMenu<SpriteRendererComponent>(m_ActiveEntity))
+			{
+				ImGui::TreePop();
+				return;
+			}
+			auto& sprite = m_ActiveEntity.GetComponent<SpriteRendererComponent>();
+			ImGui::ColorPicker3("Color", glm::value_ptr(sprite.color));
+			ImGui::TreePop();
+		}
 	}
 
 	void PropertyEditorPanel::DrawCameraComponent()
 	{
-		auto& camera = m_ActiveEntity.GetComponent<CameraComponent>();
-		ImGui::Text("Camera :");
-		ImGui::Checkbox("Active", &camera.isActive);
+		ImGui::SetNextItemOpen(true);
+		if (ImGui::TreeNode("Camera"))
+		{
+			if (DrawComponentContextMenu<CameraComponent>(m_ActiveEntity))
+			{
+				ImGui::TreePop();
+				return;
+			}
+			auto& camera = m_ActiveEntity.GetComponent<CameraComponent>();
+			ImGui::Text("Camera :");
+			ImGui::Checkbox("Active", &camera.isActive);
+			ImGui::TreePop();
+		}
 	}
 
 	void PropertyEditorPanel::DrawScriptComponent()
 	{
-		std::vector<std::string> scriptNames;
-		for (auto it = ScriptFactory::GetInstance().objectmap.begin(); it != ScriptFactory::GetInstance().objectmap.end(); it++)
+		ImGui::SetNextItemOpen(true);
+		if (ImGui::TreeNode("Script"))
 		{
-			scriptNames.push_back(it->first);
-		}
-		static int item_current_idx = 0;                   
-		const char* combo_label = scriptNames[item_current_idx].c_str();
-
-		auto& script = m_ActiveEntity.GetComponent<ScriptComponent>();
-		script.ScriptName = scriptNames[item_current_idx];
-
-		if (ImGui::BeginCombo("Script", combo_label))
-		{
-			for (int i = 0; i < scriptNames.size(); i++)
+			if (DrawComponentContextMenu<ScriptComponent>(m_ActiveEntity))
 			{
-				const bool is_selected = (item_current_idx == i);
-				if (ImGui::Selectable(scriptNames[i].c_str(), is_selected))
+				ImGui::TreePop();
+				return;
+			}
+			std::vector<std::string> scriptNames;
+			for (auto it = ScriptFactory::GetInstance().objectmap.begin(); it != ScriptFactory::GetInstance().objectmap.end(); it++)
+			{
+				scriptNames.push_back(it->first);
+			}
+			static int item_current_idx = 0;
+			const char* combo_label = scriptNames[item_current_idx].c_str();
+
+			auto& script = m_ActiveEntity.GetComponent<ScriptComponent>();
+			script.ScriptName = scriptNames[item_current_idx];
+
+			if (ImGui::BeginCombo("Script", combo_label))
+			{
+				for (int i = 0; i < scriptNames.size(); i++)
 				{
-					item_current_idx = i;
+					const bool is_selected = (item_current_idx == i);
+					if (ImGui::Selectable(scriptNames[i].c_str(), is_selected))
+					{
+						item_current_idx = i;
+					}
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
 				}
 
-				if (is_selected)
-					ImGui::SetItemDefaultFocus();
+				ImGui::EndCombo();
 			}
-			
-			ImGui::EndCombo();
+			ImGui::TreePop();
 		}
+
 	}
 
 }

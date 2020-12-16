@@ -1,37 +1,7 @@
 {
     "Scene": {
         "Entities": {
-            "1cdba83a-3d42-acd1-9aa1-22f418ed1933": {
-                "Tag": "Entity",
-                "Transform": {
-                    "Position": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ]
-                }
-            },
-            "1d2b57a2-87ec-cd9c-b768-d06b275335dc": {
-                "Script": {
-                    "Name": "TestScript"
-                },
-                "SpriteRenderer": {
-                    "Color": [
-                        0.0,
-                        0.31067943572998047,
-                        1.0
-                    ]
-                },
-                "Tag": "Box2",
-                "Transform": {
-                    "Position": [
-                        -1.2000000476837158,
-                        0.0,
-                        0.0
-                    ]
-                }
-            },
-            "a237ab9c-245a-cd23-8db4-c9a3bdbbb387": {
+            "29156ef0-01e3-f0cd-4c28-c150b451f20b": {
                 "CameraComponent": {
                     "Camera": {
                         "Projection": "Orthographic"
@@ -46,7 +16,7 @@
                     ]
                 }
             },
-            "b99bbb19-8077-36da-bc37-4f2de9fe5b5f": {
+            "94a6165f-e5f0-7981-760d-5425e3522d1a": {
                 "SpriteRenderer": {
                     "Color": [
                         0.1454545259475708,
@@ -58,6 +28,26 @@
                 "Transform": {
                     "Position": [
                         0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "b2568827-60a5-8f0c-cb3c-529ae45c0034": {
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "SpriteRenderer": {
+                    "Color": [
+                        0.0,
+                        0.31067943572998047,
+                        1.0
+                    ]
+                },
+                "Tag": "Box2",
+                "Transform": {
+                    "Position": [
+                        -1.2000000476837158,
                         0.0,
                         0.0
                     ]

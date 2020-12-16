@@ -26,6 +26,12 @@ namespace Akkad {
 		}
 
 		template<typename T>
+		void RemoveComponent()
+		{
+			m_Scene->m_Registry.remove_if_exists<T>(m_Handle);
+		}
+
+		template<typename T>
 		bool HasComponent()
 		{
 			return m_Scene->m_Registry.has<T>(m_Handle);
@@ -33,10 +39,14 @@ namespace Akkad {
 
 		bool IsValid()
 		{
-			if ((int)m_Handle != -1)
+			if (m_Scene != nullptr)
 			{
-				return true;
+				if (m_Scene->m_Registry.valid(m_Handle))
+				{
+					return true;
+				}
 			}
+			
 
 			return false;
 		}

@@ -43,6 +43,7 @@ namespace Akkad {
 		for (auto entity : view)
 		{
 			auto& tag = view.get<TagComponent>(entity);
+
 			if (ImGui::TreeNode((void*)count, tag.Tag.c_str()))
 			{
 				if (ImGui::IsItemToggledOpen())
@@ -58,6 +59,15 @@ namespace Akkad {
 					PropertyEditorPanel::SetActiveEntity(e);
 				}
 				ImGui::TreePop();
+			}
+
+			if (ImGui::BeginPopupContextItem(tag.Tag.c_str()))
+			{
+				if (ImGui::Button("Delete"))
+				{
+					EditorLayer::s_ActiveScene->m_Registry.destroy(entity);
+				}
+				ImGui::EndPopup();
 			}
 			count++;
 

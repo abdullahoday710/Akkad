@@ -121,7 +121,7 @@ namespace Akkad {
 			{
 				if (!m_ActiveEntity.HasComponent<ScriptComponent>())
 				{
-					m_ActiveEntity.AddComponent<ScriptComponent>("Null");
+					m_ActiveEntity.AddComponent<ScriptComponent>("");
 				}
 			}
 		
@@ -208,7 +208,19 @@ namespace Akkad {
 			const char* combo_label = scriptNames[item_current_idx].c_str();
 
 			auto& script = m_ActiveEntity.GetComponent<ScriptComponent>();
-			script.ScriptName = scriptNames[item_current_idx];
+			if (script.ScriptName.empty())
+			{
+				script.ScriptName = scriptNames[item_current_idx];
+			}
+
+			else
+			{
+				ptrdiff_t pos = std::find(scriptNames.begin(), scriptNames.end(), script.ScriptName) - scriptNames.begin();
+				if (pos <= scriptNames.size())
+				{
+					item_current_idx = pos;
+				}
+			}
 
 			if (ImGui::BeginCombo("Script", combo_label))
 			{

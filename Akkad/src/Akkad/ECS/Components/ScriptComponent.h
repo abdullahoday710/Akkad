@@ -40,9 +40,20 @@ namespace Akkad {
 		template<class ObjectType>
 		bool RegisterScriptObject(std::string name) 
 		{
-			std::function<ScriptableEntity* ()> func = instantiate<ObjectType>;
-			objectmap[name] = func;
-			return true;
+			auto it = objectmap.find(name);
+
+			if (it == objectmap.end())
+			{
+				std::function<ScriptableEntity* ()> func = instantiate<ObjectType>;
+				objectmap[name] = func;
+				return true;
+			}
+			else
+			{
+				AK_ASSERT(false, "Trying to register a script that already exists !");
+				return false;
+			}
+
 		}
 
 		ScriptableEntity* createObject(const std::string& name)
@@ -84,9 +95,11 @@ namespace Akkad {
 		ScriptableEntity* Instance = nullptr;
 	};
 
+// ---------------------------------
 #define RegisterScript(type,name)\
 namespace {\
 	bool registerScript = ScriptFactory::GetInstance().RegisterScriptObject<type>(name);\
 }
+// ---------------------------------
 
 }

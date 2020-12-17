@@ -1,39 +1,7 @@
 {
     "Scene": {
         "Entities": {
-            "29156ef0-01e3-f0cd-4c28-c150b451f20b": {
-                "CameraComponent": {
-                    "Camera": {
-                        "Projection": "Orthographic"
-                    }
-                },
-                "Tag": "Camera",
-                "Transform": {
-                    "Position": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ]
-                }
-            },
-            "94a6165f-e5f0-7981-760d-5425e3522d1a": {
-                "SpriteRenderer": {
-                    "Color": [
-                        0.1454545259475708,
-                        1.0,
-                        0.0
-                    ]
-                },
-                "Tag": "Box1",
-                "Transform": {
-                    "Position": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ]
-                }
-            },
-            "b2568827-60a5-8f0c-cb3c-529ae45c0034": {
+            "14c10698-e520-feaa-0347-6f66cd05e1d2": {
                 "Script": {
                     "Name": "TestScript"
                 },
@@ -48,6 +16,41 @@
                 "Transform": {
                     "Position": [
                         -1.2000000476837158,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "1c84345b-0cd4-bb25-3201-b3f5605aaa16": {
+                "CameraComponent": {
+                    "Camera": {
+                        "Projection": "Orthographic"
+                    }
+                },
+                "Script": {
+                    "Name": "TestCameraControllerScript"
+                },
+                "Tag": "Camera",
+                "Transform": {
+                    "Position": [
+                        -0.7024056315422058,
+                        -0.14997665584087372,
+                        0.0
+                    ]
+                }
+            },
+            "6092750a-ca0e-d78d-8a9a-270e5b7d0a49": {
+                "SpriteRenderer": {
+                    "Color": [
+                        0.1454545259475708,
+                        1.0,
+                        0.0
+                    ]
+                },
+                "Tag": "Box1",
+                "Transform": {
+                    "Position": [
+                        0.0,
                         0.0,
                         0.0
                     ]

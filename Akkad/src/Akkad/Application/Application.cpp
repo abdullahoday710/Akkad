@@ -10,14 +10,14 @@
 namespace Akkad {
 	Application Application::s_Instance;
 
-	void Application::InitImpl()
+	void Application::InitImpl(ApplicationSettings& settings)
 	{
 		#ifdef AK_PLATFORM_WINDOWS
 			Win32Window* window = new Win32Window();
 			EventFN event_cb = std::bind(&Application::OnEvent, this, std::placeholders::_1);
 
 			window->SetEventCallback(event_cb);
-			window->Init({"engine", 800, 600});
+			window->Init(settings.window_settings);
 			m_Window = window;
 		#endif //AK_PLATFORM_WINDOWS
 

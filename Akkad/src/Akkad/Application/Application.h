@@ -8,6 +8,12 @@
 
 namespace Akkad {
 	using namespace Graphics;
+
+	struct ApplicationSettings
+	{
+		WindowSettings window_settings;
+	};
+
 	class Application {
 	public:
 		static Application& GetInstance() { return s_Instance; }
@@ -15,7 +21,7 @@ namespace Akkad {
 		static void AttachLayer(Layer* layer) { GetInstance().AttachLayerImpl(layer); }
 		static void DetachLayer(Layer* layer) { GetInstance().DetachLayerImpl(layer); }
 		static void Run() { GetInstance().RunImpl(); }
-		static void Init() { GetInstance().InitImpl(); }
+		static void Init(ApplicationSettings& settings) { GetInstance().InitImpl(settings); }
 		static void Shutdown() { GetInstance().m_Running = false; };
 		static SharedPtr<RenderPlatform> GetRenderPlatform() { return GetInstance().m_platform; }
 		Window* GetWindow() { return m_Window; }
@@ -26,7 +32,7 @@ namespace Akkad {
 		~Application();
 		static Application s_Instance;
 
-		void InitImpl();
+		void InitImpl(ApplicationSettings& settings);
 		void RunImpl();
 		bool m_Running = false;
 

@@ -31,6 +31,8 @@ namespace Akkad {
 
 		static float s_AspectRatio;
 		bool m_IsPlaying = false;
+		void DrawMainMenuBar();
+		void DrawViewport();
 		void ApplyImGuiStyles();
 
 		void OnScenePlay();

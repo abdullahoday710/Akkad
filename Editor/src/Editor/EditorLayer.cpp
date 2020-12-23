@@ -138,6 +138,53 @@ namespace Akkad {
 		ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
 
+		DrawMainMenuBar();
+		DrawViewport();
+
+		for (auto panel : PanelManager::GetPanels())
+		{
+			if (panel)
+			{
+				panel->DrawImGui();
+			}
+			
+		}
+
+		ImGui::End();
+
+		// Handle keyboard shortcuts
+
+		if (Input::GetKeyDown(AK_KEY_LEFT_CONTROL) & Input::GetKeyDown(AK_KEY_S))
+		{
+			SaveActiveScene();
+		}
+	}
+
+	void EditorLayer::DrawViewport()
+	{
+		ImGui::Begin("Viewport");
+		if (!m_IsPlaying)
+		{
+			if (ImGui::Button("Play"))
+			{
+				OnScenePlay();
+			}
+		}
+		else
+		{
+			if (ImGui::Button("Stop"))
+			{
+				OnSceneStop();
+			}
+		}
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_FrameBuffer->SetSize(viewportPanelSize.x, viewportPanelSize.y);
+		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentTexture(), viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::End();
+	}
+
+	void EditorLayer::DrawMainMenuBar()
+	{
 		bool NewScenepopup = false;
 		if (ImGui::BeginMainMenuBar())
 		{
@@ -162,7 +209,7 @@ namespace Akkad {
 					{
 						LoadScene(scenePath);
 					}
-					
+
 				}
 
 				if (ImGui::MenuItem("Close"))
@@ -218,44 +265,6 @@ namespace Akkad {
 
 				ImGui::EndPopup();
 			}
-		}
-
-		ImGui::Begin("Viewport");
-		if (!m_IsPlaying)
-		{
-			if (ImGui::Button("Play"))
-			{
-				OnScenePlay();
-			}
-		}
-		else
-		{
-			if (ImGui::Button("Stop"))
-			{
-				OnSceneStop();
-			}
-		}
-		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		m_FrameBuffer->SetSize(viewportPanelSize.x, viewportPanelSize.y);
-		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentTexture(), viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		ImGui::End();
-
-		for (auto panel : PanelManager::GetPanels())
-		{
-			if (panel)
-			{
-				panel->DrawImGui();
-			}
-			
-		}
-
-		ImGui::End();
-
-		// Handle keyboard shortcuts
-
-		if (Input::GetKeyDown(AK_KEY_LEFT_CONTROL) & Input::GetKeyDown(AK_KEY_S))
-		{
-			SaveActiveScene();
 		}
 	}
 

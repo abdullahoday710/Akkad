@@ -29,6 +29,8 @@ namespace Akkad {
 
 		static void RemovePanel(Panel* panel)
 		{
+			panel->OnClose();
+
 			s_Panels.erase(std::remove(s_Panels.begin(), s_Panels.end(), panel), s_Panels.end());
 			delete panel;
 		}

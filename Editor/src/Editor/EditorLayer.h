@@ -23,6 +23,8 @@ namespace Akkad {
 
 		static float GetViewportAspectRatio() { return s_AspectRatio; }
 		static Scene* s_ActiveScene;
+		std::string m_ActiveProjectPath;
+
 	private:
 		SharedPtr<FrameBuffer> m_FrameBuffer;
 		SharedPtr<Texture> m_Texture;

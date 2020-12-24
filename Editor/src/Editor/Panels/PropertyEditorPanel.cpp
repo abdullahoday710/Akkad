@@ -40,17 +40,7 @@ namespace Akkad {
 
 	void PropertyEditorPanel::DrawImGui()
 	{
-		if (!showPanel)
-		{
-			OnClose();
-			return;
-		}
-
-		if (!ImGui::Begin("Property Editor", &showPanel))
-		{
-			ImGui::End();
-			return;
-		}
+		ImGui::Begin("Property Editor", &showPanel);
 
 		ImGui::Text("Properties: ");
 		if (m_ActiveEntity.IsValid())
@@ -79,11 +69,9 @@ namespace Akkad {
 
 		ImGui::End();
 	}
-	
 
 	void PropertyEditorPanel::OnClose()
 	{
-		PanelManager::RemovePanel(this);
 	}
 
 	void PropertyEditorPanel::DrawAddComponent()

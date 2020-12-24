@@ -19,23 +19,12 @@ namespace Akkad {
 
 	void SceneHierarchyPanel::OnClose()
 	{
-		PanelManager::RemovePanel(this);
 
 	}
 
 	void SceneHierarchyPanel::DrawHierarchyPanel()
 	{
-		if (!showPanel)
-		{
-			OnClose();
-			return;
-		}
-
-		if (!ImGui::Begin("Hierarchy", &showPanel))
-		{
-			ImGui::End();
-			return;
-		}
+		ImGui::Begin("Hierarchy", &showPanel);
 
 		auto view = EditorLayer::s_ActiveScene->m_Registry.view<TagComponent>();
 		unsigned int count = 0;

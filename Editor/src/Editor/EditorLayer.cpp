@@ -1,6 +1,8 @@
 #include "EditorLayer.h"
+#include "ProjectSerializer.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/PropertyEditorPanel.h"
+#include "Panels/NewProjectPanel.h"
 
 #include <Akkad/Logging.h>
 #include <Akkad/PlatformUtils.h>
@@ -12,8 +14,6 @@
 
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.cpp>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 namespace Akkad {
 	float EditorLayer::s_AspectRatio;
@@ -145,6 +145,11 @@ namespace Akkad {
 		{
 			if (panel)
 			{
+				if (!panel->IsOpen())
+				{
+					PanelManager::RemovePanel(panel);
+					continue;
+				}
 				panel->DrawImGui();
 			}
 			
@@ -191,9 +196,19 @@ namespace Akkad {
 			if (ImGui::BeginMenu("File"))
 			{
 				ImGui::Separator();
-				if (ImGui::MenuItem("New"))
+				if (ImGui::BeginMenu("New"))
 				{
-					NewScenepopup = true;
+					if (ImGui::MenuItem("Scene"))
+					{
+						NewScenepopup = true;
+					}
+
+					if (ImGui::MenuItem("Project"))
+					{
+						PanelManager::AddPanel(new NewProjectPanel());
+					}
+					ImGui::EndMenu();
+					
 				}
 
 				if (ImGui::MenuItem("Save", "ctrl + s"))

@@ -1,6 +1,6 @@
 #include "SceneHierarchyPanel.h"
 #include "PropertyEditorPanel.h"
-#include "../EditorLayer.h"
+#include "Editor/EditorLayer.h"
 
 #include <Akkad/ECS/Components/TagComponent.h>
 #include <imgui.h>
@@ -26,7 +26,7 @@ namespace Akkad {
 	{
 		ImGui::Begin("Hierarchy", &showPanel);
 
-		auto view = EditorLayer::s_ActiveScene->m_Registry.view<TagComponent>();
+		auto view = EditorLayer::GetActiveScene()->m_Registry.view<TagComponent>();
 		unsigned int count = 0;
 
 		for (auto entity : view)
@@ -41,10 +41,10 @@ namespace Akkad {
 					{
 						PropertyEditorPanel* panel = new PropertyEditorPanel();
 						PanelManager::AddPanel(panel);
-						Entity e(entity, EditorLayer::s_ActiveScene);
+						Entity e(entity, EditorLayer::GetActiveScene());
 						PropertyEditorPanel::SetActiveEntity(e);
 					}
-					Entity e(entity, EditorLayer::s_ActiveScene);
+					Entity e(entity, EditorLayer::GetActiveScene());
 					PropertyEditorPanel::SetActiveEntity(e);
 				}
 				ImGui::TreePop();
@@ -54,7 +54,7 @@ namespace Akkad {
 			{
 				if (ImGui::Button("Delete"))
 				{
-					EditorLayer::s_ActiveScene->m_Registry.destroy(entity);
+					EditorLayer::GetActiveScene()->m_Registry.destroy(entity);
 				}
 				ImGui::EndPopup();
 			}

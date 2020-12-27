@@ -1,5 +1,5 @@
 #include "PropertyEditorPanel.h"
-#include "../EditorLayer.h"
+#include "Editor/EditorLayer.h"
 
 #include <Akkad/ECS/Components/Components.h>
 

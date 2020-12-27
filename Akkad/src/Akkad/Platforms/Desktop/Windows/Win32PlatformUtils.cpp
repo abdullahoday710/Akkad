@@ -5,6 +5,8 @@
 #include <Windows.h>
 #include <shlobj_core.h>
 
+namespace Akkad {
+
 #ifdef AK_PLATFORM_WINDOWS
 
 std::string openWindowsFileDialog(bool changeCurrentWorkingDirectory) {
@@ -19,7 +21,7 @@ std::string openWindowsFileDialog(bool changeCurrentWorkingDirectory) {
 
     ofn.lpstrFile[0] = '\0';
     ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrFilter = L"All\0*.*\0Akkad scene\0*.AKSCENE\0";
+    ofn.lpstrFilter = L"All\0*.*\0Akkad scene\0*.AKSCENE\0Akkad project\0*.AKPROJ\0";
     ofn.nFilterIndex = 1;
     ofn.lpstrFileTitle = NULL;
     ofn.nMaxFileTitle = 0;
@@ -80,3 +82,4 @@ std::string PlatformUtils::OpenDirectoryDialog(std::string title)
 }
 #endif 
 
+}

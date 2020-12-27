@@ -3,6 +3,7 @@
 #include <Akkad/ECS/Scene.h>
 
 #include "EditorCamera.h"
+#include "ProjectSerializer.h"
 
 #include <vector>
 
@@ -22,14 +23,18 @@ namespace Akkad {
 		virtual void RenderImGui() override;
 
 		static float GetViewportAspectRatio() { return s_AspectRatio; }
-		static Scene* s_ActiveScene;
-		std::string m_ActiveProjectPath;
+		static ProjectDescriptor& GetActiveProject() { return s_ActiveProject; }
+		static Scene* GetActiveScene() { return s_ActiveScene; }
+		static void SetActiveProject(ProjectDescriptor& desc) { s_ActiveProject = desc; }
+		static void SaveActiveProject() { ProjectSerializer::SaveProject(s_ActiveProject); }
 
 	private:
 		SharedPtr<FrameBuffer> m_FrameBuffer;
 		SharedPtr<Texture> m_Texture;
 		SharedPtr<Shader> m_Shader;
 		EditorCamera m_EditorCamera;
+		static Scene* s_ActiveScene;
+		static ProjectDescriptor s_ActiveProject;
 
 		static float s_AspectRatio;
 		bool m_IsPlaying = false;

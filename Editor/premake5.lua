@@ -12,6 +12,7 @@ project "Editor"
 		"src/**.cpp"
 	}
 	includedirs {
+		"src/",
 		"%{wks.location}/Akkad/src",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",

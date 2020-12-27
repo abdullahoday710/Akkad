@@ -1,8 +1,8 @@
 #include "EditorLayer.h"
-#include "ProjectSerializer.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/PropertyEditorPanel.h"
 #include "Panels/NewProjectPanel.h"
+#include "Panels/AssetBrowserPanel.h"
 
 #include <Akkad/Logging.h>
 #include <Akkad/PlatformUtils.h>
@@ -15,9 +15,11 @@
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.cpp>
 
+
 namespace Akkad {
 	float EditorLayer::s_AspectRatio;
 	Scene* EditorLayer::s_ActiveScene;
+	ProjectDescriptor EditorLayer::s_ActiveProject;
 	
 
 	EditorLayer::EditorLayer()
@@ -206,6 +208,8 @@ namespace Akkad {
 					if (ImGui::MenuItem("Project"))
 					{
 						PanelManager::AddPanel(new NewProjectPanel());
+						std::string temp = "scene";
+						NewScene(temp);
 					}
 					ImGui::EndMenu();
 					
@@ -216,14 +220,30 @@ namespace Akkad {
 					SaveActiveScene();
 				}
 
-				if (ImGui::MenuItem("Open"))
+				if (ImGui::BeginMenu("Open"))
 				{
-					std::string scenePath = PlatformUtils::OpenFileDialog();
-
-					if (!scenePath.empty())
+					if (ImGui::MenuItem("Scene"))
 					{
-						LoadScene(scenePath);
+						std::string scenePath = PlatformUtils::OpenFileDialog();
+
+						if (!scenePath.empty())
+						{
+							LoadScene(scenePath);
+						}
 					}
+
+					if (ImGui::MenuItem("Project"))
+					{
+						std::string projectPath = PlatformUtils::OpenFileDialog();
+						if (!projectPath.empty())
+						{
+							std::string temp = "scene";
+							NewScene(temp);
+							s_ActiveProject = ProjectSerializer::LoadProject(projectPath);
+						}
+					}
+
+					ImGui::EndMenu();
 
 				}
 
@@ -256,6 +276,11 @@ namespace Akkad {
 				{
 					PropertyEditorPanel* panel = new PropertyEditorPanel();
 					PanelManager::AddPanel(panel);
+				}
+
+				if (ImGui::MenuItem("Asset Browser"))
+				{
+					PanelManager::AddPanel(new AssetBrowserPanel());
 				}
 
 				ImGui::EndMenu();

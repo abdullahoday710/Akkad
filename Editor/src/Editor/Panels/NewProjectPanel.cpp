@@ -1,5 +1,6 @@
 #include "NewProjectPanel.h"
-#include "../ProjectSerializer.h"
+#include "Editor/ProjectSerializer.h"
+#include "Editor/EditorLayer.h"
 
 #include <Akkad/PlatformUtils.h>
 
@@ -28,7 +29,9 @@ namespace Akkad
 		{
 			if (!projectPath.empty())
 			{
-				ProjectSerializer::NewProject(projectName, projectPath);
+				auto project = ProjectSerializer::NewProject(projectName, projectPath);
+				EditorLayer::SetActiveProject(project);
+
 				showPanel = false;
 			}
 		}

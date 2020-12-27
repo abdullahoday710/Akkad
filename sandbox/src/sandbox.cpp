@@ -25,7 +25,10 @@ int main()
 {
 	SandboxLayer* layer = new SandboxLayer();
 	Application::AttachLayer(layer);
-
-	Application::Init();
+	ApplicationSettings settings;
+	settings.window_settings.width = 800;
+	settings.window_settings.height = 600;
+	settings.window_settings.title = "sandbox";
+	Application::Init(settings);
 	Application::Run();
 }

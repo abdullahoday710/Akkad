@@ -27,8 +27,9 @@ namespace Akkad {
 	{
 		s_ActiveScene = new Scene();
 
-		SceneHierarchyPanel* panel = new SceneHierarchyPanel();
-		PanelManager::AddPanel(panel);
+		// Default UI layout...
+		PanelManager::AddPanel(new SceneHierarchyPanel());
+		PanelManager::AddPanel(new AssetBrowserPanel());
 	}
 	void EditorLayer::NewScene(std::string& sceneName)
 	{
@@ -87,7 +88,6 @@ namespace Akkad {
 	void EditorLayer::OnUpdate()
 	{
 		auto desc = m_FrameBuffer->GetDescriptor();
-
 		float ratio = desc.width / desc.height;
 		s_AspectRatio = ratio;
 

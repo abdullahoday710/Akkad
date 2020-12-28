@@ -1,6 +1,7 @@
 #include "ProjectSerializer.h"
 
-#include <filesystem>
+#include <Akkad/Logging.h>
+
 #include <fstream>
 #include <iomanip>
 
@@ -22,7 +23,9 @@ namespace Akkad {
 		std::string assets = path + "/assets";
 		filesystem::create_directory(assets.c_str());
 		descriptor.projectData = data;
-		descriptor.ProjectPath = path;
+		descriptor.ProjectDirectory = path;
+
+		descriptor.ProjectFilePath = path + "/" + name + ".AKPROJ";
 
 		return descriptor;
 	}
@@ -38,7 +41,8 @@ namespace Akkad {
 		file.close();
 		
 		descriptor.projectData = data;
-		descriptor.ProjectPath = filesystem::path(path).remove_filename().string();
+		descriptor.ProjectDirectory = filesystem::path(path).remove_filename().string();
+		descriptor.ProjectFilePath = path;
 
 		return descriptor;
 	}
@@ -46,9 +50,8 @@ namespace Akkad {
 	void ProjectSerializer::SaveProject(ProjectDescriptor& desc)
 	{
 		std::ofstream output;
-		std::string projectName = desc.projectData["project"]["name"];
 
-		output.open(desc.ProjectPath + projectName + ".AKPROJ");
+		output.open(desc.ProjectFilePath);
 		output << std::setw(4) << desc.projectData << std::endl;
 		output.close();
 	}

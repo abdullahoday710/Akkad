@@ -20,19 +20,21 @@ namespace Akkad {
 			if (ImGui::Button("Add asset"))
 			{
 				auto& project = EditorLayer::GetActiveProject();
+
 				std::string assetPath = PlatformUtils::OpenFileDialog();
 				std::string assetName = filesystem::path(assetPath).filename().string();
-				std::string destnationAssetPath = project.ProjectPath + "/assets/" + assetName;
+
+				filesystem::path destnationAssetPath = project.GetAssetsPath().append(assetName);
 
 				if (filesystem::exists(destnationAssetPath))
 				{
 					// TODO : show file already exists alert
 				}
-
+				
 				else
 				{
 					filesystem::copy(assetPath, destnationAssetPath);
-					auto assetID = Random::GenerateRandomUUID();
+					std::string assetID = Random::GenerateRandomUUID();
 
 					project.projectData["project"]["Assets"][assetID]["path"] = "assets/" + assetName;
 					project.projectData["project"]["Assets"][assetID]["name"] = assetName;
@@ -40,7 +42,6 @@ namespace Akkad {
 
 					ImGui::CloseCurrentPopup();
 				}
-
 
 			}
 			ImGui::EndPopup();

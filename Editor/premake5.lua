@@ -19,6 +19,7 @@ project "Editor"
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.json}",
+		"%{IncludeDir.iconfontcpp}",
 	}
 
 	links {

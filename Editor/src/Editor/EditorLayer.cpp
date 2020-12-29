@@ -14,6 +14,7 @@
 
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.cpp>
+#include <IconsForkAwesome.h>
 
 
 namespace Akkad {
@@ -311,6 +312,11 @@ namespace Akkad {
 	void EditorLayer::ApplyImGuiStyles() {
 		ImGuiIO& io = ImGui::GetIO();
 		io.Fonts->AddFontFromFileTTF("res/fonts/Roboto-Medium.ttf", 16.0f);
+
+		static const ImWchar icons_ranges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
+		ImFontConfig icons_config; icons_config.MergeMode = true; icons_config.PixelSnapH = true;
+		io.Fonts->AddFontFromFileTTF("res/fonts/forkawesome-webfont.ttf", 16.0f, &icons_config, icons_ranges);
+
 		ImGuiStyle* style = &ImGui::GetStyle();
 		ImVec4* colors = style->Colors;
 

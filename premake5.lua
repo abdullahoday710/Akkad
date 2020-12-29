@@ -20,6 +20,7 @@ workspace "Akkad"
     IncludeDir["spdlog"] = "%{wks.location}/3rdparty/spdlog/include"
     IncludeDir["entt"] = "%{wks.location}/3rdparty/entt/single_include"
     IncludeDir["json"] = "%{wks.location}/3rdparty/json/include"
+    IncludeDir["iconfontcpp"] = "%{wks.location}/3rdparty/iconfontcpp/include"
 
     group "Dependencies"
       include "3rdparty/glad"

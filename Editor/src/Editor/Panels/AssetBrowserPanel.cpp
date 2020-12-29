@@ -6,6 +6,7 @@
 
 #include <filesystem>
 #include <imgui.h>
+#include <IconsForkAwesome.h>
 
 namespace Akkad {
 	bool AssetBrowserPanel::showPanel;
@@ -15,12 +16,12 @@ namespace Akkad {
 	void AssetBrowserPanel::DrawImGui()
 	{
 		ImGui::Begin("Asset Browser", &showPanel);
+		auto& project = EditorLayer::GetActiveProject();
+
 		if (ImGui::BeginPopupContextWindow())
 		{
 			if (ImGui::Button("Add asset"))
 			{
-				auto& project = EditorLayer::GetActiveProject();
-
 				std::string assetPath = PlatformUtils::OpenFileDialog();
 				std::string assetName = filesystem::path(assetPath).filename().string();
 
@@ -46,8 +47,18 @@ namespace Akkad {
 			}
 			ImGui::EndPopup();
 		}
+		if (!project.projectData.is_null())
+		{
+			for (auto& asset : project.projectData["project"]["Assets"].items())
+			{
+				std::string assetID = asset.key();
+				std::string assetName = project.projectData["project"]["Assets"][assetID]["name"];
+				std::string assetNameIcon = ICON_FK_FILE + std::string(" ") + assetName;
+				ImGui::Button(assetNameIcon.c_str());
+			}
 
-		// TODO : iterate through the asset/ directory and draw icons of the assets
+		}
+		
 		ImGui::End();
 	}
 

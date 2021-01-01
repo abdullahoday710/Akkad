@@ -25,6 +25,9 @@ namespace Akkad {
 		platform->Init();
 		m_platform = platform;
 
+		SharedPtr<AssetManager> assetManager = CreateSharedPtr<AssetManager>();
+		m_AssetManager = assetManager;
+
 		#ifdef AK_ENABLE_IMGUI
 			SharedPtr<ImGuiHandler> imgui_handler = ImGuiHandler::create(RenderAPI::OPENGL);
 			imgui_handler->Init();

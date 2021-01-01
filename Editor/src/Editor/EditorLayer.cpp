@@ -47,6 +47,28 @@ namespace Akkad {
 		s_ActiveScene = SceneSerializer::Deserialize(filepath);
 	}
 
+	void EditorLayer::LoadProject(std::string& filepath)
+	{
+		std::string temp = "scene";
+		NewScene(temp);
+		Application::GetAssetManager()->Clear();
+		s_ActiveProject = ProjectSerializer::LoadProject(filepath);
+
+		for (auto& asset : s_ActiveProject.projectData["project"]["Assets"].items())
+		{
+			std::string assetID = asset.key();
+			std::string assetName = s_ActiveProject.projectData["project"]["Assets"][assetID]["name"];
+			std::string absolutePath = s_ActiveProject.GetAssetsPath().string() + assetName;
+
+			AssetDescriptor descriptor;
+			descriptor.assetID = assetID;
+			descriptor.absolutePath = absolutePath;
+
+			Application::GetAssetManager()->RegisterAsset(descriptor);
+			
+		}
+	}
+
 	void EditorLayer::SaveActiveScene()
 	{
 		std::string path = "res/scenes/" + s_ActiveScene->m_Name + ".AKSCENE";
@@ -238,9 +260,7 @@ namespace Akkad {
 						std::string projectPath = PlatformUtils::OpenFileDialog();
 						if (!projectPath.empty())
 						{
-							std::string temp = "scene";
-							NewScene(temp);
-							s_ActiveProject = ProjectSerializer::LoadProject(projectPath);
+							LoadProject(projectPath);
 						}
 					}
 

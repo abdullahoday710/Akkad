@@ -4,6 +4,8 @@
 #include "Akkad/Graphics/ImGuiHandler.h"
 #include "Akkad/Graphics/RenderCommand.h"
 #include "Akkad/Graphics/RenderContext.h"
+#include "Akkad/Asset/AssetManager.h"
+
 #include "Layer.h"
 
 namespace Akkad {
@@ -23,7 +25,10 @@ namespace Akkad {
 		static void Run() { GetInstance().RunImpl(); }
 		static void Init(ApplicationSettings& settings) { GetInstance().InitImpl(settings); }
 		static void Shutdown() { GetInstance().m_Running = false; };
+
 		static SharedPtr<RenderPlatform> GetRenderPlatform() { return GetInstance().m_platform; }
+		static SharedPtr<AssetManager> GetAssetManager() { return GetInstance().m_AssetManager; }
+
 		Window* GetWindow() { return m_Window; }
 		
 	private:
@@ -59,6 +64,7 @@ namespace Akkad {
 
 		SharedPtr<ImGuiHandler> m_ImguiHandler;
 		SharedPtr<RenderPlatform> m_platform;
+		SharedPtr<AssetManager> m_AssetManager;
 		
 
 	};

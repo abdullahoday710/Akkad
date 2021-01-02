@@ -41,11 +41,9 @@ namespace Akkad {
 					project.projectData["project"]["Assets"][assetID]["name"] = assetName;
 
 					AssetDescriptor descriptor;
-					descriptor.assetID = assetID;
 					descriptor.absolutePath = destnationAssetPath.string();
 
-					Application::GetAssetManager()->RegisterAsset(descriptor);
-
+					Application::GetAssetManager()->RegisterAsset(assetID, descriptor);
 					EditorLayer::SaveActiveProject();
 
 					ImGui::CloseCurrentPopup();

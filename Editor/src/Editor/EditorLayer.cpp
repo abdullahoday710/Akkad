@@ -61,10 +61,9 @@ namespace Akkad {
 			std::string absolutePath = s_ActiveProject.GetAssetsPath().string() + assetName;
 
 			AssetDescriptor descriptor;
-			descriptor.assetID = assetID;
 			descriptor.absolutePath = absolutePath;
 
-			Application::GetAssetManager()->RegisterAsset(descriptor);
+			Application::GetAssetManager()->RegisterAsset(assetID, descriptor);
 			
 		}
 	}

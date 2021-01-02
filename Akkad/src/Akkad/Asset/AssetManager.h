@@ -1,23 +1,20 @@
 #pragma once
 #include "Akkad/core.h"
-#include "Akkad/Graphics/Texture.h"
 
 #include <vector>
+#include <map>
 #include <string>
 
 namespace Akkad {
 
+	// forward declarations
+	namespace Graphics {
+		class Texture;
+	}
+
 	struct AssetDescriptor
 	{
 		std::string absolutePath;
-		std::string assetID;
-	};
-
-	template<typename T>
-	struct Asset
-	{
-		AssetDescriptor descriptor;
-		T asset;
 	};
 
 	class AssetManager
@@ -26,7 +23,7 @@ namespace Akkad {
 		AssetManager() {};
 		~AssetManager() {};
 
-		void RegisterAsset(AssetDescriptor& asset);
+		void RegisterAsset(std::string assetID, AssetDescriptor& asset);
 		bool IsRegistered(std::string assetID);
 		void Clear();
 
@@ -35,9 +32,9 @@ namespace Akkad {
 		SharedPtr<Graphics::Texture> GetTexture(std::string assetID);
 
 	private:
-		std::vector<AssetDescriptor> m_RegisteredAssets;
+		std::map<std::string, AssetDescriptor> m_RegisteredAssets;
 
-		std::vector<Asset<SharedPtr<Graphics::Texture>>> m_LoadedTextures;
+		std::map<std::string, SharedPtr<Graphics::Texture>> m_LoadedTextures;
 	};
 }
 

@@ -131,8 +131,13 @@ namespace Akkad {
 			{
 				auto& transform = view.get<TransformComponent>(entity);
 				auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
+				auto assetManager = Application::GetAssetManager();
+				if (!spriteRenderer.textureID.empty())
+				{
+					auto texture = assetManager->GetTexture(spriteRenderer.textureID);
+					Renderer2D::DrawQuad(texture, transform.GetTransformMatrix());
+				}
 
-				Renderer2D::DrawQuad(spriteRenderer.color, transform.GetTransformMatrix());
 			}
 		}
 		

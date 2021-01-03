@@ -34,11 +34,7 @@ namespace Akkad {
 			if (activeEntity.HasComponent<SpriteRendererComponent>())
 			{
 				auto& sprite = activeEntity.GetComponent<SpriteRendererComponent>();
-				data["Scene"]["Entities"][entityID]["SpriteRenderer"]["Color"] = {
-					sprite.color.x,
-					sprite.color.y,
-					sprite.color.z
-				};
+				data["Scene"]["Entities"][entityID]["SpriteRenderer"]["TextureID"] = sprite.textureID;
 			}
 
 			if (activeEntity.HasComponent<ScriptComponent>())
@@ -107,9 +103,9 @@ namespace Akkad {
 
 				else if (component.key() == "SpriteRenderer")
 				{
-					glm::vec3 color({componentData["Color"][0], componentData["Color"][1] ,componentData["Color"][2] });
+					std::string textureID = componentData["TextureID"];
 					auto& spriteRenderer = e.AddComponent<SpriteRendererComponent>();
-					spriteRenderer.color = color;
+					spriteRenderer.textureID = textureID;
 					continue;
 				}
 

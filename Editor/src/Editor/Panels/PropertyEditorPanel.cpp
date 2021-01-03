@@ -155,7 +155,14 @@ namespace Akkad {
 				return;
 			}
 			auto& sprite = m_ActiveEntity.GetComponent<SpriteRendererComponent>();
-			ImGui::ColorPicker3("Color", glm::value_ptr(sprite.color));
+			std::string buf = sprite.textureID;
+			
+			// TODO : make this drag and drop instead of input text
+			if (ImGui::InputText("Texture", &buf))
+			{
+				sprite.textureID = buf;
+			}
+
 			ImGui::TreePop();
 		}
 	}

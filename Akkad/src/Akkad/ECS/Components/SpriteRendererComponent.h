@@ -5,6 +5,8 @@
 namespace Akkad {
 
 	struct SpriteRendererComponent {
-		glm::vec3 color{1.0f, 0.0f, 0.0f};
+		//glm::vec3 color{1.0f, 0.0f, 0.0f};
+		std::string textureID;
+		std::string shaderID;
 	};
 }

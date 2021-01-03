@@ -1,7 +1,9 @@
 #include "AssetManager.h"
 
 #include "Akkad/Application/Application.h"
+
 #include "Akkad/Graphics/Texture.h"
+#include "Akkad/Graphics/Shader.h"
 
 namespace Akkad {
 
@@ -60,10 +62,27 @@ namespace Akkad {
 		{
 			auto desc = GetDescriptorByID(assetID);
 
-			auto asset = Application::GetInstance().GetRenderPlatform()->CreateTexture(desc.absolutePath.c_str());
-			m_LoadedTextures[assetID] = asset;
+			auto texture = Application::GetInstance().GetRenderPlatform()->CreateTexture(desc.absolutePath.c_str());
+			m_LoadedTextures[assetID] = texture;
 
-			return asset;
+			return texture;
+		}
+	}
+
+	SharedPtr<Graphics::Shader> AssetManager::GetShader(std::string assetID)
+	{
+		auto it = m_LoadedShaders.find(assetID);
+		if (it != m_LoadedShaders.end())
+		{
+			return it->second;
+		}
+		else
+		{
+			auto desc = GetDescriptorByID(assetID);
+			auto shader = Application::GetInstance().GetRenderPlatform()->CreateShader(desc.absolutePath.c_str());
+			m_LoadedShaders[assetID] = shader;
+			
+			return shader;
 		}
 	}
 }

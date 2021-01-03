@@ -155,14 +155,29 @@ namespace Akkad {
 				return;
 			}
 			auto& sprite = m_ActiveEntity.GetComponent<SpriteRendererComponent>();
-			std::string buf = sprite.textureID;
 			
-			// TODO : make this drag and drop instead of input text
-			if (ImGui::InputText("Texture", &buf))
+			if (sprite.textureID.empty())
 			{
-				sprite.textureID = buf;
+				std::string buf = sprite.textureID;
+				ImGui::InputText("Texture", &buf, ImGuiInputTextFlags_ReadOnly);
+			}
+			else
+			{
+				auto asset = Application::GetAssetManager()->GetDescriptorByID(sprite.textureID);
+				std::string buf = std::filesystem::path(asset.absolutePath).filename().string();
+				ImGui::InputText("Texture", &buf, ImGuiInputTextFlags_ReadOnly);
 			}
 
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_DRAG_DROP"))
+				{
+					const char* id = (const char*)payload->Data;
+					sprite.textureID = id;
+
+				}
+				ImGui::EndDragDropTarget();
+			}
 			ImGui::TreePop();
 		}
 	}

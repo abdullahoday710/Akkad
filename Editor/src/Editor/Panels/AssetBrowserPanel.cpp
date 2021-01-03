@@ -60,6 +60,14 @@ namespace Akkad {
 				std::string assetName = project.projectData["project"]["Assets"][assetID]["name"];
 				std::string assetNameIcon = ICON_FK_FILE + std::string(" ") + assetName;
 				ImGui::Button(assetNameIcon.c_str());
+
+				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+				{
+					ImGui::Text(assetName.c_str());
+					const char* id = assetID.c_str();
+					ImGui::SetDragDropPayload("ASSET_DRAG_DROP", id, strlen(id)+1);
+					ImGui::EndDragDropSource();
+				}
 			}
 
 		}

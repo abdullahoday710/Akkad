@@ -21,7 +21,10 @@ namespace Akkad {
 		output << std::setw(4) << data << std::endl;
 		output.close();
 		std::string assets = path + "/assets";
+		std::string scenes = assets + "/scenes";
+
 		filesystem::create_directory(assets.c_str());
+		filesystem::create_directory(scenes.c_str());
 		descriptor.projectData = data;
 		descriptor.ProjectDirectory = path;
 

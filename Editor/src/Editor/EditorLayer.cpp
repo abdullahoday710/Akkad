@@ -34,11 +34,25 @@ namespace Akkad {
 	}
 	void EditorLayer::NewScene(std::string& sceneName)
 	{
-		// when switching scenes property editor must be empty.
-		//if its not, we will get an assertion failed from entt because the previous scene is a nullptr.
-		PropertyEditorPanel::SetActiveEntity({}); 
-		delete s_ActiveScene;
-		s_ActiveScene = new Scene(sceneName);
+		bool null = s_ActiveProject.projectData["project"]["Scenes"][sceneName].is_null();
+		if (null)
+		{
+			// when switching scenes property editor must be empty.
+			//if its not, we will get an assertion failed from entt because the previous scene is a nullptr.
+			PropertyEditorPanel::SetActiveEntity({});
+			delete s_ActiveScene;
+			s_ActiveScene = new Scene(sceneName);
+
+			std::string path = s_ActiveProject.GetAssetsPath().append("scenes/").string() + s_ActiveScene->m_Name + ".AKSCENE";
+			SceneSerializer::Serialize(s_ActiveScene, path);
+
+			path = s_ActiveScene->m_Name + ".AKSCENE";
+			s_ActiveProject.projectData["project"]["Scenes"][sceneName] = path;
+
+			SaveActiveProject();
+		}
+		
+
 	}
 	void EditorLayer::LoadScene(std::string& filepath)
 	{
@@ -70,7 +84,7 @@ namespace Akkad {
 
 	void EditorLayer::SaveActiveScene()
 	{
-		std::string path = "res/scenes/" + s_ActiveScene->m_Name + ".AKSCENE";
+		std::string path = s_ActiveProject.GetAssetsPath().append("scenes/").string() + s_ActiveScene->m_Name + ".AKSCENE";
 		SceneSerializer::Serialize(s_ActiveScene, path);
 	}
 

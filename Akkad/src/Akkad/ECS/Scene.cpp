@@ -5,6 +5,7 @@
 #include "Akkad/Logging.h"
 #include "Akkad/Application/Application.h"
 #include "Akkad/Graphics/Renderer2D.h"
+#include "Akkad/Scripting/ScriptFactory.h"
 
 #include "Components/Components.h"
 

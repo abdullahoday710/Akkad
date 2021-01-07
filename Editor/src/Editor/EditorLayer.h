@@ -44,10 +44,13 @@ namespace Akkad {
 
 		void OnScenePlay();
 		void OnSceneStop();
-		void LoadScene(std::string& filepath);
+		// TODO : change loading scenes to be handled by the engine not the editor.
+		static void LoadScene(std::string& filepath);
 		void LoadProject(std::string& filepath);
 		void SaveActiveScene();
 		void NewScene(std::string& sceneName);
+
+		friend class AssetBrowserPanel;
 
 	};
 }

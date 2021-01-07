@@ -54,6 +54,24 @@ namespace Akkad {
 		}
 		if (!project.projectData.is_null())
 		{
+			if (ImGui::TreeNode("Scenes"))
+			{
+				for (auto& scene : project.projectData["project"]["Scenes"].items())
+				{
+					std::string sceneName = scene.key();
+					std::string sceneFileName = scene.value();
+					std::string scenePath = project.GetAssetsPath().append("scenes/").append(sceneFileName).string();
+
+					ImGui::Button(sceneName.c_str());
+					if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
+					{
+						EditorLayer::LoadScene(scenePath);
+					}
+					
+				}
+				ImGui::TreePop();
+			}
+			
 			for (auto& asset : project.projectData["project"]["Assets"].items())
 			{
 				std::string assetID = asset.key();

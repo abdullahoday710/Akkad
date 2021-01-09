@@ -60,6 +60,19 @@ namespace Akkad {
 		}
 	}
 
+	void Scene::BeginRenderer2D()
+	{
+		auto view = m_Registry.view<TransformComponent, CameraComponent>();
+
+		for (auto entity : view)
+		{
+			auto& transform = view.get<TransformComponent>(entity);
+			auto& camera = view.get<CameraComponent>(entity);
+			transform.RecalculateTransformMatrix();
+			Renderer2D::BeginScene(camera.camera, transform.GetTransformMatrix());
+		}
+	}
+
 	void Scene::Update()
 	{
 		// Update scripts
@@ -74,21 +87,6 @@ namespace Akkad {
 			}
 
 		}
-
-		// Begin scene
-		{
-			auto view = m_Registry.view<TransformComponent, CameraComponent>();
-
-			for (auto entity : view)
-			{
-				auto& transform = view.get<TransformComponent>(entity);
-				auto& camera = view.get<CameraComponent>(entity);
-				transform.RecalculateTransformMatrix();
-				Renderer2D::BeginScene(camera.camera, transform.GetTransformMatrix());
-			}
-		}
-
-		Render2D();
 		
 	}
 

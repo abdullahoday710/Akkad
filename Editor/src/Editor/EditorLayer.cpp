@@ -3,6 +3,7 @@
 #include "Panels/PropertyEditorPanel.h"
 #include "Panels/NewProjectPanel.h"
 #include "Panels/AssetBrowserPanel.h"
+#include "Panels/GameViewPanel.h"
 
 #include <Akkad/Logging.h>
 #include <Akkad/PlatformUtils.h>
@@ -31,6 +32,7 @@ namespace Akkad {
 		// Default UI layout...
 		PanelManager::AddPanel(new SceneHierarchyPanel());
 		PanelManager::AddPanel(new AssetBrowserPanel());
+		PanelManager::AddPanel(new GameViewPanel());
 	}
 	void EditorLayer::NewScene(std::string& sceneName)
 	{
@@ -131,7 +133,11 @@ namespace Akkad {
 	
 		if (m_IsPlaying)
 		{
+			m_EditorCamera.Update();
+			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
+			s_ActiveScene->Render2D();
 			s_ActiveScene->Update();
+
 		}
 
 		else
@@ -306,6 +312,11 @@ namespace Akkad {
 				if (ImGui::MenuItem("Asset Browser"))
 				{
 					PanelManager::AddPanel(new AssetBrowserPanel());
+				}
+
+				if (ImGui::MenuItem("Game View"))
+				{
+					PanelManager::AddPanel(new GameViewPanel());
 				}
 
 				ImGui::EndMenu();

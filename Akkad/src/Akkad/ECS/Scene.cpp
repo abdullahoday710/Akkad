@@ -39,6 +39,27 @@ namespace Akkad {
 		}
 	}
 
+	void Scene::Render2D()
+	{
+		auto command = Application::GetRenderPlatform()->GetRenderCommand();
+		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
+		auto assetManager = Application::GetAssetManager();
+		command->Clear();
+		for (auto entity : view)
+		{
+			auto& transform = view.get<TransformComponent>(entity);
+			auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
+			
+			auto texture = assetManager->GetTexture(spriteRenderer.textureID);
+			// TODO : support custom shaders
+			if (spriteRenderer.shaderID.empty())
+			{
+				Renderer2D::DrawQuad(texture, transform.GetTransformMatrix());
+			}
+			transform.RecalculateTransformMatrix();
+		}
+	}
+
 	void Scene::Update()
 	{
 		// Update scripts
@@ -62,34 +83,12 @@ namespace Akkad {
 			{
 				auto& transform = view.get<TransformComponent>(entity);
 				auto& camera = view.get<CameraComponent>(entity);
-
+				transform.RecalculateTransformMatrix();
 				Renderer2D::BeginScene(camera.camera, transform.GetTransformMatrix());
 			}
 		}
 
-		// Render
-		{
-			auto command = Application::GetRenderPlatform()->GetRenderCommand();
-			auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
-			auto assetManager = Application::GetAssetManager();
-			command->Clear();
-			for (auto entity : view)
-			{
-				auto& transform = view.get<TransformComponent>(entity);
-				auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
-
-				auto texture = assetManager->GetTexture(spriteRenderer.textureID);
-				// TODO : support custom shaders
-				if (spriteRenderer.shaderID.empty())
-				{
-					Renderer2D::DrawQuad(texture, transform.GetTransformMatrix());
-				}
-				
-
-				
-			}
-		}
-		
+		Render2D();
 		
 	}
 

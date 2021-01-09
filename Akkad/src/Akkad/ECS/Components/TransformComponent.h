@@ -33,6 +33,6 @@ namespace Akkad {
 			m_TransformMatrix = glm::translate(m_TransformMatrix, m_Position);
 		}
 
-		friend class PropertyEditorPanel;
+		friend class Scene;
 	};
 }

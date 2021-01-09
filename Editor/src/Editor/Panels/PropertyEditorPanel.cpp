@@ -137,7 +137,6 @@ namespace Akkad {
 		{
 			auto& transform = m_ActiveEntity.GetComponent<TransformComponent>();
 			ImGui::DragFloat3("Position", glm::value_ptr(transform.GetPosition()));
-			transform.RecalculateTransformMatrix();
 			ImGui::TreePop();
 		}
 

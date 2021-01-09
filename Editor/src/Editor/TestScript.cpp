@@ -13,7 +13,6 @@ namespace Akkad {
 		virtual void OnUpdate() override
 		{
 			auto& transform = GetComponent<TransformComponent>();
-			transform.SetPostion(transform.GetPosition());
 			glm::mat4& trans = transform.GetTransformMatrix();
 			trans = glm::rotate(trans, (float)Time::GetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 		};

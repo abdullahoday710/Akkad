@@ -136,23 +136,9 @@ namespace Akkad {
 
 		else
 		{
-			auto command = Application::GetRenderPlatform()->GetRenderCommand();
-			command->Clear();
-			auto view = s_ActiveScene->m_Registry.view<TransformComponent, SpriteRendererComponent>();
 			m_EditorCamera.Update();
 			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
-			for (auto entity : view)
-			{
-				auto& transform = view.get<TransformComponent>(entity);
-				auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
-				auto assetManager = Application::GetAssetManager();
-				if (!spriteRenderer.textureID.empty())
-				{
-					auto texture = assetManager->GetTexture(spriteRenderer.textureID);
-					Renderer2D::DrawQuad(texture, transform.GetTransformMatrix());
-				}
-
-			}
+			s_ActiveScene->Render2D();
 		}
 		
 		m_FrameBuffer->Unbind();

@@ -15,9 +15,7 @@ namespace Akkad {
 		~Scene();
 
 		void Start();
-
 		void Update();
-
 		void Stop();
 
 		Entity AddEntity(std::string tag = "Entity");
@@ -25,6 +23,7 @@ namespace Akkad {
 	private:
 		entt::registry m_Registry;
 		std::string m_Name = "Scene";
+		void Render2D();
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 		friend class PropertyEditorPanel;

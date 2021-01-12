@@ -24,6 +24,7 @@ namespace Akkad {
 
 	void SceneHierarchyPanel::DrawHierarchyPanel()
 	{
+		auto scene = EditorLayer::GetActiveScene();
 		ImGui::Begin("Hierarchy", &showPanel);
 
 		auto view = EditorLayer::GetActiveScene()->m_Registry.view<TagComponent>();
@@ -41,10 +42,10 @@ namespace Akkad {
 					{
 						PropertyEditorPanel* panel = new PropertyEditorPanel();
 						PanelManager::AddPanel(panel);
-						Entity e(entity, EditorLayer::GetActiveScene());
+						Entity e = scene->GetEntity(entity);
 						PropertyEditorPanel::SetActiveEntity(e);
 					}
-					Entity e(entity, EditorLayer::GetActiveScene());
+					Entity e = scene->GetEntity(entity);
 					PropertyEditorPanel::SetActiveEntity(e);
 				}
 				ImGui::TreePop();

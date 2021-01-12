@@ -10,7 +10,7 @@
 namespace Akkad {
 	using json = nlohmann::json;
 
-	void SceneSerializer::Serialize(Scene* scene, std::string& outputPath)
+	void SceneSerializer::Serialize(SharedPtr<Scene> scene, std::string& outputPath)
 	{
 		json data;
 		
@@ -29,7 +29,7 @@ namespace Akkad {
 			data["Scene"]["Entities"][entityID]["Tag"] = tag;
 			data["Scene"]["Entities"][entityID]["Transform"]["Position"] = { position.x, position.y, position.z };
 
-			Entity activeEntity(entity, scene);
+			Entity activeEntity = scene->GetEntity(entity);
 
 			if (activeEntity.HasComponent<SpriteRendererComponent>())
 			{
@@ -68,14 +68,13 @@ namespace Akkad {
 		
 	}
 
-	Scene* SceneSerializer::Deserialize(std::string filepath)
+	void SceneSerializer::Deserialize(SharedPtr<Scene> scene, std::string filepath)
 	{
 		std::ifstream file;
 		file.open(filepath);
 		json data;
 		file >> data;
 
-		Scene* scene = new Scene();
 		std::string sceneName = data["Scene"]["Name"];
 		scene->m_Name = sceneName;
 
@@ -135,6 +134,5 @@ namespace Akkad {
 			}
 		}
 		file.close();
-		return scene;
 	}
 }

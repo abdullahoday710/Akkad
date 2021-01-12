@@ -24,7 +24,7 @@ namespace Akkad {
 
 		static float GetViewportAspectRatio() { return s_AspectRatio; }
 		static ProjectDescriptor& GetActiveProject() { return s_ActiveProject; }
-		static Scene* GetActiveScene() { return s_ActiveScene; }
+		static SharedPtr<Scene> GetActiveScene() { return s_ActiveScene; }
 		static void SetActiveProject(ProjectDescriptor& desc) { s_ActiveProject = desc; }
 		static void SaveActiveProject() { ProjectSerializer::SaveProject(s_ActiveProject); }
 
@@ -33,7 +33,8 @@ namespace Akkad {
 		SharedPtr<Texture> m_Texture;
 		SharedPtr<Shader> m_Shader;
 		EditorCamera m_EditorCamera;
-		static Scene* s_ActiveScene;
+
+		static SharedPtr<Scene> s_ActiveScene;
 		static ProjectDescriptor s_ActiveProject;
 
 		static float s_AspectRatio;

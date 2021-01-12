@@ -116,5 +116,18 @@ namespace Akkad {
 		return entity;
 	}
 
+	Entity Scene::GetEntity(entt::entity handle)
+	{
+		Entity entity = { handle, this };
+		if (entity.IsValid())
+		{
+			return entity;
+		}
+		else
+		{
+			AK_ASSERT(false, "Invalid Entity");
+		}
+	}
+
 }
 

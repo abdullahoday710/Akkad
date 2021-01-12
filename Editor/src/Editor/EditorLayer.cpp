@@ -20,14 +20,14 @@
 
 namespace Akkad {
 	float EditorLayer::s_AspectRatio;
-	Scene* EditorLayer::s_ActiveScene;
+	SharedPtr<Scene> EditorLayer::s_ActiveScene;
 	ProjectDescriptor EditorLayer::s_ActiveProject;
 	
 
 	EditorLayer::EditorLayer()
 		:m_EditorCamera()
 	{
-		s_ActiveScene = new Scene();
+		s_ActiveScene = CreateSharedPtr<Scene>();
 
 		// Default UI layout...
 		PanelManager::AddPanel(new SceneHierarchyPanel());
@@ -42,8 +42,7 @@ namespace Akkad {
 			// when switching scenes property editor must be empty.
 			//if its not, we will get an assertion failed from entt because the previous scene is a nullptr.
 			PropertyEditorPanel::SetActiveEntity({});
-			delete s_ActiveScene;
-			s_ActiveScene = new Scene(sceneName);
+			s_ActiveScene.reset(new Scene(sceneName));
 
 			std::string path = s_ActiveProject.GetAssetsPath().append("scenes/").string() + s_ActiveScene->m_Name + ".AKSCENE";
 			SceneSerializer::Serialize(s_ActiveScene, path);
@@ -59,8 +58,8 @@ namespace Akkad {
 	void EditorLayer::LoadScene(std::string& filepath)
 	{
 		PropertyEditorPanel::SetActiveEntity({});
-		delete s_ActiveScene;
-		s_ActiveScene = SceneSerializer::Deserialize(filepath);
+		s_ActiveScene.reset(new Scene());
+		SceneSerializer::Deserialize(s_ActiveScene, filepath);
 	}
 
 	void EditorLayer::LoadProject(std::string& filepath)

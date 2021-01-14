@@ -108,10 +108,11 @@ namespace Akkad {
 		if (viewport != nullptr && gameview != nullptr)
 		{
 			gameview->RenderScene();
+			/*
 			if (viewport->IsPlaying)
 			{
 				s_ActiveScene->Update();
-			}
+			}*/
 			viewport->RenderScene();
 		}
 	}

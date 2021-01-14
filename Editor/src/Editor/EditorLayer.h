@@ -29,22 +29,14 @@ namespace Akkad {
 		static void SaveActiveProject() { ProjectSerializer::SaveProject(s_ActiveProject); }
 
 	private:
-		SharedPtr<FrameBuffer> m_FrameBuffer;
-		SharedPtr<Texture> m_Texture;
-		SharedPtr<Shader> m_Shader;
-		EditorCamera m_EditorCamera;
-
 		static SharedPtr<Scene> s_ActiveScene;
 		static ProjectDescriptor s_ActiveProject;
 
 		static float s_AspectRatio;
 		bool m_IsPlaying = false;
 		void DrawMainMenuBar();
-		void DrawViewport();
 		void ApplyImGuiStyles();
 
-		void OnScenePlay();
-		void OnSceneStop();
 		// TODO : change loading scenes to be handled by the engine not the editor.
 		static void LoadScene(std::string& filepath);
 		void LoadProject(std::string& filepath);

@@ -8,6 +8,8 @@
 #include "Akkad/Logging.h"
 
 namespace Akkad {
+	using namespace Graphics;
+
 	Application Application::s_Instance;
 
 	void Application::InitImpl(ApplicationSettings& settings)
@@ -20,7 +22,7 @@ namespace Akkad {
 			window->Init(settings.window_settings);
 			m_Window = window;
 		#endif //AK_PLATFORM_WINDOWS
-
+			
 		SharedPtr<RenderPlatform> platform = RenderPlatform::Create(RenderAPI::OPENGL);
 		platform->Init();
 		m_platform = platform;

@@ -10,6 +10,7 @@
 #include "Components/Components.h"
 
 namespace Akkad {
+	using namespace Graphics;
 	Scene::Scene()
 	{
 	}

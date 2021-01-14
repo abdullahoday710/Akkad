@@ -4,6 +4,7 @@
 #include "Panels/NewProjectPanel.h"
 #include "Panels/AssetBrowserPanel.h"
 #include "Panels/GameViewPanel.h"
+#include "Panels/ViewPortPanel.h"
 
 #include <Akkad/Logging.h>
 #include <Akkad/PlatformUtils.h>
@@ -25,14 +26,8 @@ namespace Akkad {
 	
 
 	EditorLayer::EditorLayer()
-		:m_EditorCamera()
 	{
 		s_ActiveScene = CreateSharedPtr<Scene>();
-
-		// Default UI layout...
-		PanelManager::AddPanel(new SceneHierarchyPanel());
-		PanelManager::AddPanel(new AssetBrowserPanel());
-		PanelManager::AddPanel(new GameViewPanel());
 	}
 	void EditorLayer::NewScene(std::string& sceneName)
 	{
@@ -91,16 +86,12 @@ namespace Akkad {
 
 	void EditorLayer::OnAttach()
 	{
-		auto platform = Application::GetRenderPlatform();
+		// Default UI layout...
+		PanelManager::AddPanel(new SceneHierarchyPanel());
+		PanelManager::AddPanel(new AssetBrowserPanel());
+		PanelManager::AddPanel(new ViewPortPanel());
+		PanelManager::AddPanel(new GameViewPanel());
 
-		FrameBufferDescriptor desc;
-
-		desc.width = Application::GetInstance().GetWindow()->GetWidth();
-		desc.height = Application::GetInstance().GetWindow()->GetHeight();
-		desc.hasColorAttachment = true;
-
-		auto framebuffer = platform->CreateFrameBuffer(desc);
-		m_FrameBuffer = framebuffer;
 		ApplyImGuiStyles();
 	}
 
@@ -109,44 +100,20 @@ namespace Akkad {
 
 	}
 
-	void EditorLayer::OnScenePlay()
-	{
-		m_IsPlaying = true;
-
-		s_ActiveScene->Start();
-	}
-
-	void EditorLayer::OnSceneStop()
-	{
-		m_IsPlaying = false;
-		s_ActiveScene->Stop();
-	}
-
 	void EditorLayer::OnUpdate()
 	{
-		auto desc = m_FrameBuffer->GetDescriptor();
-		float ratio = desc.width / desc.height;
-		s_AspectRatio = ratio;
+		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
+		GameViewPanel* gameview = (GameViewPanel*)PanelManager::GetPanel("Game View");
 
-		m_FrameBuffer->Bind();
-	
-		if (m_IsPlaying)
+		if (viewport != nullptr && gameview != nullptr)
 		{
-			m_EditorCamera.Update();
-			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
-			s_ActiveScene->Render2D();
-			s_ActiveScene->Update();
-
+			gameview->RenderScene();
+			if (viewport->IsPlaying)
+			{
+				s_ActiveScene->Update();
+			}
+			viewport->RenderScene();
 		}
-
-		else
-		{
-			m_EditorCamera.Update();
-			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
-			s_ActiveScene->Render2D();
-		}
-		
-		m_FrameBuffer->Unbind();
 	}
 
 	void EditorLayer::RenderImGui()
@@ -173,7 +140,6 @@ namespace Akkad {
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
 
 		DrawMainMenuBar();
-		DrawViewport();
 
 		for (auto panel : PanelManager::GetPanels())
 		{
@@ -184,6 +150,7 @@ namespace Akkad {
 					PanelManager::RemovePanel(panel);
 					continue;
 				}
+
 				panel->DrawImGui();
 			}
 			
@@ -197,29 +164,6 @@ namespace Akkad {
 		{
 			SaveActiveScene();
 		}
-	}
-
-	void EditorLayer::DrawViewport()
-	{
-		ImGui::Begin("Viewport");
-		if (!m_IsPlaying)
-		{
-			if (ImGui::Button("Play"))
-			{
-				OnScenePlay();
-			}
-		}
-		else
-		{
-			if (ImGui::Button("Stop"))
-			{
-				OnSceneStop();
-			}
-		}
-		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		m_FrameBuffer->SetSize(viewportPanelSize.x, viewportPanelSize.y);
-		ImGui::Image((void*)m_FrameBuffer->GetColorAttachmentTexture(), viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		ImGui::End();
 	}
 
 	void EditorLayer::DrawMainMenuBar()
@@ -311,6 +255,11 @@ namespace Akkad {
 				if (ImGui::MenuItem("Asset Browser"))
 				{
 					PanelManager::AddPanel(new AssetBrowserPanel());
+				}
+
+				if (ImGui::MenuItem("Viewport"))
+				{
+					PanelManager::AddPanel(new ViewPortPanel());
 				}
 
 				if (ImGui::MenuItem("Game View"))

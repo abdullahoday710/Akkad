@@ -9,7 +9,6 @@
 #include "Layer.h"
 
 namespace Akkad {
-	using namespace Graphics;
 
 	struct ApplicationSettings
 	{
@@ -26,7 +25,7 @@ namespace Akkad {
 		static void Init(ApplicationSettings& settings) { GetInstance().InitImpl(settings); }
 		static void Shutdown() { GetInstance().m_Running = false; };
 
-		static SharedPtr<RenderPlatform> GetRenderPlatform() { return GetInstance().m_platform; }
+		static SharedPtr<Graphics::RenderPlatform> GetRenderPlatform() { return GetInstance().m_platform; }
 		static SharedPtr<AssetManager> GetAssetManager() { return GetInstance().m_AssetManager; }
 
 		Window* GetWindow() { return m_Window; }
@@ -62,8 +61,8 @@ namespace Akkad {
 
 		Window* m_Window = nullptr;
 
-		SharedPtr<ImGuiHandler> m_ImguiHandler;
-		SharedPtr<RenderPlatform> m_platform;
+		SharedPtr<Graphics::ImGuiHandler> m_ImguiHandler;
+		SharedPtr<Graphics::RenderPlatform> m_platform;
 		SharedPtr<AssetManager> m_AssetManager;
 		
 

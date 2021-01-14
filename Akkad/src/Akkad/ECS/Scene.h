@@ -25,12 +25,14 @@ namespace Akkad {
 		void BeginRenderer2D();
 		void Render2D();
 		Entity GetEntity(entt::entity handle);
+
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 		friend class PropertyEditorPanel;
 		friend class EditorLayer;
 		friend class SceneSerializer;
 		friend class GameViewPanel;
+		friend class ViewPortPanel;
 
 	};
 

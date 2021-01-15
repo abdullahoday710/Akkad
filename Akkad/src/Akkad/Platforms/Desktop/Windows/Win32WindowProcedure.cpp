@@ -1,6 +1,5 @@
 #include "Win32WindowProcedure.h"
 #include "Win32Window.h"
-#include <iostream>
 #include <tchar.h>
 #include "Akkad/Input/KeyEvent.h"
 #include "WindowsKeyCodes.h"

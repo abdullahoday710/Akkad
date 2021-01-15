@@ -13,6 +13,7 @@
 #include <Akkad/ECS/Entity.h>
 #include <Akkad/ECS/Components/Components.h>
 #include <Akkad/ECS/SceneSerializer.h>
+#include <Akkad/Asset/AssetManager.h>
 
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.cpp>

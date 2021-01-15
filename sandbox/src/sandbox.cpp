@@ -1,4 +1,3 @@
-#include <iostream>
 #include <Akkad/Akkad.h>
 #include <imgui.h>
 

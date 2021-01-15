@@ -6,6 +6,7 @@
 #include "Akkad/Application/Application.h"
 #include "Akkad/Graphics/Renderer2D.h"
 #include "Akkad/Scripting/ScriptFactory.h"
+#include "Akkad/Asset/AssetManager.h"
 
 #include "Components/Components.h"
 
@@ -51,12 +52,16 @@ namespace Akkad {
 			auto& transform = view.get<TransformComponent>(entity);
 			auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
 			
-			auto texture = assetManager->GetTexture(spriteRenderer.textureID);
-			// TODO : support custom shaders
-			if (spriteRenderer.shaderID.empty())
+			if (!spriteRenderer.textureID.empty())
 			{
-				Renderer2D::DrawQuad(texture, transform.GetTransformMatrix());
+				auto texture = assetManager->GetTexture(spriteRenderer.textureID);
+				// TODO : support custom shaders
+				if (spriteRenderer.shaderID.empty())
+				{
+					Renderer2D::DrawQuad(texture, transform.GetTransformMatrix());
+				}
 			}
+
 			transform.RecalculateTransformMatrix();
 		}
 	}

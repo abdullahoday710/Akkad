@@ -25,9 +25,11 @@ namespace Akkad {
 			auto& transform = view.get<TransformComponent>(entity);
 
 			glm::vec3 position = transform.GetPosition();
+			glm::vec3 rotation = transform.GetRotation();
 
 			data["Scene"]["Entities"][entityID]["Tag"] = tag;
 			data["Scene"]["Entities"][entityID]["Transform"]["Position"] = { position.x, position.y, position.z };
+			data["Scene"]["Entities"][entityID]["Transform"]["Rotation"] = { rotation.x, rotation.y, rotation.z };
 
 			Entity activeEntity = scene->GetEntity(entity);
 
@@ -87,8 +89,11 @@ namespace Akkad {
 				if (component.key() == "Transform")
 				{
 					glm::vec3 position({componentData["Position"][0],componentData["Position"][1],componentData["Position"][2]});
+
+					glm::vec3 rotation({ componentData["Rotation"][0],componentData["Rotation"][1],componentData["Rotation"][2] });
 					auto& transform = e.GetComponent<TransformComponent>();
 					transform.SetPostion(position);
+					transform.SetRotation(rotation);
 					continue;
 				}
 

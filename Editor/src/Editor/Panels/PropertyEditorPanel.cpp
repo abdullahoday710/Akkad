@@ -2,6 +2,7 @@
 #include "Editor/EditorLayer.h"
 
 #include <Akkad/ECS/Components/Components.h>
+#include <Akkad/Asset/AssetManager.h>
 
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
@@ -137,6 +138,7 @@ namespace Akkad {
 		{
 			auto& transform = m_ActiveEntity.GetComponent<TransformComponent>();
 			ImGui::DragFloat3("Position", glm::value_ptr(transform.GetPosition()));
+			ImGui::DragFloat3("Rotation", glm::value_ptr(transform.GetRotation()));
 			ImGui::TreePop();
 		}
 

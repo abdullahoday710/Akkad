@@ -3,6 +3,7 @@
 
 #include <Akkad/PlatformUtils.h>
 #include <Akkad/Random.h>
+#include <Akkad/Asset/AssetManager.h>
 
 #include <filesystem>
 #include <imgui.h>

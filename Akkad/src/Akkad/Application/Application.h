@@ -1,14 +1,18 @@
-#include "Akkad/PlatformMacros.h"
 #include "IWindow.h"
 #include "Event.h"
-#include "Akkad/Graphics/ImGuiHandler.h"
-#include "Akkad/Graphics/RenderCommand.h"
-#include "Akkad/Graphics/RenderContext.h"
-#include "Akkad/Asset/AssetManager.h"
 
 #include "Layer.h"
 
 namespace Akkad {
+
+	/* Forward declarations */
+	class AssetManager;
+
+	namespace Graphics
+	{
+		class ImGuiHandler;
+		class RenderPlatform;
+	}
 
 	struct ApplicationSettings
 	{

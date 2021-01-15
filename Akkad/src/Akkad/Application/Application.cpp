@@ -1,11 +1,17 @@
 #include "Application.h"
+#include "Time.h"
+
+#include "Akkad/PlatformMacros.h"
+
 #ifdef AK_PLATFORM_WINDOWS
 	#include "Akkad/Platforms/Desktop/Windows/Win32Window.h"
 #endif
 
-#include "Akkad/Graphics/Renderer2D.h"
-#include "Time.h"
 #include "Akkad/Logging.h"
+#include "Akkad/Graphics/ImGuiHandler.h"
+#include "Akkad/Graphics/RenderPlatform.h"
+#include "Akkad/Graphics/Renderer2D.h"
+#include "Akkad/Asset/AssetManager.h"
 
 namespace Akkad {
 	using namespace Graphics;

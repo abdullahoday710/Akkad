@@ -42,11 +42,6 @@ namespace Akkad {
 		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
 		m_buffer->Bind();
 
-		if (viewport->IsPlaying)
-		{
-			EditorLayer::GetActiveScene()->Update();
-		}
-
 		EditorLayer::GetActiveScene()->BeginRenderer2D();
 		EditorLayer::GetActiveScene()->Render2D();
 		m_buffer->Unbind();

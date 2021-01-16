@@ -106,15 +106,19 @@ namespace Akkad {
 		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
 		GameViewPanel* gameview = (GameViewPanel*)PanelManager::GetPanel("Game View");
 
-		if (viewport != nullptr && gameview != nullptr)
+		if (viewport != nullptr && viewport->IsPlaying)
+		{
+			s_ActiveScene->Update();
+		}
+
+		if (viewport != nullptr)
+		{
+			viewport->RenderScene();
+		}
+
+		if (gameview != nullptr)
 		{
 			gameview->RenderScene();
-			/*
-			if (viewport->IsPlaying)
-			{
-				s_ActiveScene->Update();
-			}*/
-			viewport->RenderScene();
 		}
 	}
 
@@ -257,11 +261,6 @@ namespace Akkad {
 				if (ImGui::MenuItem("Asset Browser"))
 				{
 					PanelManager::AddPanel(new AssetBrowserPanel());
-				}
-
-				if (ImGui::MenuItem("Viewport"))
-				{
-					PanelManager::AddPanel(new ViewPortPanel());
 				}
 
 				if (ImGui::MenuItem("Game View"))

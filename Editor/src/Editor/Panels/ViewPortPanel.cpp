@@ -26,8 +26,7 @@ namespace Akkad {
 		descriptor.width = 800;
 		descriptor.height = 800;
 
-		if (ImGui::Begin("Viewport", &showPanel))
-		{
+		ImGui::Begin("Viewport");
 			if (!IsPlaying)
 			{
 				if (ImGui::Button("Play"))
@@ -48,7 +47,6 @@ namespace Akkad {
 			m_buffer->SetSize(viewportPanelSize.x, viewportPanelSize.y);
 			ImGui::Image((void*)m_buffer->GetColorAttachmentTexture(), viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			m_buffer->Unbind();
-		}
 		ImGui::End();
 	}
 
@@ -75,11 +73,6 @@ namespace Akkad {
 		m_buffer->Bind();
 
 		m_EditorCamera.Update();
-
-		if (IsPlaying)
-		{
-			EditorLayer::GetActiveScene()->Update();
-		}
 
 		Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
 		EditorLayer::GetActiveScene()->Render2D();

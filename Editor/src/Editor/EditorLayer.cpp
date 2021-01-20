@@ -13,6 +13,7 @@
 #include <Akkad/ECS/Entity.h>
 #include <Akkad/ECS/Components/Components.h>
 #include <Akkad/ECS/SceneSerializer.h>
+#include <Akkad/ECS/SceneManager.h>
 #include <Akkad/Asset/AssetManager.h>
 
 #include <imgui.h>
@@ -30,7 +31,8 @@ namespace Akkad {
 	{
 		s_ActiveScene = CreateSharedPtr<Scene>();
 	}
-	void EditorLayer::NewScene(std::string& sceneName)
+
+	void EditorLayer::NewScene(std::string sceneName)
 	{
 		bool null = s_ActiveProject.projectData["project"]["Scenes"][sceneName].is_null();
 		if (null)
@@ -51,17 +53,21 @@ namespace Akkad {
 		
 
 	}
+
 	void EditorLayer::LoadScene(std::string& filepath)
 	{
 		PropertyEditorPanel::SetActiveEntity({});
 		s_ActiveScene.reset(new Scene());
 		SceneSerializer::Deserialize(s_ActiveScene, filepath);
+
+		auto sceneManager = Application::GetSceneManager();
+		sceneManager->LoadScene(filepath);
 	}
 
 	void EditorLayer::LoadProject(std::string& filepath)
 	{
-		std::string temp = "scene";
-		NewScene(temp);
+		NewScene("scene"); // TODO : this is stupid, fix it later
+
 		Application::GetAssetManager()->Clear();
 		s_ActiveProject = ProjectSerializer::LoadProject(filepath);
 
@@ -106,20 +112,27 @@ namespace Akkad {
 		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
 		GameViewPanel* gameview = (GameViewPanel*)PanelManager::GetPanel("Game View");
 
-		if (viewport != nullptr && viewport->IsPlaying)
+		auto sceneManager = Application::GetSceneManager();
+
+		if (sceneManager->GetActiveScene() != nullptr)
 		{
-			s_ActiveScene->Update();
+			if (viewport != nullptr && viewport->IsPlaying)
+			{
+				sceneManager->GetActiveScene()->Update();
+			}
+
+			if (viewport != nullptr)
+			{
+				viewport->RenderScene();
+			}
+
+			if (gameview != nullptr)
+			{
+				gameview->RenderScene();
+			}
 		}
 
-		if (viewport != nullptr)
-		{
-			viewport->RenderScene();
-		}
-
-		if (gameview != nullptr)
-		{
-			gameview->RenderScene();
-		}
+		
 	}
 
 	void EditorLayer::RenderImGui()
@@ -204,16 +217,6 @@ namespace Akkad {
 
 				if (ImGui::BeginMenu("Open"))
 				{
-					if (ImGui::MenuItem("Scene"))
-					{
-						std::string scenePath = PlatformUtils::OpenFileDialog();
-
-						if (!scenePath.empty())
-						{
-							LoadScene(scenePath);
-						}
-					}
-
 					if (ImGui::MenuItem("Project"))
 					{
 						std::string projectPath = PlatformUtils::OpenFileDialog();
@@ -224,7 +227,6 @@ namespace Akkad {
 					}
 
 					ImGui::EndMenu();
-
 				}
 
 				if (ImGui::MenuItem("Close"))

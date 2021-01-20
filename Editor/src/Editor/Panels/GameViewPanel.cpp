@@ -3,6 +3,8 @@
 
 #include "Editor/EditorLayer.h"
 
+#include <Akkad/ECS/SceneManager.h>
+
 #include <imgui.h>
 namespace Akkad {
 	using namespace Graphics;
@@ -42,8 +44,9 @@ namespace Akkad {
 		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
 		m_buffer->Bind();
 
-		EditorLayer::GetActiveScene()->BeginRenderer2D();
-		EditorLayer::GetActiveScene()->Render2D();
+		auto sceneManager = Application::GetSceneManager();
+		sceneManager->GetActiveScene()->BeginRenderer2D();
+		sceneManager->GetActiveScene()->Render2D();
 		m_buffer->Unbind();
 	}
 }

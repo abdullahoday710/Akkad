@@ -5,14 +5,16 @@
 
 namespace Akkad {
 
-	/* Forward declarations */
+	/* ---- Forward declarations ---- */
 	class AssetManager;
+	class SceneManager;
 
 	namespace Graphics
 	{
 		class ImGuiHandler;
 		class RenderPlatform;
 	}
+	/*----------------------------------*/
 
 	struct ApplicationSettings
 	{
@@ -29,8 +31,11 @@ namespace Akkad {
 		static void Init(ApplicationSettings& settings) { GetInstance().InitImpl(settings); }
 		static void Shutdown() { GetInstance().m_Running = false; };
 
+		/*---- Getters -----*/
 		static SharedPtr<Graphics::RenderPlatform> GetRenderPlatform() { return GetInstance().m_platform; }
 		static SharedPtr<AssetManager> GetAssetManager() { return GetInstance().m_AssetManager; }
+		static SharedPtr<SceneManager> GetSceneManager() { return GetInstance().m_SceneManager; }
+		/*------------------*/
 
 		Window* GetWindow() { return m_Window; }
 		
@@ -68,6 +73,7 @@ namespace Akkad {
 		SharedPtr<Graphics::ImGuiHandler> m_ImguiHandler;
 		SharedPtr<Graphics::RenderPlatform> m_platform;
 		SharedPtr<AssetManager> m_AssetManager;
+		SharedPtr<SceneManager> m_SceneManager;
 		
 
 	};

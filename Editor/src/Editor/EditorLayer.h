@@ -28,6 +28,8 @@ namespace Akkad {
 		static void SetActiveProject(ProjectDescriptor& desc) { s_ActiveProject = desc; }
 		static void SaveActiveProject() { ProjectSerializer::SaveProject(s_ActiveProject); }
 
+		static std::string GetActiveScenePath() { return GetActiveProject().GetScenePath(s_ActiveScene->m_Name); }
+
 	private:
 		static SharedPtr<Scene> s_ActiveScene;
 		static ProjectDescriptor s_ActiveProject;
@@ -41,7 +43,7 @@ namespace Akkad {
 		static void LoadScene(std::string& filepath);
 		void LoadProject(std::string& filepath);
 		void SaveActiveScene();
-		void NewScene(std::string& sceneName);
+		void NewScene(std::string sceneName);
 
 		friend class AssetBrowserPanel;
 

@@ -2,6 +2,7 @@
 
 #include "Editor/EditorLayer.h"
 #include "Akkad/Graphics/FrameBuffer.h"
+#include "Akkad/ECS/SceneManager.h"
 #include <imgui.h>
 namespace Akkad {
 	using namespace Graphics;
@@ -58,24 +59,38 @@ namespace Akkad {
 	{
 		IsPlaying = true;
 
-		EditorLayer::GetActiveScene()->Start();
+		auto sceneManager = Application::GetSceneManager();
+
+		sceneManager->LoadScene(EditorLayer::GetActiveScenePath());
+		sceneManager->GetActiveScene()->Start();
 	}
 
 	void ViewPortPanel::OnSceneStop()
 	{
 		IsPlaying = false;
+		auto sceneManager = Application::GetSceneManager();
 
-		EditorLayer::GetActiveScene()->Stop();
+		sceneManager->GetActiveScene()->Stop();
+		sceneManager->LoadScene(EditorLayer::GetActiveScenePath());
 	}
 
 	void ViewPortPanel::RenderScene()
 	{
 		m_buffer->Bind();
 
-		m_EditorCamera.Update();
+		if (IsPlaying)
+		{
+			auto sceneManager = Application::GetSceneManager();
+			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
+			sceneManager->GetActiveScene()->Render2D();
+		}
 
-		Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
-		EditorLayer::GetActiveScene()->Render2D();
+		else
+		{
+			m_EditorCamera.Update();
+			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
+			EditorLayer::GetActiveScene()->Render2D();
+		}
 
 		m_buffer->Unbind();
 	}

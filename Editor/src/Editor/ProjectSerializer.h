@@ -2,6 +2,8 @@
 #include <json.hpp>
 #include <filesystem>
 
+#include <Akkad/core.h>
+
 namespace Akkad {
 
 	struct ProjectDescriptor
@@ -15,6 +17,18 @@ namespace Akkad {
 			std::filesystem::path result = ProjectDirectory;
 			result.append("assets/");
 			return result;
+		}
+
+		std::string GetScenePath(std::string sceneName)
+		{
+			bool isNull = projectData["project"]["Scenes"][sceneName].is_null();
+			AK_ASSERT(!isNull, "Unkown scene !");
+
+			std::filesystem::path result = ProjectDirectory;
+			std::string sceneFile = projectData["project"]["Scenes"][sceneName];
+			result.append("assets/scenes/").append(sceneFile);
+
+			return result.string();
 		}
 	};
 

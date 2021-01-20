@@ -12,6 +12,7 @@
 #include "Akkad/Graphics/RenderPlatform.h"
 #include "Akkad/Graphics/Renderer2D.h"
 #include "Akkad/Asset/AssetManager.h"
+#include "Akkad/ECS/SceneManager.h"
 
 namespace Akkad {
 	using namespace Graphics;
@@ -29,23 +30,20 @@ namespace Akkad {
 			m_Window = window;
 		#endif //AK_PLATFORM_WINDOWS
 			
-		SharedPtr<RenderPlatform> platform = RenderPlatform::Create(RenderAPI::OPENGL);
-		platform->Init();
-		m_platform = platform;
+		m_platform = RenderPlatform::Create(RenderAPI::OPENGL);
+		m_platform->Init();
 
-		SharedPtr<AssetManager> assetManager = CreateSharedPtr<AssetManager>();
-		m_AssetManager = assetManager;
-
-		#ifdef AK_ENABLE_IMGUI
-			SharedPtr<ImGuiHandler> imgui_handler = ImGuiHandler::create(RenderAPI::OPENGL);
-			imgui_handler->Init();
-			m_ImguiHandler = imgui_handler;
-		#endif // AK_ENABLE_IMGUI
+		m_AssetManager = CreateSharedPtr<AssetManager>();
+		m_SceneManager = CreateSharedPtr<SceneManager>();
 
 		Renderer2D::Init();
 		Time::Init();
 		m_Running = true;
 
+		#ifdef AK_ENABLE_IMGUI
+			m_ImguiHandler = ImGuiHandler::create(RenderAPI::OPENGL);
+			m_ImguiHandler->Init();
+		#endif // AK_ENABLE_IMGUI
 	}
 
 	void Application::RunImpl()

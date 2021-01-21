@@ -5,7 +5,9 @@
 #include "Panels/AssetBrowserPanel.h"
 #include "Panels/GameViewPanel.h"
 #include "Panels/ViewPortPanel.h"
+#include "Panels/StartupPanel.h"
 
+#include <Akkad/Application/Application.h>
 #include <Akkad/Logging.h>
 #include <Akkad/PlatformUtils.h>
 #include <Akkad/Input/Input.h>
@@ -64,25 +66,10 @@ namespace Akkad {
 		sceneManager->LoadScene(filepath);
 	}
 
-	void EditorLayer::LoadProject(std::string& filepath)
+	void EditorLayer::LoadProject()
 	{
-		NewScene("scene"); // TODO : this is stupid, fix it later
-
-		Application::GetAssetManager()->Clear();
-		s_ActiveProject = ProjectSerializer::LoadProject(filepath);
-
-		for (auto& asset : s_ActiveProject.projectData["project"]["Assets"].items())
-		{
-			std::string assetID = asset.key();
-			std::string assetName = s_ActiveProject.projectData["project"]["Assets"][assetID]["name"];
-			std::string absolutePath = s_ActiveProject.GetAssetsPath().string() + assetName;
-
-			AssetDescriptor descriptor;
-			descriptor.absolutePath = absolutePath;
-
-			Application::GetAssetManager()->RegisterAsset(assetID, descriptor);
-			
-		}
+		PanelManager::Reset();
+		PanelManager::AddPanel(new StartupPanel());
 	}
 
 	void EditorLayer::SaveActiveScene()
@@ -93,11 +80,7 @@ namespace Akkad {
 
 	void EditorLayer::OnAttach()
 	{
-		// Default UI layout...
-		PanelManager::AddPanel(new SceneHierarchyPanel());
-		PanelManager::AddPanel(new AssetBrowserPanel());
-		PanelManager::AddPanel(new ViewPortPanel());
-		PanelManager::AddPanel(new GameViewPanel());
+		PanelManager::AddPanel(new StartupPanel());
 
 		ApplyImGuiStyles();
 	}
@@ -158,7 +141,11 @@ namespace Akkad {
 		ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
 
-		DrawMainMenuBar();
+		if (!s_ActiveProject.projectData.is_null())
+		{
+			DrawMainMenuBar();
+		}
+		
 
 		for (auto panel : PanelManager::GetPanels())
 		{
@@ -202,9 +189,9 @@ namespace Akkad {
 
 					if (ImGui::MenuItem("Project"))
 					{
-						PanelManager::AddPanel(new NewProjectPanel());
-						std::string temp = "scene";
-						NewScene(temp);
+						ProjectDescriptor proj;
+						s_ActiveProject = proj;
+						LoadProject();
 					}
 					ImGui::EndMenu();
 					
@@ -219,11 +206,9 @@ namespace Akkad {
 				{
 					if (ImGui::MenuItem("Project"))
 					{
-						std::string projectPath = PlatformUtils::OpenFileDialog();
-						if (!projectPath.empty())
-						{
-							LoadProject(projectPath);
-						}
+						ProjectDescriptor proj;
+						s_ActiveProject = proj;
+						LoadProject();
 					}
 
 					ImGui::EndMenu();

@@ -52,6 +52,17 @@ namespace Akkad {
 			}
 		}
 
+		static void Reset()
+		{
+			for (auto panel : s_Panels)
+			{
+				panel->OnClose();
+				
+				delete panel;
+			}
+			s_Panels.clear();
+		}
+
 		static std::vector<Panel*> GetPanels() { return s_Panels; }
 	private:
 		static std::vector<Panel*> s_Panels;

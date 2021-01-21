@@ -1,6 +1,8 @@
 #include "ProjectSerializer.h"
 
 #include <Akkad/Logging.h>
+#include <Akkad/Application/Application.h>
+#include <Akkad/Asset/AssetManager.h>
 
 #include <fstream>
 #include <iomanip>
@@ -46,6 +48,21 @@ namespace Akkad {
 		descriptor.projectData = data;
 		descriptor.ProjectDirectory = filesystem::path(path).remove_filename().string();
 		descriptor.ProjectFilePath = path;
+
+
+		Application::GetAssetManager()->Clear();
+
+		for (auto& asset : descriptor.projectData["project"]["Assets"].items())
+		{
+			std::string assetID = asset.key();
+			std::string assetName = descriptor.projectData["project"]["Assets"][assetID]["name"];
+			std::string absolutePath = descriptor.GetAssetsPath().string() + assetName;
+
+			AssetDescriptor descriptor;
+			descriptor.absolutePath = absolutePath;
+
+			Application::GetAssetManager()->RegisterAsset(assetID, descriptor);
+		}
 
 		return descriptor;
 	}

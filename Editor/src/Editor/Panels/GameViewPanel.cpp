@@ -3,6 +3,7 @@
 
 #include "Editor/EditorLayer.h"
 
+#include <Akkad/Application/Application.h>
 #include <Akkad/ECS/SceneManager.h>
 
 #include <imgui.h>
@@ -38,7 +39,9 @@ namespace Akkad {
 
 	void GameViewPanel::OnClose()
 	{
+		showPanel = false;
 	}
+
 	void GameViewPanel::RenderScene()
 	{
 		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");

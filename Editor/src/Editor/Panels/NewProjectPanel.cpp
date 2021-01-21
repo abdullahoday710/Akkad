@@ -1,4 +1,9 @@
 #include "NewProjectPanel.h"
+#include "SceneHierarchyPanel.h"
+#include "AssetBrowserPanel.h"
+#include "ViewPortPanel.h"
+#include "GameViewPanel.h"
+
 #include "Editor/ProjectSerializer.h"
 #include "Editor/EditorLayer.h"
 
@@ -32,6 +37,18 @@ namespace Akkad
 				auto project = ProjectSerializer::NewProject(projectName, projectPath);
 				EditorLayer::SetActiveProject(project);
 
+				PanelManager::AddPanel(new SceneHierarchyPanel());
+				PanelManager::AddPanel(new AssetBrowserPanel());
+				PanelManager::AddPanel(new ViewPortPanel());
+				PanelManager::AddPanel(new GameViewPanel());
+
+				Panel* startupPanel = PanelManager::GetPanel("StartupPanel");
+
+				if (startupPanel != nullptr)
+				{
+					PanelManager::RemovePanel(startupPanel);
+				}
+
 				showPanel = false;
 			}
 		}
@@ -43,5 +60,6 @@ namespace Akkad
 	{
 		projectName = "";
 		projectPath = "";
+		showPanel = false;
 	}
 }

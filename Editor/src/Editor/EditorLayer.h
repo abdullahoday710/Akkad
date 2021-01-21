@@ -1,6 +1,6 @@
 #pragma once
-#include <Akkad/Akkad.h>
 #include <Akkad/ECS/Scene.h>
+#include <Akkad/Application/Layer.h>
 
 #include "EditorCamera.h"
 #include "ProjectSerializer.h"
@@ -39,13 +39,13 @@ namespace Akkad {
 		void DrawMainMenuBar();
 		void ApplyImGuiStyles();
 
-		// TODO : change loading scenes to be handled by the engine not the editor.
 		static void LoadScene(std::string& filepath);
-		void LoadProject(std::string& filepath);
+		void LoadProject();
 		void SaveActiveScene();
 		void NewScene(std::string sceneName);
 
 		friend class AssetBrowserPanel;
+		friend class StartupPanel;
 
 	};
 }

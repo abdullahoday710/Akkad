@@ -19,7 +19,7 @@ namespace Akkad {
 
 	void SceneHierarchyPanel::OnClose()
 	{
-
+		showPanel = false;
 	}
 
 	void SceneHierarchyPanel::DrawHierarchyPanel()

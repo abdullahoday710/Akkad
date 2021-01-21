@@ -1,6 +1,7 @@
 #include "PropertyEditorPanel.h"
 #include "Editor/EditorLayer.h"
 
+#include <Akkad/Application/Application.h>
 #include <Akkad/ECS/Components/Components.h>
 #include <Akkad/Asset/AssetManager.h>
 
@@ -73,6 +74,7 @@ namespace Akkad {
 
 	void PropertyEditorPanel::OnClose()
 	{
+		showPanel = false;
 	}
 
 	void PropertyEditorPanel::DrawAddComponent()

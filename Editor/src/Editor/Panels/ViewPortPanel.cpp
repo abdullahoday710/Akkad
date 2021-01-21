@@ -1,8 +1,12 @@
 #include "ViewPortPanel.h"
 
 #include "Editor/EditorLayer.h"
-#include "Akkad/Graphics/FrameBuffer.h"
-#include "Akkad/ECS/SceneManager.h"
+
+#include <Akkad/Graphics/FrameBuffer.h>
+#include <Akkad/ECS/SceneManager.h>
+#include <Akkad/Application/Application.h>
+#include <Akkad/Graphics/Renderer2D.h>
+
 #include <imgui.h>
 namespace Akkad {
 	using namespace Graphics;
@@ -53,6 +57,7 @@ namespace Akkad {
 
 	void ViewPortPanel::OnClose()
 	{
+		showPanel = false;
 	}
 
 	void ViewPortPanel::OnScenePlay()

@@ -1,6 +1,7 @@
 #include "AssetBrowserPanel.h"
 #include "Editor/EditorLayer.h"
 
+#include <Akkad/Application/Application.h>
 #include <Akkad/PlatformUtils.h>
 #include <Akkad/Random.h>
 #include <Akkad/Asset/AssetManager.h>
@@ -96,7 +97,7 @@ namespace Akkad {
 
 	void AssetBrowserPanel::OnClose()
 	{
-
+		showPanel = false;
 	}
 
 }

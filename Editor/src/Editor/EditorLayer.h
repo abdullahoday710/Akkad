@@ -42,9 +42,9 @@ namespace Akkad {
 		static void LoadScene(std::string& filepath);
 		void LoadProject();
 		void SaveActiveScene();
-		void NewScene(std::string sceneName);
 
 		friend class AssetBrowserPanel;
+		friend class NewScenePanel;
 		friend class StartupPanel;
 
 	};

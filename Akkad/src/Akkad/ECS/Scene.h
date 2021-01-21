@@ -19,6 +19,8 @@ namespace Akkad {
 		void Stop();
 		Entity AddEntity(std::string tag = "Entity");
 
+		std::string GetName() { return m_Name; }
+
 	private:
 		entt::registry m_Registry;
 		std::string m_Name = "Scene";

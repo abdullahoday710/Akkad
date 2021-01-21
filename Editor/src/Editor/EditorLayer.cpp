@@ -6,6 +6,7 @@
 #include "Panels/GameViewPanel.h"
 #include "Panels/ViewPortPanel.h"
 #include "Panels/StartupPanel.h"
+#include "Panels/NewScenePanel.h"
 
 #include <Akkad/Application/Application.h>
 #include <Akkad/Logging.h>
@@ -32,28 +33,6 @@ namespace Akkad {
 	EditorLayer::EditorLayer()
 	{
 		s_ActiveScene = CreateSharedPtr<Scene>();
-	}
-
-	void EditorLayer::NewScene(std::string sceneName)
-	{
-		bool null = s_ActiveProject.projectData["project"]["Scenes"][sceneName].is_null();
-		if (null)
-		{
-			// when switching scenes property editor must be empty.
-			//if its not, we will get an assertion failed from entt because the previous scene is a nullptr.
-			PropertyEditorPanel::SetActiveEntity({});
-			s_ActiveScene.reset(new Scene(sceneName));
-
-			std::string path = s_ActiveProject.GetAssetsPath().append("scenes/").string() + s_ActiveScene->m_Name + ".AKSCENE";
-			SceneSerializer::Serialize(s_ActiveScene, path);
-
-			path = s_ActiveScene->m_Name + ".AKSCENE";
-			s_ActiveProject.projectData["project"]["Scenes"][sceneName] = path;
-
-			SaveActiveProject();
-		}
-		
-
 	}
 
 	void EditorLayer::LoadScene(std::string& filepath)
@@ -114,12 +93,11 @@ namespace Akkad {
 				gameview->RenderScene();
 			}
 		}
-
-		
 	}
 
 	void EditorLayer::RenderImGui()
 	{
+		// ----------- Setup a dockspace -----------------
 		auto viewport = ImGui::GetMainViewport();
 
 		ImGui::SetNextWindowPos(viewport->GetWorkPos());
@@ -140,13 +118,14 @@ namespace Akkad {
 
 		ImGuiID dockspace_id = ImGui::GetID("DockSpace");
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
+		// ------------------------------------------------
 
 		if (!s_ActiveProject.projectData.is_null())
 		{
 			DrawMainMenuBar();
 		}
 		
-
+		// Draw panels
 		for (auto panel : PanelManager::GetPanels())
 		{
 			if (panel)
@@ -184,7 +163,7 @@ namespace Akkad {
 				{
 					if (ImGui::MenuItem("Scene"))
 					{
-						NewScenepopup = true;
+						PanelManager::AddPanel(new NewScenePanel());
 					}
 
 					if (ImGui::MenuItem("Project"))
@@ -259,24 +238,6 @@ namespace Akkad {
 			}
 
 			ImGui::EndMainMenuBar();
-
-			if (NewScenepopup)
-			{
-				ImGui::OpenPopup("New Scene");
-			}
-
-			if (ImGui::BeginPopupModal("New Scene"))
-			{
-				std::string sceneName = "";
-				if (ImGui::InputText("Scene Name", &sceneName, ImGuiInputTextFlags_EnterReturnsTrue))
-				{
-					NewScene(sceneName);
-					NewScenepopup = false;
-					ImGui::CloseCurrentPopup();
-				}
-
-				ImGui::EndPopup();
-			}
 		}
 	}
 

@@ -30,6 +30,7 @@ namespace Akkad {
 		if (ImGui::Begin("Game view", &showPanel))
 		{
 			auto panelSize = ImGui::GetContentRegionAvail();
+			m_AspectRatio = panelSize.x / panelSize.y;
 			m_buffer->SetSize(panelSize.x, panelSize.y);
 			m_buffer->Bind();
 			ImGui::Image((void*)m_buffer->GetColorAttachmentTexture(), panelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
@@ -51,14 +52,14 @@ namespace Akkad {
 		if (viewport->IsPlaying)
 		{
 			auto sceneManager = Application::GetSceneManager();
-			sceneManager->GetActiveScene()->BeginRenderer2D();
+			sceneManager->GetActiveScene()->BeginRenderer2D(m_AspectRatio);
 			sceneManager->GetActiveScene()->Render2D();
 		}
 
 		else
 		{
 			auto scene = EditorLayer::GetActiveScene();
-			scene->BeginRenderer2D();
+			scene->BeginRenderer2D(m_AspectRatio);
 			scene->Render2D();
 		}
 

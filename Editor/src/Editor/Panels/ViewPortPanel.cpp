@@ -49,6 +49,7 @@ namespace Akkad {
 
 			m_buffer->Bind();
 			ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+			m_ViewportAspectRatio = viewportPanelSize.x / viewportPanelSize.y;
 			m_buffer->SetSize(viewportPanelSize.x, viewportPanelSize.y);
 			ImGui::Image((void*)m_buffer->GetColorAttachmentTexture(), viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			m_buffer->Unbind();
@@ -82,6 +83,7 @@ namespace Akkad {
 
 	void ViewPortPanel::RenderScene()
 	{
+		m_EditorCamera.SetAspectRatio(m_ViewportAspectRatio);
 		m_buffer->Bind();
 
 		if (IsPlaying)

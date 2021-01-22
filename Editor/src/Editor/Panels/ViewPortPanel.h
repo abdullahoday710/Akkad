@@ -25,6 +25,7 @@ namespace Akkad {
 	private:
 		static bool showPanel;
 		bool IsPlaying = false;
+		float m_ViewportAspectRatio = 0.0f;
 		EditorCamera m_EditorCamera;
 		SharedPtr<Graphics::FrameBuffer> m_buffer;
 		void OnScenePlay();

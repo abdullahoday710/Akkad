@@ -24,7 +24,7 @@ namespace Akkad {
 	private:
 		entt::registry m_Registry;
 		std::string m_Name = "Scene";
-		void BeginRenderer2D();
+		void BeginRenderer2D(float aspectRatio);
 		void Render2D();
 		Entity GetEntity(entt::entity handle);
 

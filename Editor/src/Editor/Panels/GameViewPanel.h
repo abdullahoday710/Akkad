@@ -22,6 +22,7 @@ namespace Akkad {
 
 	private:
 		static bool showPanel;
+		float m_AspectRatio;
 		void RenderScene();
 		SharedPtr<Graphics::FrameBuffer> m_buffer;
 

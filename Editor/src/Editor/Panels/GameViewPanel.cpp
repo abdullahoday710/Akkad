@@ -5,6 +5,7 @@
 
 #include <Akkad/Application/Application.h>
 #include <Akkad/ECS/SceneManager.h>
+#include <Akkad/Graphics/FrameBuffer.h>
 
 #include <imgui.h>
 namespace Akkad {
@@ -47,9 +48,20 @@ namespace Akkad {
 		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
 		m_buffer->Bind();
 
-		auto sceneManager = Application::GetSceneManager();
-		sceneManager->GetActiveScene()->BeginRenderer2D();
-		sceneManager->GetActiveScene()->Render2D();
+		if (viewport->IsPlaying)
+		{
+			auto sceneManager = Application::GetSceneManager();
+			sceneManager->GetActiveScene()->BeginRenderer2D();
+			sceneManager->GetActiveScene()->Render2D();
+		}
+
+		else
+		{
+			auto scene = EditorLayer::GetActiveScene();
+			scene->BeginRenderer2D();
+			scene->Render2D();
+		}
+
 		m_buffer->Unbind();
 	}
 }

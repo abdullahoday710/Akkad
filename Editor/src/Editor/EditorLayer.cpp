@@ -25,7 +25,6 @@
 
 
 namespace Akkad {
-	float EditorLayer::s_AspectRatio;
 	SharedPtr<Scene> EditorLayer::s_ActiveScene;
 	ProjectDescriptor EditorLayer::s_ActiveProject;
 	

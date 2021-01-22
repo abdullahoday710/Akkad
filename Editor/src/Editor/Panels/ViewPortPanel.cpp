@@ -62,6 +62,7 @@ namespace Akkad {
 
 	void ViewPortPanel::OnScenePlay()
 	{
+		EditorLayer::SaveActiveScene();
 		IsPlaying = true;
 
 		auto sceneManager = Application::GetSceneManager();

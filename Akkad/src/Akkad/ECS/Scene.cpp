@@ -69,14 +69,20 @@ namespace Akkad {
 	void Scene::BeginRenderer2D(float aspectRatio)
 	{
 		auto view = m_Registry.view<TransformComponent, CameraComponent>();
+		bool foundCamera = false;
 
 		for (auto entity : view)
 		{
 			auto& transform = view.get<TransformComponent>(entity);
 			auto& camera = view.get<CameraComponent>(entity);
-			transform.RecalculateTransformMatrix();
-			camera.camera.SetAspectRatio(aspectRatio);
-			Renderer2D::BeginScene(camera.camera, transform.GetTransformMatrix());
+
+			if (camera.isActive)
+			{
+				transform.RecalculateTransformMatrix();
+				camera.camera.SetAspectRatio(aspectRatio);
+				Renderer2D::BeginScene(camera.camera, transform.GetTransformMatrix());
+				break;
+			}
 		}
 	}
 

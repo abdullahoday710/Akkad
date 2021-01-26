@@ -1,7 +1,10 @@
 #include "SceneHierarchyPanel.h"
 #include "PropertyEditorPanel.h"
+#include "ViewPortPanel.h"
 #include "Editor/EditorLayer.h"
 
+#include <Akkad/Application/Application.h>
+#include <Akkad/ECS/SceneManager.h>
 #include <Akkad/ECS/Components/TagComponent.h>
 #include <imgui.h>
 #include <entt/entt.hpp>
@@ -24,12 +27,23 @@ namespace Akkad {
 
 	void SceneHierarchyPanel::DrawHierarchyPanel()
 	{
-		auto scene = EditorLayer::GetActiveScene();
+		SharedPtr<Scene> scene;
+		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
+
+		if (viewport->IsPlaying)
+		{
+			scene = Application::GetSceneManager()->GetActiveScene();
+		}
+		else
+		{
+			scene = EditorLayer::GetActiveScene();
+		}
+
 		ImGui::Begin("Hierarchy", &showPanel);
+		
+		auto view = scene->m_Registry.view<TagComponent>();
 
-		auto view = EditorLayer::GetActiveScene()->m_Registry.view<TagComponent>();
 		unsigned int count = 0;
-
 		for (auto entity : view)
 		{
 			auto& tag = view.get<TagComponent>(entity);

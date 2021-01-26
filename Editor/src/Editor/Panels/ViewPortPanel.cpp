@@ -1,4 +1,5 @@
 #include "ViewPortPanel.h"
+#include "PropertyEditorPanel.h"
 
 #include "Editor/EditorLayer.h"
 
@@ -63,6 +64,7 @@ namespace Akkad {
 
 	void ViewPortPanel::OnScenePlay()
 	{
+		PropertyEditorPanel::SetActiveEntity({});
 		EditorLayer::SaveActiveScene();
 		IsPlaying = true;
 
@@ -74,6 +76,7 @@ namespace Akkad {
 
 	void ViewPortPanel::OnSceneStop()
 	{
+		PropertyEditorPanel::SetActiveEntity({});
 		IsPlaying = false;
 		auto sceneManager = Application::GetSceneManager();
 

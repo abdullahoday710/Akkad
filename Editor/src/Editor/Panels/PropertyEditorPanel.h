@@ -20,6 +20,7 @@ namespace Akkad {
 		friend class SceneHierarchyPanel;
 		friend class NewScenePanel;
 		friend class EditorLayer;
+		friend class ViewPortPanel;
 
 		static Entity m_ActiveEntity;
 

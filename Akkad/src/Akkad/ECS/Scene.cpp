@@ -95,8 +95,11 @@ namespace Akkad {
 			for (auto entity : view)
 			{
 				auto& script = view.get<ScriptComponent>(entity);
-
-				script.Instance->OnUpdate();
+				if (script.Instance != nullptr)
+				{
+					script.Instance->OnUpdate();
+				}
+				
 			}
 
 		}

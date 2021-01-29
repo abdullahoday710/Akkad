@@ -2,7 +2,6 @@
 #include "Akkad/ECS/Entity.h"
 #include "Akkad/Logging.h"
 
-#include <map>
 namespace Akkad {
 
 	class ScriptableEntity

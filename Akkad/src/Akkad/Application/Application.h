@@ -8,6 +8,7 @@ namespace Akkad {
 	/* ---- Forward declarations ---- */
 	class AssetManager;
 	class SceneManager;
+	class LoadedGameAssembly;
 
 	namespace Graphics
 	{
@@ -27,11 +28,15 @@ namespace Akkad {
 
 		static void AttachLayer(Layer* layer) { GetInstance().AttachLayerImpl(layer); }
 		static void DetachLayer(Layer* layer) { GetInstance().DetachLayerImpl(layer); }
-		static void Run() { GetInstance().RunImpl(); }
+
+		/*----- Application Lifetime -----*/
 		static void Init(ApplicationSettings& settings) { GetInstance().InitImpl(settings); }
+		static void Run() { GetInstance().RunImpl(); }
 		static void Shutdown() { GetInstance().m_Running = false; };
+		/*------------------------------*/
 
 		/*---- Getters -----*/
+		static LoadedGameAssembly* GetGameAssembly() { return GetInstance().m_LoadedGameAssembly; }
 		static SharedPtr<Graphics::RenderPlatform> GetRenderPlatform() { return GetInstance().m_platform; }
 		static SharedPtr<AssetManager> GetAssetManager() { return GetInstance().m_AssetManager; }
 		static SharedPtr<SceneManager> GetSceneManager() { return GetInstance().m_SceneManager; }
@@ -69,12 +74,12 @@ namespace Akkad {
 		std::vector<Layer*> m_Layers;
 
 		Window* m_Window = nullptr;
+		LoadedGameAssembly* m_LoadedGameAssembly = nullptr;
 
 		SharedPtr<Graphics::ImGuiHandler> m_ImguiHandler;
 		SharedPtr<Graphics::RenderPlatform> m_platform;
 		SharedPtr<AssetManager> m_AssetManager;
 		SharedPtr<SceneManager> m_SceneManager;
 		
-
 	};
 }

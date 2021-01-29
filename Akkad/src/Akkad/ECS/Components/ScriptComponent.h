@@ -2,7 +2,7 @@
 
 #include "Akkad/Logging.h"
 #include "Akkad/ECS/Entity.h"
-#include "Akkad/Scripting/ScriptFactory.h"
+#include "Akkad/Scripting/ScriptableEntity.h"
 
 namespace Akkad {
 
@@ -13,12 +13,5 @@ namespace Akkad {
 
 		ScriptableEntity* Instance = nullptr;
 	};
-
-// ---------------------------------
-#define RegisterScript(type,name)\
-namespace {\
-	bool registerScript = ScriptFactory::GetInstance().RegisterScriptObject<type>(name);\
-}
-// ---------------------------------
 
 }

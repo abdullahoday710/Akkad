@@ -5,6 +5,7 @@
 
 #ifdef AK_PLATFORM_WINDOWS
 	#include "Akkad/Platforms/Desktop/Windows/Win32Window.h"
+	#include "Akkad/Platforms/Desktop/Windows/Win32GameAssembly.h"
 #endif
 
 #include "Akkad/Logging.h"
@@ -28,6 +29,9 @@ namespace Akkad {
 			window->SetEventCallback(event_cb);
 			window->Init(settings.window_settings);
 			m_Window = window;
+
+			m_LoadedGameAssembly = new Win32GameAssembly();
+
 		#endif //AK_PLATFORM_WINDOWS
 			
 		m_platform = RenderPlatform::Create(RenderAPI::OPENGL);

@@ -5,8 +5,8 @@
 #include "Akkad/Logging.h"
 #include "Akkad/Application/Application.h"
 #include "Akkad/Graphics/Renderer2D.h"
-#include "Akkad/Scripting/ScriptFactory.h"
 #include "Akkad/Asset/AssetManager.h"
+#include "Akkad/Scripting/LoadedGameAssembly.h"
 
 #include "Components/Components.h"
 
@@ -32,7 +32,9 @@ namespace Akkad {
 
 				if (script.Instance == nullptr)
 				{
-					script.Instance = ScriptFactory::GetInstance().createObject(script.ScriptName);
+					auto gameAssembly = Application::GetGameAssembly();
+					script.Instance = gameAssembly->InstantiateScript(script.ScriptName.c_str());
+
 					Entity e(entity, this);
 					script.Instance->m_Entity = e;
 					script.Instance->OnStart();
@@ -115,8 +117,12 @@ namespace Akkad {
 			{
 				auto& script = view.get<ScriptComponent>(entity);
 
-				delete script.Instance;
-				script.Instance = nullptr;
+				if (script.Instance != nullptr)
+				{
+					delete script.Instance;
+					script.Instance = nullptr;
+				}
+				
 			}
 		}
 	}

@@ -66,6 +66,7 @@ namespace Akkad {
 	{
 		PropertyEditorPanel::SetActiveEntity({});
 		EditorLayer::SaveActiveScene();
+		EditorLayer::ReloadGameAssembly();
 		IsPlaying = true;
 
 		auto sceneManager = Application::GetSceneManager();

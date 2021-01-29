@@ -2,6 +2,7 @@
 #include "Editor/EditorLayer.h"
 
 #include <Akkad/Application/Application.h>
+#include <Akkad/Scripting/LoadedGameAssembly.h>
 #include <Akkad/ECS/Components/Components.h>
 #include <Akkad/Asset/AssetManager.h>
 
@@ -213,9 +214,11 @@ namespace Akkad {
 				return;
 			}
 			std::vector<std::string> scriptNames;
-			for (auto it = ScriptFactory::GetInstance().objectmap.begin(); it != ScriptFactory::GetInstance().objectmap.end(); it++)
+
+			auto gameAssembly = Application::GetGameAssembly();
+			for (auto it : gameAssembly->GetScripts())
 			{
-				scriptNames.push_back(it->first);
+				scriptNames.push_back(it);
 			}
 
 			static int item_current_idx = 0;

@@ -1,20 +1,16 @@
 #pragma once
-#include "ScriptableEntity.h"
+#include "GameAssembly.h"
 
+#include <Akkad/Logging.h>
+#include <Akkad/Scripting/ScriptableEntity.h>
+
+#include <map>
 #include <functional>
 namespace Akkad {
 
 	class ScriptFactory
 	{
 	public:
-
-		static ScriptFactory& GetInstance()
-		{
-			static ScriptFactory instance;
-
-			return instance;
-		}
-
 		template<class ObjectType>
 		bool RegisterScriptObject(std::string name)
 		{
@@ -32,18 +28,7 @@ namespace Akkad {
 				return false;
 			}
 
-		}
-
-	private:
-		ScriptFactory() {};
-		~ScriptFactory() {};
-
-		std::map<std::string, std::function<ScriptableEntity* ()>> objectmap;
-
-		template<class ObjectType>
-		static ScriptableEntity* instantiate() {
-			return new ObjectType();
-		}
+		};
 
 		ScriptableEntity* createObject(const std::string& name)
 		{
@@ -60,9 +45,22 @@ namespace Akkad {
 				// call the instantiate function
 				return it->second();
 			}
-		};
+		}
 
-		friend class PropertyEditorPanel;
-		friend class Scene;
+		std::map<std::string, std::function<ScriptableEntity* ()>> objectmap;
+
+	private:
+		ScriptFactory() {};
+		~ScriptFactory() {};
+
+		template<class ObjectType>
+		static ScriptableEntity* instantiate() {
+			return new ObjectType();
+		}
+
+		friend class GameAssembly;
 	};
+
 }
+
+

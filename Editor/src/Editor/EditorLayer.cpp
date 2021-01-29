@@ -18,15 +18,16 @@
 #include <Akkad/ECS/SceneSerializer.h>
 #include <Akkad/ECS/SceneManager.h>
 #include <Akkad/Asset/AssetManager.h>
+#include <Akkad/Platforms/Desktop/Windows/Win32GameAssembly.h>
 
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.cpp>
 #include <IconsForkAwesome.h>
 
-
 namespace Akkad {
 	SharedPtr<Scene> EditorLayer::s_ActiveScene;
 	ProjectDescriptor EditorLayer::s_ActiveProject;
+	
 	
 
 	EditorLayer::EditorLayer()
@@ -56,10 +57,20 @@ namespace Akkad {
 		SceneSerializer::Serialize(s_ActiveScene, path);
 	}
 
+	void EditorLayer::ReloadGameAssembly()
+	{
+		auto gameAssembly = Application::GetGameAssembly();
+		if (!s_ActiveProject.projectData.is_null())
+		{
+			gameAssembly->Free();
+			gameAssembly->LoadAssembly("GameAssembly");
+			gameAssembly->Initialize(Application::GetInstance());
+		}
+	}
+
 	void EditorLayer::OnAttach()
 	{
 		PanelManager::AddPanel(new StartupPanel());
-
 		ApplyImGuiStyles();
 	}
 
@@ -67,9 +78,11 @@ namespace Akkad {
 	{
 
 	}
+	
 
 	void EditorLayer::OnUpdate()
 	{
+
 		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
 		GameViewPanel* gameview = (GameViewPanel*)PanelManager::GetPanel("Game View");
 
@@ -164,7 +177,6 @@ namespace Akkad {
 					{
 						PanelManager::AddPanel(new NewScenePanel());
 					}
-
 					if (ImGui::MenuItem("Project"))
 					{
 						ProjectDescriptor proj;
@@ -173,6 +185,11 @@ namespace Akkad {
 					}
 					ImGui::EndMenu();
 					
+				}
+
+				if (ImGui::MenuItem("Reload Game Assembly"))
+				{
+					ReloadGameAssembly();
 				}
 
 				if (ImGui::MenuItem("Save", "ctrl + s"))

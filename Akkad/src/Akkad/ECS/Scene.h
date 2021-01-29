@@ -1,6 +1,4 @@
 #pragma once
-
-#include <Akkad/Graphics/RenderPlatform.h>
 #include <entt/entt.hpp>
 
 namespace Akkad {

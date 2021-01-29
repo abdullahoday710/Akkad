@@ -18,7 +18,7 @@
 #include <Akkad/ECS/SceneSerializer.h>
 #include <Akkad/ECS/SceneManager.h>
 #include <Akkad/Asset/AssetManager.h>
-#include <Akkad/Platforms/Desktop/Windows/Win32GameAssembly.h>
+#include <Akkad/Scripting/LoadedGameAssembly.h>
 
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.cpp>
@@ -28,8 +28,6 @@ namespace Akkad {
 	SharedPtr<Scene> EditorLayer::s_ActiveScene;
 	ProjectDescriptor EditorLayer::s_ActiveProject;
 	
-	
-
 	EditorLayer::EditorLayer()
 	{
 		s_ActiveScene = CreateSharedPtr<Scene>();

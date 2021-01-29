@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Akkad/Logging.h"
 #include "Akkad/ECS/Entity.h"
 #include "Akkad/Scripting/ScriptableEntity.h"
 

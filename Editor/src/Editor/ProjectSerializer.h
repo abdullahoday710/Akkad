@@ -30,6 +30,12 @@ namespace Akkad {
 
 			return result.string();
 		}
+
+		std::filesystem::path GetProjectDirectory()
+		{
+			std::filesystem::path result(ProjectDirectory);
+			return result;
+		}
 	};
 
 	class ProjectSerializer

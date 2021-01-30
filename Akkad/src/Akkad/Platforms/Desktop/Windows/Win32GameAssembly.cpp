@@ -4,16 +4,33 @@
 #include "Akkad/Scripting/LoadedGameAssembly.h"
 
 #include <Windows.h>
+#include <filesystem>
 
 namespace Akkad {
 
 	void Win32GameAssembly::LoadAssembly(const char* filename)
 	{
 		std::string filenameExt = filename;
-		filenameExt = filenameExt + ".dll";
+		filenameExt += ".dll";
+		std::filesystem::path path = filenameExt;
 
 		HINSTANCE hDLL = NULL;
-		hDLL = LoadLibraryA(filenameExt.c_str());
+
+		if (path.is_absolute())
+		{
+			std::string dllName = path.filename().string();
+			auto dllPath = path.remove_filename();
+
+			SetDllDirectoryA(dllPath.string().c_str());
+
+			hDLL = LoadLibraryA(dllName.c_str());
+		}
+
+		else if (path.is_relative())
+		{
+			hDLL = LoadLibraryA(filenameExt.c_str());
+		}
+
 		AK_ASSERT(hDLL != NULL, "Failed to load the game assembly !!");
 		m_Handle = (void*)hDLL;
 	}

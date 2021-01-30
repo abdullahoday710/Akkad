@@ -60,8 +60,11 @@ namespace Akkad {
 		auto gameAssembly = Application::GetGameAssembly();
 		if (!s_ActiveProject.projectData.is_null())
 		{
+			std::string dllPath = s_ActiveProject.GetProjectDirectory().string();
+			dllPath += "/GameAssembly";
+
 			gameAssembly->Free();
-			gameAssembly->LoadAssembly("GameAssembly");
+			gameAssembly->LoadAssembly(dllPath.c_str());
 			gameAssembly->Initialize(Application::GetInstance());
 		}
 	}

@@ -32,5 +32,3 @@ workspace "Akkad"
     include "Editor"
     include "GameAssembly"
     include "sandbox"
-
-    print("%{wks.location}/3rdparty/glad/include")

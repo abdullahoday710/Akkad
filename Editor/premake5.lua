@@ -21,6 +21,15 @@ project "Editor"
 		"%{IncludeDir.json}",
 		"%{IncludeDir.iconfontcpp}",
 	}
+		
+    postbuildcommands {
+	  "{ECHO} ------------ Build done, copying resources into output directory -------------------",
+
+      "{COPY} %{wks.location}/%{prj.name}/res %{wks.location}/bin/" .. outputdir .. "/%{prj.name}/res",
+
+	  "{COPY} %{wks.location}/GameAssembly/src %{wks.location}/bin/" .. outputdir .. "/%{prj.name}/GameAssembly/src",
+	  "{COPY} %{wks.location}/GameAssembly/premake5.lua %{wks.location}/bin/" .. outputdir .. "/%{prj.name}/GameAssembly",
+    }
 
 	links {
 	"Akkad"

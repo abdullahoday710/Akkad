@@ -1,0 +1,54 @@
+#include <Akkad/Application/Application.h>
+#include <Akkad/Application/TimeManager.h>
+
+#include <Akkad/Input/KeyCodes.h>
+#include <Akkad/Input/Input.h>
+#include "EditorCamera.h"
+
+namespace Akkad {
+
+	EditorCamera::EditorCamera(float aspectRatio) : Camera(aspectRatio)
+	{
+		m_Transform = glm::translate(m_Transform, m_Position);
+	}
+
+	EditorCamera::EditorCamera(CameraProjection projectionType) : Camera(projectionType)
+	{
+		m_Transform = glm::translate(m_Transform, m_Position);
+	}
+
+	EditorCamera::EditorCamera(CameraProjection projectionType, float aspectRatio) : Camera(projectionType, aspectRatio)
+	{
+		m_Transform = glm::translate(m_Transform, m_Position);
+	}
+
+	void EditorCamera::Update()
+	{
+		auto time = Application::GetTimeManager();
+
+		if (Input::GetKeyDown(AK_KEY_W))
+		{
+			m_Position.y += 0.5f * time->GetDeltaTime();
+			RecalculateTransform();
+		}
+
+		if (Input::GetKeyDown(AK_KEY_A))
+		{
+			m_Position.x -= 0.5f * time->GetDeltaTime();
+			RecalculateTransform();
+		}
+
+		if (Input::GetKeyDown(AK_KEY_S))
+		{
+			m_Position.y -= 0.5f * time->GetDeltaTime();
+			RecalculateTransform();
+		}
+
+		if (Input::GetKeyDown(AK_KEY_D))
+		{
+			m_Position.x += 0.5f * time->GetDeltaTime();
+			RecalculateTransform();
+		}
+	}
+
+}

@@ -9,6 +9,7 @@ namespace Akkad {
 	class AssetManager;
 	class SceneManager;
 	class LoadedGameAssembly;
+	class TimeManager;
 
 	namespace Graphics
 	{
@@ -37,6 +38,7 @@ namespace Akkad {
 
 		/*---- Getters -----*/
 		static LoadedGameAssembly* GetGameAssembly() { return GetInstance().m_LoadedGameAssembly; }
+		static TimeManager* GetTimeManager() { return GetInstance().m_TimeManager; }
 		static SharedPtr<Graphics::RenderPlatform> GetRenderPlatform() { return GetInstance().m_platform; }
 		static SharedPtr<AssetManager> GetAssetManager() { return GetInstance().m_AssetManager; }
 		static SharedPtr<SceneManager> GetSceneManager() { return GetInstance().m_SceneManager; }
@@ -73,11 +75,17 @@ namespace Akkad {
 
 		std::vector<Layer*> m_Layers;
 
+		// -------- Platform-specific classes --------
+
 		Window* m_Window = nullptr;
 		LoadedGameAssembly* m_LoadedGameAssembly = nullptr;
+		TimeManager* m_TimeManager = nullptr;
 
 		SharedPtr<Graphics::ImGuiHandler> m_ImguiHandler;
 		SharedPtr<Graphics::RenderPlatform> m_platform;
+
+		// -------------------------------------------
+
 		SharedPtr<AssetManager> m_AssetManager;
 		SharedPtr<SceneManager> m_SceneManager;
 		

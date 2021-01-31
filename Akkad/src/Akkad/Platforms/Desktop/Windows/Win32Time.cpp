@@ -1,39 +1,33 @@
-#include "Akkad/Application/Time.h"
+#include "Win32Time.h"
+
 #include <Windows.h>
 
 namespace Akkad {
 
-	unsigned long long int TimerOffset;
-	unsigned long long int TimerFrequency;
-
-	double newFrame;
-	double lastFrame = 0;
-
-	double deltaTime;
-
-	void Time::Init() {
-		QueryPerformanceFrequency((LARGE_INTEGER*)&TimerFrequency);
-		QueryPerformanceCounter((LARGE_INTEGER*)&TimerOffset);
+	Win32TimeManager::Win32TimeManager()
+	{
+		QueryPerformanceFrequency((LARGE_INTEGER*)&m_TimerFrequency);
+		QueryPerformanceCounter((LARGE_INTEGER*)&m_TimerOffset);
 	}
 
-	double Time::GetTime() {
+	double Win32TimeManager::GetTime() {
 
 		long long int value;
 		QueryPerformanceCounter((LARGE_INTEGER*)&value);
 		
-		return (double)(value - TimerOffset) / TimerFrequency;
+		return (double)(value - m_TimerOffset) / m_TimerFrequency;
 
 	}
 
-	double Time::GetDeltaTime() {
-		return deltaTime;
+	double Win32TimeManager::GetDeltaTime() {
+		return m_deltaTime;
 	}
 
-	void Time::CalculateDeltaTime() {
-		lastFrame = newFrame;
+	void Win32TimeManager::CalculateDeltaTime() {
+		m_lastFrame = m_newFrame;
 		
-		newFrame = GetTime();
+		m_newFrame = GetTime();
 
-		deltaTime = newFrame - lastFrame;
+		m_deltaTime = m_newFrame - m_lastFrame;
 	}
 }

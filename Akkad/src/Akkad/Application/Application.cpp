@@ -6,6 +6,7 @@
 #ifdef AK_PLATFORM_WINDOWS
 	#include "Akkad/Platforms/Desktop/Windows/Win32Window.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32GameAssembly.h"
+	#include "Akkad/Platforms/Desktop/Windows/Win32Time.h"
 #endif
 
 #include "Akkad/Logging.h"
@@ -30,6 +31,7 @@ namespace Akkad {
 			window->Init(settings.window_settings);
 			m_Window = window;
 
+			m_TimeManager = new Win32TimeManager();
 			m_LoadedGameAssembly = new Win32GameAssembly();
 
 		#endif //AK_PLATFORM_WINDOWS
@@ -41,7 +43,6 @@ namespace Akkad {
 		m_SceneManager = CreateSharedPtr<SceneManager>();
 
 		Renderer2D::Init();
-		Time::Init();
 		m_Running = true;
 
 		#ifdef AK_ENABLE_IMGUI
@@ -72,7 +73,7 @@ namespace Akkad {
 				#endif
 			}
 
-			Time::CalculateDeltaTime();
+			m_TimeManager->CalculateDeltaTime();
 			m_platform->GetRenderContext()->SwapWindowBuffers();
 			m_Window->OnUpdate();
 		}

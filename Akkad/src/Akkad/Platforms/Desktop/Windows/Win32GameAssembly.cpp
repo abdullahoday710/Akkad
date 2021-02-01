@@ -1,6 +1,7 @@
 #include "Win32GameAssembly.h"
 
 #include "Akkad/core.h"
+#include "Akkad/Application/Application.h"
 #include "Akkad/Scripting/LoadedGameAssembly.h"
 
 #include <Windows.h>
@@ -41,13 +42,13 @@ namespace Akkad {
 		return result;
 	}
 
-	void Win32GameAssembly::Initialize(Application& app)
+	void Win32GameAssembly::Initialize(ApplicationComponents& appComponents)
 	{
 		AK_ASSERT(m_Handle != nullptr, "Game assembly not present !");
 		INITLIBFN InitLibraryFn = (INITLIBFN)GetProcAddress((HMODULE)m_Handle, "Init");
 		AK_ASSERT(InitLibraryFn != NULL, "Required function is not found !");
 
-		InitLibraryFn(app);
+		InitLibraryFn(appComponents);
 	
 	}
 

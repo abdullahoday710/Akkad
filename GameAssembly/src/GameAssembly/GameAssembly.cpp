@@ -1,18 +1,19 @@
 #include "GameAssembly.h"
 
-#include <iostream>
 #include <Akkad/Application/Application.h>
+#include <iostream>
+
 namespace Akkad {
-	void GameAssembly::Init(Application& app)
+	void GameAssembly::Init(ApplicationComponents& appComponents)
 	{
-		m_Application = &app;
+		m_ApplicationComponents = &appComponents;
 	}
 }
 
 
-void Init(Akkad::Application& app)
+void Init(Akkad::ApplicationComponents& appComponents)
 {
-	Akkad::GameAssembly::GetInstance().Init(app);
+	Akkad::GameAssembly::GetInstance().Init(appComponents);
 }
 
 std::vector<std::string>& GetScripts()

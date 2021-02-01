@@ -10,7 +10,7 @@ namespace Akkad {
 		virtual void LoadAssembly(const char* filename) override;
 		virtual bool Free() override;
 
-		virtual void Initialize(Application& app) override;
+		virtual void Initialize(ApplicationComponents& appComponents) override;
 		virtual std::vector<std::string> GetScripts() override;
 		virtual ScriptableEntity* InstantiateScript(const char* scriptName) override;
 

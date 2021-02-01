@@ -29,25 +29,25 @@ namespace Akkad {
 
 			window->SetEventCallback(event_cb);
 			window->Init(settings.window_settings);
-			m_Window = window;
+			m_ApplicationComponents.m_Window = window;
 
-			m_TimeManager = new Win32TimeManager();
+			m_ApplicationComponents.m_TimeManager = new Win32TimeManager();
 			m_LoadedGameAssembly = new Win32GameAssembly();
 
 		#endif //AK_PLATFORM_WINDOWS
 			
-		m_platform = RenderPlatform::Create(RenderAPI::OPENGL);
-		m_platform->Init();
+		m_ApplicationComponents.m_platform = RenderPlatform::Create(RenderAPI::OPENGL);
+		m_ApplicationComponents.m_platform->Init();
 
-		m_AssetManager = CreateSharedPtr<AssetManager>();
-		m_SceneManager = CreateSharedPtr<SceneManager>();
+		m_ApplicationComponents.m_AssetManager = CreateSharedPtr<AssetManager>();
+		m_ApplicationComponents.m_SceneManager = CreateSharedPtr<SceneManager>();
 
 		Renderer2D::Init();
 		m_Running = true;
 
 		#ifdef AK_ENABLE_IMGUI
-			m_ImguiHandler = ImGuiHandler::create(RenderAPI::OPENGL);
-			m_ImguiHandler->Init();
+			m_ApplicationComponents.m_ImguiHandler = ImGuiHandler::create(RenderAPI::OPENGL);
+			m_ApplicationComponents.m_ImguiHandler->Init();
 		#endif // AK_ENABLE_IMGUI
 	}
 
@@ -66,16 +66,16 @@ namespace Akkad {
 				layer->OnUpdate();
 
 				#ifdef AK_ENABLE_IMGUI
-					m_ImguiHandler->NewFrame();
+					m_ApplicationComponents.m_ImguiHandler->NewFrame();
 					layer->RenderImGui();
-					m_ImguiHandler->Render();
-					m_ImguiHandler->UpdateRenderPlatforms();
+					m_ApplicationComponents.m_ImguiHandler->Render();
+					m_ApplicationComponents.m_ImguiHandler->UpdateRenderPlatforms();
 				#endif
 			}
 
-			m_TimeManager->CalculateDeltaTime();
-			m_platform->GetRenderContext()->SwapWindowBuffers();
-			m_Window->OnUpdate();
+			m_ApplicationComponents.m_TimeManager->CalculateDeltaTime();
+			m_ApplicationComponents.m_platform->GetRenderContext()->SwapWindowBuffers();
+			m_ApplicationComponents.m_Window->OnUpdate();
 		}
 	}
 
@@ -88,7 +88,7 @@ namespace Akkad {
 
 	Application::~Application()
 	{
-		delete m_Window;
+		delete m_ApplicationComponents.m_Window;
 
 		for (auto layer : m_Layers)
 		{
@@ -98,7 +98,7 @@ namespace Akkad {
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
-		m_platform->OnWindowResize(e.m_Width, e.m_Height);
+		m_ApplicationComponents.m_platform->OnWindowResize(e.m_Width, e.m_Height);
 		return true;
 	}
 

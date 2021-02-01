@@ -1,7 +1,9 @@
 #include "GameAssembly.h"
 
+#include <Akkad/Application/Application.h>
+#include <Akkad/Application/TimeManager.h>
+
 #include "Akkad/ECS/Components/Components.h"
-#include "Akkad/Application/Time.h"
 
 namespace Akkad {
 
@@ -16,8 +18,9 @@ namespace Akkad {
 		{
 			auto& transform = GetComponent<TransformComponent>();
 			glm::vec3& rotation = transform.GetRotation();
+			auto time = GameAssembly::GetInstance().GetApplicationComponents()->m_TimeManager;
 
-			rotation.z = 0.5 + rotation.z;
+			rotation.z += 0.5 * time->GetDeltaTime();
 
 		};
 	};

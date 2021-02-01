@@ -17,7 +17,7 @@
 #endif // AK_PLATFORM_WINDOWS
 
 namespace Akkad {
-	class Application;
+	class ApplicationComponents;
 	class ScriptableEntity;
 
 	class GameAssembly
@@ -28,7 +28,8 @@ namespace Akkad {
 			static GameAssembly instance;
 			return instance;
 		}
-		void Init(Application& app);
+		void Init(ApplicationComponents& appComponents);
+		ApplicationComponents* GetApplicationComponents() { return m_ApplicationComponents; }
 		ScriptFactory& GetFactory() { return m_Factory; }
 
 	private:
@@ -36,7 +37,7 @@ namespace Akkad {
 		~GameAssembly() {}
 
 		ScriptFactory m_Factory;
-		Application* m_Application = nullptr;
+		ApplicationComponents* m_ApplicationComponents = nullptr;
 	};
 }
 
@@ -47,7 +48,7 @@ namespace {\
 
 // ----------------- Exports ---------------------
 
-extern "C" AK_GAME_ASSEMBLY_API void Init(Akkad::Application& app);
+extern "C" AK_GAME_ASSEMBLY_API void Init(Akkad::ApplicationComponents& appComponents);
 extern "C" AK_GAME_ASSEMBLY_API std::vector<std::string>& GetScripts();
 extern "C" AK_GAME_ASSEMBLY_API Akkad::ScriptableEntity* InstantiateScript(const char* scriptName);
 

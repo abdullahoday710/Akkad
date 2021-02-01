@@ -23,6 +23,19 @@ namespace Akkad {
 		WindowSettings window_settings;
 	};
 
+	struct ApplicationComponents
+	{
+		Window* m_Window = nullptr;
+		TimeManager* m_TimeManager = nullptr;
+
+		SharedPtr<Graphics::ImGuiHandler> m_ImguiHandler;
+		SharedPtr<Graphics::RenderPlatform> m_platform;
+
+
+		SharedPtr<AssetManager> m_AssetManager;
+		SharedPtr<SceneManager> m_SceneManager;
+	};
+
 	class Application {
 	public:
 		static Application& GetInstance() { return s_Instance; }
@@ -38,13 +51,13 @@ namespace Akkad {
 
 		/*---- Getters -----*/
 		static LoadedGameAssembly* GetGameAssembly() { return GetInstance().m_LoadedGameAssembly; }
-		static TimeManager* GetTimeManager() { return GetInstance().m_TimeManager; }
-		static SharedPtr<Graphics::RenderPlatform> GetRenderPlatform() { return GetInstance().m_platform; }
-		static SharedPtr<AssetManager> GetAssetManager() { return GetInstance().m_AssetManager; }
-		static SharedPtr<SceneManager> GetSceneManager() { return GetInstance().m_SceneManager; }
+		static TimeManager* GetTimeManager() { return GetInstance().m_ApplicationComponents.m_TimeManager; }
+		static SharedPtr<Graphics::RenderPlatform> GetRenderPlatform() { return GetInstance().m_ApplicationComponents.m_platform; }
+		static SharedPtr<AssetManager> GetAssetManager() { return GetInstance().m_ApplicationComponents.m_AssetManager; }
+		static SharedPtr<SceneManager> GetSceneManager() { return GetInstance().m_ApplicationComponents.m_SceneManager; }
 		/*------------------*/
 
-		Window* GetWindow() { return m_Window; }
+		Window* GetWindow() { return m_ApplicationComponents.m_Window; }
 		
 	private:
 		friend class Window;
@@ -75,19 +88,10 @@ namespace Akkad {
 
 		std::vector<Layer*> m_Layers;
 
-		// -------- Platform-specific classes --------
-
-		Window* m_Window = nullptr;
+		ApplicationComponents m_ApplicationComponents;
 		LoadedGameAssembly* m_LoadedGameAssembly = nullptr;
-		TimeManager* m_TimeManager = nullptr;
 
-		SharedPtr<Graphics::ImGuiHandler> m_ImguiHandler;
-		SharedPtr<Graphics::RenderPlatform> m_platform;
-
-		// -------------------------------------------
-
-		SharedPtr<AssetManager> m_AssetManager;
-		SharedPtr<SceneManager> m_SceneManager;
+		friend class EditorLayer;
 		
 	};
 }

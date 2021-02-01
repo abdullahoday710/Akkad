@@ -65,7 +65,7 @@ namespace Akkad {
 
 			gameAssembly->Free();
 			gameAssembly->LoadAssembly(dllPath.c_str());
-			gameAssembly->Initialize(Application::GetInstance());
+			gameAssembly->Initialize(Application::GetInstance().m_ApplicationComponents);
 		}
 	}
 

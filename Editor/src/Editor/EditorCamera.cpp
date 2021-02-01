@@ -25,26 +25,27 @@ namespace Akkad {
 	void EditorCamera::Update()
 	{
 		auto time = Application::GetTimeManager();
+		auto input = Application::GetInputManager();
 
-		if (Input::GetKeyDown(AK_KEY_W))
+		if (input->GetKeyDown(AK_KEY_W))
 		{
 			m_Position.y += 0.5f * time->GetDeltaTime();
 			RecalculateTransform();
 		}
 
-		if (Input::GetKeyDown(AK_KEY_A))
+		if (input->GetKeyDown(AK_KEY_A))
 		{
 			m_Position.x -= 0.5f * time->GetDeltaTime();
 			RecalculateTransform();
 		}
 
-		if (Input::GetKeyDown(AK_KEY_S))
+		if (input->GetKeyDown(AK_KEY_S))
 		{
 			m_Position.y -= 0.5f * time->GetDeltaTime();
 			RecalculateTransform();
 		}
 
-		if (Input::GetKeyDown(AK_KEY_D))
+		if (input->GetKeyDown(AK_KEY_D))
 		{
 			m_Position.x += 0.5f * time->GetDeltaTime();
 			RecalculateTransform();

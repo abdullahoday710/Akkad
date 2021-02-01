@@ -2,6 +2,8 @@
 
 #include <Akkad/Application/Application.h>
 #include <Akkad/Application/TimeManager.h>
+#include <Akkad/Input/Input.h>
+#include <Akkad/Input/KeyCodes.h>
 
 #include "Akkad/ECS/Components/Components.h"
 
@@ -16,11 +18,44 @@ namespace Akkad {
 
 		virtual void OnUpdate() override
 		{
-			auto& transform = GetComponent<TransformComponent>();
-			glm::vec3& rotation = transform.GetRotation();
+			auto input = GameAssembly::GetInstance().GetApplicationComponents()->m_InputManager;
 			auto time = GameAssembly::GetInstance().GetApplicationComponents()->m_TimeManager;
 
-			rotation.z += 0.5 * time->GetDeltaTime();
+			auto& transform = GetComponent<TransformComponent>();
+
+			if (input->GetKeyDown(AK_KEY_W))
+			{
+				glm::vec3& position = transform.GetPosition();
+
+				position.y += 0.9 * time->GetDeltaTime();
+			}
+			if (input->GetKeyDown(AK_KEY_A))
+			{
+				glm::vec3& position = transform.GetPosition();
+
+				position.x -= 0.9 * time->GetDeltaTime();
+			}
+			if (input->GetKeyDown(AK_KEY_S))
+			{
+				glm::vec3& position = transform.GetPosition();
+
+				position.y -= 0.9 * time->GetDeltaTime();
+			}
+			if (input->GetKeyDown(AK_KEY_D))
+			{
+				glm::vec3& position = transform.GetPosition();
+
+				position.x += 0.9 * time->GetDeltaTime();
+			}
+
+			if (input->GetKeyDown(AK_KEY_SPACE))
+			{
+				glm::vec3& rotation = transform.GetRotation();
+
+
+				rotation.z += 0.5 * time->GetDeltaTime();
+			}
+
 
 		};
 	};

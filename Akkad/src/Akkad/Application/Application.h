@@ -10,6 +10,7 @@ namespace Akkad {
 	class SceneManager;
 	class LoadedGameAssembly;
 	class TimeManager;
+	class Input;
 
 	namespace Graphics
 	{
@@ -27,6 +28,7 @@ namespace Akkad {
 	{
 		Window* m_Window = nullptr;
 		TimeManager* m_TimeManager = nullptr;
+		Input* m_InputManager = nullptr;
 
 		SharedPtr<Graphics::ImGuiHandler> m_ImguiHandler;
 		SharedPtr<Graphics::RenderPlatform> m_platform;
@@ -50,8 +52,11 @@ namespace Akkad {
 		/*------------------------------*/
 
 		/*---- Getters -----*/
+
 		static LoadedGameAssembly* GetGameAssembly() { return GetInstance().m_LoadedGameAssembly; }
 		static TimeManager* GetTimeManager() { return GetInstance().m_ApplicationComponents.m_TimeManager; }
+		static Input* GetInputManager() { return GetInstance().m_ApplicationComponents.m_InputManager; }
+
 		static SharedPtr<Graphics::RenderPlatform> GetRenderPlatform() { return GetInstance().m_ApplicationComponents.m_platform; }
 		static SharedPtr<AssetManager> GetAssetManager() { return GetInstance().m_ApplicationComponents.m_AssetManager; }
 		static SharedPtr<SceneManager> GetSceneManager() { return GetInstance().m_ApplicationComponents.m_SceneManager; }

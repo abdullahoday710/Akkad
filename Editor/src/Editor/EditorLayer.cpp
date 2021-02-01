@@ -157,8 +157,9 @@ namespace Akkad {
 		ImGui::End();
 
 		// Handle keyboard shortcuts
+		auto input = Application::GetInputManager();
 
-		if (Input::GetKeyDown(AK_KEY_LEFT_CONTROL) & Input::GetKeyDown(AK_KEY_S))
+		if (input->GetKeyDown(AK_KEY_LEFT_CONTROL) & input->GetKeyDown(AK_KEY_S))
 		{
 			SaveActiveScene();
 		}

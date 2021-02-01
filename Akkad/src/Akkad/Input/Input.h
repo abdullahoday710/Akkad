@@ -1,8 +1,11 @@
 #pragma once
 
-class Input {
-public:
-	static bool GetKeyDown(unsigned int key);
-	static float GetMouseX();
-	static float GetMouseY();
-};
+namespace Akkad {
+
+	class Input {
+	public:
+		virtual bool GetKeyDown(unsigned int key) = 0;
+		virtual float GetMouseX() = 0;
+		virtual float GetMouseY() = 0;
+	};
+}

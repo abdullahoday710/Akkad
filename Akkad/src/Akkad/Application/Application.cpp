@@ -7,6 +7,7 @@
 	#include "Akkad/Platforms/Desktop/Windows/Win32Window.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32GameAssembly.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32Time.h"
+	#include "Akkad/Platforms/Desktop/Windows/Win32Input.h"
 #endif
 
 #include "Akkad/Logging.h"
@@ -29,8 +30,9 @@ namespace Akkad {
 
 			window->SetEventCallback(event_cb);
 			window->Init(settings.window_settings);
-			m_ApplicationComponents.m_Window = window;
 
+			m_ApplicationComponents.m_Window = window;
+			m_ApplicationComponents.m_InputManager = new Win32Input();
 			m_ApplicationComponents.m_TimeManager = new Win32TimeManager();
 			m_LoadedGameAssembly = new Win32GameAssembly();
 

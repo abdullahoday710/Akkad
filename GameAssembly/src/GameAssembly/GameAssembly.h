@@ -2,6 +2,10 @@
 #include "ScriptFactory.h"
 
 #include <Akkad/PlatformMacros.h>
+#include <Akkad/Application/Application.h>
+#include <Akkad/Application/TimeManager.h>
+#include <Akkad/Input/Input.h>
+#include <Akkad/Input/KeyCodes.h>
 
 #include <string>
 #include <vector>
@@ -17,8 +21,6 @@
 #endif // AK_PLATFORM_WINDOWS
 
 namespace Akkad {
-	class ApplicationComponents;
-	class ScriptableEntity;
 
 	class GameAssembly
 	{
@@ -31,6 +33,13 @@ namespace Akkad {
 		void Init(ApplicationComponents& appComponents);
 		ApplicationComponents* GetApplicationComponents() { return m_ApplicationComponents; }
 		ScriptFactory& GetFactory() { return m_Factory; }
+
+		// ---------------- Getters ----------------
+
+		static TimeManager* GetTimeManager() { return GetInstance().m_ApplicationComponents->m_TimeManager; };
+		static Input* GetInput() { return GetInstance().m_ApplicationComponents->m_InputManager; };
+
+		//------------------------------------------
 
 	private:
 		GameAssembly() : m_Factory() {}

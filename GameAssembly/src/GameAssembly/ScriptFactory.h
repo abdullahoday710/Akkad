@@ -1,5 +1,4 @@
 #pragma once
-#include "GameAssembly.h"
 
 #include <Akkad/Logging.h>
 #include <Akkad/Scripting/ScriptableEntity.h>

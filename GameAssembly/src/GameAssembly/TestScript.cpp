@@ -1,10 +1,5 @@
 #include "GameAssembly.h"
 
-#include <Akkad/Application/Application.h>
-#include <Akkad/Application/TimeManager.h>
-#include <Akkad/Input/Input.h>
-#include <Akkad/Input/KeyCodes.h>
-
 #include "Akkad/ECS/Components/Components.h"
 
 namespace Akkad {
@@ -18,8 +13,8 @@ namespace Akkad {
 
 		virtual void OnUpdate() override
 		{
-			auto input = GameAssembly::GetInstance().GetApplicationComponents()->m_InputManager;
-			auto time = GameAssembly::GetInstance().GetApplicationComponents()->m_TimeManager;
+			auto input = GameAssembly::GetInput();
+			auto time = GameAssembly::GetTimeManager();
 
 			auto& transform = GetComponent<TransformComponent>();
 

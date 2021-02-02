@@ -1,6 +1,5 @@
 #include "GameAssembly.h"
 
-#include <Akkad/Application/Application.h>
 #include <iostream>
 
 namespace Akkad {

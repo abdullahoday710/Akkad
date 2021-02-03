@@ -22,14 +22,23 @@ namespace Akkad {
 		output.open(path + "/"+name+".AKPROJ");
 		output << std::setw(4) << data << std::endl;
 		output.close();
+
 		std::string assets = path + "/assets";
 		std::string scenes = assets + "/scenes";
 
 		filesystem::create_directory(assets.c_str());
 		filesystem::create_directory(scenes.c_str());
-		descriptor.projectData = data;
-		descriptor.ProjectDirectory = path;
 
+		descriptor.projectData = data;
+		descriptor.ProjectDirectory = path + "/";
+
+		filesystem::path GameAssemblyPath = filesystem::current_path();
+
+		GameAssemblyPath += "/GameAssembly";
+
+		std::cout << GameAssemblyPath << std::endl;
+
+		filesystem::copy(GameAssemblyPath, path + "/GameAssembly", filesystem::copy_options::recursive);
 		descriptor.ProjectFilePath = path + "/" + name + ".AKPROJ";
 
 		return descriptor;

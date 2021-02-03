@@ -4,10 +4,11 @@ project "Editor"
 	cppdialect "C++17"
 	staticruntime "on"
 
+	debugdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
-	akkadLib = "%{wks.location}/bin/" .. outputdir .. "/Akkad/Akkad.lib"
 
 	files {
 		"src/**.h",

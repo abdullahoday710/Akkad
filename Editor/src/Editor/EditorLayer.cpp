@@ -1,4 +1,6 @@
 #include "EditorLayer.h"
+#include "Scripting/GameAssemblyHandler.h"
+
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/PropertyEditorPanel.h"
 #include "Panels/NewProjectPanel.h"
@@ -57,16 +59,24 @@ namespace Akkad {
 
 	void EditorLayer::ReloadGameAssembly()
 	{
-		auto gameAssembly = Application::GetGameAssembly();
-		if (!s_ActiveProject.projectData.is_null())
-		{
-			std::string dllPath = s_ActiveProject.GetProjectDirectory().string();
-			dllPath += "/GameAssembly";
+		std::string path = s_ActiveProject.GetProjectDirectory().string();
+		path += "GameAssembly/build/GameAssembly";
 
-			gameAssembly->Free();
-			gameAssembly->LoadAssembly(dllPath.c_str());
-			gameAssembly->Initialize(Application::GetInstance().m_ApplicationComponents);
-		}
+		GameAssemblyHandler::FreeGameAssembly();
+		
+		GameAssemblyHandler::LoadGameAssembly(path.c_str());
+	}
+
+	void EditorLayer::CompileGameAssembly()
+	{
+		GameAssemblyHandler::FreeGameAssembly();
+
+		std::string buildpPath = s_ActiveProject.GetProjectDirectory().string();
+		buildpPath += "GameAssembly/";
+
+		GameAssemblyHandler::CompileGameAssembly(buildpPath);
+		ReloadGameAssembly();
+
 	}
 
 	void EditorLayer::OnAttach()
@@ -192,6 +202,12 @@ namespace Akkad {
 				if (ImGui::MenuItem("Reload Game Assembly"))
 				{
 					ReloadGameAssembly();
+				}
+
+				if (ImGui::MenuItem("Compile Game Assembly"))
+				{
+					
+					CompileGameAssembly();
 				}
 
 				if (ImGui::MenuItem("Save", "ctrl + s"))

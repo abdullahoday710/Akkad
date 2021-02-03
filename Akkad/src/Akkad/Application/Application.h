@@ -96,7 +96,7 @@ namespace Akkad {
 		ApplicationComponents m_ApplicationComponents;
 		LoadedGameAssembly* m_LoadedGameAssembly = nullptr;
 
-		friend class EditorLayer;
+		friend class GameAssemblyHandler;
 		
 	};
 }

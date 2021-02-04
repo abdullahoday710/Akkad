@@ -17,7 +17,9 @@ namespace Akkad {
 
 	struct AssetDescriptor
 	{
+		std::string assetName;
 		std::string absolutePath;
+
 		AssetType assetType = AssetType::UNKNOWN;
 
 		void SetAssetType(std::string fileExtension) {
@@ -48,6 +50,8 @@ namespace Akkad {
 
 		SharedPtr<Graphics::Texture> GetTexture(std::string assetID);
 		SharedPtr<Graphics::Shader> GetShader(std::string assetID);
+
+		std::vector<AssetDescriptor> GetAllShaders();
 
 	private:
 		std::map<std::string, AssetDescriptor> m_RegisteredAssets;

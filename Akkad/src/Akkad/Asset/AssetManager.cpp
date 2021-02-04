@@ -85,4 +85,19 @@ namespace Akkad {
 			return shader;
 		}
 	}
+
+	std::vector<AssetDescriptor> AssetManager::GetAllShaders()
+	{
+		std::vector<AssetDescriptor> result;
+
+		for (auto it : m_RegisteredAssets)
+		{
+			if (it.second.assetType == AssetType::SHADER)
+			{
+				result.push_back(it.second);
+			}
+		}
+
+		return result;
+	}
 }

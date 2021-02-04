@@ -6,7 +6,9 @@
 #include <string>
 
 namespace Akkad {
-
+	enum class AssetType {
+		UNKNOWN, TEXTURE, SHADER
+	};
 	// forward declarations
 	namespace Graphics {
 		class Texture;
@@ -16,6 +18,19 @@ namespace Akkad {
 	struct AssetDescriptor
 	{
 		std::string absolutePath;
+		AssetType assetType = AssetType::UNKNOWN;
+
+		void SetAssetType(std::string fileExtension) {
+			if (fileExtension == ".png" || fileExtension == ".jpg")
+			{
+				assetType = AssetType::TEXTURE;
+			}
+
+			else if(fileExtension == ".glsl")
+			{
+				assetType = AssetType::SHADER;
+			}
+		}
 	};
 
 	class AssetManager

@@ -177,7 +177,12 @@ namespace Akkad {
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_DRAG_DROP"))
 				{
 					const char* id = (const char*)payload->Data;
-					sprite.textureID = id;
+					AssetDescriptor desc = Application::GetAssetManager()->GetDescriptorByID(id);
+
+					if (desc.assetType == AssetType::TEXTURE)
+					{
+						sprite.textureID = id;
+					}
 
 				}
 				ImGui::EndDragDropTarget();

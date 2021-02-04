@@ -1,5 +1,6 @@
 #include "ProjectSerializer.h"
 
+#include <Akkad/Random.h>
 #include <Akkad/Logging.h>
 #include <Akkad/Application/Application.h>
 #include <Akkad/Asset/AssetManager.h>
@@ -16,12 +17,7 @@ namespace Akkad {
 		ProjectDescriptor descriptor;
 
 		json data;
-		std::ofstream output;
 		data["project"]["name"] = name;
-
-		output.open(path + "/"+name+".AKPROJ");
-		output << std::setw(4) << data << std::endl;
-		output.close();
 
 		std::string assets = path + "/assets";
 		std::string scenes = assets + "/scenes";
@@ -33,13 +29,42 @@ namespace Akkad {
 		descriptor.ProjectDirectory = path + "/";
 
 		filesystem::path GameAssemblyPath = filesystem::current_path();
+		filesystem::path EngineResourcesPath = filesystem::current_path();
 
 		GameAssemblyPath += "/GameAssembly";
-
-		std::cout << GameAssemblyPath << std::endl;
+		EngineResourcesPath += "/res";
 
 		filesystem::copy(GameAssemblyPath, path + "/GameAssembly", filesystem::copy_options::recursive);
+		filesystem::copy(EngineResourcesPath, path + "/res", filesystem::copy_options::recursive);
+
+		for (auto& file : filesystem::directory_iterator(EngineResourcesPath))
+		{
+			if (file.is_directory())
+			{
+				for (auto& subdir : filesystem::directory_iterator(file.path()))
+				{
+					filesystem::copy(subdir.path(), path + "/assets");
+
+					std::string assetName = subdir.path().filename().string();
+					std::string assetID = Random::GenerateRandomUUID();
+
+					descriptor.projectData["project"]["Assets"][assetID]["path"] = "assets/" + assetName;
+					descriptor.projectData["project"]["Assets"][assetID]["name"] = assetName;
+
+					AssetDescriptor assetDesc;
+					assetDesc.absolutePath = path + "/assets/" + assetName;
+
+					Application::GetAssetManager()->RegisterAsset(assetID, assetDesc);
+				}
+			}
+		}
+
 		descriptor.ProjectFilePath = path + "/" + name + ".AKPROJ";
+
+		std::ofstream output;
+		output.open(path + "/" + name + ".AKPROJ");
+		output << std::setw(4) << descriptor.projectData << std::endl;
+		output.close();
 
 		return descriptor;
 	}

@@ -8,3 +8,9 @@
 [submodule "3rdparty/entt"]
 	path = 3rdparty/entt
 	url = https://github.com/skypjack/entt
+[submodule "3rdparty/glslang"]
+	path = 3rdparty/glslang
+	url = https://github.com/vertexpotato/glslang
+[submodule "3rdparty/SPIRV-Cross"]
+	path = 3rdparty/SPIRV-Cross
+	url = https://github.com/vertexpotato/SPIRV-Cross/

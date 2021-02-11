@@ -24,7 +24,7 @@ namespace Akkad {
 			};
 
 			auto platform = Application::GetRenderPlatform();
-			BufferLayout layout;
+			VertexBufferLayout layout;
 
 			layout.Push(ShaderDataType::FLOAT, 3); // positions
 			layout.Push(ShaderDataType::FLOAT, 2); // texture coords

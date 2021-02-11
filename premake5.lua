@@ -1,6 +1,6 @@
 workspace "Akkad"
     architecture "x86_64"
-    startproject "sandbox"
+    startproject "Editor"
     configurations
 	{
 		"Debug",
@@ -26,6 +26,8 @@ workspace "Akkad"
       include "3rdparty/glad"
       include "3rdparty/imgui"
       include "3rdparty/spdlog"
+      include "3rdparty/glslang"
+      include "3rdparty/SPIRV-Cross"
     group ""
     
     include "Akkad"

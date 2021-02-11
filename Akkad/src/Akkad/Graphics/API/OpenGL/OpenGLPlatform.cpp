@@ -1,6 +1,7 @@
 #include "OpenGLPlatform.h"
 #include "Akkad/Application/Application.h"
-#include "GLBuffer.h"
+#include "GLIndexBuffer.h"
+#include "GLVertexBuffer.h"
 #include "GLShader.h"
 #include "GLTexture.h"
 #include "GLRenderCommand.h"

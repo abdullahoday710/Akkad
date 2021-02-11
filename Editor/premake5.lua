@@ -17,6 +17,8 @@ project "Editor"
 	includedirs {
 		"src/",
 		"%{wks.location}/Akkad/src",
+		"%{wks.location}/3rdparty/glslang/",
+		"%{wks.location}/3rdparty/SPIRV-Cross/",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.entt}",
@@ -44,7 +46,9 @@ project "Editor"
     }
 
 	links {
-	"Akkad"
+	"Akkad",
+	"glslang",
+	"SPIRV-Cross",
 	}
 
 		filter "system:windows"

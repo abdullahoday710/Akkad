@@ -17,7 +17,7 @@ namespace Akkad {
 			static unsigned int GetSizeOfType(ShaderDataType type);
 		};
 		
-		class BufferLayout {
+		class VertexBufferLayout {
 		public:
 			unsigned int GetStride() { return m_Stride; }
 
@@ -38,8 +38,8 @@ namespace Akkad {
 			virtual void Bind() = 0;
 			virtual void UnBind() = 0;
 			virtual void SetData(const void* data, unsigned int size) = 0;
-			virtual void SetLayout(BufferLayout layout) = 0;
-			virtual BufferLayout& GetLayout() = 0;
+			virtual void SetLayout(VertexBufferLayout layout) = 0;
+			virtual VertexBufferLayout& GetLayout() = 0;
 		};
 
 		class IndexBuffer {

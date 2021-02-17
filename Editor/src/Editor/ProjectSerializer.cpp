@@ -54,7 +54,6 @@ namespace Akkad {
 					AssetDescriptor assetDesc;
 					assetDesc.absolutePath = path + "/assets/" + assetName;
 					assetDesc.assetName = subdir.path().filename().replace_extension("").string();
-					std::cout << assetDesc.assetName << std::endl;
 					assetDesc.SetAssetType(subdir.path().extension().string());
 
 					Application::GetAssetManager()->RegisterAsset(assetID, assetDesc);

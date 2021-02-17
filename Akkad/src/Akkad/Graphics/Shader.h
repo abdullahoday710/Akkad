@@ -1,4 +1,6 @@
 #pragma once
+#include "Akkad/core.h"
+
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
@@ -9,6 +11,8 @@ namespace Akkad {
 		enum class ShaderProgramType {
 			VERTEX, FRAGMENT, GEOMETRY
 		};
+
+		class UniformBuffer;
 
 		struct ShaderDescriptor {
 			std::vector<ShaderProgramType> ProgramTypes;
@@ -24,6 +28,8 @@ namespace Akkad {
 			virtual void Unbind() = 0;
 			virtual void SetMat4(const char* location, glm::mat4& value) = 0;
 			virtual void SetVec3(const char* location, glm::vec3& value) = 0;
+
+			virtual void SetUniformBuffer(SharedPtr<UniformBuffer> buffer) = 0;
 			static ShaderDescriptor LoadFile(const char* path);
 		};
 

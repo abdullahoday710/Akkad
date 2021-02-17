@@ -66,7 +66,7 @@ namespace Akkad {
 
 				glEnableVertexAttribArray(i);
 				glVertexAttribPointer(i, element.count, glType, glNormalized, layout.GetStride(), (const void*)offset);
-				offset += element.count * BufferElement::GetSizeOfType(element.type);
+				offset += element.count * GetSizeOfType(element.type);
 			}
 			UnBind();
 		}

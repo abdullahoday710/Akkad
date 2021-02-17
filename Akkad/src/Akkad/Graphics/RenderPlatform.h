@@ -1,6 +1,7 @@
 #pragma once
 #include "Akkad/core.h"
 #include "Buffer.h"
+#include "UniformBuffer.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "RenderCommand.h"
@@ -24,6 +25,7 @@ namespace Akkad {
 			virtual SharedPtr<Shader> CreateShader(const char* path) = 0;
 			virtual SharedPtr<Texture> CreateTexture(const char* path) = 0;
 			virtual SharedPtr<FrameBuffer> CreateFrameBuffer(FrameBufferDescriptor desc) = 0;
+			virtual SharedPtr<UniformBuffer> CreateUniformBuffer(UniformBufferLayout layout) = 0;
 
 			static SharedPtr<RenderPlatform> Create(RenderAPI api);
 		};

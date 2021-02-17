@@ -12,6 +12,7 @@ namespace Akkad {
 		m_Transform = glm::translate(m_Transform, m_Position);
 	}
 
+
 	EditorCamera::EditorCamera(CameraProjection projectionType) : Camera(projectionType)
 	{
 		m_Transform = glm::translate(m_Transform, m_Position);

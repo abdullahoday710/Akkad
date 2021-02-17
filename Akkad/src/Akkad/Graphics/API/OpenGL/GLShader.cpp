@@ -1,4 +1,5 @@
 #include "GLShader.h"
+#include "GLUniformBuffer.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -72,6 +73,16 @@ namespace Akkad {
 		void GLShader::SetVec3(const char* location, glm::vec3& value)
 		{
 			glUniform3f(glGetUniformLocation(m_ResourceID, location), value.x, value.y, value.z);
+		}
+
+		void GLShader::SetUniformBuffer(SharedPtr<UniformBuffer> buffer)
+		{
+			SharedPtr<GLUniformBuffer> glBuffer = DynamicCastPtr<GLUniformBuffer>(buffer);
+
+
+			unsigned int bufferIndex = glGetUniformBlockIndex(m_ResourceID, glBuffer->GetName().c_str());
+			glUniformBlockBinding(m_ResourceID, bufferIndex, glBuffer->GetBindingPoint());
+			
 		}
 	}
 }

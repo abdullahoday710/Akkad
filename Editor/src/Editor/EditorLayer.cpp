@@ -143,6 +143,7 @@ namespace Akkad {
 		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
 		// ------------------------------------------------
 
+
 		if (!s_ActiveProject.projectData.is_null())
 		{
 			DrawMainMenuBar();

@@ -13,6 +13,9 @@ namespace Akkad {
 			virtual void Unbind() override;
 			virtual void SetMat4(const char* location, glm::mat4& value) override;
 			virtual void SetVec3(const char* location, glm::vec3& value) override;
+
+			virtual void SetUniformBuffer(SharedPtr<UniformBuffer> buffer) override;
+
 		private:
 			unsigned int m_ResourceID;
 			unsigned int m_VertexShader = -1;

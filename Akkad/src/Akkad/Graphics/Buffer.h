@@ -1,20 +1,18 @@
 #pragma once
+#include "ShaderDataType.h"
+
 #include <algorithm>
 #include <vector>
+#include <string>
+#include <map>
 
 namespace Akkad {
 	namespace Graphics {
-
-		enum class ShaderDataType {
-			FLOAT, FLOAT2, FLOAT3, FLOAT4, UNISGNED_INT,
-		};
 
 		struct BufferElement {
 			ShaderDataType type;
 			unsigned int count;
 			bool normalized;
-
-			static unsigned int GetSizeOfType(ShaderDataType type);
 		};
 		
 		class VertexBufferLayout {
@@ -23,7 +21,7 @@ namespace Akkad {
 
 			void Push(ShaderDataType type, unsigned int count, bool normalized=false) {
 				m_Elements.push_back({ type, count, normalized });
-				m_Stride += count * BufferElement::GetSizeOfType(type);
+				m_Stride += count * GetSizeOfType(type);
 			}
 
 			std::vector<BufferElement> GetElements() { return m_Elements; }
@@ -48,6 +46,7 @@ namespace Akkad {
 			virtual void Unbind() = 0;
 			virtual void SetData(const void* data, unsigned int size) = 0;
 		};
+
 	}
 }
 

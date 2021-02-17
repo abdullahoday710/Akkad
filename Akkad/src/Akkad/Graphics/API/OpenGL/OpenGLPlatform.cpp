@@ -6,6 +6,7 @@
 #include "GLTexture.h"
 #include "GLRenderCommand.h"
 #include "GLFrameBuffer.h"
+#include "GLUniformBuffer.h"
 
 #include <glad/glad.h>
 
@@ -55,9 +56,15 @@ namespace Akkad {
 		{
 			return CreateSharedPtr<GLFrameBuffer>(desc);
 		}
+
 		SharedPtr<RenderContext> OpenGLPlatform::GetRenderContext()
 		{
 			return m_RenderContext;
+		}
+
+		SharedPtr<UniformBuffer> OpenGLPlatform::CreateUniformBuffer(UniformBufferLayout layout)
+		{
+			return CreateSharedPtr<GLUniformBuffer>(layout);
 		}
 	}
 }

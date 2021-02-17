@@ -20,6 +20,7 @@ namespace Akkad {
 			virtual SharedPtr<Texture> CreateTexture(const char* path) override;
 			virtual SharedPtr<FrameBuffer> CreateFrameBuffer(FrameBufferDescriptor desc) override;
 			virtual SharedPtr<RenderContext> GetRenderContext() override;
+			virtual SharedPtr<UniformBuffer> CreateUniformBuffer(UniformBufferLayout layout) override;
 
 		private:
 			RenderAPI m_API = RenderAPI::OPENGL;

@@ -165,8 +165,8 @@ namespace Akkad {
 				ResetData();
 			}
 
-			std::vector<char> m_BufferData;
 		protected:
+			std::vector<char> m_BufferData;
 			UniformBufferLayout m_Layout;
 		};
 	}

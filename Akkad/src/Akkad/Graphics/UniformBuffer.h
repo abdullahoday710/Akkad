@@ -8,6 +8,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <type_traits>
 
 namespace Akkad {
 	namespace Graphics {
@@ -57,10 +58,76 @@ namespace Akkad {
 
 		private:
 			std::vector<std::pair<std::string, UniformBufferElement>> m_DataMap;
-			unsigned int m_BufferSize;
+			unsigned int m_BufferSize = 0;
 			friend class GLUniformBuffer;
 		};
 
+		/* -------------- Templates to check if the data type we are passing is supported ------------------- */
+
+		template <typename T>
+		struct UniformBufferDataTypeMap
+		{
+			static const bool isValid = false;
+			static const ShaderDataType shaderType = ShaderDataType::UNKNOWN;
+		};
+
+		template <>
+		struct UniformBufferDataTypeMap<float>
+		{
+			using BaseType = float;
+			static const bool isValid = true;
+			static const ShaderDataType shaderType = ShaderDataType::FLOAT;
+		};
+
+		template <>
+		struct UniformBufferDataTypeMap<unsigned int>
+		{
+			using BaseType = unsigned int;
+			static const bool isValid = true;
+			static const ShaderDataType shaderType = ShaderDataType::UNISGNED_INT;
+		};
+
+		template <>
+		struct UniformBufferDataTypeMap<glm::mat3>
+		{
+			using BaseType = glm::mat3;
+			static const bool isValid = true;
+			static const ShaderDataType shaderType = ShaderDataType::MAT3;
+		};
+
+		template <>
+		struct UniformBufferDataTypeMap<glm::mat4>
+		{
+			using BaseType = glm::mat4;
+			static const bool isValid = true;
+			static const ShaderDataType shaderType = ShaderDataType::MAT4;
+		};
+
+		template <>
+		struct UniformBufferDataTypeMap<glm::vec2>
+		{
+			using BaseType = glm::vec2;
+			static const bool isValid = true;
+			static const ShaderDataType shaderType = ShaderDataType::FLOAT2;
+		};
+
+		template <>
+		struct UniformBufferDataTypeMap<glm::vec3>
+		{
+			using BaseType = glm::vec3;
+			static const bool isValid = true;
+			static const ShaderDataType shaderType = ShaderDataType::FLOAT3;
+		};
+
+		template <>
+		struct UniformBufferDataTypeMap<glm::vec4>
+		{
+			using BaseType = glm::vec4;
+			static const bool isValid = true;
+			static const ShaderDataType shaderType = ShaderDataType::FLOAT4;
+		};
+
+		/*------------------------------------------------------------------------------*/
 
 		class UniformBuffer {
 		public:
@@ -71,20 +138,31 @@ namespace Akkad {
 
 			virtual void ResetData() = 0;
 
-			void PushDataTest(std::string index, float data)
+			template<typename T>
+			void SetData(std::string index, T& data)
 			{
-				auto elem = m_Layout[index];
+				bool valid = UniformBufferDataTypeMap<T>::isValid;
+				AK_ASSERT(valid, "Trying to push unsupported data type to the uniform buffer !");
 
+				auto element = m_Layout[index];
+				AK_ASSERT(element.GetType() == UniformBufferDataTypeMap<T>::shaderType, "Uniform buffer data type mismatch !");
+
+				auto elementType = element.GetType();
+				
 				std::vector<char> dataBuffer;
-				dataBuffer.resize(sizeof(float));
-				memcpy(dataBuffer.data(), &data, sizeof(data));
+				dataBuffer.resize(GetSizeOfType(element.GetType()));
 
-				unsigned int position = elem.offset;
+				memcpy(dataBuffer.data(), &data, GetSizeOfType(element.GetType()));
+
+				unsigned int position = element.offset;
+				
 				for (auto it : dataBuffer)
 				{
 					m_BufferData[position] = it;
 					position += 1;
 				}
+
+				ResetData();
 			}
 
 			std::vector<char> m_BufferData;

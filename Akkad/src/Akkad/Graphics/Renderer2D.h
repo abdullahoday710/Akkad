@@ -15,7 +15,7 @@ namespace Akkad {
 
 			static void BeginScene(Camera& camera, glm::mat4& cameraTransform) { GetInstance().BeginSceneImpl(camera, cameraTransform); }
 			static void DrawQuad(SharedPtr<Texture> texture, glm::mat4& transform) { GetInstance().DrawQuadImpl(texture, transform); }
-			static void DrawQuad(glm::vec3 color, glm::mat4& transform) { GetInstance().DrawQuadImpl(color, transform); }
+
 		private:
 			Renderer2D() {};
 			~Renderer2D() {};
@@ -25,13 +25,12 @@ namespace Akkad {
 			void InitImpl();
 			void BeginSceneImpl(Camera& camera, glm::mat4& cameraTransform);
 			void DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform);
-			void DrawQuadImpl(glm::vec3 color, glm::mat4& transform);
 
 			SharedPtr<VertexBuffer> m_QuadVB;
 			SharedPtr<IndexBuffer> m_QuadIB;
 			SharedPtr<Shader> m_TextureShader;
 			SharedPtr<Shader> m_ColorShader;
-			SharedPtr<UniformBuffer> m_UniformBuffer;
+			SharedPtr<UniformBuffer> m_SceneProps;
 		};
 	}
 }

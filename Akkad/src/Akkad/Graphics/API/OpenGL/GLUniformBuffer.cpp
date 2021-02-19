@@ -46,15 +46,12 @@ namespace Akkad {
 			void* data = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
 			memcpy(data, m_BufferData.data(), m_Layout.m_BufferSize);
 			glUnmapBuffer(GL_UNIFORM_BUFFER);
-			//float floaty = 1.0f;
-			//glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float), &floaty);
 
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		}
 
 		int roundUp(int numToRound, int multiple)
 		{
-			assert(multiple);
 			return ((numToRound + multiple - 1) / multiple) * multiple;
 		}
 
@@ -84,15 +81,11 @@ namespace Akkad {
 				}
 
 				index += 1;
-
-				std::cout << it.first << "  " << element.offset << std::endl;
 			}
 
 			unsigned int bufferSize = lastOffset + lastSize;
 
 			m_Layout.m_BufferSize = bufferSize;
-
-			std::cout << m_Layout.m_BufferSize << " Buffer size  " << std::endl;
 
 		}
 

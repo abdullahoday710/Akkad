@@ -1,4 +1,5 @@
 #include "EditorLayer.h"
+#include "ShaderHandler.h"
 #include "Scripting/GameAssemblyHandler.h"
 
 #include "Panels/SceneHierarchyPanel.h"
@@ -240,6 +241,20 @@ namespace Akkad {
 				if (ImGui::MenuItem("Create Entity"))
 				{
 					Entity e = s_ActiveScene->AddEntity();
+				}
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Graphics"))
+			{
+				if (ImGui::MenuItem("Recompile shaders"))
+				{
+					// iterate through all shaders in project;
+					// compile them into spv;
+					// save them into EngineResources/shaders/compiledspv
+
+					
 				}
 
 				ImGui::EndMenu();

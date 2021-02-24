@@ -17,6 +17,7 @@ namespace Akkad {
 			virtual void SetUniformBuffer(SharedPtr<UniformBuffer> buffer) override;
 
 		private:
+			std::string CompileFromSPV(std::vector<unsigned int>& spv);
 			unsigned int m_ResourceID;
 			unsigned int m_VertexShader = -1;
 			unsigned int m_FragmentShader = -1;

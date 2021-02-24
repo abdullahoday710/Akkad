@@ -45,7 +45,7 @@ namespace Akkad {
 
 			m_SceneProps = platform->CreateUniformBuffer(scenePropsLayout);
 
-			m_TextureShader = platform->CreateShader("res/shaders/textureShader.glsl");
+			m_TextureShader = platform->CreateShader("res/shaders/compiledSPV/textureShader.shaderdesc");
 			m_TextureShader->SetUniformBuffer(m_SceneProps);
 		}
 

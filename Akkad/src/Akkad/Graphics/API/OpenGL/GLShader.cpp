@@ -3,13 +3,15 @@
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <spirv_glsl.hpp>
 
 namespace Akkad {
 	namespace Graphics {
 
 		GLShader::GLShader(const char* path)
 		{
-			ShaderDescriptor desc = LoadFile(path);
+			
+			ShaderDescriptor desc = LoadShader(path);
 			m_ResourceID = glCreateProgram();
 			
 			for (ShaderProgramType type : desc.ProgramTypes)
@@ -19,7 +21,10 @@ namespace Akkad {
 				case ShaderProgramType::VERTEX:
 				{
 					m_VertexShader = glCreateShader(GL_VERTEX_SHADER);
-					const char* src = desc.VertexSource.c_str();
+
+					std::string shaderString = CompileFromSPV(desc.VertexData);
+					const char* src = shaderString.c_str();
+
 					glShaderSource(m_VertexShader, 1, &src, NULL);
 					//TODO : check shader compiler errors
 					glCompileShader(m_VertexShader);
@@ -31,7 +36,10 @@ namespace Akkad {
 				case ShaderProgramType::FRAGMENT:
 				{
 					m_FragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-					const char* src = desc.FragmentSource.c_str();
+
+					std::string shaderString = CompileFromSPV(desc.FragmentData);
+					const char* src = shaderString.c_str();
+
 					glShaderSource(m_FragmentShader, 1, &src, NULL);
 					glCompileShader(m_FragmentShader);
 
@@ -45,11 +53,12 @@ namespace Akkad {
 					break;
 				}
 			}
-			//TODO : check shader linking errors
+
 			glLinkProgram(m_ResourceID);
 
 			glDeleteShader(m_VertexShader);
 			glDeleteShader(m_FragmentShader);
+			
 		}
 
 		GLShader::~GLShader()
@@ -83,6 +92,43 @@ namespace Akkad {
 			unsigned int bufferIndex = glGetUniformBlockIndex(m_ResourceID, glBuffer->GetName().c_str());
 			glUniformBlockBinding(m_ResourceID, bufferIndex, glBuffer->GetBindingPoint());
 			
+		}
+
+		std::string GLShader::CompileFromSPV(std::vector<unsigned int>& spv)
+		{
+
+			spirv_cross::CompilerGLSL glsl(std::move(spv));
+
+			spirv_cross::CompilerGLSL::Options options;
+			options.version = 330;
+			glsl.set_common_options(options);
+
+			spirv_cross::ShaderResources resources = glsl.get_shader_resources();
+
+			// remove bindings from uniform buffers:
+			for (auto& resource : resources.uniform_buffers)
+			{
+				unsigned set = glsl.get_decoration(resource.id, spv::DecorationDescriptorSet);
+				unsigned binding = glsl.get_decoration(resource.id, spv::DecorationBinding);
+
+				glsl.unset_decoration(resource.id, spv::DecorationDescriptorSet);
+
+				glsl.unset_decoration(resource.id, spv::DecorationBinding);
+			}
+
+			// remove bindings from textures:
+			for (auto& resource : resources.sampled_images)
+			{
+				unsigned set = glsl.get_decoration(resource.id, spv::DecorationDescriptorSet);
+				unsigned binding = glsl.get_decoration(resource.id, spv::DecorationBinding);
+
+				glsl.unset_decoration(resource.id, spv::DecorationDescriptorSet);
+
+				glsl.unset_decoration(resource.id, spv::DecorationBinding);
+			}
+			std::string source = glsl.compile();
+
+			return source;
 		}
 	}
 }

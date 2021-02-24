@@ -15,10 +15,10 @@ namespace Akkad {
 		class UniformBuffer;
 
 		struct ShaderDescriptor {
-			std::vector<ShaderProgramType> ProgramTypes;
-			std::string VertexSource;
-			std::string FragmentSource;
-			
+			std::vector<Graphics::ShaderProgramType> ProgramTypes;
+			std::vector<unsigned int> VertexData;
+			std::vector<unsigned int> FragmentData;
+
 		};
 
 		class Shader
@@ -30,7 +30,10 @@ namespace Akkad {
 			virtual void SetVec3(const char* location, glm::vec3& value) = 0;
 
 			virtual void SetUniformBuffer(SharedPtr<UniformBuffer> buffer) = 0;
-			static ShaderDescriptor LoadFile(const char* path);
+
+			static std::vector<unsigned int> LoadSpirV(const char* spirvPath);
+
+			static ShaderDescriptor LoadShader(const char* shaderdescPath);
 		};
 
 	}

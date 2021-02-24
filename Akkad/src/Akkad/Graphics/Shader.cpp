@@ -5,49 +5,76 @@
 namespace Akkad {
 	namespace Graphics {
 
-		ShaderDescriptor Shader::LoadFile(const char* path)
+		std::vector<unsigned int> Shader::LoadSpirV(const char* spirvPath)
 		{
-			std::ifstream file(path);
+			std::vector<unsigned int> spirv_data;
+
+			std::ifstream spirv_file;
+			spirv_file.open(spirvPath, std::ios::in);
+
 			std::string line;
-			std::stringstream vertexsource;
-			std::stringstream fragmentsource;
+			while (std::getline(spirv_file, line))
+			{
+				std::istringstream iss(line);
+				unsigned int value;
+				if (!(iss >> value)) { break; }
+
+				spirv_data.push_back(value);
+			}
+
+			return spirv_data;
+		}
+
+		ShaderDescriptor Shader::LoadShader(const char* shaderdescPath)
+		{
+			std::ifstream file(shaderdescPath);
+			std::string line;
+			std::stringstream vertexPath;
+			std::stringstream fragmentPath;
+
 			ShaderProgramType current_type;
 			ShaderDescriptor desc;
 
 			while (std::getline(file, line)) {
-				
-				if (line.find("#VERTEX_SHADER") != std::string::npos)
+
+				if (!line.empty())
 				{
-					current_type = ShaderProgramType::VERTEX;
-					desc.ProgramTypes.push_back(ShaderProgramType::VERTEX);
-				}
-
-				else if (line.find("#FRAGMENT_SHADER") != std::string::npos)
-				{
-					current_type = ShaderProgramType::FRAGMENT;
-					desc.ProgramTypes.push_back(ShaderProgramType::FRAGMENT);
-				}
-
-				else {
-
-					switch (current_type)
+					if (line.find("#VERTEX_SHADER") != std::string::npos)
 					{
-					case ShaderProgramType::VERTEX:
+						current_type = Graphics::ShaderProgramType::VERTEX;
+						desc.ProgramTypes.push_back(Graphics::ShaderProgramType::VERTEX);
+					}
+
+					else if (line.find("#FRAGMENT_SHADER") != std::string::npos)
 					{
-						vertexsource << line << "\n";
-						break;
+						current_type = Graphics::ShaderProgramType::FRAGMENT;
+						desc.ProgramTypes.push_back(Graphics::ShaderProgramType::FRAGMENT);
 					}
-					case ShaderProgramType::FRAGMENT:
-					{
-						fragmentsource << line << "\n";
-						break;
+
+					else {
+
+						switch (current_type)
+						{
+						case Graphics::ShaderProgramType::VERTEX:
+						{
+							vertexPath << line;
+							break;
+						}
+						case Graphics::ShaderProgramType::FRAGMENT:
+						{
+							fragmentPath << line;
+							break;
+						}
+
+						}
 					}
-					
-					}
-				}
 			}
-			desc.VertexSource = vertexsource.str();
-			desc.FragmentSource = fragmentsource.str();
+
+			}
+
+			desc.VertexData = LoadSpirV(vertexPath.str().c_str());
+			desc.FragmentData = LoadSpirV(fragmentPath.str().c_str());
+
 			return desc;
 		}
 

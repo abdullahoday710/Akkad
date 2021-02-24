@@ -22,6 +22,7 @@ project "Akkad"
     includedirs
 	{
         "src",
+        "%{wks.location}/3rdparty/SPIRV-Cross/",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.imgui}",
         "%{IncludeDir.glm}",
@@ -37,7 +38,8 @@ project "Akkad"
         "opengl32.lib",
         "Glad",
         "imgui",
-        "spdlog"
+        "spdlog",
+        "SPIRV-Cross",
     }
     
     filter "system:windows"

@@ -80,6 +80,40 @@ namespace Akkad {
 
 	}
 
+	void EditorLayer::CompileShaders()
+	{
+		auto& project = GetActiveProject();
+		
+		for (auto& asset : project.projectData["project"]["Assets"].items())
+		{
+			std::string assetID = asset.key();
+			
+			std::string assetType = project.projectData["project"]["Assets"][assetID]["type"];
+
+			if (assetType == "shader")
+			{
+				std::filesystem::path shaderAbsolutePath = project.GetProjectDirectory();
+
+				std::filesystem::path outputDir = project.GetAssetsPath();
+				outputDir.append("compiledSPV/");
+
+				std::string shaderPath = project.projectData["project"]["Assets"][assetID]["path"];
+				shaderAbsolutePath.append(shaderPath);
+
+				ShaderHandler::CompileSPV(shaderAbsolutePath, outputDir);
+
+				std::string assetName = project.projectData["project"]["Assets"][assetID]["name"];
+
+				std::string shaderdescPath = "assets/compiledSPV/" + assetName + ".shaderdesc";
+				project.projectData["project"]["Assets"][assetID]["shaderdescPath"] = shaderdescPath;
+
+				SaveActiveProject();
+
+			}
+		}
+
+	}
+
 	void EditorLayer::OnAttach()
 	{
 		PanelManager::AddPanel(new StartupPanel());
@@ -250,11 +284,7 @@ namespace Akkad {
 			{
 				if (ImGui::MenuItem("Recompile shaders"))
 				{
-					// iterate through all shaders in project;
-					// compile them into spv;
-					// save them into EngineResources/shaders/compiledspv
-
-					
+					CompileShaders();
 				}
 
 				ImGui::EndMenu();

@@ -8,8 +8,6 @@
 #include <StandAlone/ResourceLimits.cpp>
 #include <spirv_glsl.hpp>
 
-#include <filesystem>
-
 namespace Akkad {
 
 	std::string GetStageName(EShLanguage stage)
@@ -23,7 +21,7 @@ namespace Akkad {
 		}
 	}
 
-	void ShaderHandler::CompileSPV(std::string glslpath)
+	void ShaderHandler::CompileSPV(std::filesystem::path glslpath, std::filesystem::path outputPath)
 	{
 		static bool glslangInitialized = false;
 
@@ -33,11 +31,10 @@ namespace Akkad {
 			glslangInitialized = true;
 		}
 
-		std::filesystem::path outputPath = "res/shaders/compiledSPV/";
 		std::filesystem::path shaderpath = glslpath;
 		std::string shaderName = shaderpath.filename().replace_extension("").string();
 
-		ShaderSourceDescriptor shaderDesc = LoadSourceFile(glslpath.c_str());
+		ShaderSourceDescriptor shaderDesc = LoadSourceFile(glslpath.string().c_str());
 		
 		EShMessages messages = (EShMessages)(EShMsgSpvRules | EShMsgVulkanRules);
         TBuiltInResource Resources = glslang::DefaultTBuiltInResource;
@@ -113,6 +110,7 @@ namespace Akkad {
 			std::ofstream outFile;
 			
 			std::string outputfilePath = outputPath.string() + shaderName + "." + GetStageName(shaderStage) + ".spv";
+
 			outFile.open(outputfilePath, std::ios::trunc);
 
 			for (auto value : SpirV)

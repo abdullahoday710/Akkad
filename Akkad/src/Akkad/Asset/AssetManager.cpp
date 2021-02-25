@@ -100,4 +100,37 @@ namespace Akkad {
 
 		return result;
 	}
+
+	std::string AssetManager::AssetTypeToStr(AssetType type)
+	{
+		switch (type)
+		{
+		case AssetType::UNKNOWN:
+			return "unkown";
+			break;
+		case AssetType::TEXTURE:
+			return "texture";
+			break;
+		case AssetType::SHADER:
+			return "shader";
+			break;
+		}
+	}
+
+	AssetType AssetManager::GetAssetTypeFromFileExtension(std::string extension)
+	{
+		AssetType assetType = AssetType::UNKNOWN;
+
+		if (extension == ".png" || extension == ".jpg")
+		{
+			assetType = AssetType::TEXTURE;
+		}
+
+		else if (extension == ".glsl")
+		{
+			assetType = AssetType::SHADER;
+		}
+
+		return assetType;
+	}
 }

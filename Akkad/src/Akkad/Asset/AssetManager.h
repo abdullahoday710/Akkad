@@ -22,15 +22,21 @@ namespace Akkad {
 
 		AssetType assetType = AssetType::UNKNOWN;
 
-		void SetAssetType(std::string fileExtension) {
-			if (fileExtension == ".png" || fileExtension == ".jpg")
+		void SetAssetType(std::string type) {
+
+			if (type == "texture")
 			{
 				assetType = AssetType::TEXTURE;
 			}
 
-			else if(fileExtension == ".glsl")
+			else if (type == "shader")
 			{
 				assetType = AssetType::SHADER;
+			}
+
+			else if (type == "unknown")
+			{
+				assetType = AssetType::UNKNOWN;
 			}
 		}
 	};
@@ -52,6 +58,9 @@ namespace Akkad {
 		SharedPtr<Graphics::Shader> GetShader(std::string assetID);
 
 		std::vector<AssetDescriptor> GetAllShaders();
+
+		static std::string AssetTypeToStr(AssetType type);
+		static AssetType GetAssetTypeFromFileExtension(std::string extension);
 
 	private:
 		std::map<std::string, AssetDescriptor> m_RegisteredAssets;

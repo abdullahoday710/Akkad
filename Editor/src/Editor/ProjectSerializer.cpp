@@ -37,24 +37,36 @@ namespace Akkad {
 		filesystem::copy(GameAssemblyPath, path + "/GameAssembly", filesystem::copy_options::recursive);
 		filesystem::copy(EngineResourcesPath, path + "/res", filesystem::copy_options::recursive);
 
+		filesystem::create_directory(path + "/assets/compiledSPV");
+
 		for (auto& file : filesystem::directory_iterator(EngineResourcesPath))
 		{
 			if (file.is_directory())
 			{
 				for (auto& subdir : filesystem::directory_iterator(file.path()))
 				{
+					if (subdir.is_directory()) // if the subdirectory has another subdirectoy skip it
+					{
+						continue;
+					}
+
 					filesystem::copy(subdir.path(), path + "/assets");
 
 					std::string assetName = subdir.path().filename().string();
 					std::string assetID = Random::GenerateRandomUUID();
 
 					descriptor.projectData["project"]["Assets"][assetID]["path"] = "assets/" + assetName;
-					descriptor.projectData["project"]["Assets"][assetID]["name"] = assetName;
 
 					AssetDescriptor assetDesc;
 					assetDesc.absolutePath = path + "/assets/" + assetName;
+
 					assetDesc.assetName = subdir.path().filename().replace_extension("").string();
-					assetDesc.SetAssetType(subdir.path().extension().string());
+					descriptor.projectData["project"]["Assets"][assetID]["name"] = assetDesc.assetName;
+
+					AssetType assetType = AssetManager::GetAssetTypeFromFileExtension(subdir.path().extension().string());
+			
+					descriptor.projectData["project"]["Assets"][assetID]["type"] = AssetManager::AssetTypeToStr(assetType);
+					assetDesc.assetType = assetType;
 
 					Application::GetAssetManager()->RegisterAsset(assetID, assetDesc);
 				}
@@ -92,13 +104,16 @@ namespace Akkad {
 		{
 			std::string assetID = asset.key();
 			std::string assetName = descriptor.projectData["project"]["Assets"][assetID]["name"];
-			filesystem::path absolutePath = descriptor.GetAssetsPath().string() + assetName;
+			std::string assetType = descriptor.projectData["project"]["Assets"][assetID]["type"];
+			std::string assetPath = descriptor.projectData["project"]["Assets"][assetID]["path"];
+
+			std::string absolutePath = descriptor.GetProjectDirectory().string() + assetPath;
 
 			AssetDescriptor descriptor;
-			descriptor.absolutePath = absolutePath.string();
-			descriptor.assetName = absolutePath.filename().replace_extension("").string();
+			descriptor.absolutePath = absolutePath;
+			descriptor.assetName = assetName;
 
-			descriptor.SetAssetType(absolutePath.extension().string());
+			descriptor.SetAssetType(assetType);
 
 			Application::GetAssetManager()->RegisterAsset(assetID, descriptor);
 		}

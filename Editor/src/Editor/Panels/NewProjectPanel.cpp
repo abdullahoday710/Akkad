@@ -4,7 +4,7 @@
 #include "ViewPortPanel.h"
 #include "GameViewPanel.h"
 
-#include "Editor/ProjectSerializer.h"
+#include "Editor/Serializers/ProjectSerializer.h"
 #include "Editor/EditorLayer.h"
 
 #include <Akkad/PlatformUtils.h>

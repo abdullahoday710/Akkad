@@ -12,7 +12,6 @@ namespace Akkad {
 		#ifdef AK_PLATFORM_WINDOWS
 		path += "GameAssembly.sln";
 		std::string command = "msbuild " + path;
-		std::cout << command << std::endl;
 		system(command.c_str());
 
 		#endif // AK_PLATFORM_WINDOWS

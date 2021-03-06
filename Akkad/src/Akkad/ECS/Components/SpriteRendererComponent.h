@@ -1,12 +1,13 @@
 #pragma once
+#include "Akkad/Graphics/Material.h"
+
 #include <glm/glm.hpp>
 #include <string>
 
 namespace Akkad {
 
 	struct SpriteRendererComponent {
-		//glm::vec3 color{1.0f, 0.0f, 0.0f};
-		std::string textureID;
-		std::string shaderID;
+		Graphics::Material material;
+		std::string materialID;
 	};
 }

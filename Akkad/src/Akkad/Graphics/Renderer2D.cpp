@@ -45,8 +45,8 @@ namespace Akkad {
 
 			m_SceneProps = platform->CreateUniformBuffer(scenePropsLayout);
 
-			m_TextureShader = platform->CreateShader("res/shaders/compiledSPV/textureShader.shaderdesc");
-			m_TextureShader->SetUniformBuffer(m_SceneProps);
+			//m_TextureShader = platform->CreateShader("res/shaders/compiledSPV/textureShader.shaderdesc");
+			//m_TextureShader->SetUniformBuffer(m_SceneProps);
 		}
 
 		void Renderer2D::BeginSceneImpl(Camera& camera, glm::mat4& cameraTransform)
@@ -61,7 +61,7 @@ namespace Akkad {
 		void Renderer2D::DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform)
 		{
 			auto command = Application::GetRenderPlatform()->GetRenderCommand();
-
+			/*
 			m_QuadVB->Bind();
 			m_QuadIB->Bind();
 			m_TextureShader->Bind();
@@ -69,6 +69,24 @@ namespace Akkad {
 			texture->Bind(0);
 
 			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+			*/
+		}
+
+		void Renderer2D::DrawQuadImpl(Material& material, glm::mat4& transform)
+		{
+			auto command = Application::GetRenderPlatform()->GetRenderCommand();
+			
+			if (material.isValid())
+			{
+				material.BindShaders();
+				material.BindTextures();
+				m_SceneProps->SetData("sys_transform", transform);
+
+				m_QuadVB->Bind();
+				m_QuadIB->Bind();
+				command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+			}
+
 		}
 	}
 }

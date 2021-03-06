@@ -100,7 +100,7 @@ namespace Akkad {
 			spirv_cross::CompilerGLSL glsl(std::move(spv));
 
 			spirv_cross::CompilerGLSL::Options options;
-			options.version = 330;
+			options.version = 400;
 			glsl.set_common_options(options);
 
 			spirv_cross::ShaderResources resources = glsl.get_shader_resources();
@@ -116,15 +116,15 @@ namespace Akkad {
 				glsl.unset_decoration(resource.id, spv::DecorationBinding);
 			}
 
-			// remove bindings from textures:
+			// set bindings for textures:
+			unsigned int index = 0;
 			for (auto& resource : resources.sampled_images)
 			{
 				unsigned set = glsl.get_decoration(resource.id, spv::DecorationDescriptorSet);
 				unsigned binding = glsl.get_decoration(resource.id, spv::DecorationBinding);
 
-				glsl.unset_decoration(resource.id, spv::DecorationDescriptorSet);
-
-				glsl.unset_decoration(resource.id, spv::DecorationBinding);
+				glsl.set_decoration(resource.id, spv::DecorationBinding, index);
+				index++;
 			}
 			std::string source = glsl.compile();
 

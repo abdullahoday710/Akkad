@@ -11,6 +11,7 @@ namespace Akkad {
 	{
 		if (!IsRegistered(assetID))
 		{
+			asset.assetID = assetID;
 			m_RegisteredAssets[assetID] = asset;
 		}
 	}
@@ -36,12 +37,12 @@ namespace Akkad {
 		m_LoadedTextures.clear();
 	}
 
-	AssetDescriptor AssetManager::GetDescriptorByID(std::string assetID)
+	AssetDescriptor& AssetManager::GetDescriptorByID(std::string assetID)
 	{
-		auto it = m_RegisteredAssets.find(assetID);
-		if (it != m_RegisteredAssets.end())
+		auto it = m_RegisteredAssets.count(assetID);
+		if (it > 0)
 		{
-			return it->second;
+			return m_RegisteredAssets[assetID];
 		}
 
 		else
@@ -83,6 +84,15 @@ namespace Akkad {
 			m_LoadedShaders[assetID] = shader;
 			
 			return shader;
+		}
+	}
+
+	void AssetManager::RemoveShader(std::string assetID)
+	{
+		auto it = m_LoadedShaders.find(assetID);
+		if (it != m_LoadedShaders.end())
+		{
+			m_LoadedShaders.erase(assetID);
 		}
 	}
 

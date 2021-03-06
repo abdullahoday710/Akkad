@@ -12,6 +12,8 @@ namespace Akkad {
 	using json = nlohmann::json;
 	namespace filesystem = std::filesystem;
 
+	// TODO : rewrite this piece of shit (entire class maybe)
+
 	ProjectDescriptor ProjectSerializer::NewProject(std::string name, std::string path)
 	{
 		ProjectDescriptor descriptor;
@@ -38,6 +40,8 @@ namespace Akkad {
 		filesystem::copy(EngineResourcesPath, path + "/res", filesystem::copy_options::recursive);
 
 		filesystem::create_directory(path + "/assets/compiledSPV");
+
+		Application::GetAssetManager()->SetAssetsRootPath(descriptor.GetAssetsPath().string());
 
 		for (auto& file : filesystem::directory_iterator(EngineResourcesPath))
 		{
@@ -99,23 +103,38 @@ namespace Akkad {
 
 
 		Application::GetAssetManager()->Clear();
+		Application::GetAssetManager()->SetAssetsRootPath(descriptor.GetAssetsPath().string());
 
 		for (auto& asset : descriptor.projectData["project"]["Assets"].items())
 		{
 			std::string assetID = asset.key();
 			std::string assetName = descriptor.projectData["project"]["Assets"][assetID]["name"];
 			std::string assetType = descriptor.projectData["project"]["Assets"][assetID]["type"];
-			std::string assetPath = descriptor.projectData["project"]["Assets"][assetID]["path"];
+			
 
-			std::string absolutePath = descriptor.GetProjectDirectory().string() + assetPath;
 
-			AssetDescriptor descriptor;
-			descriptor.absolutePath = absolutePath;
-			descriptor.assetName = assetName;
+			AssetDescriptor assetDesc;
+			if (assetType == "shader")
+			{
+				if (!descriptor.projectData["project"]["Assets"][assetID]["shaderdescPath"].empty())
+				{
+					std::string assetPath = descriptor.projectData["project"]["Assets"][assetID]["shaderdescPath"];
+					std::string absolutePath = descriptor.GetProjectDirectory().string() + assetPath;
+					assetDesc.absolutePath = absolutePath;
+				}
+			}
+			else
+			{
+				std::string assetPath = descriptor.projectData["project"]["Assets"][assetID]["path"];
+				std::string absolutePath = descriptor.GetProjectDirectory().string() + assetPath;
+				assetDesc.absolutePath = absolutePath;
+			}
 
-			descriptor.SetAssetType(assetType);
+			assetDesc.assetName = assetName;
 
-			Application::GetAssetManager()->RegisterAsset(assetID, descriptor);
+			assetDesc.SetAssetType(assetType);
+
+			Application::GetAssetManager()->RegisterAsset(assetID, assetDesc);
 		}
 
 		return descriptor;

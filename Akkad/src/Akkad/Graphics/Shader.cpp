@@ -1,4 +1,8 @@
 #include "Shader.h"
+
+#include <Akkad/Application/Application.h>
+#include <Akkad/Asset/AssetManager.h>
+
 #include <fstream>
 #include <sstream>
 
@@ -42,25 +46,25 @@ namespace Akkad {
 					if (line.find("#VERTEX_SHADER") != std::string::npos)
 					{
 						current_type = Graphics::ShaderProgramType::VERTEX;
-						desc.ProgramTypes.push_back(Graphics::ShaderProgramType::VERTEX);
+						desc.ProgramTypes.push_back(ShaderProgramType::VERTEX);
 					}
 
 					else if (line.find("#FRAGMENT_SHADER") != std::string::npos)
 					{
 						current_type = Graphics::ShaderProgramType::FRAGMENT;
-						desc.ProgramTypes.push_back(Graphics::ShaderProgramType::FRAGMENT);
+						desc.ProgramTypes.push_back(ShaderProgramType::FRAGMENT);
 					}
 
 					else {
 
 						switch (current_type)
 						{
-						case Graphics::ShaderProgramType::VERTEX:
+						case ShaderProgramType::VERTEX:
 						{
 							vertexPath << line;
 							break;
 						}
-						case Graphics::ShaderProgramType::FRAGMENT:
+						case ShaderProgramType::FRAGMENT:
 						{
 							fragmentPath << line;
 							break;
@@ -72,8 +76,13 @@ namespace Akkad {
 
 			}
 
-			desc.VertexData = LoadSpirV(vertexPath.str().c_str());
-			desc.FragmentData = LoadSpirV(fragmentPath.str().c_str());
+			std::string assetRootPath = Application::GetAssetManager()->GetAssetsRootPath() + "compiledSPV/";
+
+			std::string vertexAbsolutePath = assetRootPath + vertexPath.str();
+			std::string fragmentAbsolutePath = assetRootPath + fragmentPath.str();
+
+			desc.VertexData = LoadSpirV(vertexAbsolutePath.c_str());
+			desc.FragmentData = LoadSpirV(fragmentAbsolutePath.c_str());
 
 			return desc;
 		}

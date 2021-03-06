@@ -2,6 +2,8 @@
 #include "Components/Components.h"
 
 #include "Akkad/Random.h"
+#include "Akkad/Application/Application.h"
+#include "Akkad/Asset/AssetManager.h"
 
 #include <json.hpp>
 #include <fstream>
@@ -36,7 +38,7 @@ namespace Akkad {
 			if (activeEntity.HasComponent<SpriteRendererComponent>())
 			{
 				auto& sprite = activeEntity.GetComponent<SpriteRendererComponent>();
-				data["Scene"]["Entities"][entityID]["SpriteRenderer"]["TextureID"] = sprite.textureID;
+				data["Scene"]["Entities"][entityID]["SpriteRenderer"]["MaterialID"] = sprite.materialID;
 			}
 
 			if (activeEntity.HasComponent<ScriptComponent>())
@@ -107,9 +109,14 @@ namespace Akkad {
 
 				else if (component.key() == "SpriteRenderer")
 				{
-					std::string textureID = componentData["TextureID"];
+					std::string materialID = componentData["MaterialID"];
 					auto& spriteRenderer = e.AddComponent<SpriteRendererComponent>();
-					spriteRenderer.textureID = textureID;
+					spriteRenderer.materialID = materialID;
+
+					auto desc = Application::GetAssetManager()->GetDescriptorByID(materialID);
+
+					spriteRenderer.material = Graphics::Material::LoadFile(desc.absolutePath);
+
 					continue;
 				}
 

@@ -1,17 +1,25 @@
 #include "AssetBrowserPanel.h"
 #include "Editor/EditorLayer.h"
+#include "Editor/Panels/MaterialEditorPanel.h"
+#include "Editor/Serializers/MaterialSerializer.h"
 
 #include <Akkad/Application/Application.h>
 #include <Akkad/PlatformUtils.h>
 #include <Akkad/Random.h>
 #include <Akkad/Asset/AssetManager.h>
+#include <Akkad/Graphics/Material.h>
 
 #include <filesystem>
+#include <fstream>
 #include <imgui.h>
+#include <misc/cpp/imgui_stdlib.h>
 #include <IconsForkAwesome.h>
 
 namespace Akkad {
 	bool AssetBrowserPanel::showPanel;
+
+	bool showNewAsset = false;
+	std::string NewAssetType;
 
 	namespace filesystem = std::filesystem;
 
@@ -22,12 +30,29 @@ namespace Akkad {
 
 		if (ImGui::BeginPopupContextWindow())
 		{
-			if (ImGui::Button("Add asset"))
+			if (ImGui::BeginMenu("New"))
+			{
+				if (ImGui::MenuItem("Shader"))
+				{
+					NewAssetType = "shader";
+					showNewAsset = true;
+				}
+				if (ImGui::MenuItem("Material"))
+				{
+					NewAssetType = "material";
+					showNewAsset = true;
+				}
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::MenuItem("Add asset"))
 			{
 				std::string assetPath = PlatformUtils::OpenFileDialog();
-				std::string assetName = filesystem::path(assetPath).filename().string();
+				std::string assetName = filesystem::path(assetPath).filename().replace_extension("").string();
+				std::string fileExtension = filesystem::path(assetPath).extension().string();
 
-				filesystem::path destnationAssetPath = project.GetAssetsPath().append(assetName);
+				filesystem::path destnationAssetPath = project.GetAssetsPath().append(assetName + fileExtension);
 
 				if (filesystem::exists(destnationAssetPath))
 				{
@@ -39,11 +64,25 @@ namespace Akkad {
 					filesystem::copy(assetPath, destnationAssetPath);
 					std::string assetID = Random::GenerateRandomUUID();
 
-					project.projectData["project"]["Assets"][assetID]["path"] = "assets/" + assetName;
+					std::string assetType = AssetManager::AssetTypeToStr(AssetManager::GetAssetTypeFromFileExtension(fileExtension));
+
+					project.projectData["project"]["Assets"][assetID]["path"] = "assets/" + assetName + fileExtension;
 					project.projectData["project"]["Assets"][assetID]["name"] = assetName;
+					project.projectData["project"]["Assets"][assetID]["type"] = assetType;
 
 					AssetDescriptor descriptor;
-					descriptor.absolutePath = destnationAssetPath.string();
+
+					if (assetType == "shader")
+					{
+						project.projectData["project"]["Assets"][assetID]["shaderdescPath"] = "null";
+						descriptor.absolutePath = "";
+					}
+
+					else
+					{
+						descriptor.absolutePath = destnationAssetPath.string();
+					}
+		
 
 					Application::GetAssetManager()->RegisterAsset(assetID, descriptor);
 					EditorLayer::SaveActiveProject();
@@ -53,6 +92,75 @@ namespace Akkad {
 
 			}
 			ImGui::EndPopup();
+		}
+
+		if (showNewAsset)
+		{
+			std::string label = "New " + NewAssetType;
+			static std::string assetName;
+			
+			ImGui::Begin(label.c_str(), &showNewAsset);
+
+			ImGui::InputText("Asset name", &assetName);
+
+			if (ImGui::Button(label.c_str()))
+			{
+				AssetDescriptor desc;
+				desc.assetID = Random::GenerateRandomUUID();
+				desc.SetAssetType(NewAssetType);
+				
+				std::string fileExtension;
+
+				switch (desc.assetType)
+				{
+				case Akkad::AssetType::UNKNOWN:
+					break;
+				case Akkad::AssetType::SHADER:
+					fileExtension = ".glsl";
+					break;
+				case Akkad::AssetType::MATERIAL:
+					fileExtension = ".mat";
+					break;
+				}
+
+				filesystem::path destPath = project.GetAssetsPath().append(assetName + fileExtension);
+				if (NewAssetType == "material")
+				{
+					Graphics::Material mat(assetName);
+					MaterialSerializer::Serialize(mat, destPath.string());
+
+				}
+
+				else
+				{
+					std::ofstream file(destPath);
+				}
+
+				project.projectData["project"]["Assets"][desc.assetID]["path"] = "assets/" + assetName + fileExtension;
+				project.projectData["project"]["Assets"][desc.assetID]["name"] = assetName;
+				project.projectData["project"]["Assets"][desc.assetID]["type"] = NewAssetType;
+
+				if (NewAssetType == "shader")
+				{
+					project.projectData["project"]["Assets"][desc.assetID]["shaderdescPath"] = "null";
+					desc.absolutePath = "";
+				}
+
+				else
+				{
+					desc.absolutePath = destPath.string();
+				}
+
+				Application::GetAssetManager()->RegisterAsset(desc.assetID, desc);
+				EditorLayer::SaveActiveProject();
+
+				assetName = "";
+				showNewAsset = false;
+				
+			}
+
+
+			ImGui::End();
 		}
 		if (!project.projectData.is_null())
 		{
@@ -79,7 +187,22 @@ namespace Akkad {
 				std::string assetID = asset.key();
 				std::string assetName = project.projectData["project"]["Assets"][assetID]["name"];
 				std::string assetNameIcon = ICON_FK_FILE + std::string(" ") + assetName;
-				ImGui::Button(assetNameIcon.c_str());
+				std::string assetType = project.projectData["project"]["Assets"][assetID]["type"];
+				std::string assetPath = project.projectData["project"]["Assets"][assetID]["path"];
+
+				std::string assetAbsolutePath = project.GetProjectDirectory().string() + assetPath;
+
+
+
+				if (ImGui::Button(assetNameIcon.c_str()))
+				{
+					if (assetType == "material")
+					{
+						auto material = Graphics::Material::LoadFile(assetAbsolutePath);
+						PanelManager::AddPanel(new MaterialEditorPanel());
+						MaterialEditorPanel::SetActiveMaterial(material, assetID);
+					}
+				}
 
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 				{
@@ -91,8 +214,9 @@ namespace Akkad {
 			}
 
 		}
-		
+
 		ImGui::End();
+
 	}
 
 	void AssetBrowserPanel::OnClose()

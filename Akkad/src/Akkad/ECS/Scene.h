@@ -33,6 +33,7 @@ namespace Akkad {
 		friend class SceneSerializer;
 		friend class GameViewPanel;
 		friend class ViewPortPanel;
+		friend class MaterialEditorPanel;
 		friend class SceneManager;
 
 	};

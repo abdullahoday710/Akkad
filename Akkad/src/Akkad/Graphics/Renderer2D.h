@@ -1,5 +1,6 @@
 #pragma once
 #include "RenderPlatform.h"
+#include "Material.h"
 #include "Camera.h"
 
 namespace Akkad {
@@ -15,6 +16,8 @@ namespace Akkad {
 
 			static void BeginScene(Camera& camera, glm::mat4& cameraTransform) { GetInstance().BeginSceneImpl(camera, cameraTransform); }
 			static void DrawQuad(SharedPtr<Texture> texture, glm::mat4& transform) { GetInstance().DrawQuadImpl(texture, transform); }
+			static void DrawQuad(Material& material, glm::mat4& transform) { GetInstance().DrawQuadImpl(material, transform); }
+			static SharedPtr<UniformBuffer> GetSystemUniforms() {return GetInstance().m_SceneProps;};
 
 		private:
 			Renderer2D() {};
@@ -25,6 +28,7 @@ namespace Akkad {
 			void InitImpl();
 			void BeginSceneImpl(Camera& camera, glm::mat4& cameraTransform);
 			void DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform);
+			void DrawQuadImpl(Material& material, glm::mat4& transform);
 
 			SharedPtr<VertexBuffer> m_QuadVB;
 			SharedPtr<IndexBuffer> m_QuadIB;

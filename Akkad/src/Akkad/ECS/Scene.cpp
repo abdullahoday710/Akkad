@@ -49,21 +49,13 @@ namespace Akkad {
 		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
 		auto assetManager = Application::GetAssetManager();
 		command->Clear();
+
 		for (auto entity : view)
 		{
 			auto& transform = view.get<TransformComponent>(entity);
 			auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
 			
-			if (!spriteRenderer.textureID.empty())
-			{
-				auto texture = assetManager->GetTexture(spriteRenderer.textureID);
-				// TODO : support custom shaders
-				if (spriteRenderer.shaderID.empty())
-				{
-					Renderer2D::DrawQuad(texture, transform.GetTransformMatrix());
-				}
-			}
-
+			Renderer2D::DrawQuad(spriteRenderer.material, transform.GetTransformMatrix());
 			transform.RecalculateTransformMatrix();
 		}
 	}

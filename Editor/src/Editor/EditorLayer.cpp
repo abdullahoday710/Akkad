@@ -22,6 +22,7 @@
 #include <Akkad/ECS/SceneManager.h>
 #include <Akkad/Asset/AssetManager.h>
 #include <Akkad/Scripting/LoadedGameAssembly.h>
+#include <Akkad/Graphics/Material.h>
 
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.cpp>
@@ -87,7 +88,8 @@ namespace Akkad {
 		for (auto& asset : project.projectData["project"]["Assets"].items())
 		{
 			std::string assetID = asset.key();
-			
+			Application::GetAssetManager()->RemoveShader(assetID); // unload the shader.
+
 			std::string assetType = project.projectData["project"]["Assets"][assetID]["type"];
 
 			if (assetType == "shader")
@@ -107,7 +109,13 @@ namespace Akkad {
 				std::string shaderdescPath = "assets/compiledSPV/" + assetName + ".shaderdesc";
 				project.projectData["project"]["Assets"][assetID]["shaderdescPath"] = shaderdescPath;
 
+				auto& assetDesc = Application::GetAssetManager()->GetDescriptorByID(assetID);
+
+				assetDesc.absolutePath = outputDir.string() + assetName + ".shaderdesc";
+
 				SaveActiveProject();
+
+				
 
 			}
 		}

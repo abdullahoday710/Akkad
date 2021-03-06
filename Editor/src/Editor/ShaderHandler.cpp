@@ -71,9 +71,9 @@ namespace Akkad {
 			glslang::TShader Shader(shaderStage);
 
 			/* setting up target clients and versions */
-			int ClientInputSemanticsVersion = 100;
+			int ClientInputSemanticsVersion = 400;
 			glslang::EShTargetClientVersion OpenGLClientVersion = glslang::EShTargetOpenGL_450;
-			glslang::EShTargetLanguageVersion TargetVersion = glslang::EShTargetSpv_1_0;
+			glslang::EShTargetLanguageVersion TargetVersion = glslang::EShTargetSpv_1_5;
 
 			/* set shader properties */
 			const char* ShaderCSource = shaderDesc.VertexSource.c_str();
@@ -90,6 +90,7 @@ namespace Akkad {
 				AK_ERROR("{} stage parsing failed for shader {}", GetStageName(shaderStage), shaderName);
 				AK_INFO("{}", Shader.getInfoLog());
 				AK_INFO("{}", Shader.getInfoDebugLog());
+				return;
 			}
 
 			glslang::TProgram Program;
@@ -101,6 +102,7 @@ namespace Akkad {
 				AK_ERROR("Shader linking failed for file : ", shaderName);
 				AK_INFO("{}", Shader.getInfoLog());
 				AK_INFO("{}", Shader.getInfoDebugLog());
+				return;
 			}
 
 			std::vector<unsigned int> SpirV;
@@ -123,7 +125,8 @@ namespace Akkad {
 			/* data relevant to the .shaderdesc file */
 			std::pair<Graphics::ShaderProgramType, std::string> info;
 			info.first = shaderType;
-			info.second = outputfilePath;
+			info.second = shaderName + "." + GetStageName(shaderStage) + ".spv";
+
 			shaderDescInfo.push_back(info);
 
 		}

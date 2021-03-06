@@ -6,7 +6,7 @@
 #include "NewProjectPanel.h"
 
 #include "Editor/EditorLayer.h"
-#include "Editor/ProjectSerializer.h"
+#include "Editor/Serializers/ProjectSerializer.h"
 
 #include <Akkad/PlatformUtils.h>
 #include <Akkad/Application/Application.h>

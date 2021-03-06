@@ -1,5 +1,8 @@
 #include "PropertyEditorPanel.h"
+#include "MaterialEditorPanel.h"
+
 #include "Editor/EditorLayer.h"
+#include "Editor/Serializers/MaterialSerializer.h"
 
 #include <Akkad/Application/Application.h>
 #include <Akkad/Scripting/LoadedGameAssembly.h>
@@ -159,17 +162,25 @@ namespace Akkad {
 				return;
 			}
 			auto& sprite = m_ActiveEntity.GetComponent<SpriteRendererComponent>();
-			
-			if (sprite.textureID.empty())
+
+			auto& material = sprite.material;
+
+			ImGui::Text("Material :");
+
+			if (material.isValid())
 			{
-				std::string buf = sprite.textureID;
-				ImGui::InputText("Texture", &buf, ImGuiInputTextFlags_ReadOnly);
+				if (ImGui::Button(sprite.material.GetName().c_str()))
+				{
+					auto desc = Application::GetAssetManager()->GetDescriptorByID(sprite.materialID);
+					MaterialEditorPanel::SetActiveMaterial(sprite.material, sprite.materialID);
+					PanelManager::AddPanel(new MaterialEditorPanel());
+				}
+				
 			}
 			else
 			{
-				auto asset = Application::GetAssetManager()->GetDescriptorByID(sprite.textureID);
-				std::string buf = std::filesystem::path(asset.absolutePath).filename().string();
-				ImGui::InputText("Texture", &buf, ImGuiInputTextFlags_ReadOnly);
+				std::string buf;
+				ImGui::InputText("Material", &buf, ImGuiInputTextFlags_ReadOnly);
 			}
 
 			if (ImGui::BeginDragDropTarget())
@@ -179,14 +190,15 @@ namespace Akkad {
 					const char* id = (const char*)payload->Data;
 					AssetDescriptor desc = Application::GetAssetManager()->GetDescriptorByID(id);
 
-					if (desc.assetType == AssetType::TEXTURE)
+					if (desc.assetType == AssetType::MATERIAL)
 					{
-						sprite.textureID = id;
+						sprite.materialID = desc.assetID;
+						sprite.material = Graphics::Material::LoadFile(desc.absolutePath);
 					}
-
 				}
 				ImGui::EndDragDropTarget();
 			}
+			
 			ImGui::TreePop();
 		}
 	}

@@ -26,6 +26,7 @@ namespace Akkad {
 			}
 
 			glBindBufferRange(GL_UNIFORM_BUFFER, s_LastBindingPoint, m_ResourceID, 0 , m_Layout.m_BufferSize);
+			m_BindingPoint = s_LastBindingPoint;
 			s_LastBindingPoint += 1;
 		}
 

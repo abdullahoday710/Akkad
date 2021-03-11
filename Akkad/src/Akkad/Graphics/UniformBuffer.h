@@ -56,6 +56,8 @@ namespace Akkad {
 				return result.second;
 			}
 
+			std::vector<std::pair<std::string, UniformBufferElement>>& GetElements() { return m_DataMap; }
+
 		private:
 			std::vector<std::pair<std::string, UniformBufferElement>> m_DataMap;
 			unsigned int m_BufferSize = 0;
@@ -165,7 +167,94 @@ namespace Akkad {
 				ResetData();
 			}
 
+			template<typename T>
+			T GetData(std::string index) {
+				AK_ASSERT(false, "trying to get an unkown data type")
+			}
+
+			template<>
+			float GetData(std::string index)
+			{
+				auto element = m_Layout[index];
+				AK_ASSERT(element.GetType() == ShaderDataType::FLOAT, "uniform buffer data type mismatch !");
+				auto data = GetDataGeneric(index);
+				float result;
+
+				memcpy(&result, (void*)data.data(), GetSizeOfType(element.GetType()));
+
+				return result;
+			}
+
+			template<>
+			unsigned int GetData(std::string index)
+			{
+				auto element = m_Layout[index];
+				AK_ASSERT(element.GetType() == ShaderDataType::UNISGNED_INT, "uniform buffer data type mismatch !");
+				auto data = GetDataGeneric(index);
+				unsigned int result;
+
+				memcpy(&result, (void*)data.data(), GetSizeOfType(element.GetType()));
+
+				return result;
+			}
+
+			template<>
+			glm::vec2 GetData(std::string index)
+			{
+				auto element = m_Layout[index];
+				AK_ASSERT(element.GetType() == ShaderDataType::FLOAT2, "uniform buffer data type mismatch !");
+				auto data = GetDataGeneric(index);
+				glm::vec2 result;
+
+				memcpy(&result, (void*)data.data(), GetSizeOfType(element.GetType()));
+
+				return result;
+			}
+
+			template<>
+			glm::vec3 GetData(std::string index)
+			{
+				auto element = m_Layout[index];
+				AK_ASSERT(element.GetType() == ShaderDataType::FLOAT3, "uniform buffer data type mismatch !");
+				auto data = GetDataGeneric(index);
+				glm::vec3 result;
+
+				memcpy(&result, (void*)data.data(), GetSizeOfType(element.GetType()));
+
+				return result;
+			}
+
+			template<>
+			glm::vec4 GetData(std::string index)
+			{
+				auto element = m_Layout[index];
+				AK_ASSERT(element.GetType() == ShaderDataType::FLOAT4, "uniform buffer data type mismatch !");
+				auto data = GetDataGeneric(index);
+				glm::vec4 result;
+
+				memcpy(&result, (void*)data.data(), GetSizeOfType(element.GetType()));
+
+				return result;
+			}
+
 		protected:
+
+			std::vector<char> GetDataGeneric(std::string index) {
+				auto element = m_Layout[index];
+				auto type = element.GetType();
+				unsigned int offset = element.offset;
+
+				std::vector<char> dataBuffer;
+
+				for (unsigned int i = 0; i < GetSizeOfType(type); i++)
+				{
+					unsigned int position = i + offset;
+					char byte = m_BufferData[position];
+					dataBuffer.push_back(byte);
+				}
+				return dataBuffer;
+			}
+
 			std::vector<char> m_BufferData;
 			UniformBufferLayout m_Layout;
 		};

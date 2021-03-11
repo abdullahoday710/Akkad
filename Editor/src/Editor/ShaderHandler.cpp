@@ -76,7 +76,6 @@ namespace Akkad {
 			glslang::EShTargetLanguageVersion TargetVersion = glslang::EShTargetSpv_1_5;
 
 			/* set shader properties */
-			const char* ShaderCSource = shaderDesc.VertexSource.c_str();
 			Shader.setStrings(&shaderStageSource, 1);
 			Shader.setEnvInput(glslang::EShSourceGlsl, shaderStage, glslang::EShClientOpenGL, ClientInputSemanticsVersion);
 			Shader.setEnvClient(glslang::EShClientOpenGL, OpenGLClientVersion);
@@ -85,11 +84,11 @@ namespace Akkad {
 			Shader.setAutoMapBindings(true);
 
 			/*  parse shader and get glsl compiler errors if any */
-			if (!Shader.parse(&Resources, 100, false, messages))
+			if (!Shader.parse(&Resources, 400, true, messages))
 			{
 				AK_ERROR("{} stage parsing failed for shader {}", GetStageName(shaderStage), shaderName);
-				AK_INFO("{}", Shader.getInfoLog());
-				AK_INFO("{}", Shader.getInfoDebugLog());
+				AK_ERROR("{}", Shader.getInfoLog());
+				AK_ERROR("{}", Shader.getInfoDebugLog());
 				return;
 			}
 
@@ -100,8 +99,8 @@ namespace Akkad {
 			if (!Program.link(messages))
 			{
 				AK_ERROR("Shader linking failed for file : ", shaderName);
-				AK_INFO("{}", Shader.getInfoLog());
-				AK_INFO("{}", Shader.getInfoDebugLog());
+				AK_ERROR("{}", Shader.getInfoLog());
+				AK_ERROR("{}", Shader.getInfoDebugLog());
 				return;
 			}
 

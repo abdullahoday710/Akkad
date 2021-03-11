@@ -24,10 +24,11 @@ namespace Akkad {
 			void SetShader(std::string assetID, bool serialize = true);
 			void BindTextures();
 			void BindShaders();
+			void ClearResources();
+			bool isValid();
 
 			std::string GetName() { return m_Name; }
 
-			bool isValid();
 
 			static Material LoadFile(std::string filePath);
 
@@ -36,10 +37,15 @@ namespace Akkad {
 			void SerializeShader();
 
 			SharedPtr<Shader> m_Shader;
-			SharedPtr<UniformBuffer> m_PropertiesBuffer;
+
+			//std::vector<SharedPtr<UniformBuffer>> m_PropertyBuffers;
+
+			SharedPtr<UniformBuffer> m_PropertyBuffer;
 
 			std::vector<TextureProps> m_Textures;
 			std::string m_ShaderID;
+
+			static std::string DEFAULT_PROPERTY_BUFFER_NAME;
 
 			friend class MaterialSerializer;
 			friend class MaterialEditorPanel;

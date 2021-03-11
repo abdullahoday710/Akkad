@@ -2,6 +2,7 @@
 #include "Renderer2D.h"
 #include "RenderPlatform.h"
 
+#include "Akkad/Logging.h"
 #include "Akkad/Application/Application.h"
 #include "Akkad/Asset/AssetManager.h"
 
@@ -12,15 +13,11 @@
 namespace Akkad {
 
 	namespace Graphics {
+		std::string Material::DEFAULT_PROPERTY_BUFFER_NAME = "shader_props";
 
 		void Material::SetShader(std::string assetID, bool serialize)
 		{
 			m_ShaderID = assetID;
-
-			if (serialize)
-			{
-				SerializeShader();
-			}
 
 			auto assetManager = Application::GetAssetManager();
 			m_Shader = assetManager->GetShader(assetID);
@@ -45,8 +42,17 @@ namespace Akkad {
 		{
 			if (m_Shader != nullptr)
 			{
+				if (m_PropertyBuffer != nullptr)
+				{
+					m_Shader->SetUniformBuffer(m_PropertyBuffer);
+				}
 				m_Shader->Bind();
 			}
+		}
+
+		void Material::ClearResources()
+		{
+			m_Textures.clear();
 		}
 
 		bool Material::isValid()
@@ -72,54 +78,271 @@ namespace Akkad {
 				Material material;
 
 				std::string name = data["material"]["name"];
-				std::string shaderID = data["material"]["shaderID"];
-
 				material.m_Name = name;
-				material.SetShader(shaderID, false);
 
-				for (auto texture : data["material"]["textures"].items())
+				if (!data["material"]["shaderID"].is_null())
 				{
-					std::string assetID = texture.key();
-					std::string samplerName = data["material"]["textures"][assetID]["samplerName"];
-					unsigned int bindingUnit = data["material"]["textures"][assetID]["bindingUnit"];
-
-					Graphics::TextureProps props;
-					props.assetID = assetID;
-					props.samplerName = samplerName;
-					props.textureBindingUnit = bindingUnit;
-					material.m_Textures.push_back(props);
+					std::string shaderID = data["material"]["shaderID"];
+					material.SetShader(shaderID, false);
 				}
 
+				if (!data["material"]["textures"].is_null())
+				{
+					for (auto texture : data["material"]["textures"].items())
+					{
+						std::string assetID = texture.key();
+						std::string samplerName = data["material"]["textures"][assetID]["samplerName"];
+						unsigned int bindingUnit = data["material"]["textures"][assetID]["bindingUnit"];
+
+						Graphics::TextureProps props;
+						props.assetID = assetID;
+						props.samplerName = samplerName;
+						props.textureBindingUnit = bindingUnit;
+						material.m_Textures.push_back(props);
+					}
+				}
+
+				if (!data["material"]["properties"].is_null())
+				{
+					// parsing the material properties is slow as fuck right now, but it works lol
+
+					UniformBufferLayout propertyBufferLayout;
+
+					std::map<std::string, float> props_float;
+					std::map<std::string, unsigned int> props_unsignedints;
+					std::map<std::string, glm::vec2> props_float2;
+					std::map<std::string, glm::vec3> props_float3;
+					std::map<std::string, glm::vec4> props_float4;
+
+
+					for (auto it : data["material"]["properties"].items())
+					{
+						std::string propertyName = it.key();
+						std::string propertyType = data["material"]["properties"][propertyName]["type"];
+
+						if (propertyType == "float")
+						{
+							propertyBufferLayout.Push(propertyName, ShaderDataType::FLOAT);
+							float value = data["material"]["properties"][propertyName]["value"];
+							props_float[propertyName] = value;
+						}
+						else if (propertyType == "float2")
+						{
+							propertyBufferLayout.Push(propertyName, ShaderDataType::FLOAT2);
+							float x = data["material"]["properties"][propertyName]["value"]["x"];
+							float y = data["material"]["properties"][propertyName]["value"]["y"];
+							
+							glm::vec2 value({x, y});
+							props_float2[propertyName] = value;
+
+						}
+						else if (propertyType == "float3")
+						{
+							propertyBufferLayout.Push(propertyName, ShaderDataType::FLOAT3);
+							float x = data["material"]["properties"][propertyName]["value"]["x"];
+							float y = data["material"]["properties"][propertyName]["value"]["y"];
+							float z = data["material"]["properties"][propertyName]["value"]["z"];
+
+							glm::vec3 value({ x, y, z });
+							props_float3[propertyName] = value;
+						}
+						else if (propertyType == "float4")
+						{
+							propertyBufferLayout.Push(propertyName, ShaderDataType::FLOAT4);
+							float x = data["material"]["properties"][propertyName]["value"]["x"];
+							float y = data["material"]["properties"][propertyName]["value"]["y"];
+							float z = data["material"]["properties"][propertyName]["value"]["z"];
+							float w = data["material"]["properties"][propertyName]["value"]["w"];
+
+							glm::vec4 value({ x, y, z, w });
+							props_float4[propertyName] = value;
+						}
+						else if (propertyType == "uint")
+						{
+							propertyBufferLayout.Push(propertyName, ShaderDataType::UNISGNED_INT);
+							unsigned int value = data["material"]["properties"][propertyName]["value"];
+							props_unsignedints[propertyName] = value;
+						}
+					}
+
+					auto propertyBuffer = Application::GetRenderPlatform()->CreateUniformBuffer(propertyBufferLayout);
+
+					for (auto it : propertyBuffer->GetLayout().GetElements())
+					{
+						ShaderDataType type = it.second.GetType();
+						std::string elementName = it.first;
+						
+						switch (type)
+						{
+						case ShaderDataType::FLOAT:
+						{
+							float value = props_float[elementName];
+							propertyBuffer->SetData(elementName, value);
+							break;
+						}
+						case ShaderDataType::FLOAT2:
+						{
+							glm::vec2 value = props_float2[elementName];
+							propertyBuffer->SetData(elementName, value);
+							break;
+						}
+						case ShaderDataType::FLOAT3:
+						{
+							glm::vec3 value = props_float3[elementName];
+							propertyBuffer->SetData(elementName, value);
+							break;
+						}
+						case ShaderDataType::FLOAT4:
+						{
+							glm::vec4 value = props_float4[elementName];
+							propertyBuffer->SetData(elementName, value);
+							break;
+						}
+						case ShaderDataType::UNISGNED_INT:
+						{
+							unsigned int value = props_unsignedints[elementName];
+							propertyBuffer->SetData(elementName, value);
+							break;
+						}
+						}
+
+					}
+					propertyBuffer->SetName(DEFAULT_PROPERTY_BUFFER_NAME);
+					material.m_PropertyBuffer = propertyBuffer;
+				}
+				
 				return material;
 		}
 
 		void Material::SerializeShader()
 		{
-			m_Textures.clear();
+			ClearResources();
 
 			auto assetManager = Application::GetAssetManager();
 			auto assetDesc = assetManager->GetDescriptorByID(m_ShaderID);
 			auto shaderDesc = Shader::LoadShader(assetDesc.absolutePath.c_str());
 
-			UniformBufferLayout layout;
-
-			spirv_cross::Compiler vertexShader(std::move(shaderDesc.VertexData));
-			spirv_cross::Compiler fragmentShader(std::move(shaderDesc.FragmentData));
-
-			spirv_cross::ShaderResources resources = fragmentShader.get_shader_resources();
-
-			unsigned int index = 0;
-			for (auto resource : resources.sampled_images)
+			for (ShaderProgramType shaderStage : shaderDesc.ProgramTypes)
 			{
-				TextureProps props;
-				props.textureBindingUnit = index;
-				props.samplerName = resource.name;
-				m_Textures.push_back(props);
+				ScopedPtr<spirv_cross::Compiler> shader;
 
-				index += 1;
+				switch (shaderStage)
+				{
+
+				case ShaderProgramType::VERTEX:
+				{
+					shader = CreateScopedPtr<spirv_cross::Compiler>(shaderDesc.VertexData);
+					break;
+				}
+
+				case ShaderProgramType::FRAGMENT:
+				{
+					shader = CreateScopedPtr<spirv_cross::Compiler>(shaderDesc.FragmentData);
+					break;
+				}
+
+				case ShaderProgramType::GEOMETRY:
+				{
+					break;
+				}
+
+				}
+
+				spirv_cross::ShaderResources resources = shader->get_shader_resources();
+
+				/* Getting texture samplers from the shader */
+				{
+					unsigned int index = 0;
+					for (auto resource : resources.sampled_images)
+					{
+						TextureProps props;
+						props.textureBindingUnit = index;
+						props.samplerName = resource.name;
+						m_Textures.push_back(props);
+
+						index += 1;
+					}
+				}
+				/* ------------------------------------------ */
+
+				/* Getting uniform buffers from the shader (for material properties) */
+				{
+					for (auto& resource : resources.uniform_buffers)
+					{
+						std::string BufferName = resource.name;
+						
+						if (BufferName == DEFAULT_PROPERTY_BUFFER_NAME && m_PropertyBuffer == nullptr)
+						{
+							auto& type = shader->get_type(resource.base_type_id);
+							unsigned member_count = type.member_types.size();
+
+							UniformBufferLayout uniformLayout;
+							for (unsigned i = 0; i < member_count; i++)
+							{
+								const spirv_cross::SPIRType& member_type = shader->get_type(type.member_types[i]);
+								spirv_cross::SPIRType::BaseType baseType = member_type.basetype;
+								size_t member_size = shader->get_declared_struct_member_size(type, i);
+
+								const std::string& name = shader->get_member_name(type.self, i);
+
+								switch (baseType)
+								{
+
+								case spirv_cross::SPIRType::UInt:
+								{
+									uniformLayout.Push(name, ShaderDataType::UNISGNED_INT);
+									break;
+								}
+
+								case spirv_cross::SPIRType::Float:
+								{
+									switch (member_type.vecsize)
+									{
+
+									case 1:
+									{
+										uniformLayout.Push(name, ShaderDataType::FLOAT);
+										break;
+									}
+
+									case 2:
+									{
+										uniformLayout.Push(name, ShaderDataType::FLOAT2);
+										break;
+									}
+
+									case 3:
+									{
+										uniformLayout.Push(name, ShaderDataType::FLOAT3);
+										break;
+									}
+
+									case 4:
+									{
+										uniformLayout.Push(name, ShaderDataType::FLOAT4);
+										break;
+									}
+
+									}
+									break;
+								}
+
+								}
+							}
+
+							auto propertyBuffer = Application::GetRenderPlatform()->CreateUniformBuffer(uniformLayout);
+
+							propertyBuffer->SetName(BufferName);
+							m_PropertyBuffer = propertyBuffer;
+						}
+
+					}
+				}
+
 			}
-		/* TODO : Support additional material properties using uniform buffers */
+
 		}
+
 	}
 }
 

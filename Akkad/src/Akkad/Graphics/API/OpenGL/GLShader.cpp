@@ -87,11 +87,8 @@ namespace Akkad {
 		void GLShader::SetUniformBuffer(SharedPtr<UniformBuffer> buffer)
 		{
 			SharedPtr<GLUniformBuffer> glBuffer = DynamicCastPtr<GLUniformBuffer>(buffer);
-
-
 			unsigned int bufferIndex = glGetUniformBlockIndex(m_ResourceID, glBuffer->GetName().c_str());
 			glUniformBlockBinding(m_ResourceID, bufferIndex, glBuffer->GetBindingPoint());
-			
 		}
 
 		std::string GLShader::CompileFromSPV(std::vector<unsigned int>& spv)

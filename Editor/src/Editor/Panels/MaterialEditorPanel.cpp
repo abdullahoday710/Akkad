@@ -46,6 +46,7 @@ namespace Akkad {
 					if (ImGui::Selectable(shaders[i].assetName.c_str()))
 					{
 						m_Material.SetShader(shaders[i].assetID);
+						m_Material.SerializeShader();
 					}
 				}
 
@@ -77,6 +78,7 @@ namespace Akkad {
 						{
 
 							m_Material.SetShader(shaders[i].assetID);
+							m_Material.SerializeShader();
 						}
 					}
 
@@ -120,27 +122,84 @@ namespace Akkad {
 			}
 		}
 
+		ImGui::Text("Properties");
+		if (m_Material.m_PropertyBuffer != nullptr)
+		{
+			for (auto element : m_Material.m_PropertyBuffer->GetLayout().GetElements())
+			{
+				std::string elementName = element.first;
+				Graphics::ShaderDataType type;
+				type = element.second.GetType();
+
+				switch (type)
+				{
+
+				case Graphics::ShaderDataType::FLOAT:
+				{
+					float bufferValue = m_Material.m_PropertyBuffer->GetData<float>(elementName);
+					ImGui::InputFloat(elementName.c_str(), &bufferValue);
+					m_Material.m_PropertyBuffer->SetData(elementName, bufferValue);
+					break;
+				}
+
+				case Graphics::ShaderDataType::FLOAT2:
+				{
+					glm::vec2 bufferValue = m_Material.m_PropertyBuffer->GetData<glm::vec2>(elementName);
+					ImGui::InputFloat2(elementName.c_str(), glm::value_ptr(bufferValue));
+					m_Material.m_PropertyBuffer->SetData(elementName, bufferValue);
+					break;
+				}
+
+				case Graphics::ShaderDataType::FLOAT3:
+				{
+					glm::vec3 bufferValue = m_Material.m_PropertyBuffer->GetData<glm::vec3>(elementName);
+					ImGui::ColorEdit3(elementName.c_str(), glm::value_ptr(bufferValue));
+					m_Material.m_PropertyBuffer->SetData(elementName, bufferValue);
+					break;
+				}
+
+				case Graphics::ShaderDataType::FLOAT4:
+				{
+					glm::vec4 bufferValue = m_Material.m_PropertyBuffer->GetData<glm::vec4>(elementName);
+					ImGui::InputFloat4(elementName.c_str(), glm::value_ptr(bufferValue));
+					m_Material.m_PropertyBuffer->SetData(elementName, bufferValue);
+					break;
+				}
+
+				case Graphics::ShaderDataType::UNISGNED_INT:
+				{
+					unsigned int bufferValue = m_Material.m_PropertyBuffer->GetData<unsigned int>(elementName);
+					ImGui::InputScalar(elementName.c_str(), ImGuiDataType_U32, &bufferValue);
+					m_Material.m_PropertyBuffer->SetData(elementName, bufferValue);
+					break;
+				}
+
+				}
+
+			}
+		}
+
+		auto scene = EditorLayer::GetActiveScene();
+
+		auto view = scene->m_Registry.view<SpriteRendererComponent>();
+
+		for (auto entity : view)
+		{
+			auto& sprite = view.get<SpriteRendererComponent>(entity);
+			if (sprite.materialID == m_MaterialAssetID)
+			{
+				auto desc = Application::GetAssetManager()->GetDescriptorByID(m_MaterialAssetID);
+
+				sprite.material = m_Material;
+			}
+		}
+
 		if (ImGui::Button("Save material"))
 		{
 			std::string path = EditorLayer::GetActiveProject().GetAssetsPath().string();
 
 			path += m_Material.m_Name + ".mat";
 			MaterialSerializer::Serialize(m_Material, path);
-
-			auto scene = EditorLayer::GetActiveScene();
-			
-			auto view = scene->m_Registry.view<SpriteRendererComponent>();
-
-			for (auto entity : view)
-			{
-				auto& sprite = view.get<SpriteRendererComponent>(entity);
-				if (sprite.materialID == m_MaterialAssetID)
-				{
-					auto desc = Application::GetAssetManager()->GetDescriptorByID(m_MaterialAssetID);
-
-					sprite.material = Graphics::Material::LoadFile(desc.absolutePath);
-				}
-			}
 		}
 
 		ImGui::End();

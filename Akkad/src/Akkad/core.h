@@ -6,7 +6,7 @@ template<typename T>
 using SharedPtr = std::shared_ptr<T>;
 
 template<typename T>
-using UniquePtr = std::unique_ptr<T>;
+using ScopedPtr = std::unique_ptr<T>;
 
 template<typename T, typename ... Args>
 SharedPtr<T> CreateSharedPtr(Args&& ... args) {
@@ -14,7 +14,7 @@ SharedPtr<T> CreateSharedPtr(Args&& ... args) {
 }
 
 template<typename T, typename ... Args>
-UniquePtr<T> CreateUniquePtr(Args&& ... args) {
+ScopedPtr<T> CreateScopedPtr(Args&& ... args) {
     return std::make_unique<T>(std::forward<Args>(args)...);
 }
 

@@ -20,10 +20,14 @@ namespace Akkad {
 		virtual void OnClose() override;
 		virtual bool IsOpen() override { return showPanel; };
 
+		virtual std::string GetName() override { return "MaterialEditorPanel"; };
+
 	private:
 		static bool showPanel;
 		static Graphics::Material& m_Material;
 		static std::string m_MaterialAssetID;
+
+		friend class EditorLayer;
 	};
 }
 

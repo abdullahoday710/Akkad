@@ -10,6 +10,7 @@
 #include "Panels/ViewPortPanel.h"
 #include "Panels/StartupPanel.h"
 #include "Panels/NewScenePanel.h"
+#include "Panels/MaterialEditorPanel.h"
 
 #include <Akkad/Application/Application.h>
 #include <Akkad/Logging.h>
@@ -113,20 +114,28 @@ namespace Akkad {
 
 				assetDesc.absolutePath = outputDir.string() + assetName + ".shaderdesc";
 
-				SaveActiveProject();
-
 				auto view = s_ActiveScene->m_Registry.view<SpriteRendererComponent>();
+
+				MaterialEditorPanel* panel = (MaterialEditorPanel*)PanelManager::GetPanel("MaterialEditorPanel");
 
 				for (auto entity : view)
 				{
 					auto& sprite = view.get<SpriteRendererComponent>(entity);
+
 					if (sprite.material.GetShaderID() == assetDesc.assetID)
 					{
-
 						sprite.material = Graphics::Material::LoadFileFromID(sprite.materialID);
+
+						if (panel->m_MaterialAssetID == sprite.materialID)
+						{
+							panel->m_Material = sprite.material;
+						}
 					}
 				}
 
+
+
+				SaveActiveProject();
 			}
 		}
 

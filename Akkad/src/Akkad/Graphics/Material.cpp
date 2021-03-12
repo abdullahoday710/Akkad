@@ -15,7 +15,7 @@ namespace Akkad {
 	namespace Graphics {
 		std::string Material::DEFAULT_PROPERTY_BUFFER_NAME = "shader_props";
 
-		void Material::SetShader(std::string assetID, bool serialize)
+		void Material::SetShader(std::string assetID)
 		{
 			m_ShaderID = assetID;
 
@@ -28,12 +28,12 @@ namespace Akkad {
 
 		void Material::BindTextures()
 		{
-			for (auto textureProp : m_Textures)
+			for (auto it : m_Textures)
 			{
-				if (!textureProp.assetID.empty())
+				if (!it.second.assetID.empty())
 				{
-					auto texture = Application::GetAssetManager()->GetTexture(textureProp.assetID);
-					texture->Bind(textureProp.textureBindingUnit);
+					auto texture = Application::GetAssetManager()->GetTexture(it.second.assetID);
+					texture->Bind(it.second.textureBindingUnit);
 				}
 			}
 		}
@@ -86,7 +86,8 @@ namespace Akkad {
 				if (!data["material"]["shaderID"].is_null())
 				{
 					std::string shaderID = data["material"]["shaderID"];
-					material.SetShader(shaderID, false);
+					material.SetShader(shaderID);
+					material.SerializeShader();
 				}
 
 				if (!data["material"]["textures"].is_null())
@@ -97,19 +98,23 @@ namespace Akkad {
 						std::string samplerName = data["material"]["textures"][assetID]["samplerName"];
 						unsigned int bindingUnit = data["material"]["textures"][assetID]["bindingUnit"];
 
-						Graphics::TextureProps props;
-						props.assetID = assetID;
-						props.samplerName = samplerName;
-						props.textureBindingUnit = bindingUnit;
-						material.m_Textures.push_back(props);
+						auto prop = material.m_Textures.find(samplerName);
+
+						if (prop != material.m_Textures.end())
+						{
+							Graphics::TextureProps props;
+							props.assetID = assetID;
+							props.samplerName = samplerName;
+							props.textureBindingUnit = bindingUnit;
+							material.m_Textures[samplerName] = props;
+						}
+
 					}
 				}
 
 				if (!data["material"]["properties"].is_null())
 				{
 					// parsing the material properties is slow as fuck right now, but it works lol
-
-					UniformBufferLayout propertyBufferLayout;
 
 					std::map<std::string, float> props_float;
 					std::map<std::string, unsigned int> props_unsignedints;
@@ -125,13 +130,11 @@ namespace Akkad {
 
 						if (propertyType == "float")
 						{
-							propertyBufferLayout.Push(propertyName, ShaderDataType::FLOAT);
 							float value = data["material"]["properties"][propertyName]["value"];
 							props_float[propertyName] = value;
 						}
 						else if (propertyType == "float2")
 						{
-							propertyBufferLayout.Push(propertyName, ShaderDataType::FLOAT2);
 							float x = data["material"]["properties"][propertyName]["value"]["x"];
 							float y = data["material"]["properties"][propertyName]["value"]["y"];
 							
@@ -141,7 +144,6 @@ namespace Akkad {
 						}
 						else if (propertyType == "float3")
 						{
-							propertyBufferLayout.Push(propertyName, ShaderDataType::FLOAT3);
 							float x = data["material"]["properties"][propertyName]["value"]["x"];
 							float y = data["material"]["properties"][propertyName]["value"]["y"];
 							float z = data["material"]["properties"][propertyName]["value"]["z"];
@@ -151,7 +153,6 @@ namespace Akkad {
 						}
 						else if (propertyType == "float4")
 						{
-							propertyBufferLayout.Push(propertyName, ShaderDataType::FLOAT4);
 							float x = data["material"]["properties"][propertyName]["value"]["x"];
 							float y = data["material"]["properties"][propertyName]["value"]["y"];
 							float z = data["material"]["properties"][propertyName]["value"]["z"];
@@ -162,56 +163,57 @@ namespace Akkad {
 						}
 						else if (propertyType == "uint")
 						{
-							propertyBufferLayout.Push(propertyName, ShaderDataType::UNISGNED_INT);
 							unsigned int value = data["material"]["properties"][propertyName]["value"];
 							props_unsignedints[propertyName] = value;
 						}
 					}
 
-					auto propertyBuffer = Application::GetRenderPlatform()->CreateUniformBuffer(propertyBufferLayout);
-
-					for (auto it : propertyBuffer->GetLayout().GetElements())
+					if (material.m_PropertyBuffer != nullptr)
 					{
-						ShaderDataType type = it.second.GetType();
-						std::string elementName = it.first;
-						
-						switch (type)
+						for (auto it : material.m_PropertyBuffer->GetLayout().GetElements())
 						{
-						case ShaderDataType::FLOAT:
-						{
-							float value = props_float[elementName];
-							propertyBuffer->SetData(elementName, value);
-							break;
-						}
-						case ShaderDataType::FLOAT2:
-						{
-							glm::vec2 value = props_float2[elementName];
-							propertyBuffer->SetData(elementName, value);
-							break;
-						}
-						case ShaderDataType::FLOAT3:
-						{
-							glm::vec3 value = props_float3[elementName];
-							propertyBuffer->SetData(elementName, value);
-							break;
-						}
-						case ShaderDataType::FLOAT4:
-						{
-							glm::vec4 value = props_float4[elementName];
-							propertyBuffer->SetData(elementName, value);
-							break;
-						}
-						case ShaderDataType::UNISGNED_INT:
-						{
-							unsigned int value = props_unsignedints[elementName];
-							propertyBuffer->SetData(elementName, value);
-							break;
-						}
+							ShaderDataType type = it.second.GetType();
+							std::string elementName = it.first;
+
+							switch (type)
+							{
+							case ShaderDataType::FLOAT:
+							{
+								float value = props_float[elementName];
+								material.m_PropertyBuffer->SetData(elementName, value);
+								break;
+							}
+							case ShaderDataType::FLOAT2:
+							{
+								glm::vec2 value = props_float2[elementName];
+								material.m_PropertyBuffer->SetData(elementName, value);
+								break;
+							}
+							case ShaderDataType::FLOAT3:
+							{
+								glm::vec3 value = props_float3[elementName];
+								material.m_PropertyBuffer->SetData(elementName, value);
+								break;
+							}
+							case ShaderDataType::FLOAT4:
+							{
+								glm::vec4 value = props_float4[elementName];
+								material.m_PropertyBuffer->SetData(elementName, value);
+								break;
+							}
+							case ShaderDataType::UNISGNED_INT:
+							{
+								unsigned int value = props_unsignedints[elementName];
+								material.m_PropertyBuffer->SetData(elementName, value);
+								break;
+							}
+							}
+
 						}
 
+						material.m_PropertyBuffer->SetName(DEFAULT_PROPERTY_BUFFER_NAME);
 					}
-					propertyBuffer->SetName(DEFAULT_PROPERTY_BUFFER_NAME);
-					material.m_PropertyBuffer = propertyBuffer;
+
 				}
 				
 				return material;
@@ -268,7 +270,7 @@ namespace Akkad {
 						TextureProps props;
 						props.textureBindingUnit = index;
 						props.samplerName = resource.name;
-						m_Textures.push_back(props);
+						m_Textures[resource.name] = props;
 
 						index += 1;
 					}

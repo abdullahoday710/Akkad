@@ -2,6 +2,7 @@
 #include "Shader.h"
 
 #include <string>
+#include <map>
 
 namespace Akkad {
 	namespace Graphics {
@@ -21,7 +22,7 @@ namespace Akkad {
 
 			~Material() {};
 
-			void SetShader(std::string assetID, bool serialize = true);
+			void SetShader(std::string assetID);
 			void BindTextures();
 			void BindShaders();
 			void ClearResources();
@@ -40,11 +41,9 @@ namespace Akkad {
 
 			SharedPtr<Shader> m_Shader;
 
-			//std::vector<SharedPtr<UniformBuffer>> m_PropertyBuffers;
-
 			SharedPtr<UniformBuffer> m_PropertyBuffer;
 
-			std::vector<TextureProps> m_Textures;
+			std::map<std::string, TextureProps> m_Textures;
 			std::string m_ShaderID;
 
 			static std::string DEFAULT_PROPERTY_BUFFER_NAME;

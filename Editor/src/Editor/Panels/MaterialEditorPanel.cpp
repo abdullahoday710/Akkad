@@ -31,8 +31,11 @@ namespace Akkad {
 
 	void MaterialEditorPanel::DrawImGui()
 	{
-		std::string label = "Material Editor : " + m_Material.m_Name;
-		ImGui::Begin(label.c_str(), &showPanel);
+		ImGui::Begin("Material Editor", &showPanel);
+
+		std::string label = "Material Name : " + m_Material.GetName();
+		ImGui::Text(label.c_str());
+		ImGui::Separator();
 
 		auto shaders = Application::GetAssetManager()->GetAllShaders();
 
@@ -90,8 +93,9 @@ namespace Akkad {
 			}
 		}
 		ImGui::Text("Textures:");
-		for (auto& textureProp : m_Material.m_Textures)
+		for (auto& it : m_Material.m_Textures)
 		{
+			auto& textureProp = it.second;
 			if (textureProp.assetID.empty())
 			{
 				std::string buf = textureProp.assetID;

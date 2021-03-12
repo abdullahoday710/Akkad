@@ -24,8 +24,9 @@ namespace Akkad {
 		}
 		
 
-		for (auto textureProp : material.m_Textures)
+		for (auto it : material.m_Textures)
 		{
+			auto& textureProp = it.second;
 			if (!textureProp.assetID.empty())
 			{
 				materialData["material"]["textures"][textureProp.assetID]["samplerName"] = textureProp.samplerName;

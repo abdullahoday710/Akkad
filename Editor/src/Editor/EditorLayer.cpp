@@ -115,7 +115,17 @@ namespace Akkad {
 
 				SaveActiveProject();
 
-				
+				auto view = s_ActiveScene->m_Registry.view<SpriteRendererComponent>();
+
+				for (auto entity : view)
+				{
+					auto& sprite = view.get<SpriteRendererComponent>(entity);
+					if (sprite.material.GetShaderID() == assetDesc.assetID)
+					{
+
+						sprite.material = Graphics::Material::LoadFileFromID(sprite.materialID);
+					}
+				}
 
 			}
 		}

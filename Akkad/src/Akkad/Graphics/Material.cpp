@@ -53,6 +53,7 @@ namespace Akkad {
 		void Material::ClearResources()
 		{
 			m_Textures.clear();
+			m_PropertyBuffer.reset();
 		}
 
 		bool Material::isValid()
@@ -72,7 +73,9 @@ namespace Akkad {
 		{
 				std::ifstream file;
 				file.open(filePath);
-				nlohmann::json data;
+				// Material deserialization should be ordered so it can match the underlying property buffer.
+				nlohmann::ordered_json data;
+
 				file >> data;
 
 				Material material;
@@ -212,6 +215,13 @@ namespace Akkad {
 				}
 				
 				return material;
+		}
+
+		Material Material::LoadFileFromID(std::string assetID)
+		{
+			auto desc = Application::GetAssetManager()->GetDescriptorByID(assetID);
+
+			return LoadFile(desc.absolutePath);
 		}
 
 		void Material::SerializeShader()

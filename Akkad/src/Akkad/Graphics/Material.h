@@ -28,9 +28,11 @@ namespace Akkad {
 			bool isValid();
 
 			std::string GetName() { return m_Name; }
+			std::string GetShaderID() { return m_ShaderID; }
 
 
 			static Material LoadFile(std::string filePath);
+			static Material LoadFileFromID(std::string assetID);
 
 		private:
 			std::string m_Name = "material";

@@ -12,7 +12,10 @@ namespace Akkad {
 	void MaterialSerializer::Serialize(Graphics::Material& material, std::string outputPath)
 	{
 		auto& project = EditorLayer::GetActiveProject();
-		nlohmann::json materialData;
+
+		// Material serialization should be ordered so it can match the underlying property buffer.
+		nlohmann::ordered_json materialData;
+
 		materialData["material"]["name"] = material.GetName();
 
 		if (!material.m_ShaderID.empty())

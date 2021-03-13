@@ -157,7 +157,14 @@ namespace Akkad {
 				case Graphics::ShaderDataType::FLOAT3:
 				{
 					glm::vec3 bufferValue = m_Material.m_PropertyBuffer->GetData<glm::vec3>(elementName);
-					ImGui::ColorEdit3(elementName.c_str(), glm::value_ptr(bufferValue));
+
+					if (elementName.rfind("color_", 0) == 0) {
+						ImGui::ColorEdit3(elementName.c_str(), glm::value_ptr(bufferValue));
+					}
+					else
+					{
+						ImGui::InputFloat3(elementName.c_str(), glm::value_ptr(bufferValue));
+					}
 					m_Material.m_PropertyBuffer->SetData(elementName, bufferValue);
 					break;
 				}

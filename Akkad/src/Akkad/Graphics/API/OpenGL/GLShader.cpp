@@ -26,7 +26,7 @@ namespace Akkad {
 					const char* src = shaderString.c_str();
 
 					glShaderSource(m_VertexShader, 1, &src, NULL);
-					//TODO : check shader compiler errors
+
 					glCompileShader(m_VertexShader);
 
 					glAttachShader(m_ResourceID, m_VertexShader);

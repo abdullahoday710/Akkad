@@ -20,6 +20,7 @@ project "GameAssembly"
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.json}",
 		"%{IncludeDir.iconfontcpp}",
+		"%{IncludeDir.box2d}",
 	}
 	defines {"AK_GAME_ASSEMBLY"}
 	links {

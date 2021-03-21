@@ -33,6 +33,7 @@ namespace Akkad {
 		void DrawSpriteRendererComponent();
 		void DrawCameraComponent();
 		void DrawScriptComponent();
+		void DrawRigidBody2dComponent();
 
 	};
 }

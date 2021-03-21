@@ -51,6 +51,15 @@ namespace Akkad {
 			m_Position.x += 0.5f * time->GetDeltaTime();
 			RecalculateTransform();
 		}
+
+		if (input->GetKeyDown(AK_KEY_KP_SUBTRACT))
+		{
+			m_ZoomLevel += 1.0f * time->GetDeltaTime();
+		}
+		if (input->GetKeyDown(AK_KEY_KP_ADD))
+		{
+			m_ZoomLevel -= 1.0f * time->GetDeltaTime();
+		}
 	}
 
 }

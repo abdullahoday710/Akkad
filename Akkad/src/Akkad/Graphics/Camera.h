@@ -12,12 +12,12 @@ namespace Akkad {
 	public:
 		Camera() {
 			m_AspectRatio = 1.0f;
-			m_ProjectionMatrix = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
+			m_ProjectionMatrix = glm::ortho(-1.0f - m_ZoomLevel, 1.0f + m_ZoomLevel, -1.0f - m_ZoomLevel, 1.0f + m_ZoomLevel, -1.0f, 1.0f);
 			m_ProjectionType = CameraProjection::Orthographic;
 		}
 
 		Camera(float aspectRatio) {
-			m_ProjectionMatrix = glm::ortho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
+			m_ProjectionMatrix = glm::ortho(-aspectRatio - m_ZoomLevel, aspectRatio + m_ZoomLevel, -1.0f - m_ZoomLevel, 1.0f + m_ZoomLevel, -1.0f, 1.0f);
 			m_AspectRatio = aspectRatio;
 			m_ProjectionType = CameraProjection::Orthographic;
 		}
@@ -39,7 +39,8 @@ namespace Akkad {
 			{
 			case Akkad::CameraProjection::Orthographic:
 			{
-				m_ProjectionMatrix = glm::ortho(-m_AspectRatio, m_AspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
+				//m_ProjectionMatrix = glm::ortho(-m_AspectRatio, m_AspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
+				m_ProjectionMatrix = glm::ortho(-m_AspectRatio - m_ZoomLevel, m_AspectRatio + m_ZoomLevel, -1.0f - m_ZoomLevel, 1.0f + m_ZoomLevel, -1.0f, 1.0f);
 				break;
 			}
 			case Akkad::CameraProjection::Perspective:
@@ -60,6 +61,7 @@ namespace Akkad {
 
 		CameraProjection GetProjectionType() { return m_ProjectionType; }
 		
+		float m_ZoomLevel = 0.0f;
 	private:
 		float m_AspectRatio = 0.0f;
 		glm::mat4 m_ProjectionMatrix = glm::mat4(1.0f);

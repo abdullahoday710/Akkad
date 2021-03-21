@@ -88,6 +88,13 @@ namespace Akkad {
 			}
 
 		}
+		void Renderer2D::DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount)
+		{
+			auto command = Application::GetRenderPlatform()->GetRenderCommand();
+			vb->Bind();
+			shader->Bind();
+			command->DrawArrays(PrimitiveType::TRIANGLE_FAN, vertexCount);
+		}
 	}
 }
 

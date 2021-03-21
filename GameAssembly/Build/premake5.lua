@@ -32,6 +32,7 @@ workspace "GameAssembly"
 			"%{IncludeDir.spdlog}",
 			"%{IncludeDir.glm}",
 			"%{IncludeDir.entt}",
+			"%{IncludeDir.box2d}",
 		}
 		defines {"AK_GAME_ASSEMBLY"}
 

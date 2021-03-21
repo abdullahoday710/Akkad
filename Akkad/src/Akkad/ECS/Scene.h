@@ -1,4 +1,5 @@
 #pragma once
+#include "Akkad/Physics/Box2d/Box2dWorld.h"
 #include <entt/entt.hpp>
 
 namespace Akkad {
@@ -25,6 +26,7 @@ namespace Akkad {
 		void BeginRenderer2D(float aspectRatio);
 		void Render2D();
 		Entity GetEntity(entt::entity handle);
+		Box2dWorld m_PhysicsWorld2D;
 
 		friend class Entity;
 		friend class SceneHierarchyPanel;

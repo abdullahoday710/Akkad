@@ -25,6 +25,7 @@ project "Editor"
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.json}",
 		"%{IncludeDir.iconfontcpp}",
+		"%{IncludeDir.box2d}",
 	}
 		
     postbuildcommands {

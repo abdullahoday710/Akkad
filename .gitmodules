@@ -14,3 +14,6 @@
 [submodule "3rdparty/SPIRV-Cross"]
 	path = 3rdparty/SPIRV-Cross
 	url = https://github.com/vertexpotato/SPIRV-Cross/
+[submodule "3rdparty/box2d"]
+	path = 3rdparty/box2d
+	url = https://github.com/vertexpotato/box2d

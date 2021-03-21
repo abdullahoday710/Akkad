@@ -22,6 +22,33 @@ namespace Akkad {
 
 	void Scene::Start()
 	{
+		// Initialize physics
+		{
+			m_PhysicsWorld2D.Clear();
+			auto view = m_Registry.view<TransformComponent,RigidBody2dComponent>();
+
+			for (auto entity : view)
+			{
+				auto& rigidbody2dcomp = view.get<RigidBody2dComponent>(entity);
+				auto& transform = view.get<TransformComponent>(entity);
+
+				BodySettings settings;
+				settings.density = rigidbody2dcomp.density;
+				settings.friction = rigidbody2dcomp.friction;
+				settings.shape = rigidbody2dcomp.shape;
+				settings.type = rigidbody2dcomp.type;
+
+				settings.position = { transform.GetPosition().x, transform.GetPosition().y };
+				settings.rotation = { transform.GetRotation().z };
+
+				settings.halfX = transform.GetScale().x / 2;
+				settings.halfY = transform.GetScale().y / 2;
+
+				rigidbody2dcomp.body = m_PhysicsWorld2D.CreateBody(settings);
+			}
+			
+		}
+		
 		{
 			auto view = m_Registry.view<ScriptComponent>();
 
@@ -34,7 +61,6 @@ namespace Akkad {
 				{
 					auto gameAssembly = Application::GetGameAssembly();
 					script.Instance = gameAssembly->InstantiateScript(script.ScriptName.c_str());
-
 					Entity e(entity, this);
 					script.Instance->m_Entity = e;
 					script.Instance->OnStart();
@@ -57,6 +83,11 @@ namespace Akkad {
 			
 			Renderer2D::DrawQuad(spriteRenderer.material, transform.GetTransformMatrix());
 			transform.RecalculateTransformMatrix();
+			if (m_Registry.has<RigidBody2dComponent>(entity))
+			{
+				auto& rigidbody2dcomponent = m_Registry.get<RigidBody2dComponent>(entity);
+				rigidbody2dcomponent.body.DrawBoundingBox();
+			}
 		}
 	}
 
@@ -95,7 +126,25 @@ namespace Akkad {
 				}
 				
 			}
+		}
 
+		// Update physics
+		{
+			m_PhysicsWorld2D.Step();
+
+			auto view = m_Registry.view<TransformComponent, RigidBody2dComponent>();
+
+			for (auto entity : view)
+			{
+				auto& transform = view.get<TransformComponent>(entity);
+				auto& rigidbody2dcomponent = view.get<RigidBody2dComponent>(entity);
+
+				glm::vec2 position = rigidbody2dcomponent.body.GetPosition();
+				float rotation = rigidbody2dcomponent.body.GetRotation();
+				transform.SetPostion({position.x, position.y, 0.0f});
+				transform.SetRotation({ 0, 0, rotation });
+
+			}
 		}
 		
 	}
@@ -114,9 +163,21 @@ namespace Akkad {
 					delete script.Instance;
 					script.Instance = nullptr;
 				}
-				
+
 			}
 		}
+
+		{
+			m_PhysicsWorld2D.Clear();
+			auto view = m_Registry.view<RigidBody2dComponent>();
+			for (auto entity : view)
+			{
+				auto& rigidbody2dcomponent = view.get<RigidBody2dComponent>(entity);
+
+				rigidbody2dcomponent.body = Box2dBody();
+			}
+		}
+		
 	}
 
 	Entity Scene::AddEntity(std::string tag)

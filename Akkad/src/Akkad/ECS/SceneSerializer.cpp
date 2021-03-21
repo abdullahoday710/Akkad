@@ -28,10 +28,12 @@ namespace Akkad {
 
 			glm::vec3 position = transform.GetPosition();
 			glm::vec3 rotation = transform.GetRotation();
+			glm::vec3 scale = transform.GetScale();
 
 			data["Scene"]["Entities"][entityID]["Tag"] = tag;
 			data["Scene"]["Entities"][entityID]["Transform"]["Position"] = { position.x, position.y, position.z };
 			data["Scene"]["Entities"][entityID]["Transform"]["Rotation"] = { rotation.x, rotation.y, rotation.z };
+			data["Scene"]["Entities"][entityID]["Transform"]["Scale"] = { scale.x, scale.y, scale.z };
 
 			Entity activeEntity = scene->GetEntity(entity);
 
@@ -63,6 +65,40 @@ namespace Akkad {
 				}
 
 			}
+
+			if (activeEntity.HasComponent<RigidBody2dComponent>())
+			{
+				auto& body2dcomponent = activeEntity.GetComponent<RigidBody2dComponent>();
+				data["Scene"]["Entities"][entityID]["RigidBody2D"]["Friction"] = body2dcomponent.friction;
+				data["Scene"]["Entities"][entityID]["RigidBody2D"]["Density"] = body2dcomponent.density;
+
+				switch (body2dcomponent.shape)
+				{
+				case BodyShape::POLYGON_SHAPE:
+				{
+					data["Scene"]["Entities"][entityID]["RigidBody2D"]["Shape"] = "Polygon";
+					break;
+				}
+
+				}
+
+				switch (body2dcomponent.type)
+				{
+
+				case BodyType::STATIC:
+				{
+					data["Scene"]["Entities"][entityID]["RigidBody2D"]["Type"] = "Static";
+					break;
+				}
+
+				case BodyType::DYNAMIC:
+				{
+					data["Scene"]["Entities"][entityID]["RigidBody2D"]["Type"] = "Dynamic";
+					break;
+				}
+
+				}
+			}
 		}
 
 		std::ofstream output;
@@ -91,11 +127,12 @@ namespace Akkad {
 				if (component.key() == "Transform")
 				{
 					glm::vec3 position({componentData["Position"][0],componentData["Position"][1],componentData["Position"][2]});
-
 					glm::vec3 rotation({ componentData["Rotation"][0],componentData["Rotation"][1],componentData["Rotation"][2] });
+					glm::vec3 scale({ componentData["Scale"][0],componentData["Scale"][1],componentData["Scale"][2] });
 					auto& transform = e.GetComponent<TransformComponent>();
 					transform.SetPostion(position);
 					transform.SetRotation(rotation);
+					transform.SetScale(scale);
 					continue;
 				}
 
@@ -140,6 +177,32 @@ namespace Akkad {
 					}
 
 					e.AddComponent<CameraComponent>(projtype);
+					continue;
+				}
+
+				else if (component.key() == "RigidBody2D")
+				{
+					BodyType type;
+					BodyShape shape;
+					float density = componentData["Density"];
+					float friction = componentData["Friction"];
+
+					if (componentData["Type"] == "Static")
+					{
+						type = BodyType::STATIC;
+					}
+
+					else if (componentData["Type"] == "Dynamic")
+					{
+						type = BodyType::DYNAMIC;
+					}
+
+					if (componentData["Shape"] == "Polygon")
+					{
+						shape = BodyShape::POLYGON_SHAPE;
+					}
+
+					e.AddComponent<RigidBody2dComponent>(type, shape, density, friction);
 					continue;
 				}
 

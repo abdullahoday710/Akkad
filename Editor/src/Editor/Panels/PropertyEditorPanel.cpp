@@ -69,6 +69,11 @@ namespace Akkad {
 				DrawScriptComponent();
 			}
 
+			if (m_ActiveEntity.HasComponent<RigidBody2dComponent>())
+			{
+				DrawRigidBody2dComponent();
+			}
+
 			DrawAddComponent();
 		}
 		
@@ -98,6 +103,14 @@ namespace Akkad {
 					if (!m_ActiveEntity.HasComponent<SpriteRendererComponent>())
 					{
 						m_ActiveEntity.AddComponent<SpriteRendererComponent>();
+					}
+				}
+
+				if (ImGui::Button("Rigidbody 2D"))
+				{
+					if (!m_ActiveEntity.HasComponent<RigidBody2dComponent>())
+					{
+						m_ActiveEntity.AddComponent<RigidBody2dComponent>();
 					}
 				}
 
@@ -145,6 +158,7 @@ namespace Akkad {
 			auto& transform = m_ActiveEntity.GetComponent<TransformComponent>();
 			ImGui::DragFloat3("Position", glm::value_ptr(transform.GetPosition()));
 			ImGui::DragFloat3("Rotation", glm::value_ptr(transform.GetRotation()));
+			ImGui::DragFloat3("Scale", glm::value_ptr(transform.GetScale()));
 			ImGui::TreePop();
 		}
 
@@ -276,6 +290,68 @@ namespace Akkad {
 			ImGui::TreePop();
 		}
 
+	}
+
+	std::string BodyTypeToStr(BodyType type)
+	{
+		switch (type)
+		{
+		case BodyType::STATIC:
+			return "Static";
+		case BodyType::DYNAMIC:
+			return "Dynamic";
+		}
+	}
+	void PropertyEditorPanel::DrawRigidBody2dComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		if (ImGui::TreeNode("Rigid Body"))
+		{
+			if (DrawComponentContextMenu<RigidBody2dComponent>(m_ActiveEntity))
+			{
+				ImGui::TreePop();
+				return;
+			}
+			auto& rigidBody = m_ActiveEntity.GetComponent<RigidBody2dComponent>();
+			ImGui::Text("Rigid body :");
+
+			const char* body_types[] = { "Static", "Dynamic" };
+			std::string bodytypestr = BodyTypeToStr(rigidBody.type);
+			static const char* current_body_type = bodytypestr.c_str();
+
+			if (ImGui::BeginCombo("Body type", current_body_type))
+			{
+				for (int n = 0; n < IM_ARRAYSIZE(body_types); n++)
+				{
+					bool is_selected = (current_body_type == body_types[n]);
+					if (ImGui::Selectable(body_types[n], is_selected))
+					{
+						current_body_type = body_types[n];
+					}
+					if (is_selected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+			if (current_body_type == "Static")
+			{
+				rigidBody.type = BodyType::STATIC;
+			}
+			if (current_body_type == "Dynamic")
+			{
+				rigidBody.type = BodyType::DYNAMIC;
+			}
+
+			rigidBody.shape = BodyShape::POLYGON_SHAPE; // TODO : make a the shapes selectable and add more shapes.
+
+			ImGui::InputFloat("Density", &rigidBody.density);
+			ImGui::InputFloat("Friction", &rigidBody.friction);
+
+			ImGui::TreePop();
+		}
 	}
 
 }

@@ -30,6 +30,7 @@ project "Akkad"
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.entt}",
         "%{IncludeDir.json}",
+        "%{IncludeDir.box2d}",
 
     }
     
@@ -40,6 +41,7 @@ project "Akkad"
         "imgui",
         "spdlog",
         "SPIRV-Cross",
+        "box2d",
     }
     
     filter "system:windows"

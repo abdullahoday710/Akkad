@@ -151,6 +151,18 @@ namespace Akkad {
 
 	void Scene::Stop()
 	{
+
+		{
+			m_PhysicsWorld2D.Clear();
+			auto view = m_Registry.view<RigidBody2dComponent>();
+			for (auto entity : view)
+			{
+				auto& rigidbody2dcomponent = view.get<RigidBody2dComponent>(entity);
+
+				rigidbody2dcomponent.body = Box2dBody();
+			}
+		}
+
 		{
 			auto view = m_Registry.view<ScriptComponent>();
 
@@ -164,17 +176,6 @@ namespace Akkad {
 					script.Instance = nullptr;
 				}
 
-			}
-		}
-
-		{
-			m_PhysicsWorld2D.Clear();
-			auto view = m_Registry.view<RigidBody2dComponent>();
-			for (auto entity : view)
-			{
-				auto& rigidbody2dcomponent = view.get<RigidBody2dComponent>(entity);
-
-				rigidbody2dcomponent.body = Box2dBody();
 			}
 		}
 		

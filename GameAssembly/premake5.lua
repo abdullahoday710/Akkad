@@ -2,7 +2,7 @@ project "GameAssembly"
 	kind "SharedLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/Editor")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")

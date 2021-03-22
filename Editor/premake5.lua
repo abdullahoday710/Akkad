@@ -2,7 +2,7 @@ project "Editor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
+	staticruntime "off"
 
 	debugdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 
@@ -38,6 +38,7 @@ project "Editor"
 
 	  "{COPY} %{wks.location}/3rdparty/glm/include %{wks.location}/bin/" .. outputdir .. "/%{prj.name}/GameAssembly/include/glm/include",
 	  "{COPY} %{wks.location}/3rdparty/spdlog/include %{wks.location}/bin/" .. outputdir .. "/%{prj.name}/GameAssembly/include/spdlog/include",
+	  "{COPY} %{wks.location}/3rdparty/box2d/include %{wks.location}/bin/" .. outputdir .. "/%{prj.name}/GameAssembly/include/box2d/include",
 	  "{COPY} %{wks.location}/3rdparty/entt/single_include %{wks.location}/bin/" .. outputdir .. "/%{prj.name}/GameAssembly/include/entt/single_include",
 	  "{COPY} %{wks.location}/Akkad/src/ %{wks.location}/bin/" .. outputdir .. "/%{prj.name}/GameAssembly/include/Akkad/",
 

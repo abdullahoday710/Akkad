@@ -10,6 +10,7 @@ workspace "GameAssembly"
 	IncludeDir["glm"] = "%{wks.location}/include/glm/include"
 	IncludeDir["entt"] = "%{wks.location}/include/entt/single_include"
 	IncludeDir["spdlog"] = "%{wks.location}/include/spdlog/include"
+	IncludeDir["box2d"] = "%{wks.location}/include/box2d/include"
 
 	IncludeDir["Akkad"] = "%{wks.location}/include/Akkad/"
 
@@ -17,7 +18,7 @@ workspace "GameAssembly"
 		kind "SharedLib"
 		language "C++"
 		cppdialect "C++17"
-		staticruntime "on"
+		staticruntime "off"
 
 		targetdir ("%{wks.location}/build/")
 		objdir ("%{wks.location}/build-int/")

@@ -17,6 +17,8 @@ namespace Akkad {
 		BodyType type = BodyType::STATIC;
 		BodyShape shape = BodyShape::POLYGON_SHAPE;
 
+		b2Body* GetBody() { return body.m_Body; }
+
 		float density = 0.0f;
 		float friction = 0.0f;
 

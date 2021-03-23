@@ -46,8 +46,12 @@ namespace Akkad {
 		void DrawBoundingBox();
 	private:
 		b2Body* m_Body = nullptr;
+		friend class RigidBody2dComponent;
+
+	protected:
 		SharedPtr<Graphics::VertexBuffer> m_VertexBuffer;
 		static SharedPtr<Graphics::Shader> m_DebugShader;
+
 	};
 }
 

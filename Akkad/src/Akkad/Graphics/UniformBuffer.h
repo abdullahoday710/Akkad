@@ -52,8 +52,7 @@ namespace Akkad {
 				
 				AK_ASSERT(it != m_DataMap.end(), "ELEMENT DOES NOT EXIST !");
 
-				auto result = *it;
-				return result.second;
+				return (*it).second;
 			}
 
 			std::vector<std::pair<std::string, UniformBufferElement>>& GetElements() { return m_DataMap; }

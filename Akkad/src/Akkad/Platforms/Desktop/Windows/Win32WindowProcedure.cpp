@@ -73,6 +73,28 @@ namespace Akkad {
             break;
         }
 
+        case WM_MOUSEMOVE:
+        {
+            if (!window->isCursorTracked)
+            {
+                TRACKMOUSEEVENT tme;
+                ZeroMemory(&tme, sizeof(tme));
+                tme.cbSize = sizeof(tme);
+                tme.dwFlags = TME_LEAVE;
+                tme.hwndTrack = (HWND)window->GetNativeWindow();
+                TrackMouseEvent(&tme);
+
+                window->isCursorTracked = true;
+            }
+            return 0;
+        }
+
+        case WM_MOUSELEAVE:
+        {
+            window->isCursorTracked = false;
+            return 0;
+        }
+
         }
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }

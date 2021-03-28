@@ -14,6 +14,8 @@ namespace Akkad {
 		virtual unsigned int GetHeight() { return m_Height; };
 		virtual void* GetNativeWindow() override { return m_WindowHandle; };
 		std::function<void(Event&)> m_EventCallback;
+
+		bool isCursorTracked = false;
 	private:
 		bool m_IsClosed = true;
 		HWND m_WindowHandle = nullptr;

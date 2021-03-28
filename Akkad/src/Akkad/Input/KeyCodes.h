@@ -17,6 +17,11 @@
  *     "BACKSPACE", etc.)
  *
  */
+
+enum class MouseButtons {
+	LEFT, RIGHT, MIDDLE
+};
+
 #define AK_KEY_UNKNOWN            -1
 
 /* Printable keys */

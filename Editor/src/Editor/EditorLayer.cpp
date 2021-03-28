@@ -155,6 +155,10 @@ namespace Akkad {
 
 	void EditorLayer::OnUpdate()
 	{
+		if (Application::GetInputManager()->GetMouseDown(MouseButtons::LEFT))
+		{
+			AK_INFO("click at {} {}", Application::GetInputManager()->GetMouseX(), Application::GetInputManager()->GetMouseY());
+		}
 
 		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
 		GameViewPanel* gameview = (GameViewPanel*)PanelManager::GetPanel("Game View");

@@ -72,6 +72,7 @@ namespace Akkad {
 
 		/*----- Shader handlers -----*/
 		SharedPtr<Graphics::Shader> GetShader(std::string assetID);
+		AssetDescriptor GetShaderByName(std::string shaderName);
 		void RemoveShader(std::string assetID);
 		std::vector<AssetDescriptor> GetAllShaders();
 		/*----------------------------*/

@@ -1,13 +1,15 @@
 #include "Box2dBody.h"
 #include "Akkad/Graphics/Renderer2D.h"
 #include "Akkad/Application/Application.h"
+#include "Akkad/Asset/AssetManager.h"
+
 namespace Akkad {
 	SharedPtr<Graphics::Shader> Box2dBody::m_DebugShader;
 
 	Box2dBody::Box2dBody(b2Body* body)
 	{
-
-		static SharedPtr<Graphics::Shader> debugShader = Application::GetRenderPlatform()->CreateShader("res/shaders/PhysicsDebugShader.shaderdesc");
+		static auto shader = Application::GetAssetManager()->GetShaderByName("PhysicsDebugShader");
+		static SharedPtr<Graphics::Shader> debugShader = Application::GetRenderPlatform()->CreateShader(shader.absolutePath.c_str());
 		m_Body = body;
 		m_DebugShader = debugShader;
 		m_DebugShader->SetUniformBuffer(Graphics::Renderer2D::GetSystemUniforms());

@@ -87,6 +87,17 @@ namespace Akkad {
 		}
 	}
 
+	AssetDescriptor AssetManager::GetShaderByName(std::string shaderName)
+	{
+		for (auto it : m_RegisteredAssets)
+		{
+			if (it.second.assetType == AssetType::SHADER && it.second.assetName == shaderName)
+			{
+				return it.second;
+			}
+		}
+	}
+
 	void AssetManager::RemoveShader(std::string assetID)
 	{
 		auto it = m_LoadedShaders.find(assetID);

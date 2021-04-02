@@ -8,6 +8,7 @@
 #include <Akkad/Scripting/LoadedGameAssembly.h>
 #include <Akkad/ECS/Components/Components.h>
 #include <Akkad/Asset/AssetManager.h>
+#include <Akkad/Graphics/SortingLayer2D.h>
 
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
@@ -189,6 +190,7 @@ namespace Akkad {
 					MaterialEditorPanel::SetActiveMaterial(sprite.material, sprite.materialID);
 					PanelManager::AddPanel(new MaterialEditorPanel());
 				}
+
 				
 			}
 			else
@@ -211,6 +213,25 @@ namespace Akkad {
 					}
 				}
 				ImGui::EndDragDropTarget();
+			}
+
+			auto layers = SortingLayer2DHandler::GetRegisteredLayers();
+			static int item_current_idx = 0;
+			if (ImGui::BeginCombo("Sorting Layer",sprite.sortingLayer.c_str()))
+			{
+				for (int i = 0; i < layers.size(); i++)
+				{
+					const bool is_selected = (item_current_idx == i);
+					if (ImGui::Selectable(layers[i].name.c_str(), is_selected))
+					{
+						item_current_idx = i;
+						sprite.sortingLayer = layers[i].name.c_str();
+					}
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
 			}
 			
 			ImGui::TreePop();
@@ -345,7 +366,7 @@ namespace Akkad {
 				rigidBody.type = BodyType::DYNAMIC;
 			}
 
-			rigidBody.shape = BodyShape::POLYGON_SHAPE; // TODO : make a the shapes selectable and add more shapes.
+			rigidBody.shape = BodyShape::POLYGON_SHAPE; // TODO : make the shapes selectable and add more shapes.
 
 			ImGui::InputFloat("Density", &rigidBody.density);
 			ImGui::InputFloat("Friction", &rigidBody.friction);

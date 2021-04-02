@@ -34,8 +34,6 @@ namespace Akkad {
 
 			SharedPtr<VertexBuffer> m_QuadVB;
 			SharedPtr<IndexBuffer> m_QuadIB;
-			SharedPtr<Shader> m_TextureShader;
-			SharedPtr<Shader> m_ColorShader;
 			SharedPtr<UniformBuffer> m_SceneProps;
 		};
 	}

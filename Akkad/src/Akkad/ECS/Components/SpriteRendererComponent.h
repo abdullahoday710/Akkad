@@ -9,5 +9,6 @@ namespace Akkad {
 	struct SpriteRendererComponent {
 		Graphics::Material material;
 		std::string materialID;
+		std::string sortingLayer = "Default";
 	};
 }

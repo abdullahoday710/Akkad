@@ -4,6 +4,7 @@
 #include <Akkad/Logging.h>
 #include <Akkad/Application/Application.h>
 #include <Akkad/Asset/AssetManager.h>
+#include <Akkad/Graphics/SortingLayer2D.h>
 
 #include <fstream>
 #include <iomanip>
@@ -76,7 +77,11 @@ namespace Akkad {
 				}
 			}
 		}
+		nlohmann::ordered_json defaultSortingLayers;
+		defaultSortingLayers.push_back("Default");
 
+		descriptor.projectData["project"]["SortingLayers"] = defaultSortingLayers;
+		
 		descriptor.ProjectFilePath = path + "/" + name + ".AKPROJ";
 
 		std::ofstream output;
@@ -101,7 +106,7 @@ namespace Akkad {
 		descriptor.ProjectDirectory = filesystem::path(path).remove_filename().string();
 		descriptor.ProjectFilePath = path;
 
-
+		SortingLayer2DHandler::ClearRegisteredLayers();
 		Application::GetAssetManager()->Clear();
 		Application::GetAssetManager()->SetAssetsRootPath(descriptor.GetAssetsPath().string());
 
@@ -135,6 +140,13 @@ namespace Akkad {
 			assetDesc.SetAssetType(assetType);
 
 			Application::GetAssetManager()->RegisterAsset(assetID, assetDesc);
+		}
+
+		for (auto it : descriptor.projectData["project"]["SortingLayers"])
+		{
+			std::string layerName = it;
+
+			SortingLayer2DHandler::RegisterLayer(layerName);
 		}
 
 		return descriptor;

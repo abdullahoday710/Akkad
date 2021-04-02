@@ -44,9 +44,6 @@ namespace Akkad {
 			scenePropsLayout.Push("sys_viewProjection", ShaderDataType::MAT4);
 
 			m_SceneProps = platform->CreateUniformBuffer(scenePropsLayout);
-
-			//m_TextureShader = platform->CreateShader("res/shaders/compiledSPV/textureShader.shaderdesc");
-			//m_TextureShader->SetUniformBuffer(m_SceneProps);
 		}
 
 		void Renderer2D::BeginSceneImpl(Camera& camera, glm::mat4& cameraTransform)

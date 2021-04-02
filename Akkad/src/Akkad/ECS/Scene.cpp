@@ -7,6 +7,7 @@
 #include "Akkad/Graphics/Renderer2D.h"
 #include "Akkad/Asset/AssetManager.h"
 #include "Akkad/Scripting/LoadedGameAssembly.h"
+#include "Akkad/Graphics/SortingLayer2D.h"
 
 #include "Components/Components.h"
 
@@ -76,19 +77,28 @@ namespace Akkad {
 		auto assetManager = Application::GetAssetManager();
 		command->Clear();
 
-		for (auto entity : view)
+		for (auto it : SortingLayer2DHandler::GetRegisteredLayers())
 		{
-			auto& transform = view.get<TransformComponent>(entity);
-			auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
-			
-			Renderer2D::DrawQuad(spriteRenderer.material, transform.GetTransformMatrix());
-			transform.RecalculateTransformMatrix();
-			if (m_Registry.has<RigidBody2dComponent>(entity))
+			for (auto entity : view)
 			{
-				auto& rigidbody2dcomponent = m_Registry.get<RigidBody2dComponent>(entity);
-				rigidbody2dcomponent.body.DrawBoundingBox();
+				auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
+
+				if (spriteRenderer.sortingLayer == it.name)
+				{
+					auto& transform = view.get<TransformComponent>(entity);
+
+					Renderer2D::DrawQuad(spriteRenderer.material, transform.GetTransformMatrix());
+					transform.RecalculateTransformMatrix();
+					if (m_Registry.has<RigidBody2dComponent>(entity))
+					{
+						auto& rigidbody2dcomponent = m_Registry.get<RigidBody2dComponent>(entity);
+						rigidbody2dcomponent.body.DrawBoundingBox();
+					}
+				}
+
 			}
 		}
+
 	}
 
 	void Scene::BeginRenderer2D(float aspectRatio)

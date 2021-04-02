@@ -41,6 +41,7 @@ namespace Akkad {
 			{
 				auto& sprite = activeEntity.GetComponent<SpriteRendererComponent>();
 				data["Scene"]["Entities"][entityID]["SpriteRenderer"]["MaterialID"] = sprite.materialID;
+				data["Scene"]["Entities"][entityID]["SpriteRenderer"]["SortingLayer"] = sprite.sortingLayer;
 			}
 
 			if (activeEntity.HasComponent<ScriptComponent>())
@@ -147,8 +148,11 @@ namespace Akkad {
 				else if (component.key() == "SpriteRenderer")
 				{
 					std::string materialID = componentData["MaterialID"];
+					std::string sortingLayer = componentData["SortingLayer"];
+					
 					auto& spriteRenderer = e.AddComponent<SpriteRendererComponent>();
 					spriteRenderer.materialID = materialID;
+					spriteRenderer.sortingLayer = sortingLayer;
 
 					auto desc = Application::GetAssetManager()->GetDescriptorByID(materialID);
 

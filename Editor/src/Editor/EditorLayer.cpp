@@ -11,6 +11,7 @@
 #include "Panels/StartupPanel.h"
 #include "Panels/NewScenePanel.h"
 #include "Panels/MaterialEditorPanel.h"
+#include "Panels/SortingLayersPanel.h"
 
 #include <Akkad/Application/Application.h>
 #include <Akkad/Logging.h>
@@ -24,6 +25,7 @@
 #include <Akkad/Asset/AssetManager.h>
 #include <Akkad/Scripting/LoadedGameAssembly.h>
 #include <Akkad/Graphics/Material.h>
+#include <Akkad/Graphics/SortingLayer2D.h>
 
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.cpp>
@@ -311,6 +313,11 @@ namespace Akkad {
 				if (ImGui::MenuItem("Recompile shaders"))
 				{
 					CompileShaders();
+				}
+
+				if (ImGui::MenuItem("Sorting Layers"))
+				{
+					PanelManager::AddPanel(new SortingLayersPanel());
 				}
 
 				ImGui::EndMenu();

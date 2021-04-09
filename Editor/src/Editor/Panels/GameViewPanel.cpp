@@ -17,6 +17,7 @@ namespace Akkad {
 		FrameBufferDescriptor descriptor;
 		descriptor.width = 800;
 		descriptor.height = 800;
+		descriptor.ColorAttachmentFormat = TextureFormat::RGB16;
 
 		m_buffer = Application::GetRenderPlatform()->CreateFrameBuffer(descriptor);
 	}

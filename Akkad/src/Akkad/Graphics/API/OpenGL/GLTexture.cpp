@@ -50,5 +50,27 @@ namespace Akkad {
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
+		unsigned int GLTexture::TextureFormatToGLFormat(TextureFormat format)
+		{
+			switch (format)
+			{
+			case TextureFormat::RGB8:
+				return GL_RGB8;
+			case TextureFormat::RGB16:
+				return GL_RGB16;
+			case TextureFormat::RGB16_FLOAT:
+				return GL_RGB16F;
+			case TextureFormat::RGB32_FLOAT:
+				return GL_RGB32F;
+			case TextureFormat::RGBA16:
+				return GL_RGBA16;
+			case TextureFormat::RGBA16_FLOAT:
+				return GL_RGBA16F;
+			case TextureFormat::RGBA32_FLOAT:
+				return GL_RGBA32F;
+			default:
+				break;
+			}
+		}
 	}
 }

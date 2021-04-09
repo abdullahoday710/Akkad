@@ -36,34 +36,21 @@ namespace Akkad {
 		}
 	}
 
-	float Win32Input::GetMouseX()
+	int Win32Input::GetMouseX()
 	{
 		POINT p;
 		GetCursorPos(&p);
-		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
-
-		HWND hwnd = (HWND)window->GetNativeWindow();
-		if (ScreenToClient(hwnd, &p))
-		{
-			return p.x;
-		}
+		return p.x;
 
 	}
 
-	float Win32Input::GetMouseY()
+	int Win32Input::GetMouseY()
 	{
 		POINT p;
 		GetCursorPos(&p);
-
-		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
-
-
-		HWND hwnd = (HWND)window->GetNativeWindow();
-		if (ScreenToClient(hwnd, &p))
-		{
-			return p.y;
-		}
+		return p.y;
 	}
+
 	int Win32Input::MapMouseButtonsToVKButton(MouseButtons button)
 	{
 		switch (button)

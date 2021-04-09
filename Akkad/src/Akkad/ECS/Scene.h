@@ -25,6 +25,7 @@ namespace Akkad {
 		std::string m_Name = "Scene";
 		void BeginRenderer2D(float aspectRatio);
 		void Render2D();
+		void RenderPickingBuffer2D();
 		Entity GetEntity(entt::entity handle);
 		Box2dWorld m_PhysicsWorld2D;
 

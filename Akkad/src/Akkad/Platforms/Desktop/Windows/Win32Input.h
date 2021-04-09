@@ -7,8 +7,8 @@ namespace Akkad {
 	public:
 		virtual bool GetKeyDown(unsigned int key) override;
 		virtual bool GetMouseDown(MouseButtons button) override;
-		virtual float GetMouseX() override;
-		virtual float GetMouseY() override;
+		virtual int GetMouseX() override;
+		virtual int GetMouseY() override;
 	private:
 		int MapMouseButtonsToVKButton(MouseButtons button);
 	};

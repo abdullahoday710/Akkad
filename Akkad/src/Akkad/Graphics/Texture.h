@@ -7,8 +7,13 @@ namespace Akkad {
 			TEXTURE2D
 		};
 
+		enum class TextureFormat {
+			RGB8, RGB16, RGB16_FLOAT, RGB32_FLOAT, RGBA16, RGBA16_FLOAT, RGBA32_FLOAT
+		};
+
 		struct TextureDescriptor {
 			TextureType Type;
+			TextureFormat Format;
 			int Width;
 			int Height;
 			int nChannels;

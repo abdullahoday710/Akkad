@@ -28,6 +28,7 @@ namespace Akkad {
 		float m_ViewportAspectRatio = 0.0f;
 		EditorCamera m_EditorCamera;
 		SharedPtr<Graphics::FrameBuffer> m_buffer;
+		SharedPtr<Graphics::FrameBuffer> m_PickingBuffer;
 		void OnScenePlay();
 		void OnSceneStop();
 

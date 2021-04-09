@@ -6,7 +6,7 @@ namespace Akkad {
 	public:
 		virtual bool GetKeyDown(unsigned int key) = 0;
 		virtual bool GetMouseDown(MouseButtons button) = 0;
-		virtual float GetMouseX() = 0;
-		virtual float GetMouseY() = 0;
+		virtual int GetMouseX() = 0;
+		virtual int GetMouseY() = 0;
 	};
 }

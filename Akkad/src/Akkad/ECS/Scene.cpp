@@ -74,7 +74,6 @@ namespace Akkad {
 	{
 		auto command = Application::GetRenderPlatform()->GetRenderCommand();
 		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
-		auto assetManager = Application::GetAssetManager();
 		command->Clear();
 
 		for (auto it : SortingLayer2DHandler::GetRegisteredLayers())
@@ -99,6 +98,36 @@ namespace Akkad {
 			}
 		}
 
+	}
+
+	void Scene::RenderPickingBuffer2D()
+	{
+		auto command = Application::GetRenderPlatform()->GetRenderCommand();
+
+		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
+		command->Clear();
+
+		for (auto it : SortingLayer2DHandler::GetRegisteredLayers())
+		{
+			for (auto entity : view)
+			{
+				auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
+
+				if (spriteRenderer.sortingLayer == it.name)
+				{
+					auto& transform = view.get<TransformComponent>(entity);
+
+					uint32_t entityID = (uint32_t)entity;
+
+					entityID += 1;
+
+					glm::vec3 color = {entityID , entityID , entityID};
+					Renderer2D::DrawQuad(color, transform.GetTransformMatrix());
+				}
+
+			}
+		}
+		
 	}
 
 	void Scene::BeginRenderer2D(float aspectRatio)

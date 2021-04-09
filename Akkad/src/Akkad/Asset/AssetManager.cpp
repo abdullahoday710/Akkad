@@ -1,5 +1,6 @@
 #include "AssetManager.h"
 
+#include "Akkad/Logging.h"
 #include "Akkad/Application/Application.h"
 
 #include "Akkad/Graphics/Texture.h"
@@ -96,6 +97,11 @@ namespace Akkad {
 				return it.second;
 			}
 		}
+
+		AK_ERROR("Unable to get shader : {}", shaderName);
+		AssetDescriptor err;
+		return err;
+		
 	}
 
 	void AssetManager::RemoveShader(std::string assetID)

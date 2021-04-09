@@ -11,6 +11,7 @@
 #include <Akkad/PlatformUtils.h>
 #include <Akkad/Application/Application.h>
 #include <Akkad/Asset/AssetManager.h>
+#include <Akkad/Graphics/Renderer2D.h>
 
 #include <imgui.h>
 namespace Akkad
@@ -28,6 +29,8 @@ namespace Akkad
 			{
 				auto project = ProjectSerializer::LoadProject(projectPath);
 				EditorLayer::s_ActiveProject = project;
+
+				Graphics::Renderer2D::InitShaders();
 
 				PanelManager::AddPanel(new SceneHierarchyPanel());
 				PanelManager::AddPanel(new AssetBrowserPanel());

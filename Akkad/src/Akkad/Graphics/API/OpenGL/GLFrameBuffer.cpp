@@ -1,5 +1,10 @@
 #include "GLFrameBuffer.h"
+#include "GLTexture.h"
+
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <vector>
 namespace Akkad {
 	namespace Graphics {
 
@@ -27,7 +32,7 @@ namespace Akkad {
 				Bind();
 				glBindTexture(GL_TEXTURE_2D, m_ColorAttachmentTextureID);
 
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_desc.width, m_desc.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+				glTexImage2D(GL_TEXTURE_2D, 0, GLTexture::TextureFormatToGLFormat(m_desc.ColorAttachmentFormat), m_desc.width, m_desc.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -61,6 +66,19 @@ namespace Akkad {
 		unsigned int GLFrameBuffer::GetColorAttachmentTexture()
 		{
 			return m_ColorAttachmentTextureID;
+		}
+
+		glm::vec4 GLFrameBuffer::ReadPixels(int x, int y)
+		{
+			glm::vec4 pixelData;
+
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_ResourceID);
+
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			glReadPixels(x, y, 1, 1, GL_RGBA, GL_FLOAT, glm::value_ptr(pixelData));
+
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+			return pixelData;
 		}
 
 		FrameBufferDescriptor& GLFrameBuffer::GetDescriptor()

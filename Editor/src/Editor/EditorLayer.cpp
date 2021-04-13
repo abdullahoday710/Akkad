@@ -28,13 +28,14 @@
 #include <Akkad/Graphics/SortingLayer2D.h>
 
 #include <imgui.h>
+#include <ImGuizmo.h>
 #include <misc/cpp/imgui_stdlib.cpp>
 #include <IconsForkAwesome.h>
 
 namespace Akkad {
 	SharedPtr<Scene> EditorLayer::s_ActiveScene;
 	ProjectDescriptor EditorLayer::s_ActiveProject;
-	
+
 	EditorLayer::EditorLayer()
 	{
 		s_ActiveScene = CreateSharedPtr<Scene>();
@@ -183,6 +184,7 @@ namespace Akkad {
 
 	void EditorLayer::RenderImGui()
 	{
+		ImGuizmo::BeginFrame();
 		// ----------- Setup a dockspace -----------------
 		auto viewport = ImGui::GetMainViewport();
 
@@ -233,7 +235,7 @@ namespace Akkad {
 		// Handle keyboard shortcuts
 		auto input = Application::GetInputManager();
 
-		if (input->GetKeyDown(AK_KEY_LEFT_CONTROL) & input->GetKeyDown(AK_KEY_S))
+		if (input->GetKeyDown(AK_KEY_LEFT_CONTROL) && input->GetKeyDown(AK_KEY_S))
 		{
 			SaveActiveScene();
 		}

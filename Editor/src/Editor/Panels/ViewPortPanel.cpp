@@ -8,9 +8,12 @@
 #include <Akkad/Application/Application.h>
 #include <Akkad/Input/Input.h>
 #include <Akkad/Graphics/Renderer2D.h>
-#include <Akkad/ECS/Components/TagComponent.h>
+#include <Akkad/ECS/Components/Components.h>
+#include <Akkad/Math/Math.h>
 
 #include <imgui.h>
+#include <ImGuizmo.h>
+
 namespace Akkad {
 	using namespace Graphics;
 
@@ -69,8 +72,10 @@ namespace Akkad {
 
 			auto viewportRectMin = ImGui::GetItemRectMin();
 			auto viewportRectMax = ImGui::GetItemRectMax();
-
+			
+			/* mouse picking entities */
 			auto input = Application::GetInputManager();
+			static entt::entity lastPickedEntity;
 			if (input->GetMouseDown(MouseButtons::LEFT))
 			{
 				int mouseX = input->GetMouseX();
@@ -90,13 +95,81 @@ namespace Akkad {
 						entt::entity entity = (entt::entity)entityID;
 						if (EditorLayer::GetActiveScene()->m_Registry.valid(entity))
 						{
-							auto comp = EditorLayer::GetActiveScene()->m_Registry.get<TagComponent>(entity);
-							std::cout << "Entity tag is" << comp.Tag << std::endl;
+							lastPickedEntity = entity;
+							
+							
 						}
 
 					}
 				}
 			}
+
+			/* Rendering gizmos */
+			if (EditorLayer::GetActiveScene()->m_Registry.valid(lastPickedEntity))
+			{
+				glm::vec2 viewportRects[2];
+				viewportRects[0] = { viewportRectMin.x, viewportRectMin.y};
+				viewportRects[1] = { viewportRectMax.x, viewportRectMax.y};
+
+				
+				if (m_EditorCamera.GetProjectionType() == CameraProjection::Orthographic)
+				{
+					ImGuizmo::SetOrthographic(true);
+				}
+				else
+				{
+					ImGuizmo::SetOrthographic(false);
+				}
+
+				if (IsPlaying)
+				{
+					ImGuizmo::Enable(false);
+				}
+				else
+				{
+					ImGuizmo::Enable(true);
+				}
+
+				ImGuizmo::SetDrawlist();
+				auto& comp = EditorLayer::GetActiveScene()->m_Registry.get<TransformComponent>(lastPickedEntity);
+				const auto& projection = m_EditorCamera.GetProjection();
+				auto view = glm::inverse(m_EditorCamera.GetTransformMatrix());
+				auto transform = comp.GetTransformMatrix();
+				
+				ImGuizmo::SetRect(viewportRects[0].x, viewportRects[0].y, viewportRects[1].x - viewportRects[0].x, viewportRects[1].y - viewportRects[0].y);
+				static auto operation = ImGuizmo::OPERATION::TRANSLATE;
+				static auto mode = ImGuizmo::MODE::LOCAL;
+
+				if (input->GetKeyDown(AK_KEY_LEFT_CONTROL) && input->GetKeyDown(AK_KEY_LEFT_ALT) && input->GetKeyDown(AK_KEY_S))
+				{
+					operation = ImGuizmo::OPERATION::SCALE;
+				}
+
+				if (input->GetKeyDown(AK_KEY_LEFT_CONTROL) && input->GetKeyDown(AK_KEY_LEFT_ALT) && input->GetKeyDown(AK_KEY_R))
+				{
+					operation = ImGuizmo::OPERATION::ROTATE;
+				}
+
+				if (input->GetKeyDown(AK_KEY_LEFT_CONTROL) && input->GetKeyDown(AK_KEY_LEFT_ALT) && input->GetKeyDown(AK_KEY_T))
+				{
+					operation = ImGuizmo::OPERATION::TRANSLATE;
+				}
+				ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), operation, mode, glm::value_ptr(transform), nullptr, nullptr);
+
+
+				if (ImGuizmo::IsUsing())
+				{
+					glm::vec3 translation, rotation, scale;
+					Akkad::DecomposeTransform(transform, translation, rotation, scale);
+
+					glm::vec3 deltaRotation = rotation - comp.GetRotation();
+					comp.SetPostion(translation);
+					comp.SetScale(scale);
+					auto& rotationc = comp.GetRotation();
+					rotationc += deltaRotation;
+				}
+			}
+			
 			m_buffer->Unbind();
 		ImGui::End();
 	}

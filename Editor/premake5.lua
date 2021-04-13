@@ -19,6 +19,7 @@ project "Editor"
 		"%{wks.location}/Akkad/src",
 		"%{wks.location}/3rdparty/glslang/",
 		"%{wks.location}/3rdparty/SPIRV-Cross/",
+		"%{wks.location}/3rdparty/ImGuizmo/",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.entt}",
@@ -51,6 +52,7 @@ project "Editor"
 	"Akkad",
 	"glslang",
 	"SPIRV-Cross",
+	"ImGuizmo"
 	}
 
 		filter "system:windows"

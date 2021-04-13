@@ -30,6 +30,7 @@ workspace "Akkad"
       include "3rdparty/glslang"
       include "3rdparty/SPIRV-Cross"
       include "3rdparty/box2d"
+      include "3rdparty/ImGuizmo"
     group ""
     
     include "Akkad"

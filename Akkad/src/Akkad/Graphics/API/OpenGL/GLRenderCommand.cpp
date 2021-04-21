@@ -33,6 +33,23 @@ namespace Akkad {
 				AK_ASSERT(false, "unkown polygon mode !");
 			}
 		}
+
+		unsigned int BlendSrcToGLSrc(BlendSourceFactor factor) {
+			switch (factor)
+			{
+			case BlendSourceFactor::ALPHA:
+				return GL_SRC_ALPHA;
+			}
+		}
+
+		unsigned int BlendDestToGLDest(BlendDestFactor factor) {
+			switch (factor)
+			{
+			case BlendDestFactor::INVERSE_SRC_ALPHA:
+				return GL_ONE_MINUS_SRC_ALPHA;
+			}
+		}
+
 		void GLRenderCommand::Clear()
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
@@ -56,6 +73,23 @@ namespace Akkad {
 		void GLRenderCommand::SetPolygonMode(PolygonMode mode)
 		{
 			glPolygonMode(GL_FRONT_AND_BACK, PolygonModeToGLPolygonMode(mode));
+		}
+
+		void GLRenderCommand::EnableBlending()
+		{
+			glEnable(GL_BLEND);
+		}
+
+		void GLRenderCommand::DisableBlending()
+		{
+			glDisable(GL_BLEND);
+		}
+
+		void GLRenderCommand::SetBlendState(BlendSourceFactor sfactor, BlendDestFactor dfactor)
+		{
+			unsigned int sourcefactor = BlendSrcToGLSrc(sfactor);
+			unsigned int destfactor = BlendDestToGLDest(dfactor);
+			glBlendFunc(sourcefactor, destfactor);
 		}
 	}
 }

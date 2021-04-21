@@ -11,6 +11,7 @@ namespace Akkad {
 			virtual void Bind() override;
 			virtual void UnBind() override;
 			virtual void SetData(const void* data, unsigned int size) override;
+			virtual void SetSubData(unsigned int offset, const void* data, unsigned int size) override;
 			virtual void SetLayout(VertexBufferLayout layout) override;
 			virtual VertexBufferLayout& GetLayout() override;
 		private:

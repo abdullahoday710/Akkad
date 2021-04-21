@@ -12,6 +12,14 @@ namespace Akkad {
 			POINT, LINE, FILL
 		};
 
+		enum class BlendSourceFactor {
+			ALPHA,
+		};
+
+		enum class BlendDestFactor {
+			INVERSE_SRC_ALPHA,
+		};
+
 		class RenderCommand
 		{
 		public:
@@ -20,6 +28,9 @@ namespace Akkad {
 			virtual void DrawArrays(PrimitiveType type, unsigned int count) = 0;
 			virtual void DrawIndexed(PrimitiveType type, unsigned int count) = 0;
 			virtual void SetPolygonMode(PolygonMode mode) = 0;
+			virtual void EnableBlending() = 0;
+			virtual void DisableBlending() = 0;
+			virtual void SetBlendState(BlendSourceFactor sfactor, BlendDestFactor dfactor) = 0;
 		};
 	}
 }

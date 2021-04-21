@@ -6,6 +6,7 @@
 
 namespace Akkad {
 	namespace Graphics {
+		// TODO : Refactor texture class
 		GLTexture::GLTexture(const char* path)
 		{
 			TextureDescriptor desc = LoadFile(path, true);
@@ -36,6 +37,26 @@ namespace Akkad {
 			stbi_image_free(desc.Data);
 		}
 
+		GLTexture::GLTexture(TextureDescriptor desc)
+		{
+			m_desc = desc;
+			unsigned int textureType = TextureTypeToGLType(desc.Type);
+			unsigned int textureFormat = TextureFormatToGLFormat(desc.Format);
+
+			glGenTextures(1, &m_ResourceID);
+			glBindTexture(textureType, m_ResourceID);
+			
+			glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, desc.Width, desc.Height, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
+
+
+			glBindTexture(textureType, 0);
+
+		}
+
 		GLTexture::~GLTexture()
 		{
 		}
@@ -50,6 +71,17 @@ namespace Akkad {
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
+
+		void GLTexture::SetSubData(int x, int y, unsigned int width, unsigned int height, void* data)
+		{
+			unsigned int textureType = TextureTypeToGLType(m_desc.Type);
+			unsigned int textureFormat = TextureFormatToGLFormat(m_desc.Format);
+			glBindTexture(textureType, m_ResourceID);
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			glTexSubImage2D(textureType, 0, x, y, width, height, GL_RED, GL_UNSIGNED_BYTE, data);
+			glBindTexture(textureType, 0);
+		}
+
 		unsigned int GLTexture::TextureFormatToGLFormat(TextureFormat format)
 		{
 			switch (format)
@@ -68,8 +100,22 @@ namespace Akkad {
 				return GL_RGBA16F;
 			case TextureFormat::RGBA32_FLOAT:
 				return GL_RGBA32F;
+			case TextureFormat::R8:
+				return GL_R8;
+			case TextureFormat::R16:
+				return GL_R16;
+			case TextureFormat::R32_FLOAT:
+				return GL_R32F;
 			default:
 				break;
+			}
+		}
+		unsigned int GLTexture::TextureTypeToGLType(TextureType type)
+		{
+			switch (type)
+			{
+			case TextureType::TEXTURE2D:
+				return GL_TEXTURE_2D;
 			}
 		}
 	}

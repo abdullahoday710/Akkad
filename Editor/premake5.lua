@@ -27,6 +27,7 @@ project "Editor"
 		"%{IncludeDir.json}",
 		"%{IncludeDir.iconfontcpp}",
 		"%{IncludeDir.box2d}",
+		"%{IncludeDir.freetype}",
 	}
 		
     postbuildcommands {
@@ -51,7 +52,6 @@ project "Editor"
 	links {
 	"Akkad",
 	"glslang",
-	"SPIRV-Cross",
 	"ImGuizmo"
 	}
 

@@ -5,6 +5,10 @@
 
 namespace Akkad {
 
+	namespace GUI {
+		struct GUIText;
+	}
+
 	namespace Graphics {
 
 		class Renderer2D
@@ -19,7 +23,9 @@ namespace Akkad {
 			static void DrawQuad(Material& material, glm::mat4& transform) { GetInstance().DrawQuadImpl(material, transform); }
 			static void DrawQuad(glm::vec3 color, glm::mat4& transform) { GetInstance().DrawQuadImpl(color, transform); }
 			static void Draw(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount) { GetInstance().DrawImpl(vb, shader, vertexCount); };
+			static void RenderText(GUI::GUIText& text, float x, float y, float scale, glm::vec3 color, glm::mat4 projection) { GetInstance().RenderTextImpl(text, x, y, scale, color, projection); }
 			static void InitShaders() { GetInstance().InitShadersImpl(); }
+			static Camera GetCamera() { return GetInstance().m_Camera; }
 			static SharedPtr<UniformBuffer> GetSystemUniforms() {return GetInstance().m_SceneProps;};
 
 		private:
@@ -34,14 +40,19 @@ namespace Akkad {
 			void DrawQuadImpl(Material& material, glm::mat4& transform);
 			void DrawQuadImpl(glm::vec3 color, glm::mat4& transform);
 			void DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount);
+			void RenderTextImpl(GUI::GUIText& text, float x, float y, float scale, glm::vec3 color, glm::mat4 projection);
 			void InitShadersImpl();
-
+			Camera m_Camera;
 			SharedPtr<VertexBuffer> m_QuadVB;
 			SharedPtr<IndexBuffer> m_QuadIB;
 			SharedPtr<UniformBuffer> m_SceneProps;
 
 			SharedPtr<Shader> m_ColorShader;
 			SharedPtr<UniformBuffer> m_ColorShaderProps;
+
+			SharedPtr<VertexBuffer> m_GUITextVB;
+			SharedPtr<Shader> m_GUITextShader;
+			SharedPtr<UniformBuffer> m_GUITextShaderProps;
 		};
 	}
 }

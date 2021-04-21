@@ -8,7 +8,7 @@ namespace Akkad {
 		};
 
 		enum class TextureFormat {
-			RGB8, RGB16, RGB16_FLOAT, RGB32_FLOAT, RGBA16, RGBA16_FLOAT, RGBA32_FLOAT
+			RGB8, RGB16, RGB16_FLOAT, RGB32_FLOAT, RGBA16, RGBA16_FLOAT, RGBA32_FLOAT, R8, R16, R32_FLOAT
 		};
 
 		struct TextureDescriptor {
@@ -26,7 +26,7 @@ namespace Akkad {
 			virtual void Bind(unsigned int unit) = 0;
 			virtual void Unbind() = 0;
 			virtual unsigned int GetID() = 0;
-
+			virtual void SetSubData(int x, int y, unsigned int width, unsigned int height, void* data) = 0;
 			static TextureDescriptor LoadFile(const char* path, bool flip=false);
 		};
 	}

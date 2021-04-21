@@ -10,6 +10,7 @@
 #include <Akkad/Graphics/Renderer2D.h>
 #include <Akkad/ECS/Components/Components.h>
 #include <Akkad/Math/Math.h>
+#include <Akkad/GUI/GUIText.h>
 
 #include <imgui.h>
 #include <ImGuizmo.h>
@@ -96,8 +97,6 @@ namespace Akkad {
 						if (EditorLayer::GetActiveScene()->m_Registry.valid(entity))
 						{
 							lastPickedEntity = entity;
-							
-							
 						}
 
 					}
@@ -228,6 +227,11 @@ namespace Akkad {
 
 			m_buffer->Bind();
 			EditorLayer::GetActiveScene()->Render2D();
+			static SharedPtr<GUI::Font> font = CreateSharedPtr<GUI::Font>("res/fonts/Roboto-Medium.ttf", 48);
+			static GUI::GUIText text("I haz text now lol", font);
+
+			glm::mat4 projection = glm::ortho(0.0f, (float)m_buffer->GetDescriptor().width, 0.0f, (float)m_buffer->GetDescriptor().height);
+			Renderer2D::RenderText(text, 25.0f, 25.0f, 1.0f, glm::vec3(1, 1, 1), projection);
 			m_buffer->Unbind();
 		}
 

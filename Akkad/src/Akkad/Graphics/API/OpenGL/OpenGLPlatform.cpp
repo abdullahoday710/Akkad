@@ -52,6 +52,11 @@ namespace Akkad {
 			return CreateSharedPtr<GLTexture>(path);
 		}
 
+		SharedPtr<Texture> OpenGLPlatform::CreateTexture(TextureDescriptor desc)
+		{
+			return CreateSharedPtr<GLTexture>(desc);
+		}
+
 		SharedPtr<FrameBuffer> OpenGLPlatform::CreateFrameBuffer(FrameBufferDescriptor desc)
 		{
 			return CreateSharedPtr<GLFrameBuffer>(desc);

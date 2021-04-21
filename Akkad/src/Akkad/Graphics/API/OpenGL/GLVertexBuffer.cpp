@@ -1,4 +1,6 @@
 #include "GLVertexBuffer.h"
+#include "Akkad/core.h"
+
 #include <glad/glad.h>
 namespace Akkad {
 	namespace Graphics {
@@ -47,7 +49,22 @@ namespace Akkad {
 		void GLVertexBuffer::SetData(const void* data, unsigned int size)
 		{
 			Bind();
-			glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+			if (m_Layout.isDynamic)
+			{
+				glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
+			}
+			else
+			{
+				glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+			}
+			UnBind();
+		}
+
+		void GLVertexBuffer::SetSubData(unsigned int offset, const void* data, unsigned int size)
+		{
+			AK_ASSERT(m_Layout.isDynamic, "trying to modify a static buffer subdata");
+			Bind();
+			glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
 			UnBind();
 		}
 

@@ -2,6 +2,7 @@
 
 #include "Akkad/Application/Application.h"
 #include "Akkad/Asset/AssetManager.h"
+#include "Akkad/GUI/GUIText.h"
 
 namespace Akkad {
 
@@ -52,7 +53,7 @@ namespace Akkad {
 			glm::mat4 view = glm::inverse(cameraTransform);
 			glm::mat4 projection = camera.GetProjection();
 			glm::mat4 viewProjection = projection * view;
-
+			m_Camera = camera;
 			m_SceneProps->SetData("sys_viewProjection", viewProjection);
 		}
 
@@ -105,6 +106,51 @@ namespace Akkad {
 			command->DrawArrays(PrimitiveType::TRIANGLE_FAN, vertexCount);
 		}
 
+		void Renderer2D::RenderTextImpl(GUI::GUIText& text, float x, float y, float scale, glm::vec3 color, glm::mat4 projection)
+		{
+			using namespace GUI;
+			auto command = Application::GetRenderPlatform()->GetRenderCommand();
+			std::string::const_iterator c;
+
+
+			m_GUITextShaderProps->SetData("projection", projection);
+			m_GUITextShaderProps->SetData("text_color", color);
+
+			command->EnableBlending();
+			command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::INVERSE_SRC_ALPHA);
+			m_GUITextShader->Bind();
+			for (c = text.m_Text.begin(); c != text.m_Text.end(); c++)
+			{
+				Font::FontCharacter ch = text.GetFont()->GetCharacter(*c);
+
+				float xpos = x + ch.Bearing.x * scale;
+				float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+
+				float w = ch.Size.x * scale;
+				float h = ch.Size.y * scale;
+
+				auto fontAtlasSize = text.GetFont()->GetTextureAtlasSize();
+
+				float vertices[6][4] = {
+					{ xpos,     ypos + h,   ch.xOffset / fontAtlasSize.x, 0.0f },
+					{ xpos,     ypos,       ch.xOffset / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
+					{ xpos + w, ypos,       (ch.xOffset + ch.Size.x) / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
+
+					{ xpos,     ypos + h,   ch.xOffset / fontAtlasSize.x, 0.0f },
+					{ xpos + w, ypos,       (ch.xOffset + ch.Size.x) / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
+					{ xpos + w, ypos + h,   (ch.xOffset + ch.Size.x) / fontAtlasSize.x, 0.0f }
+				};
+
+				m_GUITextVB->SetSubData(0, vertices, sizeof(vertices));
+				m_GUITextVB->Bind();
+				text.GetFont()->GetAtlas()->Bind(0);
+				Application::GetRenderPlatform()->GetRenderCommand()->DrawArrays(PrimitiveType::TRIANGLE, 6);
+				x += (ch.Advance >> 6) * scale;
+			}
+
+			command->DisableBlending();
+		}
+
 		void Renderer2D::InitShadersImpl()
 		{
 			auto assetManager = Application::GetAssetManager();
@@ -122,6 +168,28 @@ namespace Akkad {
 				m_ColorShader->SetUniformBuffer(m_ColorShaderProps);
 				m_ColorShader->SetUniformBuffer(m_SceneProps);
 
+			}
+
+			{
+				static auto guiTextShader = assetManager->GetShaderByName("r2d_guitext");
+				m_GUITextShader = assetManager->GetShader(guiTextShader.assetID);
+
+				UniformBufferLayout layout;
+				layout.Push("projection", ShaderDataType::MAT4);
+				layout.Push("text_color", ShaderDataType::FLOAT3);
+
+				m_GUITextShaderProps = platform->CreateUniformBuffer(layout);
+				m_GUITextShaderProps->SetName("shader_props");
+
+				m_GUITextShader->SetUniformBuffer(m_GUITextShaderProps);
+				VertexBufferLayout vblayout;
+
+				vblayout.isDynamic = true;
+				vblayout.Push(ShaderDataType::FLOAT, 4);
+				m_GUITextVB = platform->CreateVertexBuffer();
+				m_GUITextVB->SetLayout(vblayout);
+				
+				m_GUITextVB->SetData(0, 7 * GetSizeOfType(ShaderDataType::FLOAT4));
 			}
 
 		}

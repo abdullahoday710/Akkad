@@ -26,6 +26,7 @@
 #include <Akkad/Scripting/LoadedGameAssembly.h>
 #include <Akkad/Graphics/Material.h>
 #include <Akkad/Graphics/SortingLayer2D.h>
+#include <Akkad/Graphics/Renderer2D.h>
 
 #include <imgui.h>
 #include <ImGuizmo.h>
@@ -135,6 +136,7 @@ namespace Akkad {
 						}
 					}
 				}
+				Graphics::Renderer2D::InitShaders();
 
 
 

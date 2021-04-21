@@ -23,7 +23,7 @@ namespace Akkad {
 				m_Elements.push_back({ type, count, normalized });
 				m_Stride += count * GetSizeOfType(type);
 			}
-
+			bool isDynamic = false;
 			std::vector<BufferElement> GetElements() { return m_Elements; }
 		private:
 			unsigned int m_Stride = 0;
@@ -36,6 +36,7 @@ namespace Akkad {
 			virtual void Bind() = 0;
 			virtual void UnBind() = 0;
 			virtual void SetData(const void* data, unsigned int size) = 0;
+			virtual void SetSubData(unsigned int offset, const void* data, unsigned int size) = 0;
 			virtual void SetLayout(VertexBufferLayout layout) = 0;
 			virtual VertexBufferLayout& GetLayout() = 0;
 		};

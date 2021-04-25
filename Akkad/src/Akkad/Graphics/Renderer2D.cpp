@@ -106,11 +106,10 @@ namespace Akkad {
 			command->DrawArrays(PrimitiveType::TRIANGLE_FAN, vertexCount);
 		}
 
-		void Renderer2D::RenderTextImpl(GUI::GUIText& text, float x, float y, float scale, glm::vec3 color, glm::mat4 projection)
+		void Renderer2D::RenderTextImpl(GUI::GUIText& text, glm::vec2 position, float scale, glm::vec3 color, glm::mat4 projection)
 		{
 			using namespace GUI;
 			auto command = Application::GetRenderPlatform()->GetRenderCommand();
-			std::string::const_iterator c;
 
 
 			m_GUITextShaderProps->SetData("projection", projection);
@@ -119,38 +118,40 @@ namespace Akkad {
 			command->EnableBlending();
 			command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::INVERSE_SRC_ALPHA);
 			m_GUITextShader->Bind();
-			for (c = text.m_Text.begin(); c != text.m_Text.end(); c++)
+			for (auto line : text.m_Lines)
 			{
-				Font::FontCharacter ch = text.GetFont()->GetCharacter(*c);
+				std::string::const_iterator c;
+				auto linex = position.x;
+				for (c = line.text.begin(); c != line.text.end(); c++)
+				{
+					Font::FontCharacter ch = text.GetFont()->GetCharacter(*c);
+					float xpos = linex + ch.Bearing.x * scale;
+					float ypos = line.yOffset - (ch.Size.y - ch.Bearing.y) * scale;
 
-				float xpos = x + ch.Bearing.x * scale;
-				float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+					float w = ch.Size.x * scale;
+					float h = ch.Size.y * scale;
 
-				float w = ch.Size.x * scale;
-				float h = ch.Size.y * scale;
+					auto fontAtlasSize = text.GetFont()->GetTextureAtlasSize();
 
-				auto fontAtlasSize = text.GetFont()->GetTextureAtlasSize();
+					float vertices[6][4] = {
+						{ xpos,     ypos + h,   ch.xOffset / fontAtlasSize.x, 0.0f },
+						{ xpos,     ypos,       ch.xOffset / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
+						{ xpos + w, ypos,       (ch.xOffset + ch.Size.x) / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
 
-				float vertices[6][4] = {
-					{ xpos,     ypos + h,   ch.xOffset / fontAtlasSize.x, 0.0f },
-					{ xpos,     ypos,       ch.xOffset / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
-					{ xpos + w, ypos,       (ch.xOffset + ch.Size.x) / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
+						{ xpos,     ypos + h,   ch.xOffset / fontAtlasSize.x, 0.0f },
+						{ xpos + w, ypos,       (ch.xOffset + ch.Size.x) / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
+						{ xpos + w, ypos + h,   (ch.xOffset + ch.Size.x) / fontAtlasSize.x, 0.0f }
+					};
 
-					{ xpos,     ypos + h,   ch.xOffset / fontAtlasSize.x, 0.0f },
-					{ xpos + w, ypos,       (ch.xOffset + ch.Size.x) / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
-					{ xpos + w, ypos + h,   (ch.xOffset + ch.Size.x) / fontAtlasSize.x, 0.0f }
-				};
-
-				m_GUITextVB->SetSubData(0, vertices, sizeof(vertices));
-				m_GUITextVB->Bind();
-				text.GetFont()->GetAtlas()->Bind(0);
-				Application::GetRenderPlatform()->GetRenderCommand()->DrawArrays(PrimitiveType::TRIANGLE, 6);
-				x += (ch.Advance >> 6) * scale;
+					m_GUITextVB->SetSubData(0, vertices, sizeof(vertices));
+					m_GUITextVB->Bind();
+					text.GetFont()->GetAtlas()->Bind(0);
+					Application::GetRenderPlatform()->GetRenderCommand()->DrawArrays(PrimitiveType::TRIANGLE, 6);
+					linex += (ch.Advance >> 6) * scale;
+				}
 			}
-
 			command->DisableBlending();
 		}
-
 		void Renderer2D::InitShadersImpl()
 		{
 			auto assetManager = Application::GetAssetManager();

@@ -35,9 +35,8 @@ namespace Akkad {
 			glm::vec2 GetTextureAtlasSize();
 			SharedPtr<Graphics::Texture> GetAtlas() { return m_FontTextureAtlas; };
 			FontCharacter GetCharacter(unsigned long code);
+			unsigned int GetLineSpacing();
 		private:
-
-
 			void InitFreeType();
 			glm::vec2 CalculateTextureAtlasSize();
 			void GenerateTextureAtlas();

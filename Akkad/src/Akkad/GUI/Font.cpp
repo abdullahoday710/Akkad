@@ -53,6 +53,11 @@ namespace Akkad {
 			return m_FontCharacters[code];
 		}
 
+		unsigned int Font::GetLineSpacing()
+		{
+			return m_Face->size->metrics.height / 64;
+		}
+
 		void Font::InitFreeType()
 		{
 			static bool hasInitializedFreeType = false;

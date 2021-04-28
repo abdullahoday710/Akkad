@@ -153,6 +153,11 @@ namespace Akkad {
 			assetType = AssetType::TEXTURE;
 		}
 
+		if (extension == ".ttf")
+		{
+			assetType = AssetType::FONT;
+		}
+
 		else if (extension == ".glsl")
 		{
 			assetType = AssetType::SHADER;

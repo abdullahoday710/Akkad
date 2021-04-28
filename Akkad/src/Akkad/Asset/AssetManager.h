@@ -7,7 +7,7 @@
 
 namespace Akkad {
 	enum class AssetType {
-		UNKNOWN, TEXTURE, SHADER, MATERIAL
+		UNKNOWN, TEXTURE, SHADER, MATERIAL, FONT
 	};
 
 	// forward declarations
@@ -39,6 +39,11 @@ namespace Akkad {
 			else if (type == "material")
 			{
 				assetType = AssetType::MATERIAL;
+			}
+
+			else if (type == "font")
+			{
+				assetType = AssetType::FONT;
 			}
 
 			else if (type == "unknown")

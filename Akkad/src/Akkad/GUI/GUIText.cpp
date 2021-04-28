@@ -44,6 +44,28 @@ namespace Akkad {
 			}
 			return true;
 		}
+		void GUIText::SetFont(std::string path)
+		{
+			m_Font = CreateSharedPtr<Font>(path);
+		}
+
+		void GUIText::SetFont(std::string path, unsigned int fontSize)
+		{
+			m_Font = CreateSharedPtr<Font>(path, fontSize);
+		}
+
+		bool GUIText::IsValid()
+		{
+			if (m_Font == nullptr)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+
 		void GUIText::SetText(std::string text)
 		{
 			std::stringstream ss(text);

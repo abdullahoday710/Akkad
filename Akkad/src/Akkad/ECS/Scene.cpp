@@ -130,6 +130,28 @@ namespace Akkad {
 		
 	}
 
+	void Scene::RenderGUI()
+	{
+		auto containerView = m_Registry.view<GUIContainerComponent>();
+		glm::mat4 projection(1.0f);
+		for (auto entity : containerView)
+		{
+			auto& container = containerView.get<GUIContainerComponent>(entity);
+			container.container.SetScreenSize(m_ViewportSize);
+			projection = container.container.GetProjection();
+			break;
+		}
+		auto view = m_Registry.view<TransformComponent, GUITextComponent>();
+
+		for (auto entity : view)
+		{
+			auto& transform = view.get<TransformComponent>(entity);
+			auto& guitext = view.get<GUITextComponent>(entity);
+			guitext.text.SetPosition({ transform.GetPosition().x, transform.GetPosition().y });
+			Renderer2D::RenderText(guitext.text, guitext.text.GetPosition(), 1.0f, guitext.textColor, projection);
+		}
+	}
+
 	void Scene::BeginRenderer2D(float aspectRatio)
 	{
 		auto view = m_Registry.view<TransformComponent, CameraComponent>();
@@ -218,6 +240,11 @@ namespace Akkad {
 			}
 		}
 		
+	}
+
+	void Scene::SetViewportSize(glm::vec2 size)
+	{
+		m_ViewportSize = size;
 	}
 
 	Entity Scene::AddEntity(std::string tag)

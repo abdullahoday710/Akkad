@@ -40,7 +40,7 @@ namespace Akkad {
 			void InitFreeType();
 			glm::vec2 CalculateTextureAtlasSize();
 			void GenerateTextureAtlas();
-
+			unsigned int m_LineSpacing = 0;
 			static FT_Library s_FTLib;
 			FT_Face m_Face;
 

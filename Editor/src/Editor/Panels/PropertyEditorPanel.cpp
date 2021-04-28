@@ -75,6 +75,16 @@ namespace Akkad {
 				DrawRigidBody2dComponent();
 			}
 
+			if (m_ActiveEntity.HasComponent<GUITextComponent>())
+			{
+				DrawGUITextComponent();
+			}
+
+			if (m_ActiveEntity.HasComponent<GUIContainerComponent>())
+			{
+				DrawGUIContainerComponent();
+			}
+
 			DrawAddComponent();
 		}
 		
@@ -122,6 +132,18 @@ namespace Akkad {
 					{
 						m_ActiveEntity.AddComponent<CameraComponent>(CameraProjection::Orthographic);
 					}
+				}
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("GUI"))
+			{
+				if (ImGui::Button("Container"))
+				{
+					m_ActiveEntity.AddComponent<GUIContainerComponent>();
+				}
+				if (ImGui::Button("Text"))
+				{
+					m_ActiveEntity.AddComponent<GUITextComponent>();
 				}
 				ImGui::TreePop();
 			}
@@ -373,6 +395,73 @@ namespace Akkad {
 
 			ImGui::TreePop();
 		}
+	}
+
+	void PropertyEditorPanel::DrawGUITextComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		auto& textComponent = m_ActiveEntity.GetComponent<GUITextComponent>();
+		if (ImGui::TreeNode("Text"))
+		{
+			if (ImGui::InputText("text", &textComponent.text.m_Text))
+			{
+				if (textComponent.text.IsValid())
+				{
+					textComponent.text.SetText(textComponent.text.m_Text);
+				}
+			}
+			
+
+
+			ImGui::ColorEdit3("color", glm::value_ptr(textComponent.textColor));
+
+			static std::string fontname;
+			static std::string fontPath;
+			if (!textComponent.fontAssetID.empty())
+			{
+				auto desc = Application::GetAssetManager()->GetDescriptorByID(textComponent.fontAssetID);
+				fontname = desc.assetName;
+				fontPath = desc.absolutePath;
+			}
+			ImGui::InputText("Font", &fontname);
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_DRAG_DROP"))
+				{
+					const char* id = (const char*)payload->Data;
+					AssetDescriptor desc = Application::GetAssetManager()->GetDescriptorByID(id);
+
+					if (desc.assetType == AssetType::FONT)
+					{
+						textComponent.text.SetFont(desc.absolutePath);
+						textComponent.fontAssetID = desc.assetID;
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			if (ImGui::InputScalar("Font Size", ImGuiDataType_U32, &textComponent.fontSize))
+			{
+				if (!textComponent.fontAssetID.empty())
+				{
+					textComponent.text.SetFont(fontPath, textComponent.fontSize);
+				}
+			}
+		}
+		ImGui::TreePop();
+	}
+
+	void PropertyEditorPanel::DrawGUIContainerComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		auto& containerComponent = m_ActiveEntity.GetComponent<GUIContainerComponent>();
+		glm::vec2 size = containerComponent.container.GetScreenSize();
+		if (ImGui::TreeNode("container"))
+		{
+			ImGui::InputFloat2("size", glm::value_ptr(size));
+		}
+		ImGui::TreePop();
 	}
 
 }

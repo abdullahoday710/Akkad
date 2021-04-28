@@ -35,6 +35,8 @@ namespace Akkad {
 			}
 			FT_Set_Pixel_Sizes(m_Face, 0, pixelSize);
 			GenerateTextureAtlas();
+			m_LineSpacing = m_Face->size->metrics.height / 64;
+			FT_Done_Face(m_Face);
 			return true;
 		}
 
@@ -55,7 +57,7 @@ namespace Akkad {
 
 		unsigned int Font::GetLineSpacing()
 		{
-			return m_Face->size->metrics.height / 64;
+			return m_LineSpacing;
 		}
 
 		void Font::InitFreeType()

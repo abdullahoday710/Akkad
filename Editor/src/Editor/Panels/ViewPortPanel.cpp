@@ -209,10 +209,11 @@ namespace Akkad {
 		if (IsPlaying)
 		{
 			m_buffer->Bind();
-
 			auto sceneManager = Application::GetSceneManager();
+			sceneManager->GetActiveScene()->SetViewportSize({ m_buffer->GetDescriptor().width, m_buffer->GetDescriptor().height });
 			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
 			sceneManager->GetActiveScene()->Render2D();
+			sceneManager->GetActiveScene()->RenderGUI();
 
 			m_buffer->Unbind();
 		}
@@ -220,6 +221,7 @@ namespace Akkad {
 		else
 		{
 			m_EditorCamera.Update();
+			EditorLayer::GetActiveScene()->SetViewportSize({ m_buffer->GetDescriptor().width, m_buffer->GetDescriptor().height });
 			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
 
 			m_PickingBuffer->Bind();
@@ -228,15 +230,7 @@ namespace Akkad {
 
 			m_buffer->Bind();
 			EditorLayer::GetActiveScene()->Render2D();
-			static SharedPtr<GUI::Font> font = CreateSharedPtr<GUI::Font>("res/fonts/Roboto-Medium.ttf", 15);
-			std::string loremipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi porttitor lacus ac mauris suscipit dictum. Cras sit amet nisi venenatis, suscipit velit in, consectetur risus. Maecenas pharetra augue a dolor tempus interdum. Praesent at dui sit amet elit tincidunt porttitor eget sit amet elit. Donec aliquam sollicitudin porttitor. Aenean maximus, diam viverra faucibus efficitur, purus sapien congue ex, iaculis varius arcu diam sit amet leo. Donec pulvinar nulla vitae euismod elementum. Maecenas aliquet urna ac ante vehicula, id dignissim justo sollicitudin. Nunc non fermentum ex. Phasellus non laoreet ante. Ut posuere in elit a accumsan.";
-			static GUI::GUIText text(loremipsum, font);
-			auto lies = text.m_Lines;
-			static GUI::GUIContainer container;
-			glm::vec2 position = { 0, 475 - font->GetLineSpacing() };
-			text.SetPosition(position);
-			container.SetScreenSize({ m_buffer->GetDescriptor().width, m_buffer->GetDescriptor().height });
-			Renderer2D::RenderText(text, text.GetPosition(), 1.0f, glm::vec3(1, 1, 1), container.GetProjection());
+			EditorLayer::GetActiveScene()->RenderGUI();
 			m_buffer->Unbind();
 		}
 

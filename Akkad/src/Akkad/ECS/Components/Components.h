@@ -5,3 +5,5 @@
 #include "TransformComponent.h"
 #include "ScriptComponent.h"
 #include "RigidBody2dComponent.h"
+#include "GUITextComponent.h"
+#include "GUIContainerComponent.h"

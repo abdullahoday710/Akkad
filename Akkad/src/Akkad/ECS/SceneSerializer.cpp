@@ -100,6 +100,23 @@ namespace Akkad {
 
 				}
 			}
+
+			if (activeEntity.HasComponent<GUIContainerComponent>())
+			{
+				data["Scene"]["Entities"][entityID]["GUIContainerComponent"] = true;
+			}
+
+			if (activeEntity.HasComponent<GUITextComponent>())
+			{
+				auto textComponent = activeEntity.GetComponent<GUITextComponent>();
+				data["Scene"]["Entities"][entityID]["GUITextComponent"]["fontAssetID"] = textComponent.fontAssetID;
+				data["Scene"]["Entities"][entityID]["GUITextComponent"]["fontSize"] = textComponent.fontSize;
+				data["Scene"]["Entities"][entityID]["GUITextComponent"]["text"] = textComponent.text.m_Text;
+
+				glm::vec3 textcolor = textComponent.textColor;
+				data["Scene"]["Entities"][entityID]["GUITextComponent"]["textColor"] = {textcolor.x, textcolor.y, textcolor.z};
+
+			}
 		}
 
 		std::ofstream output;
@@ -208,6 +225,26 @@ namespace Akkad {
 
 					e.AddComponent<RigidBody2dComponent>(type, shape, density, friction);
 					continue;
+				}
+
+				else if (component.key() == "GUIContainerComponent")
+				{
+					e.AddComponent<GUIContainerComponent>();
+				}
+
+				else if (component.key() == "GUITextComponent")
+				{
+					std::string fontAssetID = componentData["fontAssetID"];
+					unsigned int fontSize = componentData["fontSize"];
+					std::string text = componentData["text"];
+					glm::vec3 textColor;
+					textColor.x = componentData["textColor"][0];
+					textColor.y = componentData["textColor"][1];
+					textColor.z = componentData["textColor"][2];
+					auto desc = Application::GetAssetManager()->GetDescriptorByID(fontAssetID);
+					e.AddComponent<GUITextComponent>(text, fontAssetID, desc.absolutePath, fontSize, textColor);
+					continue;
+					
 				}
 
 			}

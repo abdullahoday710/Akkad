@@ -16,6 +16,7 @@ namespace Akkad {
 		void Start();
 		void Update();
 		void Stop();
+		void SetViewportSize(glm::vec2 size);
 		Entity AddEntity(std::string tag = "Entity");
 
 		std::string GetName() { return m_Name; }
@@ -26,6 +27,8 @@ namespace Akkad {
 		void BeginRenderer2D(float aspectRatio);
 		void Render2D();
 		void RenderPickingBuffer2D();
+		void RenderGUI();
+		glm::vec2 m_ViewportSize;
 		Entity GetEntity(entt::entity handle);
 		Box2dWorld m_PhysicsWorld2D;
 

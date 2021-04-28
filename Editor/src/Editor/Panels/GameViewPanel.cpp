@@ -55,6 +55,8 @@ namespace Akkad {
 			auto sceneManager = Application::GetSceneManager();
 			sceneManager->GetActiveScene()->BeginRenderer2D(m_AspectRatio);
 			sceneManager->GetActiveScene()->Render2D();
+			sceneManager->GetActiveScene()->RenderGUI();
+
 		}
 
 		else
@@ -62,6 +64,7 @@ namespace Akkad {
 			auto scene = EditorLayer::GetActiveScene();
 			scene->BeginRenderer2D(m_AspectRatio);
 			scene->Render2D();
+			scene->RenderGUI();
 		}
 
 		m_buffer->Unbind();

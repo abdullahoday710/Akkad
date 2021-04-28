@@ -23,7 +23,10 @@ namespace Akkad {
 				SetText(text);
 			}
 
+			void SetFont(std::string path);
+			void SetFont(std::string path, unsigned int fontSize);
 			void SetFont(SharedPtr<Font> font) { m_Font = font; }
+			bool IsValid();
 			SharedPtr<Font> GetFont() { return m_Font; }
 
 

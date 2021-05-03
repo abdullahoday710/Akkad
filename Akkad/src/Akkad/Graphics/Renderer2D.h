@@ -22,6 +22,7 @@ namespace Akkad {
 			static void DrawQuad(SharedPtr<Texture> texture, glm::mat4& transform) { GetInstance().DrawQuadImpl(texture, transform); }
 			static void DrawQuad(Material& material, glm::mat4& transform) { GetInstance().DrawQuadImpl(material, transform); }
 			static void DrawQuad(glm::vec3 color, glm::mat4& transform) { GetInstance().DrawQuadImpl(color, transform); }
+			static void DrawRect(glm::vec2 min, glm::vec2 max, glm::vec3 color) { GetInstance().DrawRectImpl(min, max, color); }
 			static void Draw(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount) { GetInstance().DrawImpl(vb, shader, vertexCount); };
 			static void RenderText(GUI::GUIText& text, glm::vec2 position, float scale, glm::vec3 color, glm::mat4 projection) { GetInstance().RenderTextImpl(text, position, scale, color, projection); }
 			static void InitShaders() { GetInstance().InitShadersImpl(); }
@@ -39,6 +40,7 @@ namespace Akkad {
 			void DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform);
 			void DrawQuadImpl(Material& material, glm::mat4& transform);
 			void DrawQuadImpl(glm::vec3 color, glm::mat4& transform);
+			void DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color);
 			void DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount);
 			void RenderTextImpl(GUI::GUIText& text, glm::vec2 position, float scale, glm::vec3 color, glm::mat4 projection);
 			void InitShadersImpl();
@@ -49,6 +51,10 @@ namespace Akkad {
 
 			SharedPtr<Shader> m_ColorShader;
 			SharedPtr<UniformBuffer> m_ColorShaderProps;
+
+			SharedPtr<VertexBuffer> m_RectVB;
+			SharedPtr<Shader> m_RectShader;
+			SharedPtr<UniformBuffer> m_RectShaderProps;
 
 			SharedPtr<VertexBuffer> m_GUITextVB;
 			SharedPtr<Shader> m_GUITextShader;

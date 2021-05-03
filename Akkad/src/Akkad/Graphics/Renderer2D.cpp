@@ -98,6 +98,30 @@ namespace Akkad {
 			m_QuadIB->Bind();
 			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
 		}
+
+		void Renderer2D::DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color)
+		{
+			auto platform = Application::GetRenderPlatform();
+			auto command = platform->GetRenderCommand();
+
+			float vertices[] = {
+				// positions
+				 max.x,  min.y, 0.0f, // top right
+				 max.x, -max.y, 0.0f, // bottom right
+				-min.x, -max.y, 0.0f, // bottom left
+				-min.x,  min.y, 0.0f, // top left 
+			};
+
+			m_RectShaderProps->SetData("props_color", color);
+			m_RectShader->Bind();
+			m_RectVB->SetSubData(0, vertices, sizeof(vertices));
+			m_RectVB->Bind();
+			m_QuadIB->Bind();
+			command->SetPolygonMode(PolygonMode::LINE);
+			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+			command->SetPolygonMode(PolygonMode::FILL);
+		}
+
 		void Renderer2D::DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount)
 		{
 			auto command = Application::GetRenderPlatform()->GetRenderCommand();
@@ -168,6 +192,28 @@ namespace Akkad {
 
 				m_ColorShader->SetUniformBuffer(m_ColorShaderProps);
 				m_ColorShader->SetUniformBuffer(m_SceneProps);
+
+			}
+
+			{
+				auto rectShader = assetManager->GetShaderByName("r2d_rectShader");
+				m_RectShader = platform->CreateShader(rectShader.absolutePath.c_str());
+
+				UniformBufferLayout layout;
+				layout.Push("props_color", ShaderDataType::FLOAT3);
+				m_RectShaderProps = platform->CreateUniformBuffer(layout);
+				m_RectShaderProps->SetName("shader_props");
+
+				m_RectShader->SetUniformBuffer(m_RectShaderProps);
+				m_RectShader->SetUniformBuffer(m_SceneProps);
+
+
+				VertexBufferLayout vbLayout;
+				vbLayout.isDynamic = true;
+				vbLayout.Push(ShaderDataType::FLOAT, 3); // position
+				m_RectVB = platform->CreateVertexBuffer();
+				m_RectVB->SetLayout(vbLayout);
+				m_RectVB->SetData(0, 5 * GetSizeOfType(ShaderDataType::FLOAT3));
 
 			}
 

@@ -2,6 +2,7 @@
 #include "RenderPlatform.h"
 #include "Material.h"
 #include "Camera.h"
+#include "Rect.h"
 
 namespace Akkad {
 
@@ -37,14 +38,25 @@ namespace Akkad {
 
 			void InitImpl();
 			void BeginSceneImpl(Camera& camera, glm::mat4& cameraTransform);
+
 			void DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform);
 			void DrawQuadImpl(Material& material, glm::mat4& transform);
 			void DrawQuadImpl(glm::vec3 color, glm::mat4& transform);
+
 			void DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color);
+			void DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, glm::mat4 projection);
+			void DrawRectImpl(Rect rect, glm::vec3 color);
+			void DrawRectImpl(Rect rect, glm::vec3 color, glm::mat4 projection);
+
 			void DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount);
+
 			void RenderTextImpl(GUI::GUIText& text, glm::vec2 position, float scale, glm::vec3 color, glm::mat4 projection);
+
 			void InitShadersImpl();
+
 			Camera m_Camera;
+			glm::mat4 m_SceneCameraViewProjection;
+
 			SharedPtr<VertexBuffer> m_QuadVB;
 			SharedPtr<IndexBuffer> m_QuadIB;
 			SharedPtr<UniformBuffer> m_SceneProps;

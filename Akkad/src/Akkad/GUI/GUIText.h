@@ -1,7 +1,8 @@
 #pragma once
-#include "Akkad/core.h"
-
 #include "Font.h"
+
+#include "Akkad/core.h"
+#include "Akkad/Graphics/Rect.h"
 
 #include <string>
 #include <vector>
@@ -34,16 +35,19 @@ namespace Akkad {
 				std::string text = "";
 				unsigned int size = 0; // the size of the text line (in pixels) relative to screen space
 				float yOffset = 0.0f;
+				Graphics::Rect boundingBox = Graphics::Rect();
+				void CalculateBoundingBox(SharedPtr<Font> font, glm::vec2 textPosition);
 			};
 			void SetText(std::string text);
 			void SetPosition(glm::vec2 position);
 			glm::vec2 GetPosition() { return m_Position; }
 			unsigned int m_MaxLineSize = 1000;
 
-			std::vector<Line> m_Lines;
 			std::string m_Text;
+			std::vector<Line>& GetLines() { return m_Lines; };
 		private:
 			bool PushWord(std::string word);
+			std::vector<Line> m_Lines;
 			SharedPtr<Font> m_Font;
 			glm::vec2 m_Position = {0, 0};
 			float m_Scale = 1.0f;

@@ -55,6 +55,8 @@ namespace Akkad {
 			glm::mat4 viewProjection = projection * view;
 			m_Camera = camera;
 			m_SceneProps->SetData("sys_viewProjection", viewProjection);
+
+			m_SceneCameraViewProjection = viewProjection;
 		}
 
 		void Renderer2D::DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform)
@@ -107,11 +109,12 @@ namespace Akkad {
 			float vertices[] = {
 				// positions
 				 max.x,  min.y, 0.0f, // top right
-				 max.x, -max.y, 0.0f, // bottom right
-				-min.x, -max.y, 0.0f, // bottom left
-				-min.x,  min.y, 0.0f, // top left 
+				 max.x, max.y, 0.0f, // bottom right
+				min.x, max.y, 0.0f, // bottom left
+				 min.x,  min.y, 0.0f, // top left 
 			};
 
+			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
 			m_RectShaderProps->SetData("props_color", color);
 			m_RectShader->Bind();
 			m_RectVB->SetSubData(0, vertices, sizeof(vertices));
@@ -120,6 +123,40 @@ namespace Akkad {
 			command->SetPolygonMode(PolygonMode::LINE);
 			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
 			command->SetPolygonMode(PolygonMode::FILL);
+		}
+
+		void Renderer2D::DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, glm::mat4 projection)
+		{
+			auto platform = Application::GetRenderPlatform();
+			auto command = platform->GetRenderCommand();
+
+			float vertices[] = {
+				// positions
+				 max.x,  min.y, 0.0f, // top right
+				 max.x, max.y, 0.0f, // bottom right
+				 min.x, max.y, 0.0f, // bottom left
+				 min.x,  min.y, 0.0f, // top left 
+			};
+
+			m_RectShaderProps->SetData("props_color", color);
+			m_SceneProps->SetData("sys_viewProjection", projection);
+			m_RectShader->Bind();
+			m_RectVB->SetSubData(0, vertices, sizeof(vertices));
+			m_RectVB->Bind();
+			m_QuadIB->Bind();
+			command->SetPolygonMode(PolygonMode::LINE);
+			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+			command->SetPolygonMode(PolygonMode::FILL);
+		}
+
+		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color)
+		{
+			DrawRectImpl(rect.GetMin(), rect.GetMax(), color);
+		}
+
+		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color, glm::mat4 projection)
+		{
+			DrawRectImpl(rect.GetMin(), rect.GetMax(), color, projection);
 		}
 
 		void Renderer2D::DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount)
@@ -138,20 +175,17 @@ namespace Akkad {
 
 			m_GUITextShaderProps->SetData("projection", projection);
 			m_GUITextShaderProps->SetData("text_color", color);
-
-			command->EnableBlending();
-			command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::INVERSE_SRC_ALPHA);
-			m_GUITextShader->Bind();
-			for (auto line : text.m_Lines)
+			for (unsigned int i = 0; i < text.GetLines().size(); i++)
 			{
-				std::string::const_iterator c;
+				auto& line = text.GetLines()[i];
 				auto linex = position.x;
+
+				std::string::const_iterator c;
 				for (c = line.text.begin(); c != line.text.end(); c++)
 				{
 					Font::FontCharacter ch = text.GetFont()->GetCharacter(*c);
 					float xpos = linex + ch.Bearing.x * scale;
 					float ypos = line.yOffset - (ch.Size.y - ch.Bearing.y) * scale;
-
 					float w = ch.Size.x * scale;
 					float h = ch.Size.y * scale;
 
@@ -167,14 +201,26 @@ namespace Akkad {
 						{ xpos + w, ypos + h,   (ch.xOffset + ch.Size.x) / fontAtlasSize.x, 0.0f }
 					};
 
+					m_GUITextShader->Bind();
+
 					m_GUITextVB->SetSubData(0, vertices, sizeof(vertices));
 					m_GUITextVB->Bind();
+
 					text.GetFont()->GetAtlas()->Bind(0);
-					Application::GetRenderPlatform()->GetRenderCommand()->DrawArrays(PrimitiveType::TRIANGLE, 6);
+
+					command->EnableBlending();
+					command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::INVERSE_SRC_ALPHA);
+
+					command->DrawArrays(PrimitiveType::TRIANGLE, 6);
+
+					command->DisableBlending();
+
 					linex += (ch.Advance >> 6) * scale;
 				}
+
+				DrawRectImpl(line.boundingBox, { 1.0f, 0,0 }, projection);
+				
 			}
-			command->DisableBlending();
 		}
 		void Renderer2D::InitShadersImpl()
 		{
@@ -214,7 +260,6 @@ namespace Akkad {
 				m_RectVB = platform->CreateVertexBuffer();
 				m_RectVB->SetLayout(vbLayout);
 				m_RectVB->SetData(0, 5 * GetSizeOfType(ShaderDataType::FLOAT3));
-
 			}
 
 			{

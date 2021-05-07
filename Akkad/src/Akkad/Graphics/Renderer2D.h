@@ -18,12 +18,16 @@ namespace Akkad {
 			static Renderer2D& GetInstance() { return s_Instance; }
 
 			static void Init() { GetInstance().InitImpl(); }
-
 			static void BeginScene(Camera& camera, glm::mat4& cameraTransform) { GetInstance().BeginSceneImpl(camera, cameraTransform); }
+
 			static void DrawQuad(SharedPtr<Texture> texture, glm::mat4& transform) { GetInstance().DrawQuadImpl(texture, transform); }
 			static void DrawQuad(Material& material, glm::mat4& transform) { GetInstance().DrawQuadImpl(material, transform); }
 			static void DrawQuad(glm::vec3 color, glm::mat4& transform) { GetInstance().DrawQuadImpl(color, transform); }
+
 			static void DrawRect(glm::vec2 min, glm::vec2 max, glm::vec3 color) { GetInstance().DrawRectImpl(min, max, color); }
+			static void DrawRect(Rect rect, glm::vec3 color) { GetInstance().DrawRectImpl(rect, color); }
+			static void DrawRect(Rect rect, glm::vec3 color, glm::mat4 projection) { GetInstance().DrawRectImpl(rect, color, projection); }
+
 			static void Draw(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount) { GetInstance().DrawImpl(vb, shader, vertexCount); };
 			static void RenderText(GUI::GUIText& text, glm::vec2 position, float scale, glm::vec3 color, glm::mat4 projection) { GetInstance().RenderTextImpl(text, position, scale, color, projection); }
 			static void InitShaders() { GetInstance().InitShadersImpl(); }
@@ -55,7 +59,7 @@ namespace Akkad {
 			void InitShadersImpl();
 
 			Camera m_Camera;
-			glm::mat4 m_SceneCameraViewProjection;
+			glm::mat4 m_SceneCameraViewProjection = glm::mat4(1.0f);
 
 			SharedPtr<VertexBuffer> m_QuadVB;
 			SharedPtr<IndexBuffer> m_QuadIB;

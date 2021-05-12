@@ -250,12 +250,90 @@ namespace Akkad {
 	Entity Scene::AddEntity(std::string tag)
 	{
 		Entity entity = { m_Registry.create(), this };
-		// any entity must have a tag and transform component by default !
+
+		// any entity must have these components by default
 		auto& tag_comp = entity.AddComponent<TagComponent>();
 		auto& transform_comp = entity.AddComponent<TransformComponent>();
+		auto& relation_ship = entity.AddComponent<RelationShipComponent>();
+
+		relation_ship.children = 0;
 		tag_comp.Tag = tag;
 
 		return entity;
+	}
+
+	Entity Scene::AddEntityToParent(Entity parent, Entity child, std::string tag)
+	{
+		auto& parent_relation = parent.GetComponent<RelationShipComponent>();
+		auto& child_relation = child.GetComponent<RelationShipComponent>();
+
+		if (parent_relation.children == 0)
+		{
+			parent_relation.first_child = child;
+			parent_relation.last_child = child;
+		}
+
+		else
+		{
+			Entity last_child = parent_relation.last_child;
+			if (last_child.IsValid())
+			{
+				auto& last_child_relation = last_child.GetComponent<RelationShipComponent>();
+				child_relation.prev = last_child;
+				last_child_relation.next = child;
+			}
+		}
+
+		child_relation.parent = parent;
+
+		parent_relation.last_child = child;
+		parent_relation.children += 1;
+		return child;
+	}
+
+	void Scene::RemoveEntity(Entity entity)
+	{
+		auto& entity_relation = entity.GetComponent<RelationShipComponent>();
+
+		Entity current_child = entity_relation.first_child;
+		for (size_t i = 0; i < entity_relation.children; i++)
+		{
+			if (current_child.IsValid())
+			{
+				auto& current_child_relation = current_child.GetComponent<RelationShipComponent>();
+				current_child = current_child_relation.next;
+
+				current_child_relation.parent = {};
+				current_child_relation.next = {};
+				current_child_relation.prev = {};
+
+			}
+		}
+
+		if (entity_relation.parent.IsValid())
+		{
+			auto& parent_relation = entity_relation.parent.GetComponent<RelationShipComponent>();
+			if (parent_relation.first_child == entity)
+			{
+				parent_relation.first_child = entity_relation.next;
+			}
+
+			parent_relation.children -= 1;
+		}
+
+		if (entity_relation.next.IsValid())
+		{
+			auto& next_relation = entity_relation.next.GetComponent<RelationShipComponent>();
+			next_relation.prev = entity_relation.prev;
+		}
+
+		if (entity_relation.prev.IsValid())
+		{
+			auto& prev_relation = entity_relation.prev.GetComponent<RelationShipComponent>();
+			prev_relation.next = entity_relation.next;
+		}
+
+		m_Registry.destroy(entity.m_Handle);
 	}
 
 	Entity Scene::GetEntity(entt::entity handle)

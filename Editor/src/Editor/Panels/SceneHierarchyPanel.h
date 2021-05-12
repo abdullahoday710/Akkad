@@ -19,6 +19,8 @@ namespace Akkad {
 	private:
 		static bool showPanel;
 		void DrawHierarchyPanel();
+		void DrawEntityNode(Entity entity);
+		void DrawEntityContextMenu(Entity entity);
 	};
 }
 

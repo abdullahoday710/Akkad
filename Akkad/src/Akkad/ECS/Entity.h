@@ -10,6 +10,15 @@ namespace Akkad {
 		Entity(entt::entity handle, Scene* scene);
 		Entity() {};
 
+		bool operator==(const Entity& other)
+		{
+			if (other.m_Handle == m_Handle)
+			{
+				return true;
+			}
+			return false;
+		}
+
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
@@ -53,7 +62,19 @@ namespace Akkad {
 
 
 	private:
-		entt::entity m_Handle = (entt::entity)-1;
+		entt::entity m_Handle = entt::null;
 		Scene* m_Scene = nullptr;
+
+		friend class Scene;
+		friend class SceneHierarchyPanel;
+	};
+
+	struct RelationShipComponent {
+		std::size_t children = 0;
+		Entity first_child;
+		Entity last_child;
+		Entity prev;
+		Entity next;
+		Entity parent;
 	};
 }

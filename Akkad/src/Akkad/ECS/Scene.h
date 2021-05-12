@@ -18,7 +18,8 @@ namespace Akkad {
 		void Stop();
 		void SetViewportSize(glm::vec2 size);
 		Entity AddEntity(std::string tag = "Entity");
-
+		Entity AddEntityToParent(Entity parent, Entity child, std::string tag = "Child");
+		void RemoveEntity(Entity entity);
 		std::string GetName() { return m_Name; }
 
 	private:

@@ -36,6 +36,7 @@ namespace Akkad {
 		void DrawRigidBody2dComponent();
 		void DrawGUITextComponent();
 		void DrawGUIContainerComponent();
+		void DrawRectTransformComponent();
 
 	};
 }

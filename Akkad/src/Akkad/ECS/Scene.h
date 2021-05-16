@@ -17,21 +17,30 @@ namespace Akkad {
 		void Update();
 		void Stop();
 		void SetViewportSize(glm::vec2 size);
+
 		Entity AddEntity(std::string tag = "Entity");
-		Entity AddEntityToParent(Entity parent, Entity child, std::string tag = "Child");
+		void AssignEntityToParent(Entity parent, Entity child);
+		bool EntityHasChild(Entity parent, Entity child);
+		bool EntityHasHierarchyChild(Entity parent, Entity child);
+
 		void RemoveEntity(Entity entity);
 		std::string GetName() { return m_Name; }
 
 	private:
 		entt::registry m_Registry;
 		std::string m_Name = "Scene";
+
 		void BeginRenderer2D(float aspectRatio);
 		void Render2D();
 		void RenderPickingBuffer2D();
 		void RenderGUI();
-		glm::vec2 m_ViewportSize;
+
+		glm::vec2 m_ViewportSize = { 0,0 };
 		Entity GetEntity(entt::entity handle);
 		Box2dWorld m_PhysicsWorld2D;
+
+		Entity GetGuiContainer();
+		Entity AddGuiContainer();
 
 		friend class Entity;
 		friend class SceneHierarchyPanel;

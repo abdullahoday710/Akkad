@@ -281,7 +281,7 @@ namespace Akkad {
 					std::string child_id = child.value()["ID"];
 					Entity child_entity = scene->AddEntity();
 
-					scene->AddEntityToParent(entity, child_entity);
+					scene->AssignEntityToParent(entity, child_entity);
 
 					DeserializeEntity(child_entity, child_id, scene, data);
 				}

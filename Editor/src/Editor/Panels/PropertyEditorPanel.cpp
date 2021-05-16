@@ -53,7 +53,11 @@ namespace Akkad {
 		if (m_ActiveEntity.IsValid())
 		{
 			DrawTagComponent();
-			DrawTransformComponent();
+
+			if (m_ActiveEntity.HasComponent<TransformComponent>())
+			{
+				DrawTransformComponent();
+			}
 
 			if (m_ActiveEntity.HasComponent<SpriteRendererComponent>())
 			{
@@ -83,6 +87,11 @@ namespace Akkad {
 			if (m_ActiveEntity.HasComponent<GUIContainerComponent>())
 			{
 				DrawGUIContainerComponent();
+			}
+
+			if (m_ActiveEntity.HasComponent<RectTransformComponent>())
+			{
+				DrawRectTransformComponent();
 			}
 
 			DrawAddComponent();
@@ -132,18 +141,6 @@ namespace Akkad {
 					{
 						m_ActiveEntity.AddComponent<CameraComponent>(CameraProjection::Orthographic);
 					}
-				}
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("GUI"))
-			{
-				if (ImGui::Button("Container"))
-				{
-					m_ActiveEntity.AddComponent<GUIContainerComponent>();
-				}
-				if (ImGui::Button("Text"))
-				{
-					m_ActiveEntity.AddComponent<GUITextComponent>();
 				}
 				ImGui::TreePop();
 			}
@@ -460,6 +457,30 @@ namespace Akkad {
 		if (ImGui::TreeNode("container"))
 		{
 			ImGui::InputFloat2("size", glm::value_ptr(size));
+		}
+		ImGui::TreePop();
+	}
+
+	void PropertyEditorPanel::DrawRectTransformComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		auto& rectTransformComp = m_ActiveEntity.GetComponent<RectTransformComponent>();
+
+		if (ImGui::TreeNode("Rect Transform"))
+		{
+			glm::vec2 pos = rectTransformComp.GetRect().GetPosition();
+			glm::vec2 size = { rectTransformComp.GetRect().GetWidth(), rectTransformComp.GetRect().GetHeight() };
+
+			if (ImGui::DragFloat2("Position", glm::value_ptr(pos)))
+			{
+				rectTransformComp.GetRect().SetPosition(pos);
+			}
+
+			if (ImGui::DragFloat2("Size", glm::value_ptr(size)))
+			{
+				rectTransformComp.GetRect().SetWidth(size.x);
+				rectTransformComp.GetRect().SetHeight(size.y);
+			}
 		}
 		ImGui::TreePop();
 	}

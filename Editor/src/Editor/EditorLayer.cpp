@@ -309,6 +309,34 @@ namespace Akkad {
 					Entity e = s_ActiveScene->AddEntity();
 				}
 
+				if (ImGui::BeginMenu("Add GUI"))
+				{
+					Entity current_container = s_ActiveScene->GetGuiContainer();
+					if (ImGui::MenuItem("Container"))
+					{
+						if (!current_container.IsValid())
+						{
+							s_ActiveScene->AddGuiContainer();
+						}
+						
+					}
+
+					if (ImGui::MenuItem("Rect"))
+					{
+						if (!current_container.IsValid())
+						{
+							s_ActiveScene->AddGuiContainer();
+						}
+						Entity rect = Entity(s_ActiveScene->m_Registry.create(), s_ActiveScene.get());
+						rect.AddComponent<RelationShipComponent>();
+						rect.AddComponent<RectTransformComponent>();
+						auto& tag = rect.AddComponent<TagComponent>();
+						tag.Tag = "rect";
+						s_ActiveScene->AssignEntityToParent(current_container, rect);
+					}
+					ImGui::EndMenu();
+				}
+
 				ImGui::EndMenu();
 			}
 

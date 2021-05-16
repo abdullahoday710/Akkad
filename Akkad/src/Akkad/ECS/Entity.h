@@ -19,6 +19,16 @@ namespace Akkad {
 			return false;
 		}
 
+		bool operator!=(const Entity& other)
+		{
+			if (other.m_Handle != m_Handle)
+			{
+				return true;
+			}
+			return false;
+		}
+
+
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args)
 		{
@@ -50,10 +60,14 @@ namespace Akkad {
 		{
 			if (m_Scene != nullptr)
 			{
-				if (m_Scene->m_Registry.valid(m_Handle))
+				if (m_Handle != entt::null)
 				{
-					return true;
+					if (m_Scene->m_Registry.valid(m_Handle))
+					{
+						return true;
+					}
 				}
+
 			}
 			
 

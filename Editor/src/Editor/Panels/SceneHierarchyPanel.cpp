@@ -6,7 +6,9 @@
 #include <Akkad/Application/Application.h>
 #include <Akkad/ECS/SceneManager.h>
 #include <Akkad/ECS/Components/TagComponent.h>
+
 #include <imgui.h>
+#include <imgui_internal.h>
 #include <entt/entt.hpp>
 namespace Akkad {
 	bool SceneHierarchyPanel::showPanel;
@@ -33,6 +35,33 @@ namespace Akkad {
 			auto entity_relation = entity.GetComponent<RelationShipComponent>();
 
 			bool node_open = ImGui::TreeNode((void*)entity.m_Handle, entity_tag.Tag.c_str());
+
+			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+			{
+				ImGui::Text(entity_tag.Tag.c_str());
+				size_t entity_id = (size_t)entity.m_Handle;
+				ImGui::SetDragDropPayload("HIERARCHY_DRAG_DROP", &entity_id, sizeof(size_t));
+				ImGui::EndDragDropSource();
+			}
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				auto scene = EditorLayer::GetActiveScene();
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_DROP"))
+				{
+					size_t* entity_id = (size_t*)payload->Data;
+
+					if ((entt::entity)*entity_id != entity.m_Handle)
+					{
+						Entity dragged_child = EditorLayer::GetActiveScene()->GetEntity((entt::entity)*entity_id);
+						scene->AssignEntityToParent(entity, dragged_child);
+						
+					}
+
+				}
+				ImGui::EndDragDropTarget();
+			}
+
 			if (ImGui::IsItemClicked(0))
 			{
 				if (!PropertyEditorPanel::showPanel)
@@ -46,18 +75,14 @@ namespace Akkad {
 			DrawEntityContextMenu(entity);
 			if (node_open)
 			{
-				auto current_child = entity_relation.first_child;
+				Entity current_child = entity_relation.first_child;
 				for (size_t i = 0; i < entity_relation.children; i++)
 				{
 					if (current_child.IsValid())
 					{
 						DrawEntityNode(current_child);
-						if (current_child.IsValid())
-						{
-
-							auto current_child_relation = current_child.GetComponent<RelationShipComponent>();
-							current_child = current_child_relation.next;
-						}
+						auto current_child_relation = current_child.GetComponent<RelationShipComponent>();
+						current_child = current_child_relation.next;
 					}
 				}
 
@@ -86,7 +111,7 @@ namespace Akkad {
 				Entity parent = scene->GetEntity(entityID);
 				Entity child = scene->AddEntity("child");
 
-				scene->AddEntityToParent(parent, child);
+				scene->AssignEntityToParent(parent, child);
 			}
 			ImGui::EndPopup();
 		}
@@ -95,6 +120,24 @@ namespace Akkad {
 	void SceneHierarchyPanel::DrawHierarchyPanel()
 	{
 		ImGui::Begin("Hierarchy", &showPanel);
+		auto min = ImGui::GetWindowContentRegionMin();
+		auto max = ImGui::GetWindowContentRegionMax();
+		ImRect windowrect = { min, max };
+		
+		if (ImGui::BeginDragDropTargetCustom(windowrect, ImGui::GetID("Hierarchy")))
+		{
+			auto scene = EditorLayer::GetActiveScene();
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_DROP"))
+			{
+				size_t* entity_id = (size_t*)payload->Data;
+
+				Entity dragged_child = EditorLayer::GetActiveScene()->GetEntity((entt::entity) * entity_id);
+				scene->AssignEntityToParent({}, dragged_child);
+
+
+			}
+			ImGui::EndDragDropTarget();
+		}
 
 		SharedPtr<Scene> scene;
 		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");

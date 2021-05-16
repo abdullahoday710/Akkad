@@ -6,7 +6,7 @@ namespace Akkad {
 
 		void GUIContainer::SetScreenSize(glm::vec2 size)
 		{
-			m_Projection = glm::ortho(0.0f, size.x, 0.0f, size.y);
+			m_Projection = glm::ortho(0.0f, size.x, size.y, 0.0f);
 			m_ScreenSize = size;
 		}
 	}

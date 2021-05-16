@@ -7,3 +7,4 @@
 #include "RigidBody2dComponent.h"
 #include "GUITextComponent.h"
 #include "GUIContainerComponent.h"
+#include "RectTransformComponent.h"

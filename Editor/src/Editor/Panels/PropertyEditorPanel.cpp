@@ -461,6 +461,23 @@ namespace Akkad {
 		ImGui::TreePop();
 	}
 
+	std::string ConstraintTypeToStr(GUI::ConstraintType type)
+	{
+		switch (type)
+		{
+		case GUI::ConstraintType::CENTER_CONSTRAINT:
+			return "Center";
+		case GUI::ConstraintType::RELATIVE_CONSTRAINT:
+			return "Relative";
+		case GUI::ConstraintType::PIXEL_CONSTRAINT:
+			return "Pixel";
+		case GUI::ConstraintType::ASPECT_CONSTRAINT:
+			return "Aspect";
+		default:
+			break;
+		}
+	}
+
 	void PropertyEditorPanel::DrawRectTransformComponent()
 	{
 		ImGui::SetNextItemOpen(true);
@@ -470,16 +487,175 @@ namespace Akkad {
 		{
 			glm::vec2 pos = rectTransformComp.GetRect().GetPosition();
 			glm::vec2 size = { rectTransformComp.GetRect().GetWidth(), rectTransformComp.GetRect().GetHeight() };
+			
+			auto wConstraint = rectTransformComp.rect.GetWidthConstraint();
+			auto hConstraint = rectTransformComp.rect.GetHeightConstraint();
 
-			if (ImGui::DragFloat2("Position", glm::value_ptr(pos)))
+			auto xConstraint = rectTransformComp.rect.GetXConstraint();
+			auto yConstraint = rectTransformComp.rect.GetYConstraint();
+
+			const char* size_constraints[] = { "Relative", "Pixel", "Aspect" };
+			std::string selected_width_constraint = ConstraintTypeToStr(wConstraint.type);
+
+			if (ImGui::BeginCombo("Width constraint type", selected_width_constraint.c_str()))
 			{
-				rectTransformComp.GetRect().SetPosition(pos);
+				for (int n = 0; n < IM_ARRAYSIZE(size_constraints); n++)
+				{
+					bool is_selected = (selected_width_constraint == size_constraints[n]);
+					if (ImGui::Selectable(size_constraints[n], is_selected))
+					{
+						selected_width_constraint = size_constraints[n];
+
+						if (selected_width_constraint == "Relative")
+						{
+							rectTransformComp.rect.SetWidthConstraint({ GUI::ConstraintType::RELATIVE_CONSTRAINT, wConstraint.constraintValue });
+						}
+
+						if (selected_width_constraint == "Pixel")
+						{
+							rectTransformComp.rect.SetWidthConstraint({ GUI::ConstraintType::PIXEL_CONSTRAINT, wConstraint.constraintValue });
+						}
+
+						if (selected_width_constraint == "Aspect")
+						{
+							rectTransformComp.rect.SetWidthConstraint({ GUI::ConstraintType::ASPECT_CONSTRAINT, wConstraint.constraintValue });
+						}
+					}
+					if (is_selected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
 			}
 
-			if (ImGui::DragFloat2("Size", glm::value_ptr(size)))
+			if (ImGui::DragFloat("Width constraint", &wConstraint.constraintValue))
 			{
-				rectTransformComp.GetRect().SetWidth(size.x);
-				rectTransformComp.GetRect().SetHeight(size.y);
+				rectTransformComp.rect.SetWidthConstraint(wConstraint);
+			}
+
+			ImGui::Separator();
+
+			std::string selected_height_constraint = ConstraintTypeToStr(hConstraint.type);
+			if (ImGui::BeginCombo("Height constraint type", ConstraintTypeToStr(hConstraint.type).c_str()))
+			{
+				for (int n = 0; n < IM_ARRAYSIZE(size_constraints); n++)
+				{
+					bool is_selected = (selected_height_constraint == size_constraints[n]);
+					if (ImGui::Selectable(size_constraints[n], is_selected))
+					{
+						selected_height_constraint = size_constraints[n];
+
+						if (selected_height_constraint == "Relative")
+						{
+							rectTransformComp.rect.SetHeightConstraint({ GUI::ConstraintType::RELATIVE_CONSTRAINT, wConstraint.constraintValue });
+						}
+
+						if (selected_height_constraint == "Pixel")
+						{
+							rectTransformComp.rect.SetHeightConstraint({ GUI::ConstraintType::PIXEL_CONSTRAINT, wConstraint.constraintValue });
+						}
+
+						if (selected_height_constraint == "Aspect")
+						{
+							rectTransformComp.rect.SetHeightConstraint({ GUI::ConstraintType::ASPECT_CONSTRAINT, wConstraint.constraintValue });
+						}
+					}
+					if (is_selected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+
+				ImGui::EndCombo();
+			}
+
+			if (ImGui::DragFloat("Height constraint", &hConstraint.constraintValue))
+			{
+				rectTransformComp.rect.SetHeightConstraint(hConstraint);
+			}
+
+			ImGui::Separator();
+
+			const char* position_constraints[] = { "Relative", "Pixel", "Center" };
+			std::string selected_x_constraint = ConstraintTypeToStr(xConstraint.type);
+
+			if (ImGui::BeginCombo("X constraint type", selected_x_constraint.c_str()))
+			{
+				for (int n = 0; n < IM_ARRAYSIZE(position_constraints); n++)
+				{
+					bool is_selected = (selected_x_constraint == position_constraints[n]);
+					if (ImGui::Selectable(position_constraints[n], is_selected))
+					{
+						selected_x_constraint = position_constraints[n];
+
+						if (selected_x_constraint == "Relative")
+						{
+							rectTransformComp.rect.SetXConstraint({ GUI::ConstraintType::RELATIVE_CONSTRAINT, wConstraint.constraintValue });
+						}
+
+						if (selected_x_constraint == "Pixel")
+						{
+							rectTransformComp.rect.SetXConstraint({ GUI::ConstraintType::PIXEL_CONSTRAINT, wConstraint.constraintValue });
+						}
+
+						if (selected_x_constraint == "Center")
+						{
+							rectTransformComp.rect.SetXConstraint({ GUI::ConstraintType::CENTER_CONSTRAINT, wConstraint.constraintValue });
+						}
+					}
+					if (is_selected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+			if (ImGui::DragFloat("X constraint", &xConstraint.constraintValue))
+			{
+				rectTransformComp.rect.SetXConstraint(xConstraint);
+			}
+
+			ImGui::Separator();
+
+			std::string selected_y_constraint = ConstraintTypeToStr(yConstraint.type);
+
+			if (ImGui::BeginCombo("Y constraint type", ConstraintTypeToStr(yConstraint.type).c_str()))
+			{
+				for (int n = 0; n < IM_ARRAYSIZE(position_constraints); n++)
+				{
+					bool is_selected = (selected_y_constraint == position_constraints[n]);
+					if (ImGui::Selectable(position_constraints[n], is_selected))
+					{
+						selected_y_constraint = position_constraints[n];
+
+						if (selected_y_constraint == "Relative")
+						{
+							rectTransformComp.rect.SetYConstraint({ GUI::ConstraintType::RELATIVE_CONSTRAINT, wConstraint.constraintValue });
+						}
+
+						if (selected_y_constraint == "Pixel")
+						{
+							rectTransformComp.rect.SetYConstraint({ GUI::ConstraintType::PIXEL_CONSTRAINT, wConstraint.constraintValue });
+						}
+
+						if (selected_y_constraint == "Center")
+						{
+							rectTransformComp.rect.SetYConstraint({ GUI::ConstraintType::CENTER_CONSTRAINT, wConstraint.constraintValue });
+						}
+					}
+					if (is_selected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+			if (ImGui::DragFloat("Y constraint", &yConstraint.constraintValue))
+			{
+				rectTransformComp.rect.SetYConstraint(yConstraint);
 			}
 		}
 		ImGui::TreePop();

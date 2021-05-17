@@ -3,6 +3,21 @@
 namespace Akkad {
 	namespace GUI {
 
+		GUIRect::GUIRect()
+		{
+			GUI::Constraint width_const = { GUI::ConstraintType::RELATIVE_CONSTRAINT, 0.3f };
+			GUI::Constraint height_const = { GUI::ConstraintType::ASPECT_CONSTRAINT, 1.0f };
+
+			GUI::Constraint x_const = { GUI::ConstraintType::CENTER_CONSTRAINT, 0 };
+			GUI::Constraint y_const = { GUI::ConstraintType::CENTER_CONSTRAINT, 0 };
+
+			SetWidthConstraint(width_const);
+			SetHeightConstraint(height_const);
+
+			SetXConstraint(x_const);
+			SetYConstraint(y_const);
+		}
+
 		void GUIRect::SetWidth(ConstraintType type, float width)
 		{
 			switch (type)
@@ -21,7 +36,7 @@ namespace Akkad {
 			}
 			case ConstraintType::ASPECT_CONSTRAINT:
 			{
-				m_Rect.SetWidth(m_Rect.GetHeight() / width);
+				m_Rect.SetWidth(m_Rect.GetHeight() * width);
 				break;
 			}
 			default:
@@ -47,7 +62,7 @@ namespace Akkad {
 			}
 			case ConstraintType::ASPECT_CONSTRAINT:
 			{
-				m_Rect.SetHeight(m_Rect.GetWidth() / height);
+				m_Rect.SetHeight(m_Rect.GetWidth() * height);
 				break;
 			}
 			default:
@@ -115,8 +130,37 @@ namespace Akkad {
 			}
 		}
 
+		void GUIRect::SetWidthConstraint(Constraint constraint)
+		{
+			m_widthConstraint = constraint;
+			RecalculateRect();
+		}
+
+		void GUIRect::SetHeightConstraint(Constraint constraint)
+		{
+			m_heightConstraint = constraint;
+			RecalculateRect();
+		}
+
+		void GUIRect::SetXConstraint(Constraint constraint)
+		{
+			m_xConstraint = constraint;
+			RecalculateRect();
+		}
+
+		void GUIRect::SetYConstraint(Constraint constraint)
+		{
+			m_yConstraint = constraint;
+			RecalculateRect();
+		}
+
 		void GUIRect::RecalculateRect()
 		{
+			SetWidth(m_widthConstraint.type, m_widthConstraint.constraintValue);
+			SetHeight(m_heightConstraint.type, m_heightConstraint.constraintValue);
+
+			SetX(m_xConstraint.type, m_xConstraint.constraintValue);
+			SetY(m_yConstraint.type, m_yConstraint.constraintValue);
 		}
 
 	}

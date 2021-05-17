@@ -171,10 +171,7 @@ namespace Akkad {
 						rect_transform.rect.SetParentPos(parent_position);
 					}
 
-					rect_transform.rect.SetX(GUI::ConstraintType::CENTER_CONSTRAINT, 0);
-					rect_transform.rect.SetY(GUI::ConstraintType::RELATIVE_CONSTRAINT, 20);
-					rect_transform.rect.SetWidth(GUI::ConstraintType::RELATIVE_CONSTRAINT, 0.2f);
-					rect_transform.rect.SetHeight(GUI::ConstraintType::ASPECT_CONSTRAINT, 1.0f);
+					rect_transform.rect.RecalculateRect();
 
 					Renderer2D::DrawRect(rect_transform.GetRect(), { 1,0,0 }, activeContainer.container.GetProjection());
 				}
@@ -328,8 +325,29 @@ namespace Akkad {
 						old_parent_relation.first_child = {};
 					}
 				}
+
+				if (old_parent_relation.last_child == child)
+				{
+					if (child_relation.prev.IsValid())
+					{
+						old_parent_relation.last_child = child_relation.prev;
+					}
+				}
 				old_parent_relation.children -= 1;
 			}
+
+			if (child_relation.next.IsValid())
+			{
+				auto& next_relation = child_relation.next.GetComponent<RelationShipComponent>();
+				next_relation.prev = child_relation.prev;
+			}
+
+			if (child_relation.prev.IsValid())
+			{
+				auto& prev_relation = child_relation.prev.GetComponent<RelationShipComponent>();
+				prev_relation.next = child_relation.next;
+			}
+
 			if (parent.IsValid())
 			{
 				auto& parent_relation = parent.GetComponent<RelationShipComponent>();

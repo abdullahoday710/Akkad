@@ -33,6 +33,9 @@ namespace Akkad {
 		void BeginRenderer2D(float aspectRatio);
 		void Render2D();
 		void RenderPickingBuffer2D();
+
+		void UpdateGUIPositions();
+		void RenderGUIElement(Entity parent);
 		void RenderGUI();
 
 		glm::vec2 m_ViewportSize = { 0,0 };

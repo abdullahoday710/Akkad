@@ -130,65 +130,107 @@ namespace Akkad {
 		
 	}
 
-	void Scene::RenderGUI()
+	void Scene::UpdateGUIPositions()
 	{
 		Entity activeContainerEntity = GetGuiContainer();
 		if (activeContainerEntity.IsValid())
 		{
 			auto& activeContainer = activeContainerEntity.GetComponent<GUIContainerComponent>();
 			activeContainer.container.SetScreenSize(m_ViewportSize);
+			auto view = m_Registry.view<RelationShipComponent, RectTransformComponent>();
+
+			for (auto entity : view)
 			{
-				auto view = m_Registry.view<RelationShipComponent, RectTransformComponent>();
-				for (auto entity : view)
+				auto& relation_ship = view.get<RelationShipComponent>(entity);
+				auto& rect_transform = view.get<RectTransformComponent>(entity);
+
+				if (relation_ship.parent.IsValid())
 				{
-					auto& relation_ship = view.get<RelationShipComponent>(entity);
-					auto& rect_transform = view.get<RectTransformComponent>(entity);
+					glm::vec2 parent_size = {};
+					glm::vec2 parent_position = {};
 
-					if (relation_ship.parent.IsValid())
+					if (relation_ship.parent.HasComponent<GUIContainerComponent>())
 					{
-						glm::vec2 parent_size = {};
-						glm::vec2 parent_position = {};
+						auto& container = relation_ship.parent.GetComponent<GUIContainerComponent>();
 
-						if (relation_ship.parent.HasComponent<GUIContainerComponent>())
-						{
-							auto& container = relation_ship.parent.GetComponent<GUIContainerComponent>();
-
-							parent_size = container.container.GetScreenSize();
-							parent_position = { 0,0 }; // top left of the screen
-						}
-
-						else if (relation_ship.parent.HasComponent<RectTransformComponent>())
-						{
-							auto& parent_rect = relation_ship.parent.GetComponent<RectTransformComponent>();
-							parent_size = { parent_rect.GetRect().GetWidth(), parent_rect.GetRect().GetHeight() };
-
-							// top left of the parent corner
-							parent_position.x = parent_rect.GetRect().GetMin().x;
-							parent_position.y = parent_rect.GetRect().GetMin().y;
-						}
-
-						rect_transform.rect.SetParentSize(parent_size);
-						rect_transform.rect.SetParentPos(parent_position);
+						parent_size = container.container.GetScreenSize();
+						parent_position = { 0,0 }; // top left of the screen
 					}
 
-					rect_transform.rect.RecalculateRect();
+					else if (relation_ship.parent.HasComponent<RectTransformComponent>())
+					{
+						auto& parent_rect = relation_ship.parent.GetComponent<RectTransformComponent>();
+						parent_size = { parent_rect.GetRect().GetWidth(), parent_rect.GetRect().GetHeight() };
 
-					Renderer2D::DrawRect(rect_transform.GetRect(), { 1,0,0 }, activeContainer.container.GetProjection());
+						// top left of the parent corner
+						parent_position.x = parent_rect.GetRect().GetMin().x;
+						parent_position.y = parent_rect.GetRect().GetMin().y;
+					}
+
+					rect_transform.rect.SetParentSize(parent_size);
+					rect_transform.rect.SetParentPos(parent_position);
 				}
 
-				{
-					auto view = m_Registry.view<TransformComponent, GUITextComponent>();
+				rect_transform.rect.RecalculateRect();
+			}
+		}
 
-					for (auto entity : view)
+	}
+
+	void Scene::RenderGUIElement(Entity parent)
+	{
+		Entity activeContainerEntity = GetGuiContainer();
+		auto& activeContainer = activeContainerEntity.GetComponent<GUIContainerComponent>();
+
+		if (parent.IsValid())
+		{
+			auto& parent_relation = parent.GetComponent<RelationShipComponent>();
+
+			Entity current_child = parent_relation.first_child;
+
+			for (size_t i = 0; i < parent_relation.children; i++)
+			{
+				if (current_child.IsValid())
+				{
+					auto& current_child_relation = current_child.GetComponent<RelationShipComponent>();
+
+					// Draw gui components here
+					if (current_child.HasComponent<RectTransformComponent>())
 					{
+						auto& rect_transform = current_child.GetComponent<RectTransformComponent>();
+						Renderer2D::DrawRect(rect_transform.GetRect(), { 1,0,0 }, activeContainer.container.GetProjection());
+					}
+
+					RenderGUIElement(current_child); // draw the child elements of the current child
+					current_child = current_child_relation.next;
+				}
+			}
+		}
+	}
+
+	void Scene::RenderGUI()
+	{
+		UpdateGUIPositions();
+
+		Entity activeContainerEntity = GetGuiContainer();
+		if (activeContainerEntity.IsValid())
+		{
+			auto& activeContainer = activeContainerEntity.GetComponent<GUIContainerComponent>();
+
+			RenderGUIElement(activeContainerEntity);
+
+			// Rendering Text
+			{
+				auto view = m_Registry.view<TransformComponent, GUITextComponent>();
+
+				for (auto entity : view)
+				{
 						auto& transform = view.get<TransformComponent>(entity);
 						auto& guitext = view.get<GUITextComponent>(entity);
 						guitext.text.SetPosition({ transform.GetPosition().x, transform.GetPosition().y });
 						Renderer2D::RenderText(guitext.text, guitext.text.GetPosition(), 1.0f, guitext.textColor, activeContainer.container.GetProjection());
-					}
 				}
 			}
-			
 		}
 
 

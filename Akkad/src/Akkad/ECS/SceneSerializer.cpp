@@ -116,7 +116,7 @@ namespace Akkad {
 			auto textComponent = entity.GetComponent<GUITextComponent>();
 			entity_data["GUITextComponent"]["fontAssetID"] = textComponent.fontAssetID;
 			entity_data["GUITextComponent"]["fontSize"] = textComponent.fontSize;
-			entity_data["GUITextComponent"]["text"] = textComponent.text.m_Text;
+			entity_data["GUITextComponent"]["text"] = textComponent.text.GetText();
 
 			glm::vec3 textcolor = textComponent.textColor;
 			entity_data["GUITextComponent"]["textColor"] = { textcolor.x, textcolor.y, textcolor.z };

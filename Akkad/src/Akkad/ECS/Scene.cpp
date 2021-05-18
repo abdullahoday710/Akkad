@@ -199,6 +199,14 @@ namespace Akkad {
 					{
 						auto& rect_transform = current_child.GetComponent<RectTransformComponent>();
 						Renderer2D::DrawRect(rect_transform.GetRect(), { 1,0,0 }, activeContainer.container.GetProjection());
+
+						if (current_child.HasComponent<GUITextComponent>())
+						{
+							auto& guitext = current_child.GetComponent<GUITextComponent>();
+							guitext.text.SetBoundingBox(rect_transform.GetRect());
+							guitext.text.RecalculateText();
+							Renderer2D::RenderText(guitext.text, guitext.text.GetPosition(), 1.0f, guitext.textColor, activeContainer.container.GetProjection());
+						}
 					}
 
 					RenderGUIElement(current_child); // draw the child elements of the current child
@@ -218,19 +226,6 @@ namespace Akkad {
 			auto& activeContainer = activeContainerEntity.GetComponent<GUIContainerComponent>();
 
 			RenderGUIElement(activeContainerEntity);
-
-			// Rendering Text
-			{
-				auto view = m_Registry.view<TransformComponent, GUITextComponent>();
-
-				for (auto entity : view)
-				{
-						auto& transform = view.get<TransformComponent>(entity);
-						auto& guitext = view.get<GUITextComponent>(entity);
-						guitext.text.SetPosition({ transform.GetPosition().x, transform.GetPosition().y });
-						Renderer2D::RenderText(guitext.text, guitext.text.GetPosition(), 1.0f, guitext.textColor, activeContainer.container.GetProjection());
-				}
-			}
 		}
 
 

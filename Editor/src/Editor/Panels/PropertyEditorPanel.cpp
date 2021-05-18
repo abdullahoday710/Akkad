@@ -79,6 +79,11 @@ namespace Akkad {
 				DrawRigidBody2dComponent();
 			}
 
+			if (m_ActiveEntity.HasComponent<RectTransformComponent>())
+			{
+				DrawRectTransformComponent();
+			}
+
 			if (m_ActiveEntity.HasComponent<GUITextComponent>())
 			{
 				DrawGUITextComponent();
@@ -87,11 +92,6 @@ namespace Akkad {
 			if (m_ActiveEntity.HasComponent<GUIContainerComponent>())
 			{
 				DrawGUIContainerComponent();
-			}
-
-			if (m_ActiveEntity.HasComponent<RectTransformComponent>())
-			{
-				DrawRectTransformComponent();
 			}
 
 			DrawAddComponent();
@@ -400,11 +400,12 @@ namespace Akkad {
 		auto& textComponent = m_ActiveEntity.GetComponent<GUITextComponent>();
 		if (ImGui::TreeNode("Text"))
 		{
-			if (ImGui::InputText("text", &textComponent.text.m_Text))
+			std::string text = textComponent.text.GetText();
+			if (ImGui::InputText("text", &text))
 			{
 				if (textComponent.text.IsValid())
 				{
-					textComponent.text.SetText(textComponent.text.m_Text);
+					textComponent.text.SetText(text);
 				}
 			}
 			

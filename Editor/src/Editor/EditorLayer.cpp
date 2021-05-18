@@ -334,6 +334,22 @@ namespace Akkad {
 						tag.Tag = "rect";
 						s_ActiveScene->AssignEntityToParent(current_container, rect);
 					}
+
+
+					if (ImGui::MenuItem("Text"))
+					{
+						if (!current_container.IsValid())
+						{
+							s_ActiveScene->AddGuiContainer();
+						}
+						Entity text = Entity(s_ActiveScene->m_Registry.create(), s_ActiveScene.get());
+						text.AddComponent<RelationShipComponent>();
+						text.AddComponent<RectTransformComponent>();
+						text.AddComponent<GUITextComponent>();
+						auto& tag = text.AddComponent<TagComponent>();
+						tag.Tag = "text";
+						s_ActiveScene->AssignEntityToParent(current_container, text);
+					}
 					ImGui::EndMenu();
 				}
 

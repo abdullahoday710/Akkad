@@ -14,6 +14,14 @@ namespace Akkad {
 		class GUIText
 		{
 		public:
+			struct Line {
+				std::string text = "";
+				unsigned int size = 0;
+				float yOffset = 0.0f;
+				Graphics::Rect boundingBox = Graphics::Rect();
+				void CalculateBoundingBox(SharedPtr<Font> font, glm::vec2 textPosition);
+			};
+
 			GUIText() {}
 			GUIText(SharedPtr<Font> font)
 			{
@@ -21,36 +29,30 @@ namespace Akkad {
 			}
 			GUIText(std::string text, SharedPtr<Font> font) {
 				m_Font = font;
-				SetText(text);
 			}
 
 			void SetFont(std::string path);
 			void SetFont(std::string path, unsigned int fontSize);
 			void SetFont(SharedPtr<Font> font) { m_Font = font; }
-			bool IsValid();
-			SharedPtr<Font> GetFont() { return m_Font; }
+			void SetBoundingBox(Graphics::Rect box) { m_BoundingBox = box; }
 
-
-			struct Line {
-				std::string text = "";
-				unsigned int size = 0; // the size of the text line (in pixels) relative to screen space
-				float yOffset = 0.0f;
-				Graphics::Rect boundingBox = Graphics::Rect();
-				void CalculateBoundingBox(SharedPtr<Font> font, glm::vec2 textPosition);
-			};
 			void SetText(std::string text);
-			void SetPosition(glm::vec2 position);
-			glm::vec2 GetPosition() { return m_Position; }
-			unsigned int m_MaxLineSize = 1000;
+			void RecalculateText();
 
-			std::string m_Text;
+			SharedPtr<Font> GetFont() { return m_Font; }
+			bool IsValid();
+
+			glm::vec2 GetPosition() { return m_BoundingBox.GetMin(); }
+			std::string GetText() { return m_Text; }
 			std::vector<Line>& GetLines() { return m_Lines; };
+
+
 		private:
-			bool PushWord(std::string word);
-			std::vector<Line> m_Lines;
 			SharedPtr<Font> m_Font;
-			glm::vec2 m_Position = {0, 0};
-			float m_Scale = 1.0f;
+			Graphics::Rect m_BoundingBox;
+
+			std::string m_Text = "";
+			std::vector<Line> m_Lines;
 		};
 	}
 }

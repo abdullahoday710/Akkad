@@ -177,7 +177,7 @@ namespace Akkad {
 			m_GUITextShaderProps->SetData("text_color", color);
 			for (unsigned int i = 0; i < text.GetLines().size(); i++)
 			{
-				auto& line = text.GetLines()[i];
+				auto line = text.GetLines()[i];
 				auto linex = position.x;
 
 				std::string::const_iterator c;
@@ -185,40 +185,53 @@ namespace Akkad {
 				{
 					Font::FontCharacter ch = text.GetFont()->GetCharacter(*c);
 					float xpos = linex + ch.Bearing.x * scale;
-					float ypos = line.yOffset - (ch.Size.y - ch.Bearing.y) * scale;
+					float ypos = line.yOffset + (ch.Size.y - ch.Bearing.y);
 					float w = ch.Size.x * scale;
 					float h = ch.Size.y * scale;
 
 					auto fontAtlasSize = text.GetFont()->GetTextureAtlasSize();
-
+					
+					/*
 					float vertices[6][4] = {
-						{ xpos,     ypos + h,   ch.xOffset / fontAtlasSize.x, 0.0f },
-						{ xpos,     ypos,       ch.xOffset / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
-						{ xpos + w, ypos,       (ch.xOffset + ch.Size.x) / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
+						{ xpos,     ypos + h,   ch.xOffset / fontAtlasSize.x, 0.0f }, // top left
+						{ xpos,     ypos,       ch.xOffset / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y }, // bottom left
+						{ xpos + w, ypos,       (ch.xOffset + ch.Size.x) / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y }, // bottom right
 
 						{ xpos,     ypos + h,   ch.xOffset / fontAtlasSize.x, 0.0f },
 						{ xpos + w, ypos,       (ch.xOffset + ch.Size.x) / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
-						{ xpos + w, ypos + h,   (ch.xOffset + ch.Size.x) / fontAtlasSize.x, 0.0f }
+						{ xpos + w, ypos + h,   (ch.xOffset + ch.Size.x) / fontAtlasSize.x, 0.0f } // top right
+					};
+					*/
+
+					float vertices[4][4] =
+					{
+						// positions             // texture coords
+						{ xpos + w, ypos - h,	 (ch.xOffset + ch.Size.x) / fontAtlasSize.x,  0.0f},   // top right
+						{ xpos + w, ypos,		 (ch.xOffset + ch.Size.x) / fontAtlasSize.x,  ch.Size.y / fontAtlasSize.y},   // bottom right
+						{ xpos, ypos,			 ch.xOffset / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y  },   // bottom left
+						{ xpos, ypos - h,		 ch.xOffset / fontAtlasSize.x,  0.0f},  // top left 
+
 					};
 
 					m_GUITextShader->Bind();
 
 					m_GUITextVB->SetSubData(0, vertices, sizeof(vertices));
 					m_GUITextVB->Bind();
+					m_GUITextIB->Bind();
 
 					text.GetFont()->GetAtlas()->Bind(0);
 
 					command->EnableBlending();
 					command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::INVERSE_SRC_ALPHA);
 
-					command->DrawArrays(PrimitiveType::TRIANGLE, 6);
+					command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
 
 					command->DisableBlending();
 
 					linex += (ch.Advance >> 6) * scale;
 				}
 
-				DrawRectImpl(line.boundingBox, { 1.0f, 0,0 }, projection);
+				DrawRectImpl(line.boundingBox, { 1.0f, 0, 0 }, projection);
 				
 			}
 		}
@@ -278,10 +291,19 @@ namespace Akkad {
 
 				vblayout.isDynamic = true;
 				vblayout.Push(ShaderDataType::FLOAT, 4);
+
 				m_GUITextVB = platform->CreateVertexBuffer();
 				m_GUITextVB->SetLayout(vblayout);
-				
 				m_GUITextVB->SetData(0, 7 * GetSizeOfType(ShaderDataType::FLOAT4));
+
+				unsigned int indices[] = {
+					0, 1, 3,   // first triangle
+					1, 2, 3    // second triangle
+				};
+
+				m_GUITextIB = platform->CreateIndexBuffer();
+				m_GUITextIB->SetData(indices, sizeof(indices));
+
 			}
 
 		}

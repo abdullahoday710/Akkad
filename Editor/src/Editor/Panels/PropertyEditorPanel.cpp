@@ -446,6 +446,21 @@ namespace Akkad {
 					textComponent.text.SetFont(fontPath, textComponent.fontSize);
 				}
 			}
+
+			ImGui::Separator();
+
+			ImGui::Text("Alignment");
+			if (ImGui::Button("Left", {35,30}))
+			{
+				textComponent.text.SetAlignment(GUI::GUIText::Alignment::LEFT);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Center", { 50,30 }))
+			{
+				textComponent.text.SetAlignment(GUI::GUIText::Alignment::CENTER);
+			}
+
+			
 		}
 		ImGui::TreePop();
 	}

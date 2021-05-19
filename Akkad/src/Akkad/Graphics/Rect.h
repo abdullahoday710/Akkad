@@ -46,8 +46,18 @@ namespace Akkad {
 			glm::vec2 GetMin() { return m_Min; };
 			glm::vec2 GetMax() { return m_Max; };
 
-			void SetMin(glm::vec2 min) { m_Min = min; };
-			void SetMax(glm::vec2 max) { m_Max = max; };
+			void SetBounds(glm::vec2 min, glm::vec2 max)
+			{
+				m_Min = min;
+				m_Max = max;
+
+				m_Width = max.x - min.x;
+				m_Height = max.y - min.y;
+
+				m_Position.x = m_Min.x + (m_Width / 2);
+				m_Position.y = m_Max.y + (m_Height / 2);
+
+			}
 
 			void SetPosition(glm::vec2 position)
 			{

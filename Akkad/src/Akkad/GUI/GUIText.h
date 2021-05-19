@@ -14,6 +14,10 @@ namespace Akkad {
 		class GUIText
 		{
 		public:
+			enum class Alignment
+			{
+				LEFT, CENTER
+			};
 			struct Line {
 				std::string text = "";
 				unsigned int size = 0;
@@ -23,33 +27,37 @@ namespace Akkad {
 			};
 
 			GUIText() {}
+
 			GUIText(SharedPtr<Font> font)
 			{
 				m_Font = font;
 			}
+
 			GUIText(std::string text, SharedPtr<Font> font) {
 				m_Font = font;
+				SetText(text);
 			}
 
 			void SetFont(std::string path);
 			void SetFont(std::string path, unsigned int fontSize);
 			void SetFont(SharedPtr<Font> font) { m_Font = font; }
-			void SetBoundingBox(Graphics::Rect box) { m_BoundingBox = box; }
-
+			void SetBoundingBox(Graphics::Rect box);
+			void SetAlignment(Alignment alignment);
 			void SetText(std::string text);
+
 			void RecalculateText();
 
 			SharedPtr<Font> GetFont() { return m_Font; }
 			bool IsValid();
 
-			glm::vec2 GetPosition() { return m_BoundingBox.GetMin(); }
+			glm::vec2 GetPosition();
 			std::string GetText() { return m_Text; }
 			std::vector<Line>& GetLines() { return m_Lines; };
-
 
 		private:
 			SharedPtr<Font> m_Font;
 			Graphics::Rect m_BoundingBox;
+			Alignment m_Alignment = Alignment::LEFT;
 
 			std::string m_Text = "";
 			std::vector<Line> m_Lines;

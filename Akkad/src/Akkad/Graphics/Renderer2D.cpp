@@ -178,7 +178,7 @@ namespace Akkad {
 			for (unsigned int i = 0; i < text.GetLines().size(); i++)
 			{
 				auto line = text.GetLines()[i];
-				auto linex = position.x;
+				auto linex = line.boundingBox.GetMin().x;
 
 				std::string::const_iterator c;
 				for (c = line.text.begin(); c != line.text.end(); c++)
@@ -190,18 +190,6 @@ namespace Akkad {
 					float h = ch.Size.y * scale;
 
 					auto fontAtlasSize = text.GetFont()->GetTextureAtlasSize();
-					
-					/*
-					float vertices[6][4] = {
-						{ xpos,     ypos + h,   ch.xOffset / fontAtlasSize.x, 0.0f }, // top left
-						{ xpos,     ypos,       ch.xOffset / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y }, // bottom left
-						{ xpos + w, ypos,       (ch.xOffset + ch.Size.x) / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y }, // bottom right
-
-						{ xpos,     ypos + h,   ch.xOffset / fontAtlasSize.x, 0.0f },
-						{ xpos + w, ypos,       (ch.xOffset + ch.Size.x) / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y },
-						{ xpos + w, ypos + h,   (ch.xOffset + ch.Size.x) / fontAtlasSize.x, 0.0f } // top right
-					};
-					*/
 
 					float vertices[4][4] =
 					{

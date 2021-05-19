@@ -22,6 +22,21 @@ namespace Akkad {
 			m_Font = CreateSharedPtr<Font>(path, fontSize);
 		}
 
+		void GUIText::SetBoundingBox(Graphics::Rect box)
+		{
+			if (box.GetMin() != m_BoundingBox.GetMin() && box.GetMax() != m_BoundingBox.GetMax())
+			{
+				m_BoundingBox = box;
+				RecalculateText();
+			}
+		}
+
+		void GUIText::SetAlignment(Alignment alignment)
+		{
+			m_Alignment = alignment;
+			RecalculateText();
+		}
+
 		void GUIText::SetText(std::string text)
 		{
 			m_Text = text;
@@ -51,24 +66,43 @@ namespace Akkad {
 					auto& currentLine = m_Lines.back();
 					Font::FontCharacter ch = m_Font->GetCharacter(*c);
 					float advance = (ch.Advance >> 6);
+
 					if (maxLineSize > (currentLine.size + advance))
 					{
 						currentLine.text += *(c);
 						currentLine.size += advance;
-						currentLine.CalculateBoundingBox(m_Font, m_BoundingBox.GetMin());
+						currentLine.CalculateBoundingBox(m_Font, GetPosition());
+
+						if (m_Alignment == Alignment::CENTER)
+						{
+							currentLine.boundingBox.SetX(GetPosition().x);
+						}
+
 					}
 
 					else
 					{
 						Line newLine;
 						newLine.yOffset = currentLine.yOffset + m_Font->GetLineSpacing();
-						if (newLine.yOffset < m_BoundingBox.GetMax().y)
-						{
-							newLine.text += *(c);
-							newLine.size += (ch.Advance >> 6);
 
-							newLine.CalculateBoundingBox(m_Font, m_BoundingBox.GetMin());
+						newLine.text += *(c);
+						newLine.size += (ch.Advance >> 6);
+
+						newLine.CalculateBoundingBox(m_Font, GetPosition());
+
+						if (m_Alignment == Alignment::CENTER)
+						{
+							currentLine.boundingBox.SetX(GetPosition().x);
+						}
+
+						if ((newLine.boundingBox.GetMax().y + ch.Size.y) < m_BoundingBox.GetMax().y)
+						{
 							m_Lines.push_back(newLine);
+						}
+
+						else
+						{
+							break;
 						}
 
 					}
@@ -90,10 +124,29 @@ namespace Akkad {
 			}
 		}
 
+		glm::vec2 GUIText::GetPosition()
+		{
+			switch (m_Alignment)
+			{
+			case GUIText::Alignment::LEFT:
+				return m_BoundingBox.GetMin();
+			case GUIText::Alignment::CENTER:
+			{
+				glm::vec2 position;
+				position.x = m_BoundingBox.GetPosition().x;
+				position.y = m_BoundingBox.GetMin().y;
+				return position;
+			}
+			}
+		}
+
 		void GUIText::Line::CalculateBoundingBox(SharedPtr<Font> font, glm::vec2 textPosition)
 		{
-			std::string::const_iterator c;
 			float line_height = 0.0f;
+			glm::vec2 min;
+			glm::vec2 max;
+
+			std::string::const_iterator c;
 			for (c = text.begin(); c != text.end(); c++)
 			{
 				Font::FontCharacter ch = font->GetCharacter(*c);
@@ -107,21 +160,20 @@ namespace Akkad {
 				{
 					line_height = h;
 				}
+
 				if (c == text.begin())
 				{
-					glm::vec2 min;
 					min.x = xpos;
 					min.y = ypos;
-					boundingBox.SetMin(min);
 				}
 
 				textPosition.x += (ch.Advance >> 6);
 				if (std::next(c) == text.end())
 				{
-					glm::vec2 max;
+					
 					max.x = xpos + (ch.Advance >> 6);
 					max.y = ypos - line_height;
-					boundingBox.SetMax(max);
+					boundingBox.SetBounds(min, max);
 				}
 			}
 		}

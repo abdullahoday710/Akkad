@@ -55,20 +55,31 @@ namespace Akkad {
 					Line first_line;
 
 					// top left of the bounding box
-					first_line.yOffset = m_BoundingBox.GetMin().y + m_Font->GetLineSpacing();
+					first_line.yOffset = m_BoundingBox.GetMin().y;
 
 					m_Lines.push_back(first_line);
 				}
 
 				std::string::const_iterator c;
+				float line_height = 0.0f;
 				for (c = m_Text.begin(); c != m_Text.end(); c++)
 				{
 					auto& currentLine = m_Lines.back();
 					Font::FontCharacter ch = m_Font->GetCharacter(*c);
 					float advance = (ch.Advance >> 6);
 
+					if (ch.Size.y > line_height)
+					{
+						line_height = ch.Size.y;
+					}
+
 					if (maxLineSize > (currentLine.size + advance))
 					{
+						if (currentLine.yOffset == m_Lines.front().yOffset)
+						{
+							currentLine.yOffset = m_BoundingBox.GetMin().y + line_height;
+						}
+
 						currentLine.text += *(c);
 						currentLine.size += advance;
 						currentLine.CalculateBoundingBox(m_Font, GetPosition());

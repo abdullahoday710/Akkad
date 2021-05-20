@@ -101,7 +101,7 @@ namespace Akkad {
 			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
 		}
 
-		void Renderer2D::DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color)
+		void Renderer2D::DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, bool filled)
 		{
 			auto platform = Application::GetRenderPlatform();
 			auto command = platform->GetRenderCommand();
@@ -120,12 +120,21 @@ namespace Akkad {
 			m_RectVB->SetSubData(0, vertices, sizeof(vertices));
 			m_RectVB->Bind();
 			m_QuadIB->Bind();
-			command->SetPolygonMode(PolygonMode::LINE);
-			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
-			command->SetPolygonMode(PolygonMode::FILL);
+
+			if (filled)
+			{
+				command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+			}
+
+			else
+			{
+				command->SetPolygonMode(PolygonMode::LINE);
+				command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+				command->SetPolygonMode(PolygonMode::FILL);
+			}
 		}
 
-		void Renderer2D::DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, glm::mat4 projection)
+		void Renderer2D::DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, bool filled, glm::mat4 projection)
 		{
 			auto platform = Application::GetRenderPlatform();
 			auto command = platform->GetRenderCommand();
@@ -144,19 +153,28 @@ namespace Akkad {
 			m_RectVB->SetSubData(0, vertices, sizeof(vertices));
 			m_RectVB->Bind();
 			m_QuadIB->Bind();
-			command->SetPolygonMode(PolygonMode::LINE);
-			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
-			command->SetPolygonMode(PolygonMode::FILL);
+
+			if (filled)
+			{
+				command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+			}
+			else
+			{
+				command->SetPolygonMode(PolygonMode::LINE);
+				command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+				command->SetPolygonMode(PolygonMode::FILL);
+			}
+
 		}
 
-		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color)
+		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color, bool filled)
 		{
-			DrawRectImpl(rect.GetMin(), rect.GetMax(), color);
+			DrawRectImpl(rect.GetMin(), rect.GetMax(), color, filled);
 		}
 
-		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color, glm::mat4 projection)
+		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color, bool filled, glm::mat4 projection)
 		{
-			DrawRectImpl(rect.GetMin(), rect.GetMax(), color, projection);
+			DrawRectImpl(rect.GetMin(), rect.GetMax(), color, filled, projection);
 		}
 
 		void Renderer2D::DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount)
@@ -219,7 +237,10 @@ namespace Akkad {
 					linex += (ch.Advance >> 6) * scale;
 				}
 
-				DrawRectImpl(line.boundingBox, { 1.0f, 0, 0 }, projection);
+				if (m_DrawDebugGUIRects)
+				{
+					DrawRectImpl(line.boundingBox, { 1.0f, 0, 0 }, false, projection);
+				}
 				
 			}
 		}

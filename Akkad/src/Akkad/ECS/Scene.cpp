@@ -198,7 +198,10 @@ namespace Akkad {
 					if (current_child.HasComponent<RectTransformComponent>())
 					{
 						auto& rect_transform = current_child.GetComponent<RectTransformComponent>();
-						Renderer2D::DrawRect(rect_transform.GetRect(), { 1,0,0 }, activeContainer.container.GetProjection());
+						if (Renderer2D::GetGUIDebugDrawState())
+						{
+							Renderer2D::DrawRect(rect_transform.GetRect(), { 1,0,0 }, false, activeContainer.container.GetProjection());
+						}
 
 						if (current_child.HasComponent<GUITextComponent>())
 						{

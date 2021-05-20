@@ -24,15 +24,18 @@ namespace Akkad {
 			static void DrawQuad(Material& material, glm::mat4& transform) { GetInstance().DrawQuadImpl(material, transform); }
 			static void DrawQuad(glm::vec3 color, glm::mat4& transform) { GetInstance().DrawQuadImpl(color, transform); }
 
-			static void DrawRect(glm::vec2 min, glm::vec2 max, glm::vec3 color) { GetInstance().DrawRectImpl(min, max, color); }
-			static void DrawRect(Rect rect, glm::vec3 color) { GetInstance().DrawRectImpl(rect, color); }
-			static void DrawRect(Rect rect, glm::vec3 color, glm::mat4 projection) { GetInstance().DrawRectImpl(rect, color, projection); }
+			static void DrawRect(glm::vec2 min, glm::vec2 max, glm::vec3 color, bool filled) { GetInstance().DrawRectImpl(min, max, color, filled); }
+			static void DrawRect(Rect rect, glm::vec3 color, bool filled) { GetInstance().DrawRectImpl(rect, color, filled); }
+			static void DrawRect(Rect rect, glm::vec3 color, bool filled, glm::mat4 projection) { GetInstance().DrawRectImpl(rect, color, filled, projection); }
 
 			static void Draw(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount) { GetInstance().DrawImpl(vb, shader, vertexCount); };
 			static void RenderText(GUI::GUIText& text, glm::vec2 position, float scale, glm::vec3 color, glm::mat4 projection) { GetInstance().RenderTextImpl(text, position, scale, color, projection); }
 			static void InitShaders() { GetInstance().InitShadersImpl(); }
 			static Camera GetCamera() { return GetInstance().m_Camera; }
 			static SharedPtr<UniformBuffer> GetSystemUniforms() {return GetInstance().m_SceneProps;};
+
+			static bool GetGUIDebugDrawState() { return GetInstance().m_DrawDebugGUIRects; }
+			static void SetGUIDebugDrawState(bool state) { GetInstance().m_DrawDebugGUIRects = state; }
 
 		private:
 			Renderer2D() {};
@@ -47,10 +50,10 @@ namespace Akkad {
 			void DrawQuadImpl(Material& material, glm::mat4& transform);
 			void DrawQuadImpl(glm::vec3 color, glm::mat4& transform);
 
-			void DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color);
-			void DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, glm::mat4 projection);
-			void DrawRectImpl(Rect rect, glm::vec3 color);
-			void DrawRectImpl(Rect rect, glm::vec3 color, glm::mat4 projection);
+			void DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, bool filled);
+			void DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, bool filled, glm::mat4 projection);
+			void DrawRectImpl(Rect rect, glm::vec3 color, bool filled);
+			void DrawRectImpl(Rect rect, glm::vec3 color, bool filled, glm::mat4 projection);
 
 			void DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount);
 
@@ -58,6 +61,7 @@ namespace Akkad {
 
 			void InitShadersImpl();
 
+			bool m_DrawDebugGUIRects = true;
 			Camera m_Camera;
 			glm::mat4 m_SceneCameraViewProjection = glm::mat4(1.0f);
 

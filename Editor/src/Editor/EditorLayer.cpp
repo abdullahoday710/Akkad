@@ -358,6 +358,17 @@ namespace Akkad {
 
 			if (ImGui::BeginMenu("Graphics"))
 			{
+				using namespace Graphics;
+				if (ImGui::BeginMenu("2D Renderer"))
+				{
+					bool guidebug = Renderer2D::GetGUIDebugDrawState();
+					if (ImGui::Checkbox("Draw debug GUI rects", &guidebug))
+					{
+						Renderer2D::SetGUIDebugDrawState(guidebug);
+					}
+
+					ImGui::EndMenu();
+				}
 				if (ImGui::MenuItem("Recompile shaders"))
 				{
 					CompileShaders();

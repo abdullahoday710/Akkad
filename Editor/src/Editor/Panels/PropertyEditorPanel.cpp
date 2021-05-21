@@ -94,6 +94,11 @@ namespace Akkad {
 				DrawGUIContainerComponent();
 			}
 
+			if (m_ActiveEntity.HasComponent<GUIButtonComponent>())
+			{
+				DrawGUIButtonComponent();
+			}
+
 			DrawAddComponent();
 		}
 		
@@ -432,7 +437,7 @@ namespace Akkad {
 
 					if (desc.assetType == AssetType::FONT)
 					{
-						textComponent.text.SetFont(desc.absolutePath);
+						textComponent.text.SetFont(desc.absolutePath, textComponent.fontSize);
 						textComponent.fontAssetID = desc.assetID;
 					}
 				}
@@ -672,6 +677,21 @@ namespace Akkad {
 			if (ImGui::DragFloat("Y constraint", &yConstraint.constraintValue))
 			{
 				rectTransformComp.rect.SetYConstraint(yConstraint);
+			}
+		}
+		ImGui::TreePop();
+	}
+
+	void PropertyEditorPanel::DrawGUIButtonComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		auto& guibutton = m_ActiveEntity.GetComponent<GUIButtonComponent>();
+		if (ImGui::TreeNode("gui button"))
+		{
+			glm::vec3 color = guibutton.button.GetColor();
+			if (ImGui::ColorEdit3("color", glm::value_ptr(color)))
+			{
+				guibutton.button.SetColor(color);
 			}
 		}
 		ImGui::TreePop();

@@ -165,6 +165,8 @@ namespace Akkad {
 				command->SetPolygonMode(PolygonMode::FILL);
 			}
 
+			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
+
 		}
 
 		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color, bool filled)

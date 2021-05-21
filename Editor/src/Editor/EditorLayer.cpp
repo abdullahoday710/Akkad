@@ -1,6 +1,7 @@
 #include "EditorLayer.h"
 #include "ShaderHandler.h"
 #include "Scripting/GameAssemblyHandler.h"
+#include "GUI/GUIFactory.h"
 
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/PropertyEditorPanel.h"
@@ -323,32 +324,18 @@ namespace Akkad {
 
 					if (ImGui::MenuItem("Rect"))
 					{
-						if (!current_container.IsValid())
-						{
-							s_ActiveScene->AddGuiContainer();
-						}
-						Entity rect = Entity(s_ActiveScene->m_Registry.create(), s_ActiveScene.get());
-						rect.AddComponent<RelationShipComponent>();
-						rect.AddComponent<RectTransformComponent>();
-						auto& tag = rect.AddComponent<TagComponent>();
-						tag.Tag = "rect";
-						s_ActiveScene->AssignEntityToParent(current_container, rect);
+						GUIFactory::AddGuiRect();
 					}
 
 
 					if (ImGui::MenuItem("Text"))
 					{
-						if (!current_container.IsValid())
-						{
-							s_ActiveScene->AddGuiContainer();
-						}
-						Entity text = Entity(s_ActiveScene->m_Registry.create(), s_ActiveScene.get());
-						text.AddComponent<RelationShipComponent>();
-						text.AddComponent<RectTransformComponent>();
-						text.AddComponent<GUITextComponent>();
-						auto& tag = text.AddComponent<TagComponent>();
-						tag.Tag = "text";
-						s_ActiveScene->AssignEntityToParent(current_container, text);
+						GUIFactory::AddGuiText();
+					}
+
+					if (ImGui::MenuItem("Button"))
+					{
+						GUIFactory::AddGuiButton();
 					}
 					ImGui::EndMenu();
 				}

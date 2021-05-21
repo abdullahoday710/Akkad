@@ -8,3 +8,4 @@
 #include "GUITextComponent.h"
 #include "GUIContainerComponent.h"
 #include "RectTransformComponent.h"
+#include "GUIButtonComponent.h"

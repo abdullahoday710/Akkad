@@ -4,6 +4,7 @@
 #include "Editor/EditorCamera.h"
 
 #include "Akkad/core.h"
+#include "Akkad/Graphics/Rect.h"
 
 namespace Akkad {
 	namespace Graphics {
@@ -28,7 +29,7 @@ namespace Akkad {
 		float m_ViewportAspectRatio = 0.0f;
 		EditorCamera m_EditorCamera;
 		SharedPtr<Graphics::FrameBuffer> m_buffer;
-		SharedPtr<Graphics::FrameBuffer> m_PickingBuffer;
+		Graphics::Rect m_ViewportRect;
 		void OnScenePlay();
 		void OnSceneStop();
 

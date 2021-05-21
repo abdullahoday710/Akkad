@@ -4,6 +4,7 @@
 
 #include "Akkad/Logging.h"
 #include "Akkad/Application/Application.h"
+#include "Akkad/Input/Input.h"
 #include "Akkad/Graphics/Renderer2D.h"
 #include "Akkad/Asset/AssetManager.h"
 #include "Akkad/Scripting/LoadedGameAssembly.h"
@@ -15,6 +16,15 @@ namespace Akkad {
 	using namespace Graphics;
 	Scene::Scene()
 	{
+
+		FrameBufferDescriptor pickingBufferDescriptor;
+		pickingBufferDescriptor.width = 800;
+		pickingBufferDescriptor.height = 800;
+		pickingBufferDescriptor.ColorAttachmentFormat = TextureFormat::RGB32_FLOAT;
+		if (Application::GetRenderPlatform() != nullptr)
+		{
+			m_PickingBuffer = Application::GetRenderPlatform()->CreateFrameBuffer(pickingBufferDescriptor);
+		}
 	}
 
 	Scene::~Scene()
@@ -103,30 +113,41 @@ namespace Akkad {
 	void Scene::RenderPickingBuffer2D()
 	{
 		auto command = Application::GetRenderPlatform()->GetRenderCommand();
-
-		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
+		m_PickingBuffer->Bind();
 		command->Clear();
 
-		for (auto it : SortingLayer2DHandler::GetRegisteredLayers())
 		{
-			for (auto entity : view)
+			auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
+
+			for (auto it : SortingLayer2DHandler::GetRegisteredLayers())
 			{
-				auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
-
-				if (spriteRenderer.sortingLayer == it.name)
+				for (auto entity : view)
 				{
-					auto& transform = view.get<TransformComponent>(entity);
+					auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
 
-					uint32_t entityID = (uint32_t)entity;
+					if (spriteRenderer.sortingLayer == it.name)
+					{
+						auto& transform = view.get<TransformComponent>(entity);
 
-					entityID += 1;
+						uint32_t entityID = (uint32_t)entity;
 
-					glm::vec3 color = {entityID , entityID , entityID};
-					Renderer2D::DrawQuad(color, transform.GetTransformMatrix());
+						entityID += 1;
+
+						glm::vec3 color = { entityID , entityID , entityID };
+						Renderer2D::DrawQuad(color, transform.GetTransformMatrix());
+					}
+
 				}
-
 			}
 		}
+
+		// GUI picking
+		{
+			RenderGUI(true);
+		}
+
+
+		m_PickingBuffer->Unbind();
 		
 	}
 
@@ -177,7 +198,7 @@ namespace Akkad {
 
 	}
 
-	void Scene::RenderGUIElement(Entity parent)
+	void Scene::RenderGUIElement(Entity parent, bool pickingPhase)
 	{
 		Entity activeContainerEntity = GetGuiContainer();
 		auto& activeContainer = activeContainerEntity.GetComponent<GUIContainerComponent>();
@@ -193,6 +214,7 @@ namespace Akkad {
 				if (current_child.IsValid())
 				{
 					auto& current_child_relation = current_child.GetComponent<RelationShipComponent>();
+					size_t child_id = (size_t)current_child.m_Handle;
 
 					// Draw gui components here
 					if (current_child.HasComponent<RectTransformComponent>())
@@ -200,25 +222,47 @@ namespace Akkad {
 						auto& rect_transform = current_child.GetComponent<RectTransformComponent>();
 						if (Renderer2D::GetGUIDebugDrawState())
 						{
-							Renderer2D::DrawRect(rect_transform.GetRect(), { 1,0,0 }, false, activeContainer.container.GetProjection());
+							if (!pickingPhase)
+							{
+								Renderer2D::DrawRect(rect_transform.GetRect(), { 1,0,0 }, false, activeContainer.container.GetProjection());
+							}
 						}
 
 						if (current_child.HasComponent<GUITextComponent>())
 						{
 							auto& guitext = current_child.GetComponent<GUITextComponent>();
 							guitext.text.SetBoundingBox(rect_transform.GetRect());
-							Renderer2D::RenderText(guitext.text, guitext.text.GetPosition(), 1.0f, guitext.textColor, activeContainer.container.GetProjection());
+							if (!pickingPhase)
+							{
+								Renderer2D::RenderText(guitext.text, guitext.text.GetPosition(), 1.0f, guitext.textColor, activeContainer.container.GetProjection());
+							}
+							
+						}
+
+						if (current_child.HasComponent<GUIButtonComponent>())
+						{
+							auto& guibutton = current_child.GetComponent<GUIButtonComponent>();
+							guibutton.button.SetUIRect(rect_transform.rect);
+							if (pickingPhase)
+							{
+								child_id += 1;
+								Renderer2D::DrawRect(guibutton.button.GetUIRect().GetRect(), {child_id, child_id, child_id}, true, activeContainer.container.GetProjection());
+							}
+							else
+							{
+								Renderer2D::DrawRect(guibutton.button.GetUIRect().GetRect(), guibutton.button.GetColor(), true, activeContainer.container.GetProjection());
+							}
 						}
 					}
 
-					RenderGUIElement(current_child); // draw the child elements of the current child
+					RenderGUIElement(current_child, pickingPhase); // draw the child elements of the current child
 					current_child = current_child_relation.next;
 				}
 			}
 		}
 	}
 
-	void Scene::RenderGUI()
+	void Scene::RenderGUI(bool pickingPhase)
 	{
 		UpdateGUIPositions();
 
@@ -227,10 +271,8 @@ namespace Akkad {
 		{
 			auto& activeContainer = activeContainerEntity.GetComponent<GUIContainerComponent>();
 
-			RenderGUIElement(activeContainerEntity);
+			RenderGUIElement(activeContainerEntity, pickingPhase);
 		}
-
-
 		
 	}	
 
@@ -289,6 +331,46 @@ namespace Akkad {
 
 			}
 		}
+
+		// Handle GUI mouse events
+		{
+			auto input = Application::GetInputManager();
+
+			if (input->GetMouseDown(MouseButtons::LEFT))
+			{
+				int mouseX = input->GetMouseX();
+				int mouseY = input->GetMouseY();
+
+				if (mouseX < m_ViewportRect.GetMax().x && mouseY < m_ViewportRect.GetMax().y)
+				{
+					if (mouseX > m_ViewportRect.GetMin().x && mouseY > m_ViewportRect.GetMin().y)
+					{
+						int bufferX = mouseX - (int)m_ViewportRect.GetMin().x;
+						int bufferY = mouseY - (int)m_ViewportRect.GetMin().y;
+						auto pixel = m_PickingBuffer->ReadPixels(bufferX, m_ViewportSize.y - bufferY - 1);
+						unsigned int entityID = pixel.x;
+						std::cout << pixel.x << std::endl;
+
+						entityID -= 1;
+						Entity PickedEntity = Entity((entt::entity)entityID, this);
+						if (PickedEntity.IsValid())
+						{
+							if (PickedEntity.HasComponent<GUIButtonComponent>())
+							{
+								auto& uibutton = PickedEntity.GetComponent<GUIButtonComponent>();
+
+								if (uibutton.button.m_Callback)
+								{
+									uibutton.button.m_Callback();
+								}
+								std::cout << PickedEntity.GetComponent<TagComponent>().Tag << std::endl;
+							}
+						}
+	
+					}
+				}
+			}
+		}
 		
 	}
 
@@ -326,6 +408,7 @@ namespace Akkad {
 
 	void Scene::SetViewportSize(glm::vec2 size)
 	{
+		m_PickingBuffer->SetSize(size.x, size.y);
 		m_ViewportSize = size;
 	}
 

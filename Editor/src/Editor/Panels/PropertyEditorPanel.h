@@ -37,6 +37,7 @@ namespace Akkad {
 		void DrawGUITextComponent();
 		void DrawGUIContainerComponent();
 		void DrawRectTransformComponent();
+		void DrawGUIButtonComponent();
 
 	};
 }

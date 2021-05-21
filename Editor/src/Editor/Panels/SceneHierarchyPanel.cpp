@@ -81,8 +81,11 @@ namespace Akkad {
 					if (current_child.IsValid())
 					{
 						DrawEntityNode(current_child);
-						auto current_child_relation = current_child.GetComponent<RelationShipComponent>();
-						current_child = current_child_relation.next;
+						if (current_child.IsValid())
+						{
+							auto current_child_relation = current_child.GetComponent<RelationShipComponent>();
+							current_child = current_child_relation.next;
+						}
 					}
 				}
 

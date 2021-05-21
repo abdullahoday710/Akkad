@@ -482,7 +482,7 @@ namespace Akkad {
 		ImGui::TreePop();
 	}
 
-	std::string ConstraintTypeToStr(GUI::ConstraintType type)
+	std::string ConstraintTypeToStr_(GUI::ConstraintType type)
 	{
 		switch (type)
 		{
@@ -516,7 +516,7 @@ namespace Akkad {
 			auto yConstraint = rectTransformComp.rect.GetYConstraint();
 
 			const char* size_constraints[] = { "Relative", "Pixel", "Aspect" };
-			std::string selected_width_constraint = ConstraintTypeToStr(wConstraint.type);
+			std::string selected_width_constraint = ConstraintTypeToStr_(wConstraint.type);
 
 			if (ImGui::BeginCombo("Width constraint type", selected_width_constraint.c_str()))
 			{
@@ -557,8 +557,8 @@ namespace Akkad {
 
 			ImGui::Separator();
 
-			std::string selected_height_constraint = ConstraintTypeToStr(hConstraint.type);
-			if (ImGui::BeginCombo("Height constraint type", ConstraintTypeToStr(hConstraint.type).c_str()))
+			std::string selected_height_constraint = ConstraintTypeToStr_(hConstraint.type);
+			if (ImGui::BeginCombo("Height constraint type", ConstraintTypeToStr_(hConstraint.type).c_str()))
 			{
 				for (int n = 0; n < IM_ARRAYSIZE(size_constraints); n++)
 				{
@@ -599,7 +599,7 @@ namespace Akkad {
 			ImGui::Separator();
 
 			const char* position_constraints[] = { "Relative", "Pixel", "Center" };
-			std::string selected_x_constraint = ConstraintTypeToStr(xConstraint.type);
+			std::string selected_x_constraint = ConstraintTypeToStr_(xConstraint.type);
 
 			if (ImGui::BeginCombo("X constraint type", selected_x_constraint.c_str()))
 			{
@@ -640,9 +640,9 @@ namespace Akkad {
 
 			ImGui::Separator();
 
-			std::string selected_y_constraint = ConstraintTypeToStr(yConstraint.type);
+			std::string selected_y_constraint = ConstraintTypeToStr_(yConstraint.type);
 
-			if (ImGui::BeginCombo("Y constraint type", ConstraintTypeToStr(yConstraint.type).c_str()))
+			if (ImGui::BeginCombo("Y constraint type", ConstraintTypeToStr_(yConstraint.type).c_str()))
 			{
 				for (int n = 0; n < IM_ARRAYSIZE(position_constraints); n++)
 				{

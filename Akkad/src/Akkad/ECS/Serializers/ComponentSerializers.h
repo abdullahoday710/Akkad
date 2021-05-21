@@ -6,3 +6,4 @@
 #include "CameraComponentSerializer.h"
 #include "RigidBody2dComponentSerializer.h"
 #include "GUITextComponentSerializer.h"
+#include "RectTransformComponentSerializer.h"

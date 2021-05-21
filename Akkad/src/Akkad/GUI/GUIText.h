@@ -50,6 +50,7 @@ namespace Akkad {
 			SharedPtr<Font> GetFont() { return m_Font; }
 			bool IsValid();
 
+			Alignment GetAlignment() { return m_Alignment; }
 			glm::vec2 GetPosition();
 			std::string GetText() { return m_Text; }
 			std::vector<Line>& GetLines() { return m_Lines; };

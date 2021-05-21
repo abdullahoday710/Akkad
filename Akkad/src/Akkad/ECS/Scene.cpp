@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include "Entity.h"
-#include "SceneSerializer.h"
+#include "Serializers/SceneSerializer.h"
 
 #include "Akkad/Logging.h"
 #include "Akkad/Application/Application.h"

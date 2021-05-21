@@ -1,7 +1,7 @@
 #pragma once
 #include <Akkad/core.h>
 
-#include "Scene.h"
+#include "Akkad/ECS/Scene.h"
 
 namespace Akkad {
 	class SceneSerializer

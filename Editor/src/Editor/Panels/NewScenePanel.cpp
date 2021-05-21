@@ -3,7 +3,7 @@
 
 #include "Editor/EditorLayer.h"
 
-#include <Akkad/ECS/SceneSerializer.h>
+#include <Akkad/ECS/Serializers/SceneSerializer.h>
 
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>

@@ -21,7 +21,7 @@
 #include <Akkad/Input/KeyCodes.h>
 #include <Akkad/ECS/Entity.h>
 #include <Akkad/ECS/Components/Components.h>
-#include <Akkad/ECS/SceneSerializer.h>
+#include <Akkad/ECS/Serializers/SceneSerializer.h>
 #include <Akkad/ECS/SceneManager.h>
 #include <Akkad/Asset/AssetManager.h>
 #include <Akkad/Scripting/LoadedGameAssembly.h>

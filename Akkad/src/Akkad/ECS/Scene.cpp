@@ -349,7 +349,6 @@ namespace Akkad {
 						int bufferY = mouseY - (int)m_ViewportRect.GetMin().y;
 						auto pixel = m_PickingBuffer->ReadPixels(bufferX, m_ViewportSize.y - bufferY - 1);
 						unsigned int entityID = pixel.x;
-						std::cout << pixel.x << std::endl;
 
 						entityID -= 1;
 						Entity PickedEntity = Entity((entt::entity)entityID, this);
@@ -363,7 +362,6 @@ namespace Akkad {
 								{
 									uibutton.button.m_Callback();
 								}
-								std::cout << PickedEntity.GetComponent<TagComponent>().Tag << std::endl;
 							}
 						}
 	

@@ -70,6 +70,11 @@ namespace Akkad {
 			RectTransformComponentSerializer::Serialize(entity, entity_data);
 		}
 
+		if (entity.HasComponent<GUIButtonComponent>())
+		{
+			GUIButtonComponentSerializer::Serialize(entity, entity_data);
+		}
+
 		auto& entity_relation = entity.GetComponent<RelationShipComponent>();
 		Entity current_child = entity_relation.first_child;
 
@@ -168,6 +173,13 @@ namespace Akkad {
 			else if (component.key() == "RectTransformComponent")
 			{
 				RectTransformComponentSerializer::Deserialize(entity, componentData);
+				continue;
+
+			}
+
+			else if (component.key() == "GUIButtonComponent")
+			{
+				GUIButtonComponentSerializer::Deserialize(entity, componentData);
 				continue;
 
 			}

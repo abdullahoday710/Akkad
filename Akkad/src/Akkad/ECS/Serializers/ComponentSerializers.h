@@ -7,3 +7,4 @@
 #include "RigidBody2dComponentSerializer.h"
 #include "GUITextComponentSerializer.h"
 #include "RectTransformComponentSerializer.h"
+#include "GUIButtonComponentSerializer.h"

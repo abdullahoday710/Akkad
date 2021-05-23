@@ -149,13 +149,14 @@ namespace Akkad {
 		{
 		case AssetType::UNKNOWN:
 			return "unkown";
-			break;
 		case AssetType::TEXTURE:
 			return "texture";
-			break;
 		case AssetType::SHADER:
 			return "shader";
-			break;
+		case AssetType::FONT:
+			return "font";
+		default:
+			return "unkown";
 		}
 	}
 

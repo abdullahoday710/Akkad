@@ -581,6 +581,11 @@ namespace Akkad {
 				parent_relation.first_child = entity_relation.next;
 			}
 
+			else if (parent_relation.last_child == entity)
+			{
+				parent_relation.last_child = entity_relation.prev;
+			}
+
 			parent_relation.children -= 1;
 		}
 

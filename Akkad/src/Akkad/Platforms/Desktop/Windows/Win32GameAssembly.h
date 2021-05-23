@@ -7,7 +7,7 @@ namespace Akkad {
 	{
 
 	public:
-		virtual void LoadAssembly(const char* filename) override;
+		virtual bool LoadAssembly(const char* filename) override;
 		virtual bool Free() override;
 
 		virtual void Initialize(ApplicationComponents& appComponents) override;

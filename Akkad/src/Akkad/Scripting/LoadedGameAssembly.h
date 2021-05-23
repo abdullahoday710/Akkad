@@ -14,7 +14,7 @@ namespace Akkad {
 	class LoadedGameAssembly
 	{
 	public:
-		virtual void LoadAssembly(const char* filename) = 0;
+		virtual bool LoadAssembly(const char* filename) = 0;
 		virtual bool Free() = 0;
 
 		virtual void Initialize(ApplicationComponents& appComponents) = 0;

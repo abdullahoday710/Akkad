@@ -1,5 +1,6 @@
 #include "GameAssemblyHandler.h"
 
+#include <Akkad/Logging.h>
 #include <Akkad/PlatformMacros.h>
 #include <Akkad/Application/Application.h>
 #include <Akkad/Scripting/LoadedGameAssembly.h>
@@ -23,10 +24,17 @@ namespace Akkad {
 		if (!loadedGameAssembly)
 		{
 			auto assembly = Application::GetInstance().m_LoadedGameAssembly;
-			assembly->LoadAssembly(filename.c_str());
-			assembly->Initialize(Application::GetInstance().m_ApplicationComponents);
+			if (assembly->LoadAssembly(filename.c_str()))
+			{
+				assembly->Initialize(Application::GetInstance().m_ApplicationComponents);
+				loadedGameAssembly = true;
+			}
 
-			loadedGameAssembly = true;
+			else
+			{
+				AK_WARNING("Failed to load the game assembly, maybe the assembly was never compiled or it was deleted.");
+			}
+
 		}
 
 	}

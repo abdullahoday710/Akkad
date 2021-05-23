@@ -9,7 +9,7 @@
 
 namespace Akkad {
 
-	void Win32GameAssembly::LoadAssembly(const char* filename)
+	bool Win32GameAssembly::LoadAssembly(const char* filename)
 	{
 		std::string filenameExt = filename;
 		filenameExt += ".dll";
@@ -32,8 +32,12 @@ namespace Akkad {
 			hDLL = LoadLibraryA(filenameExt.c_str());
 		}
 
-		AK_ASSERT(hDLL != NULL, "Failed to load the game assembly !!");
-		m_Handle = (void*)hDLL;
+		if (hDLL != NULL)
+		{
+			m_Handle = (void*)hDLL;
+			return true;
+		}
+		return false;
 	}
 
 	bool Win32GameAssembly::Free()

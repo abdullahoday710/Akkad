@@ -82,6 +82,10 @@ namespace Akkad {
 		std::vector<AssetDescriptor> GetAllShaders();
 		/*----------------------------*/
 
+		/*----- Font file handlers -----*/
+		AssetDescriptor GetFontByName(std::string fontname);
+		/*----------------------------*/
+
 		/*---- Helper functions ----*/
 		static std::string AssetTypeToStr(AssetType type);
 		static AssetType GetAssetTypeFromFileExtension(std::string extension);

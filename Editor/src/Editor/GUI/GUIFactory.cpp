@@ -1,11 +1,15 @@
 #include "GUIFactory.h"
 
 #include <Akkad/ECS/Components/Components.h>
+#include <Akkad/Application/Application.h>
+#include <Akkad/Asset/AssetManager.h>
 
 namespace Akkad {
 	using namespace GUI;
 	Entity GUIFactory::AddGuiText()
 	{
+		auto assetmanager = Application::GetAssetManager();
+
 		auto scene = EditorLayer::GetActiveScene();
 		CheckGuiContainer();
 
@@ -13,6 +17,11 @@ namespace Akkad {
 		text.AddComponent<RelationShipComponent>();
 		text.AddComponent<RectTransformComponent>();
 		text.AddComponent<GUITextComponent>();
+
+		auto& uitext = text.GetComponent<GUITextComponent>();
+		auto defaultFont = assetmanager->GetFontByName("Roboto-Medium");
+		uitext.text.SetFont(defaultFont.absolutePath);
+
 		auto& tag = text.AddComponent<TagComponent>();
 		tag.Tag = "text";
 		scene->AssignEntityToParent(scene->GetGuiContainer(), text);

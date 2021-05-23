@@ -128,6 +128,21 @@ namespace Akkad {
 		return result;
 	}
 
+	AssetDescriptor AssetManager::GetFontByName(std::string fontname)
+	{
+		for (auto it : m_RegisteredAssets)
+		{
+			if (it.second.assetType == AssetType::FONT && it.second.assetName == fontname)
+			{
+				return it.second;
+			}
+		}
+
+		AK_ERROR("Unable to get shader : {}", fontname);
+		AssetDescriptor err;
+		return err;
+	}
+
 	std::string AssetManager::AssetTypeToStr(AssetType type)
 	{
 		switch (type)

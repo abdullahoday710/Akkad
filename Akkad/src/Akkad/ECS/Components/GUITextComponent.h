@@ -7,7 +7,7 @@ namespace Akkad {
 		GUITextComponent() {}
 		GUITextComponent(std::string inText, std::string inFontAssetID, std::string fontAbsPath, unsigned int inFontSize, glm::vec3 inTextColor) : text()
 		{
-			text.SetFont(fontAbsPath, fontSize);
+			text.SetFont(fontAbsPath, inFontSize);
 			text.SetText(inText);
 			fontAssetID = inFontAssetID;
 			fontSize = inFontSize;

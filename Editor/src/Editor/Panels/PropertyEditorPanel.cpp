@@ -405,12 +405,12 @@ namespace Akkad {
 		auto& textComponent = m_ActiveEntity.GetComponent<GUITextComponent>();
 		if (ImGui::TreeNode("Text"))
 		{
-			std::string text = textComponent.text.GetText();
+			std::string text = textComponent.text;
 			if (ImGui::InputText("text", &text))
 			{
-				if (textComponent.text.IsValid())
+				if (textComponent._textsys.IsValid())
 				{
-					textComponent.text.SetText(text);
+					textComponent.text = text;
 				}
 			}
 			
@@ -437,7 +437,7 @@ namespace Akkad {
 
 					if (desc.assetType == AssetType::FONT)
 					{
-						textComponent.text.SetFont(desc.absolutePath, textComponent.fontSize);
+						textComponent._textsys.SetFont(desc.absolutePath, textComponent.fontSize);
 						textComponent.fontAssetID = desc.assetID;
 					}
 				}
@@ -448,7 +448,7 @@ namespace Akkad {
 			{
 				if (!textComponent.fontAssetID.empty())
 				{
-					textComponent.text.SetFont(fontPath, textComponent.fontSize);
+					textComponent._textsys.SetFont(fontPath, textComponent.fontSize);
 				}
 			}
 
@@ -457,12 +457,12 @@ namespace Akkad {
 			ImGui::Text("Alignment");
 			if (ImGui::Button("Left", {35,30}))
 			{
-				textComponent.text.SetAlignment(GUI::GUIText::Alignment::LEFT);
+				textComponent._textsys.SetAlignment(GUI::GUIText::Alignment::LEFT);
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Center", { 50,30 }))
 			{
-				textComponent.text.SetAlignment(GUI::GUIText::Alignment::CENTER);
+				textComponent._textsys.SetAlignment(GUI::GUIText::Alignment::CENTER);
 			}
 
 			

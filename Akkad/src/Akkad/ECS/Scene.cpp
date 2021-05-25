@@ -231,10 +231,14 @@ namespace Akkad {
 						if (current_child.HasComponent<GUITextComponent>())
 						{
 							auto& guitext = current_child.GetComponent<GUITextComponent>();
-							guitext.text.SetBoundingBox(rect_transform.GetRect());
+							if (guitext._textsys.GetText() != guitext.text)
+							{
+								guitext._textsys.SetText(guitext.text);
+							}
+							guitext._textsys.SetBoundingBox(rect_transform.GetRect());
 							if (!pickingPhase)
 							{
-								Renderer2D::RenderText(guitext.text, guitext.text.GetPosition(), 1.0f, guitext.textColor, activeContainer.container.GetProjection());
+								Renderer2D::RenderText(guitext._textsys, guitext._textsys.GetPosition(), 1.0f, guitext.textColor, activeContainer.container.GetProjection());
 							}
 							
 						}

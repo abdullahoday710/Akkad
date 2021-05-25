@@ -35,11 +35,8 @@ workspace "GameAssembly"
 			"%{IncludeDir.entt}",
 			"%{IncludeDir.box2d}",
 		}
-		defines {"AK_GAME_ASSEMBLY"}
 
-		links {
-		"Akkad.lib"
-		}
+		defines {"AK_GAME_ASSEMBLY"}
 
 		filter "system:windows"
 			systemversion "latest"

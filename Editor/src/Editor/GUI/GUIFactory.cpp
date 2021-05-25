@@ -20,7 +20,8 @@ namespace Akkad {
 
 		auto& uitext = text.GetComponent<GUITextComponent>();
 		auto defaultFont = assetmanager->GetFontByName("Roboto-Medium");
-		uitext.text.SetFont(defaultFont.absolutePath);
+		uitext.fontAssetID = defaultFont.assetID;
+		uitext._textsys.SetFont(defaultFont.absolutePath);
 
 		auto& tag = text.AddComponent<TagComponent>();
 		tag.Tag = "text";
@@ -66,7 +67,7 @@ namespace Akkad {
 		auto& textcomp = text.GetComponent<GUITextComponent>();
 
 		textcomp.textColor = { 0,0,0 };
-		textcomp.text.SetAlignment(GUIText::Alignment::CENTER);
+		textcomp._textsys.SetAlignment(GUIText::Alignment::CENTER);
 		textcomp.fontSize = 30;
 
 		auto& textrect = text.GetComponent<RectTransformComponent>();

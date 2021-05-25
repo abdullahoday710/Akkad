@@ -5,6 +5,10 @@
 
 #include <glad/glad.h>
 #include <algorithm>
+
+#include <ft2build.h>
+#include <freetype/freetype.h>
+
 namespace Akkad {
 	namespace GUI {
 

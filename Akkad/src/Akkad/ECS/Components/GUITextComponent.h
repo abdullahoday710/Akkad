@@ -4,18 +4,15 @@
 namespace Akkad {
 	struct GUITextComponent
 	{
-		GUITextComponent() {}
-		GUITextComponent(std::string inText, std::string inFontAssetID, std::string fontAbsPath, unsigned int inFontSize, glm::vec3 inTextColor) : text()
+		GUITextComponent() : text()
 		{
-			text.SetFont(fontAbsPath, inFontSize);
-			text.SetText(inText);
-			fontAssetID = inFontAssetID;
-			fontSize = inFontSize;
-			textColor = inTextColor;
+
 		}
-		GUI::GUIText text;
+
+		GUI::GUIText _textsys;
 		std::string fontAssetID;
 		unsigned int fontSize = 48;
 		glm::vec3 textColor = { 1,1,1 };
+		std::string text;
 	};
 }

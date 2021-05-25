@@ -2,10 +2,10 @@
 #include "Akkad/core.h"
 
 #include <glm/glm.hpp>
-#include <ft2build.h>
-#include FT_FREETYPE_H
 
 #include <map>
+struct FT_LibraryRec_;
+struct FT_FaceRec_;
 
 namespace Akkad {
 
@@ -41,8 +41,8 @@ namespace Akkad {
 			glm::vec2 CalculateTextureAtlasSize();
 			void GenerateTextureAtlas();
 			unsigned int m_LineSpacing = 0;
-			static FT_Library s_FTLib;
-			FT_Face m_Face;
+			static FT_LibraryRec_* s_FTLib;
+			FT_FaceRec_* m_Face;
 
 			SharedPtr<Graphics::Texture> m_FontTextureAtlas;
 			glm::vec2 m_TextureAtlasSize;

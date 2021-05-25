@@ -10,9 +10,9 @@ namespace Akkad {
 		auto textComponent = entity.GetComponent<GUITextComponent>();
 		entity_data["GUITextComponent"]["fontAssetID"] = textComponent.fontAssetID;
 		entity_data["GUITextComponent"]["fontSize"] = textComponent.fontSize;
-		entity_data["GUITextComponent"]["text"] = textComponent.text.GetText();
+		entity_data["GUITextComponent"]["text"] = textComponent._textsys.GetText();
 		
-		switch (textComponent.text.GetAlignment())
+		switch (textComponent._textsys.GetAlignment())
 		{
 		case GUI::GUIText::Alignment::LEFT:
 		{
@@ -44,16 +44,19 @@ namespace Akkad {
 		textColor.z = component_data["textColor"][2];
 
 		auto desc = Application::GetAssetManager()->GetDescriptorByID(fontAssetID);
-		auto& uitext = entity.AddComponent<GUITextComponent>(text, fontAssetID, desc.absolutePath, fontSize, textColor);
-
+		auto& uitext = entity.AddComponent<GUITextComponent>();
+		uitext.text = text;
+		uitext.fontAssetID = fontAssetID;
+		uitext.fontSize = fontSize;
+		uitext._textsys.SetFont(desc.absolutePath);
 		if (component_data["alignment"] == "Left")
 		{
-			uitext.text.SetAlignment(GUI::GUIText::Alignment::LEFT);
+			uitext._textsys.SetAlignment(GUI::GUIText::Alignment::LEFT);
 		}
 
 		if (component_data["alignment"] == "Center")
 		{
-			uitext.text.SetAlignment(GUI::GUIText::Alignment::CENTER);
+			uitext._textsys.SetAlignment(GUI::GUIText::Alignment::CENTER);
 		}
 
 	}

@@ -1,9 +1,8 @@
 import sys
 import os
 from shutil import copy
-from shutil import copytree, ignore_patterns
+from shutil import copytree, ignore_patterns, copyfile, rmtree
 from distutils.dir_util import copy_tree
-from shutil import copyfile
 
 workspace_location = sys.argv[1]
 project_name = sys.argv[2]
@@ -11,15 +10,6 @@ project_output_dir = sys.argv[3]
 
 game_assembly_include_path = workspace_location +"/bin/" + project_output_dir + "/"+ project_name+ "/GameAssembly/include/"
 dependencies_src_path = workspace_location + "/3rdparty/"
-
-def include_patterns(*patterns):
-    def _ignore_patterns(path, names):
-        keep = set(name for pattern in patterns
-                    for name in filter(names, pattern))
-        ignore = set(name for name in names
-                            if name not in keep and not isdir(join(path, name)))
-        return ignore
-        return _ignore_patterns
 
 def copy_base_game_assembly_files():
     game_assembly_src_path = workspace_location + "/GameAssembly/src"
@@ -32,8 +22,9 @@ def copy_base_game_assembly_files():
 def copy_akkad_include_files():
     akkad_src_path = workspace_location + "/Akkad/src/Akkad"
     akkad_dest_path = game_assembly_include_path + "/Akkad/Akkad"
-    if(not os.path.isdir(akkad_dest_path)):
-        copytree(akkad_src_path, akkad_dest_path, ignore=ignore_patterns('*.cpp'))
+    if(os.path.isdir(akkad_dest_path)):
+        rmtree(akkad_dest_path)
+    copytree(akkad_src_path, akkad_dest_path, ignore=ignore_patterns('*.cpp'))
 
 def copy_resource_files():
     res_src_path = workspace_location + "/" + project_name + "/res"

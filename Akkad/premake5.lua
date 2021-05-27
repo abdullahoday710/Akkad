@@ -41,7 +41,6 @@ project "Akkad"
         "spdlog",
         "SPIRV-Cross",
         "box2d",
-        "freetype",
     }
     
     filter "system:windows"

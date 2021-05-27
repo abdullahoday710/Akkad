@@ -29,10 +29,12 @@ namespace Akkad {
 		{
 			InitFreeType();
 			SetFontFile(filePath, pixelSize);
+			m_FontSize = pixelSize;
 		}
 
 		bool Font::SetFontFile(std::string filePath, unsigned int pixelSize)
 		{
+			m_FontSize = pixelSize;
 			if (FT_New_Face(s_FTLib, filePath.c_str(), 0, &m_Face))
 			{
 				return false;

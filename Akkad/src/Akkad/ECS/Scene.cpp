@@ -235,6 +235,16 @@ namespace Akkad {
 							{
 								guitext._textsys.SetText(guitext.text);
 							}
+							if (guitext._textsys.GetFont()->GetFontSize() != guitext.fontSize)
+							{
+								if (!guitext.fontAssetID.empty())
+								{
+									auto desc = Application::GetAssetManager()->GetDescriptorByID(guitext.fontAssetID);
+
+									guitext._textsys.SetFont(desc.absolutePath, guitext.fontSize);
+									guitext._textsys.RecalculateText();
+								}
+							}
 							guitext._textsys.SetBoundingBox(rect_transform.GetRect());
 							if (!pickingPhase)
 							{

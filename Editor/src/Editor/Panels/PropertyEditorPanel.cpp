@@ -443,13 +443,11 @@ namespace Akkad {
 				}
 				ImGui::EndDragDropTarget();
 			}
+			auto ftsize = textComponent.fontSize;
 
-			if (ImGui::InputScalar("Font Size", ImGuiDataType_U32, &textComponent.fontSize))
+			if (ImGui::InputScalar("Font Size", ImGuiDataType_U32, &ftsize))
 			{
-				if (!textComponent.fontAssetID.empty())
-				{
-					textComponent._textsys.SetFont(fontPath, textComponent.fontSize);
-				}
+				textComponent.fontSize = ftsize;
 			}
 
 			ImGui::Separator();

@@ -36,6 +36,7 @@ namespace Akkad {
 			SharedPtr<Graphics::Texture> GetAtlas() { return m_FontTextureAtlas; };
 			FontCharacter GetCharacter(unsigned long code);
 			unsigned int GetLineSpacing();
+			unsigned int GetFontSize() { return m_FontSize; }
 		private:
 			void InitFreeType();
 			glm::vec2 CalculateTextureAtlasSize();
@@ -47,6 +48,7 @@ namespace Akkad {
 			SharedPtr<Graphics::Texture> m_FontTextureAtlas;
 			glm::vec2 m_TextureAtlasSize;
 			std::map<unsigned long, FontCharacter> m_FontCharacters;
+			unsigned int m_FontSize = 48;
 			
 		};
 	}

@@ -31,7 +31,6 @@ project "Akkad"
         "%{IncludeDir.entt}",
         "%{IncludeDir.json}",
         "%{IncludeDir.box2d}",
-        "%{IncludeDir.freetype}",
     }
     
     links

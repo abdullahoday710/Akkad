@@ -189,62 +189,7 @@ namespace Akkad {
 
 		void Renderer2D::RenderTextImpl(GUI::GUIText& text, glm::vec2 position, float scale, glm::vec3 color, glm::mat4 projection)
 		{
-			using namespace GUI;
-			auto command = Application::GetRenderPlatform()->GetRenderCommand();
-
-
-			m_GUITextShaderProps->SetData("projection", projection);
-			m_GUITextShaderProps->SetData("text_color", color);
-			for (unsigned int i = 0; i < text.GetLines().size(); i++)
-			{
-				auto line = text.GetLines()[i];
-				auto linex = line.boundingBox.GetMin().x;
-
-				std::string::const_iterator c;
-				for (c = line.text.begin(); c != line.text.end(); c++)
-				{
-					Font::FontCharacter ch = text.GetFont()->GetCharacter(*c);
-					float xpos = linex + ch.Bearing.x * scale;
-					float ypos = line.yOffset + (ch.Size.y - ch.Bearing.y);
-					float w = ch.Size.x * scale;
-					float h = ch.Size.y * scale;
-
-					auto fontAtlasSize = text.GetFont()->GetTextureAtlasSize();
-
-					float vertices[4][4] =
-					{
-						// positions             // texture coords
-						{ xpos + w, ypos - h,	 (ch.xOffset + ch.Size.x) / fontAtlasSize.x,  0.0f},   // top right
-						{ xpos + w, ypos,		 (ch.xOffset + ch.Size.x) / fontAtlasSize.x,  ch.Size.y / fontAtlasSize.y},   // bottom right
-						{ xpos, ypos,			 ch.xOffset / fontAtlasSize.x, ch.Size.y / fontAtlasSize.y  },   // bottom left
-						{ xpos, ypos - h,		 ch.xOffset / fontAtlasSize.x,  0.0f},  // top left 
-
-					};
-
-					m_GUITextShader->Bind();
-
-					m_GUITextVB->SetSubData(0, vertices, sizeof(vertices));
-					m_GUITextVB->Bind();
-					m_GUITextIB->Bind();
-
-					text.GetFont()->GetAtlas()->Bind(0);
-
-					command->EnableBlending();
-					command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::INVERSE_SRC_ALPHA);
-
-					command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
-
-					command->DisableBlending();
-
-					linex += (ch.Advance >> 6) * scale;
-				}
-
-				if (m_DrawDebugGUIRects)
-				{
-					DrawRectImpl(line.boundingBox, { 1.0f, 0, 0 }, false, projection);
-				}
-				
-			}
+		
 		}
 		void Renderer2D::InitShadersImpl()
 		{

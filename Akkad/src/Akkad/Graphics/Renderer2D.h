@@ -29,7 +29,7 @@ namespace Akkad {
 			static void DrawRect(Rect rect, glm::vec3 color, bool filled, glm::mat4 projection) { GetInstance().DrawRectImpl(rect, color, filled, projection); }
 
 			static void Draw(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount) { GetInstance().DrawImpl(vb, shader, vertexCount); };
-			static void RenderText(GUI::GUIText& text, glm::vec2 position, float scale, glm::vec3 color, glm::mat4 projection) { GetInstance().RenderTextImpl(text, position, scale, color, projection); }
+			static void RenderText(GUI::GUIText& uitext, glm::mat4 projection) { GetInstance().RenderTextImpl(uitext, projection); }
 			static void InitShaders() { GetInstance().InitShadersImpl(); }
 			static Camera GetCamera() { return GetInstance().m_Camera; }
 			static SharedPtr<UniformBuffer> GetSystemUniforms() {return GetInstance().m_SceneProps;};
@@ -54,10 +54,11 @@ namespace Akkad {
 			void DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, bool filled, glm::mat4 projection);
 			void DrawRectImpl(Rect rect, glm::vec3 color, bool filled);
 			void DrawRectImpl(Rect rect, glm::vec3 color, bool filled, glm::mat4 projection);
+			void DrawRectImpl(Rect rect, SharedPtr<Texture> texture, glm::mat4 projection);
 
 			void DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount);
 
-			void RenderTextImpl(GUI::GUIText& text, glm::vec2 position, float scale, glm::vec3 color, glm::mat4 projection);
+			void RenderTextImpl(GUI::GUIText& uitext, glm::mat4 projection);
 
 			void InitShadersImpl();
 
@@ -75,6 +76,8 @@ namespace Akkad {
 			SharedPtr<VertexBuffer> m_RectVB;
 			SharedPtr<Shader> m_RectShader;
 			SharedPtr<UniformBuffer> m_RectShaderProps;
+			SharedPtr<Shader> m_TexturedRectShader;
+			SharedPtr<UniformBuffer> m_TexturedRectShaderProps;
 
 			SharedPtr<VertexBuffer> m_GUITextVB;
 			SharedPtr<IndexBuffer> m_GUITextIB;

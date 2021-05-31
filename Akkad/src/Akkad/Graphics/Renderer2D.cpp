@@ -107,11 +107,11 @@ namespace Akkad {
 			auto command = platform->GetRenderCommand();
 
 			float vertices[] = {
-				// positions
-				 max.x,  min.y, 0.0f, // top right
-				 max.x, max.y, 0.0f, // bottom right
-				min.x, max.y, 0.0f, // bottom left
-				 min.x,  min.y, 0.0f, // top left 
+				// positions             // texture coords
+				 max.x,  min.y, 0.0f,    1.0f, 1.0f,  // top right
+				 max.x, max.y, 0.0f,     1.0f, 0.0f,  // bottom right
+				min.x, max.y, 0.0f,      0.0f, 0.0f,  // bottom left
+				 min.x,  min.y, 0.0f,    0.0f, 1.0f   // top left 
 			};
 
 			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
@@ -140,11 +140,11 @@ namespace Akkad {
 			auto command = platform->GetRenderCommand();
 
 			float vertices[] = {
-				// positions
-				 max.x,  min.y, 0.0f, // top right
-				 max.x, max.y, 0.0f, // bottom right
-				 min.x, max.y, 0.0f, // bottom left
-				 min.x,  min.y, 0.0f, // top left 
+				// positions             // texture coords
+				 max.x,  min.y, 0.0f,    1.0f, 1.0f,  // top right
+				 max.x, max.y, 0.0f,     1.0f, 0.0f,  // bottom right
+				min.x, max.y, 0.0f,      0.0f, 0.0f,  // bottom left
+				 min.x,  min.y, 0.0f,    0.0f, 1.0f   // top left 
 			};
 
 			m_RectShaderProps->SetData("props_color", color);
@@ -169,6 +169,37 @@ namespace Akkad {
 
 		}
 
+		void Renderer2D::DrawRectImpl(Rect rect, SharedPtr<Texture> texture, glm::mat4 projection)
+		{
+			auto platform = Application::GetRenderPlatform();
+			auto command = platform->GetRenderCommand();
+			auto min = rect.GetMin();
+			auto max = rect.GetMax();
+
+			auto mintex = rect.GetMinTextureCoords();
+			auto maxtex = rect.GetMaxTextureCoords();
+			
+				
+			float vertices[] = {
+				// positions                // texture coords
+				 max.x,  min.y, 0.0f,       maxtex.x, mintex.y,  // top right
+				 max.x,  max.y, 0.0f,       maxtex.x, maxtex.y,  // bottom right
+				 min.x,  max.y, 0.0f,       mintex.x, maxtex.y,  // bottom left
+				 min.x,  min.y, 0.0f,       mintex.x, mintex.y,   // top left 
+			};
+
+			m_SceneProps->SetData("sys_viewProjection", projection);
+			texture->Bind(0);
+			m_TexturedRectShader->Bind();
+			m_RectVB->SetSubData(0, vertices, sizeof(vertices));
+			m_RectVB->Bind();
+			m_QuadIB->Bind();
+
+			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+
+			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
+		}
+
 		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color, bool filled)
 		{
 			DrawRectImpl(rect.GetMin(), rect.GetMax(), color, filled);
@@ -179,6 +210,7 @@ namespace Akkad {
 			DrawRectImpl(rect.GetMin(), rect.GetMax(), color, filled, projection);
 		}
 
+
 		void Renderer2D::DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount)
 		{
 			auto command = Application::GetRenderPlatform()->GetRenderCommand();
@@ -187,9 +219,32 @@ namespace Akkad {
 			command->DrawArrays(PrimitiveType::TRIANGLE_FAN, vertexCount);
 		}
 
-		void Renderer2D::RenderTextImpl(GUI::GUIText& text, glm::vec2 position, float scale, glm::vec3 color, glm::mat4 projection)
+		void Renderer2D::RenderTextImpl(GUI::GUIText& uitext, glm::mat4 projection)
 		{
-		
+			if (uitext.IsValid())
+			{
+				auto atlasSize = uitext.GetFont()->GetTextureAtlasSize();
+				float x = uitext.GetBoundingBox().GetMin().x;
+				float y = uitext.GetBoundingBox().GetMin().y + uitext.GetFont()->GetFontSize() / 1.5;
+
+				unsigned int has_tint = 1;
+				m_TexturedRectShaderProps->SetData("tint_color", uitext.GetColor());
+				m_TexturedRectShaderProps->SetData("has_tint", has_tint);
+
+				std::string text = uitext.GetText();
+				std::string::const_iterator c;
+				for (c = text.begin(); c != text.end(); c++)
+				{
+					auto ftchar = uitext.GetFont()->GetASCIICharacter(*c, x, y);
+					auto command = Application::GetRenderPlatform()->GetRenderCommand();
+
+					command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::INVERSE_SRC_ALPHA);
+					command->EnableBlending();
+					DrawRectImpl(ftchar.CharacterRect, uitext.GetFont()->GetTextureAtlas(), projection);
+					command->DisableBlending();
+				}
+			}
+			
 		}
 		void Renderer2D::InitShadersImpl()
 		{
@@ -226,39 +281,25 @@ namespace Akkad {
 				VertexBufferLayout vbLayout;
 				vbLayout.isDynamic = true;
 				vbLayout.Push(ShaderDataType::FLOAT, 3); // position
+				vbLayout.Push(ShaderDataType::FLOAT, 2); // texture coords
 				m_RectVB = platform->CreateVertexBuffer();
 				m_RectVB->SetLayout(vbLayout);
-				m_RectVB->SetData(0, 5 * GetSizeOfType(ShaderDataType::FLOAT3));
+				m_RectVB->SetData(0, 5 * GetSizeOfType(ShaderDataType::FLOAT3) * GetSizeOfType(ShaderDataType::FLOAT2));
 			}
 
 			{
-				static auto guiTextShader = assetManager->GetShaderByName("r2d_guitext");
-				m_GUITextShader = assetManager->GetShader(guiTextShader.assetID);
+				auto texturedRectShader = assetManager->GetShaderByName("r2d_texturedRect");
+				m_TexturedRectShader = platform->CreateShader(texturedRectShader.absolutePath.c_str());
 
 				UniformBufferLayout layout;
-				layout.Push("projection", ShaderDataType::MAT4);
-				layout.Push("text_color", ShaderDataType::FLOAT3);
+				layout.Push("tint_color", ShaderDataType::FLOAT3);
+				layout.Push("has_tint", ShaderDataType::UNISGNED_INT);
 
-				m_GUITextShaderProps = platform->CreateUniformBuffer(layout);
-				m_GUITextShaderProps->SetName("shader_props");
+				m_TexturedRectShaderProps = platform->CreateUniformBuffer(layout);
+				m_TexturedRectShaderProps->SetName("shader_props");
 
-				m_GUITextShader->SetUniformBuffer(m_GUITextShaderProps);
-				VertexBufferLayout vblayout;
-
-				vblayout.isDynamic = true;
-				vblayout.Push(ShaderDataType::FLOAT, 4);
-
-				m_GUITextVB = platform->CreateVertexBuffer();
-				m_GUITextVB->SetLayout(vblayout);
-				m_GUITextVB->SetData(0, 7 * GetSizeOfType(ShaderDataType::FLOAT4));
-
-				unsigned int indices[] = {
-					0, 1, 3,   // first triangle
-					1, 2, 3    // second triangle
-				};
-
-				m_GUITextIB = platform->CreateIndexBuffer();
-				m_GUITextIB->SetData(indices, sizeof(indices));
+				m_TexturedRectShader->SetUniformBuffer(m_TexturedRectShaderProps);
+				m_TexturedRectShader->SetUniformBuffer(m_SceneProps);
 
 			}
 

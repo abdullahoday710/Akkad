@@ -27,6 +27,7 @@ project "Editor"
 		"%{IncludeDir.json}",
 		"%{IncludeDir.iconfontcpp}",
 		"%{IncludeDir.box2d}",
+		"%{IncludeDir.stb}",
 	}
 		
     postbuildcommands {

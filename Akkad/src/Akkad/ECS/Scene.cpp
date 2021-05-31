@@ -231,10 +231,12 @@ namespace Akkad {
 						if (current_child.HasComponent<GUITextComponent>())
 						{
 							auto& guitext = current_child.GetComponent<GUITextComponent>();
-							
+							auto& uitextbb = current_child.GetComponent<RectTransformComponent>();
+
+							guitext.uitext.SetBoundingBox(uitextbb.GetRect());
 							if (!pickingPhase)
 							{
-								
+								Renderer2D::RenderText(guitext.uitext, activeContainer.container.GetProjection());
 							}
 							
 						}

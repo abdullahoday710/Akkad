@@ -137,14 +137,12 @@ namespace Akkad {
 						}
 					}
 				}
-				Graphics::Renderer2D::InitShaders();
 
-
-
-				SaveActiveProject();
 			}
-		}
 
+		}
+		SaveActiveProject();
+		Graphics::Renderer2D::InitShaders();
 	}
 
 	void EditorLayer::OnAttach()

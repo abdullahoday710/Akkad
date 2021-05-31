@@ -401,6 +401,21 @@ namespace Akkad {
 
 	void PropertyEditorPanel::DrawGUITextComponent()
 	{
+		ImGui::SetNextItemOpen(true);
+		auto& uitext = m_ActiveEntity.GetComponent<GUITextComponent>();
+
+		if (ImGui::TreeNode("gui text"))
+		{
+			int ftsize = uitext.uitext.GetFont()->GetFontSize();
+			if (ImGui::InputInt("font size", &ftsize))
+			{
+				if (ftsize > 10)
+				{
+					uitext.uitext.SetFontSize(ftsize);
+				}
+			}
+		}
+		ImGui::TreePop();
 	}
 
 	void PropertyEditorPanel::DrawGUIContainerComponent()

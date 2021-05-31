@@ -45,6 +45,8 @@ namespace Akkad {
 			}
 			glm::vec2 GetMin() { return m_Min; };
 			glm::vec2 GetMax() { return m_Max; };
+			glm::vec2 GetMinTextureCoords() { return m_MinTextureCoords; };
+			glm::vec2 GetMaxTextureCoords() { return m_MaxTextureCoords; };
 
 			void SetBounds(glm::vec2 min, glm::vec2 max)
 			{
@@ -57,6 +59,12 @@ namespace Akkad {
 				m_Position.x = m_Min.x + (m_Width / 2);
 				m_Position.y = m_Max.y + (m_Height / 2);
 
+			}
+
+			void SetTextureCoords(glm::vec2 min, glm::vec2 max)
+			{
+				m_MinTextureCoords = min;
+				m_MaxTextureCoords = max;
 			}
 
 			void SetPosition(glm::vec2 position)
@@ -108,6 +116,10 @@ namespace Akkad {
 			glm::vec2 m_Min;
 			glm::vec2 m_Max;
 			glm::vec2 m_Position;
+
+			glm::vec2 m_MinTextureCoords = {0.0f, 1.0f};
+			glm::vec2 m_MaxTextureCoords = {1.0f, 0.0f};
+
 			float m_Width;
 			float m_Height;
 		};

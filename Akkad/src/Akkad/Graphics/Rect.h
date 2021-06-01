@@ -43,6 +43,28 @@ namespace Akkad {
 
 				SetPosition(position);
 			}
+
+			bool operator==(const Rect& other) {
+				if (other.m_Max.x == m_Max.x && other.m_Max.y == m_Max.y)
+				{
+					if (other.m_Min.x == m_Min.x && other.m_Min.y == m_Min.y) {
+
+						return true;
+					}
+				}
+				return false;
+			}
+
+			bool operator!=(const Rect& other) {
+				if (other.m_Max.x != m_Max.x && other.m_Max.y != m_Max.y)
+				{
+					if (other.m_Min.x != m_Min.x && other.m_Min.y != m_Min.y) {
+
+						return true;
+					}
+				}
+				return false;
+			}
 			glm::vec2 GetMin() { return m_Min; };
 			glm::vec2 GetMax() { return m_Max; };
 			glm::vec2 GetMinTextureCoords() { return m_MinTextureCoords; };

@@ -224,25 +224,23 @@ namespace Akkad {
 			if (uitext.IsValid())
 			{
 				auto atlasSize = uitext.GetFont()->GetTextureAtlasSize();
-				float x = uitext.GetBoundingBox().GetMin().x;
-				float y = uitext.GetBoundingBox().GetMin().y + uitext.GetFont()->GetFontSize() / 1.5;
-
 				unsigned int has_tint = 1;
 				m_TexturedRectShaderProps->SetData("tint_color", uitext.GetColor());
 				m_TexturedRectShaderProps->SetData("has_tint", has_tint);
 
-				std::string text = uitext.GetText();
-				std::string::const_iterator c;
-				for (c = text.begin(); c != text.end(); c++)
+				for (const auto& line : uitext.GetLines())
 				{
-					auto ftchar = uitext.GetFont()->GetASCIICharacter(*c, x, y);
-					auto command = Application::GetRenderPlatform()->GetRenderCommand();
+					for (const auto& fontCharacter : line.characters)
+					{
+						auto command = Application::GetRenderPlatform()->GetRenderCommand();
 
-					command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::INVERSE_SRC_ALPHA);
-					command->EnableBlending();
-					DrawRectImpl(ftchar.CharacterRect, uitext.GetFont()->GetTextureAtlas(), projection);
-					command->DisableBlending();
+						command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::INVERSE_SRC_ALPHA);
+						command->EnableBlending();
+						DrawRectImpl(fontCharacter.CharacterRect, uitext.GetFont()->GetTextureAtlas(), projection);
+						command->DisableBlending();
+					}
 				}
+
 			}
 			
 		}

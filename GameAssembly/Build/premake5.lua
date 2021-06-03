@@ -11,6 +11,7 @@ workspace "GameAssembly"
 	IncludeDir["entt"] = "%{wks.location}/include/entt/single_include"
 	IncludeDir["spdlog"] = "%{wks.location}/include/spdlog/include"
 	IncludeDir["box2d"] = "%{wks.location}/include/box2d/include"
+	IncludeDir["stb"] = "%{wks.location}/include/stb/include"
 
 	IncludeDir["Akkad"] = "%{wks.location}/include/Akkad/"
 
@@ -34,6 +35,7 @@ workspace "GameAssembly"
 			"%{IncludeDir.glm}",
 			"%{IncludeDir.entt}",
 			"%{IncludeDir.box2d}",
+			"%{IncludeDir.stb}",
 		}
 
 		defines {"AK_GAME_ASSEMBLY"}

@@ -21,9 +21,7 @@ namespace Akkad {
 		auto& uitext = text.GetComponent<GUITextComponent>();
 		auto defaultFont = assetmanager->GetFontByName("Roboto-Medium");
 		uitext.fontAssetID = defaultFont.assetID;
-
-		uitext.uitext.SetFont(defaultFont.absolutePath);
-		uitext.uitext.SetText("Text");
+		uitext.text = "Text";
 
 		auto& tag = text.AddComponent<TagComponent>();
 		tag.Tag = "text";
@@ -68,7 +66,7 @@ namespace Akkad {
 		Entity text = AddGuiText();
 		auto& textcomp = text.GetComponent<GUITextComponent>();
 
-		textcomp.uitext.SetColor({ 0,0,0 });
+		textcomp.color = { 0,0,0 };
 
 		auto& textrect = text.GetComponent<RectTransformComponent>();
 

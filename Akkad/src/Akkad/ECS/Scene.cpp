@@ -232,11 +232,39 @@ namespace Akkad {
 						{
 							auto& guitext = current_child.GetComponent<GUITextComponent>();
 							auto& uitextbb = current_child.GetComponent<RectTransformComponent>();
-
-							guitext.uitext.SetBoundingBox(uitextbb.GetRect());
-							if (!pickingPhase)
+							if (!guitext.fontAssetID.empty())
 							{
-								Renderer2D::RenderText(guitext.uitext, activeContainer.container.GetProjection());
+								auto fontdesc = Application::GetAssetManager()->GetDescriptorByID(guitext.fontAssetID);
+
+								if (fontdesc.absolutePath != guitext.uitext.m_FontFilePath)
+								{
+									guitext.uitext.SetFont(fontdesc.absolutePath);
+								}
+							}
+							if (guitext.uitext.IsValid())
+							{
+								guitext.uitext.SetBoundingBox(uitextbb.GetRect());
+
+								if (guitext.text != guitext.uitext.GetText())
+								{
+									guitext.uitext.SetText(guitext.text);
+								}
+
+
+								if (guitext.uitext.GetColor() != guitext.color)
+								{
+									guitext.uitext.SetColor(guitext.color);
+								}
+
+								if (guitext.fontSize != guitext.uitext.GetOriginalFontSize())
+								{
+									guitext.uitext.SetOriginalFontSize(guitext.fontSize);
+								}
+
+								if (!pickingPhase)
+								{
+									Renderer2D::RenderText(guitext.uitext, activeContainer.container.GetProjection());
+								}
 							}
 							
 						}

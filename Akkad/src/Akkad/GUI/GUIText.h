@@ -52,10 +52,13 @@ namespace Akkad {
 			unsigned int m_OriginalFontSize = 64;
 			SharedPtr<Font> m_Font;
 			std::string m_Text;
+			std::string m_FontFilePath;
 			std::vector<TextLine> m_Lines;
 			Graphics::Rect m_BoundingBox;
 			
 			glm::vec3 m_Color = { 1.0f, 1.0f, 1.0f };
+
+			friend class Scene;
 
 		};
 	}

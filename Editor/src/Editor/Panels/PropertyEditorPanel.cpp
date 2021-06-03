@@ -406,18 +406,18 @@ namespace Akkad {
 
 		if (ImGui::TreeNode("gui text"))
 		{
-			std::string text = uitext.uitext.GetText();
+			std::string text = uitext.text;
 			if (ImGui::InputText("Text", &text))
 			{
-				uitext.uitext.SetText(text);
+				uitext.text = text;
 			}
 
-			int ftsize = uitext.uitext.GetOriginalFontSize();
+			int ftsize = uitext.fontSize;
 			if (ImGui::InputInt("font size", &ftsize))
 			{
 				if (ftsize > 10)
 				{
-					uitext.uitext.SetOriginalFontSize(ftsize);
+					uitext.fontSize = ftsize;
 				}
 			}
 		}

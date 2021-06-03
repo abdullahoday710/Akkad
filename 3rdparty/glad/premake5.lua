@@ -1,6 +1,6 @@
 project "Glad"
     kind "StaticLib"
-    language "C"
+    language "C++"
     staticruntime "off"
     
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")

@@ -48,6 +48,9 @@ def copy_dependencies():
     entt_dest_path = os.path.join(game_assembly_include_path, "entt/single_include")
     copy_tree(entt_src_path, entt_dest_path)
 
+    stb_src_path = os.path.join(dependencies_src_path, "stb/include")
+    stb_dest_path = os.path.join(game_assembly_include_path, "stb/include")
+    copy_tree(stb_src_path, stb_dest_path)
 
 
 if __name__ == "__main__":

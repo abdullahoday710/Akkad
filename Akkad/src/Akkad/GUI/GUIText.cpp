@@ -10,6 +10,7 @@ namespace Akkad {
 		void GUIText::SetFont(std::string filepath)
 		{
 			m_Font = CreateSharedPtr<Font>(filepath);
+			m_FontFilePath = filepath;
 		}
 
 		void GUIText::SetFontSize(unsigned int sizePixels)

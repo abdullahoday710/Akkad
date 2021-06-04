@@ -11,8 +11,9 @@ namespace Akkad {
 
 		static void LoadGameAssembly(std::string filename);
 		static void FreeGameAssembly();
-		static bool loadedGameAssembly;
+		static bool HasLoadedGameAssembly() { return s_LoadedGameAssembly; };
 	private:
+		static bool s_LoadedGameAssembly;
 	};
 }
 

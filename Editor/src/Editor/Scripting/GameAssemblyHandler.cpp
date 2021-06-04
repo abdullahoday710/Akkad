@@ -6,7 +6,7 @@
 #include <Akkad/Scripting/LoadedGameAssembly.h>
 
 namespace Akkad {
-	bool GameAssemblyHandler::loadedGameAssembly = false;
+	bool GameAssemblyHandler::s_LoadedGameAssembly = false;
 
 	void GameAssemblyHandler::CompileGameAssembly(std::string path)
 	{
@@ -21,13 +21,13 @@ namespace Akkad {
 
 	void GameAssemblyHandler::LoadGameAssembly(std::string filename)
 	{
-		if (!loadedGameAssembly)
+		if (!s_LoadedGameAssembly)
 		{
 			auto assembly = Application::GetInstance().m_LoadedGameAssembly;
 			if (assembly->LoadAssembly(filename.c_str()))
 			{
 				assembly->Initialize(Application::GetInstance().m_ApplicationComponents);
-				loadedGameAssembly = true;
+				s_LoadedGameAssembly = true;
 			}
 
 			else
@@ -41,13 +41,13 @@ namespace Akkad {
 
 	void GameAssemblyHandler::FreeGameAssembly()
 	{
-		if (loadedGameAssembly)
+		if (s_LoadedGameAssembly)
 		{
 			auto assembly = Application::GetInstance().m_LoadedGameAssembly;
 			bool result = assembly->Free();
 			if (result)
 			{
-				loadedGameAssembly = false;
+				s_LoadedGameAssembly = false;
 			}
 			
 		}

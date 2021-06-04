@@ -2,6 +2,8 @@
 #include "Akkad/ECS/Entity.h"
 #include "Akkad/Logging.h"
 
+#include <stdexcept>
+
 namespace Akkad {
 
 	class ScriptableEntity
@@ -11,7 +13,16 @@ namespace Akkad {
 		template<typename T>
 		T& GetComponent()
 		{
-			return m_Entity.GetComponent<T>();
+			if (m_Entity.HasComponent<T>())
+			{
+				return m_Entity.GetComponent<T>();
+			}
+
+			else
+			{
+				std::string msg = "Entity does not have the component : " + std::string(typeid(T).name());
+				throw std::exception(msg.c_str());
+			}
 		}
 
 		virtual void OnStart() {}

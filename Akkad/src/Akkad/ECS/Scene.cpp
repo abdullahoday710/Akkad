@@ -74,7 +74,16 @@ namespace Akkad {
 					script.Instance = gameAssembly->InstantiateScript(script.ScriptName.c_str());
 					Entity e(entity, this);
 					script.Instance->m_Entity = e;
-					script.Instance->OnStart();
+
+					try
+					{
+						script.Instance->OnStart();
+					}
+					catch (const std::exception& e)
+					{
+						AK_ERROR(e.what());
+					}
+					
 				}
 			}
 		}
@@ -337,7 +346,15 @@ namespace Akkad {
 				auto& script = view.get<ScriptComponent>(entity);
 				if (script.Instance != nullptr)
 				{
-					script.Instance->OnUpdate();
+					try
+					{
+						script.Instance->OnUpdate();
+					}
+					catch (const std::exception& e)
+					{
+						AK_ERROR(e.what());
+					}
+					
 				}
 				
 			}

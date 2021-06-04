@@ -3,6 +3,7 @@
 
 #include "Editor/EditorLayer.h"
 #include "Editor/Serializers/MaterialSerializer.h"
+#include "Editor/Scripting/GameAssemblyHandler.h"
 
 #include <Akkad/Application/Application.h>
 #include <Akkad/Scripting/LoadedGameAssembly.h>
@@ -284,54 +285,68 @@ namespace Akkad {
 		ImGui::SetNextItemOpen(true);
 		if (ImGui::TreeNode("Script"))
 		{
-			if (DrawComponentContextMenu<ScriptComponent>(m_ActiveEntity))
+			if (GameAssemblyHandler::HasLoadedGameAssembly())
 			{
-				ImGui::TreePop();
-				return;
-			}
-			std::vector<std::string> scriptNames;
+				if (DrawComponentContextMenu<ScriptComponent>(m_ActiveEntity))
+				{
+					ImGui::TreePop();
+					return;
+				}
 
-			auto gameAssembly = Application::GetGameAssembly();
-			for (auto it : gameAssembly->GetScripts())
-			{
-				scriptNames.push_back(it);
-			}
+				auto gameAssembly = Application::GetGameAssembly();
+				std::vector<std::string> scriptNames;
 
-			static int item_current_idx = 0;
-			const char* combo_label = scriptNames[item_current_idx].c_str();
+				for (auto it : gameAssembly->GetScripts())
+				{
+					scriptNames.push_back(it);
+				}
 
-			auto& script = m_ActiveEntity.GetComponent<ScriptComponent>();
-			if (script.ScriptName.empty())
-			{
-				script.ScriptName = scriptNames[item_current_idx];
+				static int item_current_idx = 0;
+				const char* combo_label = scriptNames[item_current_idx].c_str();
+
+				auto& script = m_ActiveEntity.GetComponent<ScriptComponent>();
+				if (script.ScriptName.empty())
+				{
+					script.ScriptName = scriptNames[item_current_idx];
+				}
+
+				else
+				{
+					ptrdiff_t pos = std::find(scriptNames.begin(), scriptNames.end(), script.ScriptName) - scriptNames.begin();
+					if (pos <= scriptNames.size())
+					{
+						item_current_idx = pos;
+					}
+				}
+
+				if (ImGui::BeginCombo("Script", combo_label))
+				{
+					for (int i = 0; i < scriptNames.size(); i++)
+					{
+						const bool is_selected = (item_current_idx == i);
+						if (ImGui::Selectable(scriptNames[i].c_str(), is_selected))
+						{
+							item_current_idx = i;
+							script.ScriptName = scriptNames[i];
+						}
+
+						if (is_selected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
 			}
 
 			else
 			{
-				ptrdiff_t pos = std::find(scriptNames.begin(), scriptNames.end(), script.ScriptName) - scriptNames.begin();
-				if (pos <= scriptNames.size())
+				if (ImGui::BeginCombo("Script", "Game assembly not loaded !"))
 				{
-					item_current_idx = pos;
+					ImGui::EndCombo();
 				}
+				
 			}
 
-			if (ImGui::BeginCombo("Script", combo_label))
-			{
-				for (int i = 0; i < scriptNames.size(); i++)
-				{
-					const bool is_selected = (item_current_idx == i);
-					if (ImGui::Selectable(scriptNames[i].c_str(), is_selected))
-					{
-						item_current_idx = i;
-						script.ScriptName = scriptNames[i];
-					}
-
-					if (is_selected)
-						ImGui::SetItemDefaultFocus();
-				}
-
-				ImGui::EndCombo();
-			}
 			ImGui::TreePop();
 		}
 

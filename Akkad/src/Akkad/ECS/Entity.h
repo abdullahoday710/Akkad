@@ -40,7 +40,6 @@ namespace Akkad {
 		template<typename T>
 		T& GetComponent()
 		{
-			AK_ASSERT(HasComponent<T>(), "Entity does not have the component");
 			return m_Scene->m_Registry.get<T>(m_Handle);
 		}
 

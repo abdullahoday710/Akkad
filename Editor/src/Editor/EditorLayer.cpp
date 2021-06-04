@@ -277,6 +277,11 @@ namespace Akkad {
 					CompileGameAssembly();
 				}
 
+				if (ImGui::MenuItem("Unload Game Assembly"))
+				{
+					GameAssemblyHandler::FreeGameAssembly();
+				}
+
 				if (ImGui::MenuItem("Save", "ctrl + s"))
 				{
 					SaveActiveScene();

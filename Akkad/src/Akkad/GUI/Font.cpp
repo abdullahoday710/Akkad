@@ -3,8 +3,6 @@
 #include "Akkad/Application/Application.h"
 #include "Akkad/Graphics/Texture.h"
 
-#include <glad/glad.h>
-
 #define STB_RECT_PACK_IMPLEMENTATION
 #include <stb_rect_pack.h>
 #define STB_TRUETYPE_IMPLEMENTATION

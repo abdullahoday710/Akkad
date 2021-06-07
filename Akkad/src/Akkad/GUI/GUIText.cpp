@@ -82,61 +82,27 @@ namespace Akkad {
 		{
 
 			std::string::const_iterator c;
-			glm::vec2 current_line_pos;
-			current_line_pos.x = GetPosition().x;
-			current_line_pos.y = m_Lines.back().yOffset;
-			Graphics::Rect current_line_bb;
-			glm::vec2 bbmin;
-			glm::vec2 bbmax;
 
-			
+			auto& current_line = m_Lines.back();
+			current_line.boundingBox.SetParent(m_BoundingBox);
+			current_line.boundingBox.SetXConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
+			current_line.boundingBox.SetYConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 0 });
+
+			current_line.boundingBox.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 1 });
+			current_line.boundingBox.SetHeightConstraint({ ConstraintType::ASPECT_CONSTRAINT, 0.15 });
+
+			float current_line_height = current_line.boundingBox.GetRect().GetHeight();
+			if (current_line_height > 12)
+			{
+				m_Font->SetFontPixelScaling(current_line.boundingBox.GetRect().GetHeight());
+			}
+
+			glm::vec2 current_line_pos;
+			current_line_pos.x = current_line.boundingBox.GetRect().GetMin().x;
+			current_line_pos.y = m_Lines.back().yOffset;
 			for (c = m_Text.begin(); c != m_Text.end(); c++)
 			{
-				auto& current_line = m_Lines.back();
 				auto ftchar = m_Font->GetASCIICharacter(*c, current_line_pos.x, current_line_pos.y);
-				
-				if (c == m_Text.begin())
-				{
-					bbmin = ftchar.CharacterRect.GetMin();
-				}
-
-				// A terrible way to scale text, but it works lol
-				if (std::next(c) == m_Text.end())
-				{
-					bbmax = ftchar.CharacterRect.GetMax();
-					current_line_bb.SetBounds(bbmin, bbmax);
-					static bool isScalingDown = false;
-					if (current_line_bb.GetMax().x > m_BoundingBox.GetMax().x)
-					{
-						if (m_Font->GetFontSize() > 12)
-						{
-							isScalingDown = true;
-							SetFontSize(m_Font->GetFontSize() - 1);
-							isScalingDown = false;
-							break;
-						}
-					}
-
-					if (current_line_bb.GetMax().y > m_BoundingBox.GetMax().y)
-					{
-						if (m_Font->GetFontSize() > 12)
-						{
-							isScalingDown = true;
-							SetFontSize(m_Font->GetFontSize() - 1);
-							isScalingDown = false;
-							break;
-						}
-					}
-
-					if (current_line_bb.GetMax().x < m_BoundingBox.GetMax().x && !isScalingDown)
-					{
-						if (m_Font->GetFontSize() < m_OriginalFontSize)
-						{
-							SetFontSize(m_Font->GetFontSize() + 1);
-							break;
-						}
-					}
-				}
 				current_line.characters.push_back(ftchar);
 			}
 		}
@@ -164,10 +130,14 @@ namespace Akkad {
 				{
 					TextLine newline;
 					newline.yOffset = current_line.yOffset + m_Font->GetFontSize();
-					newline.characters.push_back(ftchar);
-					current_line_pos.x = GetPosition().x;
-					current_line_pos.y = newline.yOffset;
-					m_Lines.push_back(newline);
+					if (newline.yOffset < m_BoundingBox.GetMax().y)
+					{
+						newline.characters.push_back(ftchar);
+						current_line_pos.x = GetPosition().x;
+						current_line_pos.y = newline.yOffset;
+						m_Lines.push_back(newline);
+					}
+				
 				}
 			}
 		}

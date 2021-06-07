@@ -228,7 +228,7 @@ namespace Akkad {
 				m_TexturedRectShaderProps->SetData("tint_color", uitext.GetColor());
 				m_TexturedRectShaderProps->SetData("has_tint", has_tint);
 
-				for (const auto& line : uitext.GetLines())
+				for (auto& line : uitext.GetLines())
 				{
 					for (const auto& fontCharacter : line.characters)
 					{
@@ -239,8 +239,15 @@ namespace Akkad {
 						DrawRectImpl(fontCharacter.CharacterRect, uitext.GetFont()->GetTextureAtlas(), projection);
 						command->DisableBlending();
 					}
-				}
 
+					if (m_DrawDebugGUIRects)
+					{
+						const Graphics::Rect rect = line.boundingBox.GetRect();
+						DrawRectImpl(rect, { 1,0,0 }, false, projection);
+					}
+					
+				}
+				
 			}
 			
 		}

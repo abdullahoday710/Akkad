@@ -26,7 +26,7 @@ namespace Akkad {
 				break;
 			case ConstraintType::RELATIVE_CONSTRAINT:
 			{
-				m_Rect.SetWidth(width * m_ParentSize.x);
+				m_Rect.SetWidth(width * m_ParentRect.GetWidth());
 				break;
 			}
 			case ConstraintType::PIXEL_CONSTRAINT:
@@ -52,7 +52,7 @@ namespace Akkad {
 				break;
 			case ConstraintType::RELATIVE_CONSTRAINT:
 			{
-				m_Rect.SetHeight(height * m_ParentSize.y);
+				m_Rect.SetHeight(height * m_ParentRect.GetHeight());
 				break;
 			}
 			case ConstraintType::PIXEL_CONSTRAINT:
@@ -77,13 +77,13 @@ namespace Akkad {
 
 			case ConstraintType::CENTER_CONSTRAINT:
 			{
-				m_Rect.SetX((m_ParentPos.x) + (m_ParentSize.x / 2));
+				m_Rect.SetX((m_ParentRect.GetMin().x) + (m_ParentRect.GetWidth() / 2));
 				break;
 			}
 
 			case ConstraintType::RELATIVE_CONSTRAINT:
 			{
-				m_Rect.SetX((m_ParentPos.x + xPos) + (m_Rect.GetWidth() / 2));
+				m_Rect.SetX((m_ParentRect.GetMin().x + xPos) + (m_Rect.GetWidth() / 2));
 				break;
 			}
 
@@ -95,6 +95,12 @@ namespace Akkad {
 
 			case ConstraintType::ASPECT_CONSTRAINT:
 				break;
+
+			case ConstraintType::SNAP_LEFT_CONSTRAINT:
+			{
+				m_Rect.SetX(m_ParentRect.GetMin().x);
+				break;
+			}
 			default:
 				break;
 			}
@@ -107,13 +113,13 @@ namespace Akkad {
 
 			case ConstraintType::CENTER_CONSTRAINT:
 			{
-				m_Rect.SetY(m_ParentPos.y + (m_ParentSize.y / 2));
+				m_Rect.SetY(m_ParentRect.GetMin().y + (m_ParentRect.GetHeight() / 2));
 				break;
 			}
 
 			case ConstraintType::RELATIVE_CONSTRAINT:
 			{
-				m_Rect.SetY((m_ParentPos.y + yPos) + (m_Rect.GetHeight() / 2));
+				m_Rect.SetY((m_ParentRect.GetMin().y + yPos) + (m_Rect.GetHeight() / 2));
 				break;
 			}
 
@@ -125,6 +131,11 @@ namespace Akkad {
 
 			case ConstraintType::ASPECT_CONSTRAINT:
 				break;
+			case ConstraintType::SNAP_LEFT_CONSTRAINT:
+			{
+				m_Rect.SetX(m_ParentRect.GetMin().y / 2);
+				break;
+			}
 			default:
 				break;
 			}

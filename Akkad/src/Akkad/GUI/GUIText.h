@@ -1,5 +1,6 @@
 #pragma once
 #include "Font.h"
+#include "GUIRect.h"
 
 #include "Akkad/core.h"
 
@@ -24,6 +25,7 @@ namespace Akkad {
 			struct TextLine {
 				float yOffset;
 				std::vector<Font::FontCharacter> characters;
+				GUIRect boundingBox;
 			};
 
 			void SetFont(std::string filepath);
@@ -47,7 +49,7 @@ namespace Akkad {
 			void PositionTextKeepFtSize();
 			void SetFontSize(unsigned int sizePixels);
 
-			FittingMode m_FittingMode = FittingMode::SCALE_TO_FIT;
+			FittingMode m_FittingMode = FittingMode::KEEP_FONT_SIZE;
 			Alignment m_Alignment = Alignment::LEFT;
 			unsigned int m_OriginalFontSize = 64;
 			SharedPtr<Font> m_Font;

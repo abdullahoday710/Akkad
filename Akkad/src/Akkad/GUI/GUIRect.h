@@ -4,7 +4,7 @@
 namespace Akkad {
 	namespace GUI {
 		enum class ConstraintType { CENTER_CONSTRAINT,
-			RELATIVE_CONSTRAINT, PIXEL_CONSTRAINT, ASPECT_CONSTRAINT };
+			RELATIVE_CONSTRAINT, PIXEL_CONSTRAINT, ASPECT_CONSTRAINT, SNAP_LEFT_CONSTRAINT };
 
 		struct Constraint
 		{
@@ -17,8 +17,7 @@ namespace Akkad {
 		public:
 			GUIRect();
 
-			void SetParentPos(glm::vec2 pos) { m_ParentPos = pos; }
-			void SetParentSize(glm::vec2 size) { m_ParentSize = size; }
+			void SetParent(Graphics::Rect parent) { m_ParentRect = parent; };
 
 			void SetWidthConstraint(Constraint constraint);
 			void SetHeightConstraint(Constraint constraint);
@@ -47,8 +46,7 @@ namespace Akkad {
 			Constraint m_heightConstraint;
 
 			Graphics::Rect m_Rect;
-			glm::vec2 m_ParentPos;
-			glm::vec2 m_ParentSize;
+			Graphics::Rect m_ParentRect;
 
 			friend class Scene;
 		};

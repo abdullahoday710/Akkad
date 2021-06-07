@@ -182,23 +182,20 @@ namespace Akkad {
 					if (relation_ship.parent.HasComponent<GUIContainerComponent>())
 					{
 						auto& container = relation_ship.parent.GetComponent<GUIContainerComponent>();
-
-						parent_size = container.container.GetScreenSize();
-						parent_position = { 0,0 }; // top left of the screen
+						
+						Graphics::Rect parent;
+						parent.SetBounds({ 0,0 }, container.container.GetScreenSize());
+						rect_transform.rect.SetParent(parent);
 					}
 
 					else if (relation_ship.parent.HasComponent<RectTransformComponent>())
 					{
 						auto& parent_rect = relation_ship.parent.GetComponent<RectTransformComponent>();
-						parent_size = { parent_rect.GetRect().GetWidth(), parent_rect.GetRect().GetHeight() };
 
-						// top left of the parent corner
-						parent_position.x = parent_rect.GetRect().GetMin().x;
-						parent_position.y = parent_rect.GetRect().GetMin().y;
+						rect_transform.rect.SetParent(parent_rect.GetRect());
 					}
 
-					rect_transform.rect.SetParentSize(parent_size);
-					rect_transform.rect.SetParentPos(parent_position);
+					
 				}
 
 				rect_transform.rect.RecalculateRect();

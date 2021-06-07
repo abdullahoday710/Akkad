@@ -105,15 +105,24 @@ namespace Akkad {
 				auto ftchar = m_Font->GetASCIICharacter(*c, current_line_pos.x, current_line_pos.y);
 				current_line.characters.push_back(ftchar);
 			}
+			
+			current_line.ApplyAlignment(m_Alignment, m_Font);
+
 		}
 
 		void GUIText::PositionTextKeepFtSize()
 		{
-			
 			std::string::const_iterator c;
 			glm::vec2 current_line_pos;
 			current_line_pos.x = GetPosition().x;
 			current_line_pos.y = m_Lines.back().yOffset;
+
+			m_Lines.back().boundingBox.SetParent(m_BoundingBox);
+			m_Lines.back().boundingBox.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 1 });
+			m_Lines.back().boundingBox.SetHeightConstraint({ ConstraintType::PIXEL_CONSTRAINT, (float)m_OriginalFontSize });
+			m_Lines.back().boundingBox.SetXConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
+			m_Lines.back().boundingBox.SetYConstraint({ ConstraintType::PIXEL_CONSTRAINT, current_line_pos.y - m_Lines.back().boundingBox.GetRect().GetHeight() /1.5f});
+
 
 			for (c = m_Text.begin(); c != m_Text.end(); c++)
 			{
@@ -124,6 +133,7 @@ namespace Akkad {
 				if (ftchar.CharacterRect.GetMax().x < m_BoundingBox.GetMax().x)
 				{
 					current_line.characters.push_back(ftchar);
+					current_line.ApplyAlignment(m_Alignment, m_Font);
 				}
 
 				else
@@ -132,9 +142,19 @@ namespace Akkad {
 					newline.yOffset = current_line.yOffset + m_Font->GetFontSize();
 					if (newline.yOffset < m_BoundingBox.GetMax().y)
 					{
-						newline.characters.push_back(ftchar);
 						current_line_pos.x = GetPosition().x;
 						current_line_pos.y = newline.yOffset;
+
+						newline.boundingBox.SetParent(m_BoundingBox);
+
+						newline.boundingBox.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 1 });
+						newline.boundingBox.SetHeightConstraint({ ConstraintType::PIXEL_CONSTRAINT, (float)m_OriginalFontSize });
+
+						newline.boundingBox.SetXConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
+						newline.boundingBox.SetYConstraint({ ConstraintType::PIXEL_CONSTRAINT, current_line_pos.y - newline.boundingBox.GetRect().GetHeight() / 1.5f });
+						newline.characters.push_back(ftchar);
+
+						newline.ApplyAlignment(m_Alignment, m_Font);
 						m_Lines.push_back(newline);
 					}
 				
@@ -147,6 +167,45 @@ namespace Akkad {
 			return m_BoundingBox.GetMin();
 		}
 
-	}
+		void GUIText::TextLine::ApplyAlignment(Alignment alignment, SharedPtr<Font> font)
+		{
+			glm::vec2 current_line_pos{};
+			
+			switch (alignment)
+			{
+			case Akkad::GUI::GUIText::Alignment::LEFT:
+			{
+				current_line_pos.x = boundingBox.GetRect().GetMin().x;
+				current_line_pos.y = yOffset;
+
+				for (auto& character : characters)
+				{
+					character = font->GetASCIICharacter(character.character, current_line_pos.x, current_line_pos.y);
+				}
+				break;
+			}
+			case Akkad::GUI::GUIText::Alignment::CENTER:
+			{
+				float line_width = 0.0f;
+				for (auto& ftchar : characters)
+				{
+					line_width += ftchar.CharacterRect.GetWidth();
+				}
+
+				current_line_pos.x = boundingBox.GetParentRect().GetPosition().x - (line_width / 2);
+				current_line_pos.y = yOffset;
+
+				for (auto& character : characters)
+				{
+					character = font->GetASCIICharacter(character.character, current_line_pos.x, current_line_pos.y);
+				}
+				break;
+			}
+			default:
+				break;
+			}
+		}
+
+}
 }
 

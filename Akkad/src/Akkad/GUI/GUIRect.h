@@ -33,6 +33,7 @@ namespace Akkad {
 
 
 			Graphics::Rect GetRect() { return m_Rect; }
+			Graphics::Rect GetParentRect() { return m_ParentRect; }
 		private:
 			void RecalculateRect();
 			void SetWidth(ConstraintType type, float width);

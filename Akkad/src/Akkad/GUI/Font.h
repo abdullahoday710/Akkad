@@ -23,6 +23,8 @@ namespace Akkad {
 		public:
 			struct FontCharacter
 			{
+				char character;
+				float xAdvance;
 				Graphics::Rect CharacterRect; // returns a textured rect, call Renderer2D::DrawRect() and pass the font atlas to it.
 			};
 

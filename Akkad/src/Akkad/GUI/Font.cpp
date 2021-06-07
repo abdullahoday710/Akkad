@@ -39,6 +39,8 @@ namespace Akkad {
 			stbtt_GetPackedQuad(info, textureAtlasSize.x, textureAtlasSize.y, 0, &xpos, &ypos, &quad, 0);
 
 			FontCharacter ftcharacter;
+			ftcharacter.character = character;
+			ftcharacter.xAdvance = info->xadvance;
 			ftcharacter.CharacterRect.SetBounds({ quad.x0, quad.y0 }, { quad.x1, quad.y1 });
 			ftcharacter.CharacterRect.SetTextureCoords({ quad.s0, quad.t0 }, { quad.s1, quad.t1 });
 			return ftcharacter;

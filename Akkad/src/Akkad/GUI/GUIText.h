@@ -26,6 +26,8 @@ namespace Akkad {
 				float yOffset;
 				std::vector<Font::FontCharacter> characters;
 				GUIRect boundingBox;
+
+				void ApplyAlignment(Alignment alignment, SharedPtr<Font> font);
 			};
 
 			void SetFont(std::string filepath);
@@ -50,7 +52,7 @@ namespace Akkad {
 			void SetFontSize(unsigned int sizePixels);
 
 			FittingMode m_FittingMode = FittingMode::KEEP_FONT_SIZE;
-			Alignment m_Alignment = Alignment::LEFT;
+			Alignment m_Alignment = Alignment::CENTER;
 			unsigned int m_OriginalFontSize = 64;
 			SharedPtr<Font> m_Font;
 			std::string m_Text;

@@ -34,13 +34,19 @@ namespace Akkad {
 			void SetText(std::string text);
 			void SetBoundingBox(Graphics::Rect boundingBox);
 			void SetColor(glm::vec3 color) { m_Color = color; };
+			void SetAlignment(Alignment alignment);
+			void SetFittingMode(FittingMode mode);
 			
+			Alignment GetAlignment() { return m_Alignment; }
+			FittingMode GetFittingMode() { return m_FittingMode; }
+
 			Graphics::Rect GetBoundingBox() { return m_BoundingBox; }
 			SharedPtr<Font> GetFont() { return m_Font; }
 			std::string GetText() { return m_Text; }
 			std::vector<TextLine> GetLines() { return m_Lines; }
 			glm::vec3 GetColor() { return m_Color; }
 			glm::vec2 GetPosition();
+
 			bool IsValid();
 
 			unsigned int GetOriginalFontSize() { return m_OriginalFontSize; }
@@ -52,7 +58,7 @@ namespace Akkad {
 			void SetFontSize(unsigned int sizePixels);
 
 			FittingMode m_FittingMode = FittingMode::KEEP_FONT_SIZE;
-			Alignment m_Alignment = Alignment::CENTER;
+			Alignment m_Alignment = Alignment::LEFT;
 			unsigned int m_OriginalFontSize = 64;
 			SharedPtr<Font> m_Font;
 			std::string m_Text;

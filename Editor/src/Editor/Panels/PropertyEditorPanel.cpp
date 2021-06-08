@@ -413,7 +413,28 @@ namespace Akkad {
 			ImGui::TreePop();
 		}
 	}
+	std::string TextFittingModeToStr(GUI::GUIText::FittingMode mode)
+	{
+		switch (mode)
+		{
+		case GUI::GUIText::FittingMode::SCALE_TO_FIT:
+			return "Scale to fit";
+		case GUI::GUIText::FittingMode::KEEP_FONT_SIZE:
+			return "Keep font size";
+		}
+	}
 
+	GUI::GUIText::FittingMode GetFittingModeFromStr(std::string mode)
+	{
+		if (mode == "Scale to fit")
+		{
+			return GUI::GUIText::FittingMode::SCALE_TO_FIT;
+		}
+		if (mode == "Keep font size")
+		{
+			return GUI::GUIText::FittingMode::KEEP_FONT_SIZE;
+		}
+	}
 	void PropertyEditorPanel::DrawGUITextComponent()
 	{
 		ImGui::SetNextItemOpen(true);
@@ -426,15 +447,49 @@ namespace Akkad {
 			{
 				uitext.text = text;
 			}
-
-			int ftsize = uitext.fontSize;
-			if (ImGui::InputInt("font size", &ftsize))
+			const char* fittingmodes[] = { "Scale to fit", "Keep font size" };
+			std::string current_fitting_mode = TextFittingModeToStr(uitext.fittingMode);
+			if (ImGui::BeginCombo("Fitting mode", current_fitting_mode.c_str()))
 			{
-				if (ftsize > 10)
+				for (int n = 0; n < IM_ARRAYSIZE(fittingmodes); n++)
 				{
-					uitext.fontSize = ftsize;
+					bool is_selected = (current_fitting_mode == fittingmodes[n]);
+					if (ImGui::Selectable(fittingmodes[n], is_selected))
+					{
+						current_fitting_mode = fittingmodes[n];
+						uitext.fittingMode = GetFittingModeFromStr(current_fitting_mode);
+					}
+					if (is_selected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
+
+			ImGui::Separator();
+			ImGui::Text("Text alignment");
+			if (ImGui::Button("Left"))
+			{
+				uitext.alignment = GUI::GUIText::Alignment::LEFT;
+			}
+			if (ImGui::Button("Center"))
+			{
+				uitext.alignment = GUI::GUIText::Alignment::CENTER;
+			}
+			
+			if (uitext.fittingMode == GUI::GUIText::FittingMode::KEEP_FONT_SIZE)
+			{
+				int ftsize = uitext.fontSize;
+				if (ImGui::InputInt("font size", &ftsize))
+				{
+					if (ftsize > 10)
+					{
+						uitext.fontSize = ftsize;
+					}
 				}
 			}
+
 		}
 		ImGui::TreePop();
 	}

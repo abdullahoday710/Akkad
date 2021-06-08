@@ -267,6 +267,16 @@ namespace Akkad {
 									guitext.uitext.SetOriginalFontSize(guitext.fontSize);
 								}
 
+								if (guitext.alignment != guitext.uitext.GetAlignment())
+								{
+									guitext.uitext.SetAlignment(guitext.alignment);
+								}
+
+								if (guitext.fittingMode != guitext.uitext.GetFittingMode())
+								{
+									guitext.uitext.SetFittingMode(guitext.fittingMode);
+								}
+
 								if (!pickingPhase)
 								{
 									Renderer2D::RenderText(guitext.uitext, activeContainer.container.GetProjection());

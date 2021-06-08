@@ -40,6 +40,18 @@ namespace Akkad {
 			}
 		}
 
+		void GUIText::SetAlignment(Alignment alignment)
+		{
+			m_Alignment = alignment;
+			RecalculateTextPosition();
+		}
+
+		void GUIText::SetFittingMode(FittingMode mode)
+		{
+			m_FittingMode = mode;
+			RecalculateTextPosition();
+		}
+
 		bool GUIText::IsValid()
 		{
 			if (m_Font != nullptr)

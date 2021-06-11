@@ -3,6 +3,7 @@
 #include "Material.h"
 #include "Camera.h"
 #include "Rect.h"
+#include "Sprite.h"
 
 namespace Akkad {
 
@@ -27,6 +28,8 @@ namespace Akkad {
 			static void DrawRect(glm::vec2 min, glm::vec2 max, glm::vec3 color, bool filled) { GetInstance().DrawRectImpl(min, max, color, filled); }
 			static void DrawRect(Rect rect, glm::vec3 color, bool filled) { GetInstance().DrawRectImpl(rect, color, filled); }
 			static void DrawRect(Rect rect, glm::vec3 color, bool filled, glm::mat4 projection) { GetInstance().DrawRectImpl(rect, color, filled, projection); }
+
+			static void DrawSprite(Sprite& sprite, glm::mat4& transform) { GetInstance().DrawSpriteImpl(sprite, transform); };
 
 			static void Draw(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount) { GetInstance().DrawImpl(vb, shader, vertexCount); };
 			static void RenderText(GUI::GUIText& uitext, glm::mat4 projection) { GetInstance().RenderTextImpl(uitext, projection); }
@@ -55,6 +58,8 @@ namespace Akkad {
 			void DrawRectImpl(Rect rect, glm::vec3 color, bool filled);
 			void DrawRectImpl(Rect rect, glm::vec3 color, bool filled, glm::mat4 projection);
 			void DrawRectImpl(Rect rect, SharedPtr<Texture> texture, glm::mat4 projection);
+
+			void DrawSpriteImpl(Sprite& sprite, glm::mat4& transform);
 
 			void DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount);
 

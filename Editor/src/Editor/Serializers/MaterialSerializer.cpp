@@ -9,22 +9,22 @@
 #include <fstream>
 namespace Akkad {
 
-	void MaterialSerializer::Serialize(Graphics::Material& material, std::string outputPath)
+	void MaterialSerializer::Serialize(SharedPtr<Graphics::Material> material, std::string outputPath)
 	{
 		auto& project = EditorLayer::GetActiveProject();
 
 		// Material serialization should be ordered so it can match the underlying property buffer.
 		nlohmann::ordered_json materialData;
 
-		materialData["material"]["name"] = material.GetName();
+		materialData["material"]["name"] = material->GetName();
 
-		if (!material.m_ShaderID.empty())
+		if (!material->m_ShaderID.empty())
 		{
-			materialData["material"]["shaderID"] = material.m_ShaderID;
+			materialData["material"]["shaderID"] = material->m_ShaderID;
 		}
 		
 
-		for (auto it : material.m_Textures)
+		for (auto it : material->m_Textures)
 		{
 			auto& textureProp = it.second;
 			if (!textureProp.assetID.empty())
@@ -39,9 +39,9 @@ namespace Akkad {
 
 		}
 
-		if (material.m_PropertyBuffer != nullptr)
+		if (material->m_PropertyBuffer != nullptr)
 		{
-			for (auto it : material.m_PropertyBuffer->GetLayout().GetElements())
+			for (auto it : material->m_PropertyBuffer->GetLayout().GetElements())
 			{
 				auto elementName = it.first;
 				auto element = it.second;
@@ -52,14 +52,14 @@ namespace Akkad {
 				{
 				case Graphics::ShaderDataType::FLOAT:
 				{
-					float value = material.m_PropertyBuffer->GetData<float>(elementName);
+					float value = material->m_PropertyBuffer->GetData<float>(elementName);
 					materialData["material"]["properties"][elementName]["type"] = "float";
 					materialData["material"]["properties"][elementName]["value"] = value;
 					break;
 				}
 				case Graphics::ShaderDataType::FLOAT2:
 				{
-					glm::vec2 value = material.m_PropertyBuffer->GetData<glm::vec2>(elementName);
+					glm::vec2 value = material->m_PropertyBuffer->GetData<glm::vec2>(elementName);
 					materialData["material"]["properties"][elementName]["type"] = "float2";
 					materialData["material"]["properties"][elementName]["value"]["x"] = value.x;
 					materialData["material"]["properties"][elementName]["value"]["y"] = value.y;
@@ -67,7 +67,7 @@ namespace Akkad {
 				}
 				case Graphics::ShaderDataType::FLOAT3:
 				{
-					glm::vec3 value = material.m_PropertyBuffer->GetData<glm::vec3>(elementName);
+					glm::vec3 value = material->m_PropertyBuffer->GetData<glm::vec3>(elementName);
 					materialData["material"]["properties"][elementName]["type"] = "float3";
 					materialData["material"]["properties"][elementName]["value"]["x"] = value.x;
 					materialData["material"]["properties"][elementName]["value"]["y"] = value.y;
@@ -76,7 +76,7 @@ namespace Akkad {
 				}
 				case Graphics::ShaderDataType::FLOAT4:
 				{
-					glm::vec4 value = material.m_PropertyBuffer->GetData<glm::vec4>(elementName);
+					glm::vec4 value = material->m_PropertyBuffer->GetData<glm::vec4>(elementName);
 					materialData["material"]["properties"][elementName]["type"] = "float4";
 					materialData["material"]["properties"][elementName]["value"]["x"] = value.x;
 					materialData["material"]["properties"][elementName]["value"]["y"] = value.y;
@@ -86,7 +86,7 @@ namespace Akkad {
 				}
 				case Graphics::ShaderDataType::UNISGNED_INT:
 				{
-					unsigned int value = material.m_PropertyBuffer->GetData<unsigned int>(elementName);
+					unsigned int value = material->m_PropertyBuffer->GetData<unsigned int>(elementName);
 					materialData["material"]["properties"][elementName]["type"] = "uint";
 					materialData["material"]["properties"][elementName]["value"] = value;
 					break;

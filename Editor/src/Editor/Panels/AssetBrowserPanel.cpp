@@ -1,6 +1,7 @@
 #include "AssetBrowserPanel.h"
+#include "MaterialEditorPanel.h"
+
 #include "Editor/EditorLayer.h"
-#include "Editor/Panels/MaterialEditorPanel.h"
 #include "Editor/Serializers/MaterialSerializer.h"
 
 #include <Akkad/Application/Application.h>
@@ -126,7 +127,7 @@ namespace Akkad {
 				filesystem::path destPath = project.GetAssetsPath().append(assetName + fileExtension);
 				if (NewAssetType == "material")
 				{
-					Graphics::Material mat(assetName);
+					SharedPtr<Graphics::Material> mat = CreateSharedPtr<Graphics::Material>(assetName);
 					MaterialSerializer::Serialize(mat, destPath.string());
 
 				}

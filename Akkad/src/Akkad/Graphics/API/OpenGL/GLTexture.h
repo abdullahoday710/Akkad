@@ -14,6 +14,7 @@ namespace Akkad {
 			virtual void Unbind() override;
 			virtual unsigned int GetID() override { return m_ResourceID; }
 			virtual void SetSubData(int x, int y, unsigned int width, unsigned int height, void* data) override;
+			virtual TextureDescriptor GetDescriptor() override { return m_desc; };
 
 			static unsigned int TextureFormatToGLFormat(TextureFormat format);
 			static unsigned int TextureTypeToGLType(TextureType type);

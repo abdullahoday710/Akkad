@@ -1,4 +1,5 @@
 #pragma once
+#include <Akkad/core.h>
 
 #include <string>
 namespace Akkad {
@@ -8,7 +9,7 @@ namespace Akkad {
 	class MaterialSerializer
 	{
 	public:
-		static void Serialize(Graphics::Material& material, std::string outputPath);
+		static void Serialize(SharedPtr<Graphics::Material> material, std::string outputPath);
 
 	};
 }

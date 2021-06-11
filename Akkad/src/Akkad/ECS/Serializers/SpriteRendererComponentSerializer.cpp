@@ -9,7 +9,7 @@ namespace Akkad {
 	{
 		auto& sprite = entity.GetComponent<SpriteRendererComponent>();
 		entity_data["SpriteRenderer"]["MaterialID"] = sprite.materialID;
-		entity_data["SpriteRenderer"]["SortingLayer"] = sprite.sortingLayer;
+		entity_data["SpriteRenderer"]["SortingLayer"] = sprite.sprite.GetSortingLayer();
 	}
 
 	void SpriteRendererComponentSerializer::Deserialize(Entity entity, json& component_data)
@@ -19,10 +19,10 @@ namespace Akkad {
 
 		auto& spriteRenderer = entity.AddComponent<SpriteRendererComponent>();
 		spriteRenderer.materialID = materialID;
-		spriteRenderer.sortingLayer = sortingLayer;
+		spriteRenderer.sprite.SetSortingLayer(sortingLayer);
 
 		auto desc = Application::GetAssetManager()->GetDescriptorByID(materialID);
 
-		spriteRenderer.material = Graphics::Material::LoadFile(desc.absolutePath);
+		spriteRenderer.sprite.SetMaterial(desc.absolutePath);
 	}
 }

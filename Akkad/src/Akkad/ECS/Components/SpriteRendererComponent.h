@@ -1,5 +1,5 @@
 #pragma once
-#include "Akkad/Graphics/Material.h"
+#include "Akkad/Graphics/Sprite.h"
 
 #include <glm/glm.hpp>
 #include <string>
@@ -7,8 +7,7 @@
 namespace Akkad {
 
 	struct SpriteRendererComponent {
-		Graphics::Material material;
+		Graphics::Sprite sprite;
 		std::string materialID;
-		std::string sortingLayer = "Default";
 	};
 }

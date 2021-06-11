@@ -127,13 +127,14 @@ namespace Akkad {
 				{
 					auto& sprite = view.get<SpriteRendererComponent>(entity);
 
-					if (sprite.material.GetShaderID() == assetDesc.assetID)
+					if (sprite.sprite.GetMaterial()->GetShaderID() == assetDesc.assetID)
 					{
-						sprite.material = Graphics::Material::LoadFileFromID(sprite.materialID);
+						auto desc = Application::GetAssetManager()->GetDescriptorByID(sprite.materialID);
+						sprite.sprite.SetMaterial(desc.absolutePath);
 
 						if (panel->m_MaterialAssetID == sprite.materialID)
 						{
-							panel->m_Material = sprite.material;
+							panel->m_Material = sprite.sprite.GetMaterial();
 						}
 					}
 				}

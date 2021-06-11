@@ -203,16 +203,16 @@ namespace Akkad {
 			}
 			auto& sprite = m_ActiveEntity.GetComponent<SpriteRendererComponent>();
 
-			auto& material = sprite.material;
+			auto material = sprite.sprite.GetMaterial();
 
 			ImGui::Text("Material :");
 
-			if (material.isValid())
+			if (material != nullptr && material->isValid())
 			{
-				if (ImGui::Button(sprite.material.GetName().c_str()))
+				if (ImGui::Button(material->GetName().c_str()))
 				{
 					auto desc = Application::GetAssetManager()->GetDescriptorByID(sprite.materialID);
-					MaterialEditorPanel::SetActiveMaterial(sprite.material, sprite.materialID);
+					MaterialEditorPanel::SetActiveMaterial(material, sprite.materialID);
 					PanelManager::AddPanel(new MaterialEditorPanel());
 				}
 
@@ -234,7 +234,7 @@ namespace Akkad {
 					if (desc.assetType == AssetType::MATERIAL)
 					{
 						sprite.materialID = desc.assetID;
-						sprite.material = Graphics::Material::LoadFile(desc.absolutePath);
+						sprite.sprite.SetMaterial(desc.absolutePath);
 					}
 				}
 				ImGui::EndDragDropTarget();
@@ -242,7 +242,7 @@ namespace Akkad {
 
 			auto layers = SortingLayer2DHandler::GetRegisteredLayers();
 			static int item_current_idx = 0;
-			if (ImGui::BeginCombo("Sorting Layer",sprite.sortingLayer.c_str()))
+			if (ImGui::BeginCombo("Sorting Layer",sprite.sprite.GetSortingLayer().c_str()))
 			{
 				for (int i = 0; i < layers.size(); i++)
 				{
@@ -250,13 +250,38 @@ namespace Akkad {
 					if (ImGui::Selectable(layers[i].name.c_str(), is_selected))
 					{
 						item_current_idx = i;
-						sprite.sortingLayer = layers[i].name.c_str();
+						sprite.sprite.SetSortingLayer(layers[i].name);
 					}
 
 					if (is_selected)
 						ImGui::SetItemDefaultFocus();
 				}
 				ImGui::EndCombo();
+			}
+			bool single_texture = sprite.sprite.IsSingleTexture();
+			if(ImGui::Checkbox("Is single texture", &single_texture))
+			{
+				sprite.sprite.UseSingleTexture(single_texture);
+			}
+
+			if (!sprite.sprite.IsSingleTexture())
+			{
+				glm::vec2 tileSize = sprite.sprite.GetTileSize();
+				if (ImGui::InputFloat2("tile size", glm::value_ptr(tileSize)))
+				{
+					sprite.sprite.SetTileSize(tileSize);
+				}
+				float row = sprite.sprite.GetTileRow();
+				if (ImGui::InputFloat("Tile row", &row))
+				{
+					sprite.sprite.SetTileRow(row);
+				}
+
+				float col = sprite.sprite.GetTileColoumn();
+				if (ImGui::InputFloat("Tile coloumn", &col))
+				{
+					sprite.sprite.SetTileColoumn(col);
+				}
 			}
 			
 			ImGui::TreePop();

@@ -1,5 +1,6 @@
 #pragma once
 #include "Shader.h"
+#include "Texture.h"
 
 #include <string>
 #include <map>
@@ -28,12 +29,13 @@ namespace Akkad {
 			void ClearResources();
 			bool isValid();
 
+			SharedPtr<Texture> GetTexture(std::string samplerName);
 			std::string GetName() { return m_Name; }
 			std::string GetShaderID() { return m_ShaderID; }
 
 
-			static Material LoadFile(std::string filePath);
-			static Material LoadFileFromID(std::string assetID);
+			static SharedPtr<Material> LoadFile(std::string filePath);
+			static SharedPtr<Material> LoadFileFromID(std::string assetID);
 
 		private:
 			std::string m_Name = "material";

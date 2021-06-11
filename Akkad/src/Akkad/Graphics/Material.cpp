@@ -69,7 +69,15 @@ namespace Akkad {
 			}
 		}
 
-		Material Material::LoadFile(std::string filePath)
+		SharedPtr<Texture> Material::GetTexture(std::string samplerName)
+		{
+			auto it = m_Textures[samplerName];
+			auto texture = Application::GetAssetManager()->GetTexture(it.assetID);
+
+			return texture;
+		}
+
+		SharedPtr<Material> Material::LoadFile(std::string filePath)
 		{
 				std::ifstream file;
 				file.open(filePath);
@@ -78,16 +86,16 @@ namespace Akkad {
 
 				file >> data;
 
-				Material material;
+				SharedPtr<Material> material = CreateSharedPtr<Material>();
 
 				std::string name = data["material"]["name"];
-				material.m_Name = name;
+				material->m_Name = name;
 
 				if (!data["material"]["shaderID"].is_null())
 				{
 					std::string shaderID = data["material"]["shaderID"];
-					material.SetShader(shaderID);
-					material.SerializeShader();
+					material->SetShader(shaderID);
+					material->SerializeShader();
 				}
 
 				if (!data["material"]["textures"].is_null())
@@ -98,15 +106,15 @@ namespace Akkad {
 						std::string samplerName = data["material"]["textures"][assetID]["samplerName"];
 						unsigned int bindingUnit = data["material"]["textures"][assetID]["bindingUnit"];
 
-						auto prop = material.m_Textures.find(samplerName);
+						auto prop = material->m_Textures.find(samplerName);
 
-						if (prop != material.m_Textures.end())
+						if (prop != material->m_Textures.end())
 						{
 							Graphics::TextureProps props;
 							props.assetID = assetID;
 							props.samplerName = samplerName;
 							props.textureBindingUnit = bindingUnit;
-							material.m_Textures[samplerName] = props;
+							material->m_Textures[samplerName] = props;
 						}
 
 					}
@@ -168,9 +176,9 @@ namespace Akkad {
 						}
 					}
 
-					if (material.m_PropertyBuffer != nullptr)
+					if (material->m_PropertyBuffer != nullptr)
 					{
-						for (auto it : material.m_PropertyBuffer->GetLayout().GetElements())
+						for (auto it : material->m_PropertyBuffer->GetLayout().GetElements())
 						{
 							ShaderDataType type = it.second.GetType();
 							std::string elementName = it.first;
@@ -180,38 +188,38 @@ namespace Akkad {
 							case ShaderDataType::FLOAT:
 							{
 								float value = props_float[elementName];
-								material.m_PropertyBuffer->SetData(elementName, value);
+								material->m_PropertyBuffer->SetData(elementName, value);
 								break;
 							}
 							case ShaderDataType::FLOAT2:
 							{
 								glm::vec2 value = props_float2[elementName];
-								material.m_PropertyBuffer->SetData(elementName, value);
+								material->m_PropertyBuffer->SetData(elementName, value);
 								break;
 							}
 							case ShaderDataType::FLOAT3:
 							{
 								glm::vec3 value = props_float3[elementName];
-								material.m_PropertyBuffer->SetData(elementName, value);
+								material->m_PropertyBuffer->SetData(elementName, value);
 								break;
 							}
 							case ShaderDataType::FLOAT4:
 							{
 								glm::vec4 value = props_float4[elementName];
-								material.m_PropertyBuffer->SetData(elementName, value);
+								material->m_PropertyBuffer->SetData(elementName, value);
 								break;
 							}
 							case ShaderDataType::UNISGNED_INT:
 							{
 								unsigned int value = props_unsignedints[elementName];
-								material.m_PropertyBuffer->SetData(elementName, value);
+								material->m_PropertyBuffer->SetData(elementName, value);
 								break;
 							}
 							}
 
 						}
 
-						material.m_PropertyBuffer->SetName(DEFAULT_PROPERTY_BUFFER_NAME);
+						material->m_PropertyBuffer->SetName(DEFAULT_PROPERTY_BUFFER_NAME);
 					}
 
 				}
@@ -219,7 +227,7 @@ namespace Akkad {
 				return material;
 		}
 
-		Material Material::LoadFileFromID(std::string assetID)
+		SharedPtr<Material> Material::LoadFileFromID(std::string assetID)
 		{
 			auto desc = Application::GetAssetManager()->GetDescriptorByID(assetID);
 

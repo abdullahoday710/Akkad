@@ -101,11 +101,11 @@ namespace Akkad {
 			{
 				auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
 
-				if (spriteRenderer.sortingLayer == it.name)
+				if (spriteRenderer.sprite.GetSortingLayer() == it.name)
 				{
 					auto& transform = view.get<TransformComponent>(entity);
 
-					Renderer2D::DrawQuad(spriteRenderer.material, transform.GetTransformMatrix());
+					Renderer2D::DrawSprite(spriteRenderer.sprite, transform.GetTransformMatrix());
 					transform.RecalculateTransformMatrix();
 					if (m_Registry.has<RigidBody2dComponent>(entity))
 					{
@@ -134,7 +134,7 @@ namespace Akkad {
 				{
 					auto& spriteRenderer = view.get<SpriteRendererComponent>(entity);
 
-					if (spriteRenderer.sortingLayer == it.name)
+					if (spriteRenderer.sprite.GetSortingLayer() == it.name)
 					{
 						auto& transform = view.get<TransformComponent>(entity);
 

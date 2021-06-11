@@ -17,6 +17,11 @@ namespace Akkad {
 			int Width;
 			int Height;
 			int nChannels;
+
+			/* If the texture is an Atlas those values are not 0 ! */
+			float TileWidth = 0.0f;
+			float TileHeight = 0.0f;
+
 			unsigned char* Data;
 		};
 
@@ -27,6 +32,7 @@ namespace Akkad {
 			virtual void Unbind() = 0;
 			virtual unsigned int GetID() = 0;
 			virtual void SetSubData(int x, int y, unsigned int width, unsigned int height, void* data) = 0;
+			virtual TextureDescriptor GetDescriptor() = 0;
 			static TextureDescriptor LoadFile(const char* path, bool flip=false);
 		};
 	}

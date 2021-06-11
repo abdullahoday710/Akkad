@@ -1,6 +1,6 @@
 #pragma once
 #include "Panel.h"
-
+#include "Akkad/core.h"
 namespace Akkad {
 
 	namespace Graphics {
@@ -13,7 +13,7 @@ namespace Akkad {
 		MaterialEditorPanel();
 		~MaterialEditorPanel() {}
 
-		static void SetActiveMaterial(Graphics::Material& mat, std::string assetID);
+		static void SetActiveMaterial(SharedPtr<Graphics::Material> mat, std::string assetID);
 
 		virtual void DrawImGui() override;
 		virtual void OnOpen() override { showPanel = true; }
@@ -24,7 +24,7 @@ namespace Akkad {
 
 	private:
 		static bool showPanel;
-		static Graphics::Material& m_Material;
+		static SharedPtr<Graphics::Material> m_Material;
 		static std::string m_MaterialAssetID;
 
 		friend class EditorLayer;

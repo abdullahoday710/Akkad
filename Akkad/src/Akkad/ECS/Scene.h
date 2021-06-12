@@ -64,6 +64,7 @@ namespace Akkad {
 		friend class GameViewPanel;
 		friend class ViewPortPanel;
 		friend class MaterialEditorPanel;
+		friend class TexturePreviewPanel;
 		friend class SceneManager;
 		friend class GUIFactory;
 

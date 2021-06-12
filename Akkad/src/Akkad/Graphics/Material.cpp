@@ -77,6 +77,13 @@ namespace Akkad {
 			return texture;
 		}
 
+		std::string Material::GetTextureID(std::string samplerName)
+		{
+			auto it = m_Textures[samplerName];
+
+			return it.assetID;
+		}
+
 		SharedPtr<Material> Material::LoadFile(std::string filePath)
 		{
 				std::ifstream file;

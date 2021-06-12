@@ -9,6 +9,7 @@ namespace Akkad {
 		public:
 			GLTexture(const char* path);
 			GLTexture(TextureDescriptor desc);
+			GLTexture(const char* path, float tileWidth, float tileHeight);
 			~GLTexture();
 			virtual void Bind(unsigned int unit) override;
 			virtual void Unbind() override;
@@ -19,6 +20,8 @@ namespace Akkad {
 			static unsigned int TextureFormatToGLFormat(TextureFormat format);
 			static unsigned int TextureTypeToGLType(TextureType type);
 		private:
+			void InitilizeTexture();
+			void SetTextureImageData();
 			unsigned int m_ResourceID;
 			TextureDescriptor m_desc;
 

@@ -25,6 +25,7 @@ namespace Akkad {
 			virtual SharedPtr<Shader> CreateShader(const char* path) = 0;
 			virtual SharedPtr<Texture> CreateTexture(const char* path) = 0;
 			virtual SharedPtr<Texture> CreateTexture(TextureDescriptor desc) = 0;
+			virtual SharedPtr<Texture> CreateTexture(const char* path, float tileWidth, float tileHeight) = 0;
 			virtual SharedPtr<FrameBuffer> CreateFrameBuffer(FrameBufferDescriptor desc) = 0;
 			virtual SharedPtr<UniformBuffer> CreateUniformBuffer(UniformBufferLayout layout) = 0;
 

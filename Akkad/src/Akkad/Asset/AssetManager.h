@@ -16,6 +16,17 @@ namespace Akkad {
 		class Shader;
 	}
 
+	struct AssetInfo {
+		virtual ~AssetInfo() = 0;
+	};
+
+	struct TextureAssetInfo : public AssetInfo
+	{
+		bool isTilemap;
+		float tileWidth;
+		float tileHeight;
+	};
+
 	struct AssetDescriptor
 	{
 		std::string assetName;
@@ -23,6 +34,8 @@ namespace Akkad {
 		std::string assetID;
 
 		AssetType assetType = AssetType::UNKNOWN;
+
+		SharedPtr<AssetInfo> assetInfo;
 
 		void SetAssetType(std::string type) {
 
@@ -73,6 +86,7 @@ namespace Akkad {
 
 		/*---- Texture handlers ----*/
 		SharedPtr<Graphics::Texture> GetTexture(std::string assetID);
+		void ReloadTexture(std::string assetID);
 		/*---------------------------*/
 
 		/*----- Shader handlers -----*/

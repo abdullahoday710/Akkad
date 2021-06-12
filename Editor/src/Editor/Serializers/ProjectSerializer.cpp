@@ -128,11 +128,31 @@ namespace Akkad {
 					assetDesc.absolutePath = absolutePath;
 				}
 			}
+
 			else
 			{
 				std::string assetPath = descriptor.projectData["project"]["Assets"][assetID]["path"];
 				std::string absolutePath = descriptor.GetProjectDirectory().string() + assetPath;
 				assetDesc.absolutePath = absolutePath;
+			}
+
+			if (assetType == "texture")
+			{
+				SharedPtr<TextureAssetInfo> textureInfo = CreateSharedPtr<TextureAssetInfo>();
+				if (!descriptor.projectData["project"]["Assets"][assetID]["AtlasTileSize"].is_null())
+				{
+					textureInfo->tileWidth = descriptor.projectData["project"]["Assets"][assetID]["AtlasTileSize"][0];
+					textureInfo->tileHeight = descriptor.projectData["project"]["Assets"][assetID]["AtlasTileSize"][1];
+				}
+				if (!descriptor.projectData["project"]["Assets"][assetID]["IsAtlas"].is_null())
+				{
+					textureInfo->isTilemap = descriptor.projectData["project"]["Assets"][assetID]["IsAtlas"];
+				}
+				else
+				{
+					textureInfo->isTilemap = false;
+				}
+				assetDesc.assetInfo = textureInfo;
 			}
 
 			assetDesc.assetName = assetName;

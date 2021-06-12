@@ -24,5 +24,7 @@ namespace Akkad {
 		auto desc = Application::GetAssetManager()->GetDescriptorByID(materialID);
 
 		spriteRenderer.sprite.SetMaterial(desc.absolutePath);
+
+		spriteRenderer.sprite.RecalculateTextureCoords();
 	}
 }

@@ -258,19 +258,9 @@ namespace Akkad {
 				}
 				ImGui::EndCombo();
 			}
-			bool single_texture = sprite.sprite.IsSingleTexture();
-			if(ImGui::Checkbox("Is single texture", &single_texture))
-			{
-				sprite.sprite.UseSingleTexture(single_texture);
-			}
 
-			if (!sprite.sprite.IsSingleTexture())
+			if (sprite.sprite.IsUsingTilemap())
 			{
-				glm::vec2 tileSize = sprite.sprite.GetTileSize();
-				if (ImGui::InputFloat2("tile size", glm::value_ptr(tileSize)))
-				{
-					sprite.sprite.SetTileSize(tileSize);
-				}
 				float row = sprite.sprite.GetTileRow();
 				if (ImGui::InputFloat("Tile row", &row))
 				{

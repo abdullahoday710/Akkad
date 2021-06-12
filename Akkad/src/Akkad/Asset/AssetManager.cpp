@@ -7,7 +7,7 @@
 #include "Akkad/Graphics/Shader.h"
 
 namespace Akkad {
-
+	AssetInfo::~AssetInfo() {}
 	void AssetManager::RegisterAsset(std::string assetID, AssetDescriptor& asset)
 	{
 		if (!IsRegistered(assetID))
@@ -63,12 +63,32 @@ namespace Akkad {
 		else
 		{
 			auto desc = GetDescriptorByID(assetID);
+			auto textureinfo = DynamicCastPtr<TextureAssetInfo>(desc.assetInfo);
+			if (textureinfo->isTilemap)
+			{
+				auto texture = Application::GetInstance().GetRenderPlatform()->CreateTexture(desc.absolutePath.c_str(), textureinfo->tileWidth, textureinfo->tileHeight);
+				m_LoadedTextures[assetID] = texture;
+				return texture;
+			}
 
-			auto texture = Application::GetInstance().GetRenderPlatform()->CreateTexture(desc.absolutePath.c_str());
-			m_LoadedTextures[assetID] = texture;
+			else
+			{
+				auto texture = Application::GetInstance().GetRenderPlatform()->CreateTexture(desc.absolutePath.c_str());
+				m_LoadedTextures[assetID] = texture;
+				return texture;
+			}
 
-			return texture;
 		}
+	}
+
+	void AssetManager::ReloadTexture(std::string assetID)
+	{
+		auto desc = GetDescriptorByID(assetID);
+
+		AK_ASSERT(desc.assetType == AssetType::TEXTURE, "Failed to reload asset, asset type mismatch !");
+		
+		m_LoadedTextures.erase(assetID);
+		GetTexture(assetID);
 	}
 
 	SharedPtr<Graphics::Shader> AssetManager::GetShader(std::string assetID)

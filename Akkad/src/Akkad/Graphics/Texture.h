@@ -18,7 +18,7 @@ namespace Akkad {
 			int Height;
 			int nChannels;
 
-			/* If the texture is an Atlas those values are not 0 ! */
+			bool IsTilemap = false;
 			float TileWidth = 0.0f;
 			float TileHeight = 0.0f;
 

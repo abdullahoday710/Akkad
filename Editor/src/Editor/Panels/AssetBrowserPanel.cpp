@@ -1,5 +1,6 @@
 #include "AssetBrowserPanel.h"
 #include "MaterialEditorPanel.h"
+#include "TexturePreviewPanel.h"
 
 #include "Editor/EditorLayer.h"
 #include "Editor/Serializers/MaterialSerializer.h"
@@ -202,6 +203,12 @@ namespace Akkad {
 						auto material = Graphics::Material::LoadFile(assetAbsolutePath);
 						PanelManager::AddPanel(new MaterialEditorPanel());
 						MaterialEditorPanel::SetActiveMaterial(material, assetID);
+					}
+
+					if (assetType == "texture")
+					{
+						PanelManager::AddPanel(new TexturePreviewPanel());
+						TexturePreviewPanel::SetActiveTexture(assetID);
 					}
 				}
 

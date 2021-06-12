@@ -32,6 +32,7 @@ namespace Akkad {
 			SharedPtr<Texture> GetTexture(std::string samplerName);
 			std::string GetName() { return m_Name; }
 			std::string GetShaderID() { return m_ShaderID; }
+			std::string GetTextureID(std::string samplerName);
 
 
 			static SharedPtr<Material> LoadFile(std::string filePath);

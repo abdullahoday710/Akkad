@@ -6,35 +6,15 @@
 
 namespace Akkad {
 	namespace Graphics {
-		// TODO : Refactor texture class
+
 		GLTexture::GLTexture(const char* path)
 		{
 			TextureDescriptor desc = LoadFile(path, true);
 			m_desc = desc;
+			m_desc.Type = TextureType::TEXTURE2D;
 
-			glGenTextures(1, &m_ResourceID);
-			glBindTexture(GL_TEXTURE_2D, m_ResourceID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-			if (desc.nChannels == 3)
-			{
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, desc.Width, desc.Height, 0, GL_RGB, GL_UNSIGNED_BYTE, desc.Data);
-				glGenerateMipmap(GL_TEXTURE_2D);
-			}
-			else if (desc.nChannels == 4)
-			{
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, desc.Width, desc.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, desc.Data);
-				glGenerateMipmap(GL_TEXTURE_2D);
-			}
-			else
-			{
-				AK_ASSERT((false), "number of channels is not supported !");
-			}
-			glBindTexture(GL_TEXTURE_2D, 0);
-			stbi_image_free(desc.Data);
+			InitilizeTexture();
+			SetTextureImageData();
 		}
 
 		GLTexture::GLTexture(TextureDescriptor desc)
@@ -43,22 +23,63 @@ namespace Akkad {
 			unsigned int textureType = TextureTypeToGLType(desc.Type);
 			unsigned int textureFormat = TextureFormatToGLFormat(desc.Format);
 
-			glGenTextures(1, &m_ResourceID);
+			InitilizeTexture();
+
 			glBindTexture(textureType, m_ResourceID);
-			
-			glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, desc.Width, desc.Height, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
-
-
 			glBindTexture(textureType, 0);
 
 		}
 
+		GLTexture::GLTexture(const char* path, float tileWidth, float tileHeight)
+		{
+			TextureDescriptor desc = LoadFile(path, true);
+			m_desc = desc;
+			m_desc.IsTilemap = true;
+			m_desc.TileWidth = tileWidth;
+			m_desc.TileHeight = tileHeight;
+			m_desc.Type = TextureType::TEXTURE2D;
+			InitilizeTexture();
+			SetTextureImageData();
+		}
+
 		GLTexture::~GLTexture()
 		{
+		}
+
+		void GLTexture::InitilizeTexture()
+		{
+			unsigned int textureType = TextureTypeToGLType(m_desc.Type);
+			glGenTextures(1, &m_ResourceID);
+			glBindTexture(textureType, m_ResourceID);
+			glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glBindTexture(textureType, 0);
+
+		}
+
+		void GLTexture::SetTextureImageData()
+		{
+			unsigned int textureType = TextureTypeToGLType(m_desc.Type);
+			glBindTexture(textureType, m_ResourceID);
+			if (m_desc.nChannels == 3)
+			{
+				glTexImage2D(textureType, 0, GL_RGB, m_desc.Width, m_desc.Height, 0, GL_RGB, GL_UNSIGNED_BYTE, m_desc.Data);
+				glGenerateMipmap(textureType);
+			}
+			else if (m_desc.nChannels == 4)
+			{
+				glTexImage2D(textureType, 0, GL_RGBA, m_desc.Width, m_desc.Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_desc.Data);
+				glGenerateMipmap(textureType);
+			}
+			else
+			{
+				AK_ASSERT((false), "number of channels is not supported !");
+			}
+			glBindTexture(textureType, 0);
+			stbi_image_free(m_desc.Data);
 		}
 
 		void GLTexture::Bind(unsigned int unit)
@@ -118,5 +139,6 @@ namespace Akkad {
 				return GL_TEXTURE_2D;
 			}
 		}
+
 	}
 }

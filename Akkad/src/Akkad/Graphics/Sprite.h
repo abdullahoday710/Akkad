@@ -21,6 +21,7 @@ namespace Akkad {
 			float GetTileRow() { return m_TileRow; };
 			float GetTileColoumn() { return m_TileColoumn; };
 			bool IsUsingTilemap();
+			bool IsValid();
 		private:
 			SharedPtr<Material> m_Material;
 			std::string m_SortingLayer;

@@ -260,25 +260,28 @@ namespace Akkad {
 				ImGui::EndCombo();
 			}
 
-			if (sprite.sprite.IsUsingTilemap())
+			if (sprite.sprite.IsValid())
 			{
-				float row = sprite.sprite.GetTileRow();
-				if (ImGui::InputFloat("Tile row", &row))
+				if (sprite.sprite.IsUsingTilemap())
 				{
-					sprite.sprite.SetTileRow(row);
-				}
+					float row = sprite.sprite.GetTileRow();
+					if (ImGui::InputFloat("Tile row", &row))
+					{
+						sprite.sprite.SetTileRow(row);
+					}
 
-				float col = sprite.sprite.GetTileColoumn();
-				if (ImGui::InputFloat("Tile coloumn", &col))
-				{
-					sprite.sprite.SetTileColoumn(col);
-				}
+					float col = sprite.sprite.GetTileColoumn();
+					if (ImGui::InputFloat("Tile coloumn", &col))
+					{
+						sprite.sprite.SetTileColoumn(col);
+					}
 
-				if (ImGui::Button("Select sprite from tilemap"))
-				{
-					PanelManager::AddPanel(new SpriteSelectorPanel());
+					if (ImGui::Button("Select sprite from tilemap"))
+					{
+						PanelManager::AddPanel(new SpriteSelectorPanel());
 
-					SpriteSelectorPanel::SetActiveEntity(m_ActiveEntity);
+						SpriteSelectorPanel::SetActiveEntity(m_ActiveEntity);
+					}
 				}
 			}
 			

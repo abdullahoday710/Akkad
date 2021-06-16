@@ -69,6 +69,15 @@ namespace Akkad {
 			}
 		}
 
+		bool Material::HasTexture(std::string samplerName)
+		{
+			if (m_Textures.count(samplerName) > 0)
+			{
+				return true;
+			}
+			return false;
+		}
+
 		SharedPtr<Texture> Material::GetTexture(std::string samplerName)
 		{
 			auto it = m_Textures[samplerName];

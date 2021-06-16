@@ -34,16 +34,16 @@ layout (std140) uniform shader_props {
 in vec2 TexCoord;
 out vec4 FragColor;
 
-uniform sampler2D Texture;
+uniform sampler2D main_sprite_tex;
 
 void main()
 {
     if (color_tint.x == 0 && color_tint.y == 0 && color_tint.z == 0)
     {
-        FragColor = texture(Texture, TexCoord);
+        FragColor = texture(main_sprite_tex, TexCoord);
     }
     else
     {
-        FragColor = mix(texture(Texture, TexCoord), vec4(color_tint, 1.0), tintColorIntensity);
+        FragColor = mix(texture(main_sprite_tex, TexCoord), vec4(color_tint, 1.0), tintColorIntensity);
     }
 }

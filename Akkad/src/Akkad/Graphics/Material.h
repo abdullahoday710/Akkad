@@ -28,6 +28,7 @@ namespace Akkad {
 			void BindShaders();
 			void ClearResources();
 			bool isValid();
+			bool HasTexture(std::string samplerName);
 
 			SharedPtr<Texture> GetTexture(std::string samplerName);
 			std::string GetName() { return m_Name; }

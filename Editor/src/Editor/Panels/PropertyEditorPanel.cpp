@@ -1,5 +1,6 @@
 #include "PropertyEditorPanel.h"
 #include "MaterialEditorPanel.h"
+#include "SpriteSelectorPanel.h"
 
 #include "Editor/EditorLayer.h"
 #include "Editor/Serializers/MaterialSerializer.h"
@@ -271,6 +272,13 @@ namespace Akkad {
 				if (ImGui::InputFloat("Tile coloumn", &col))
 				{
 					sprite.sprite.SetTileColoumn(col);
+				}
+
+				if (ImGui::Button("Select sprite from tilemap"))
+				{
+					PanelManager::AddPanel(new SpriteSelectorPanel());
+
+					SpriteSelectorPanel::SetActiveEntity(m_ActiveEntity);
 				}
 			}
 			

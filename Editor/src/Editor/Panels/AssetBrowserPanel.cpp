@@ -80,9 +80,21 @@ namespace Akkad {
 						descriptor.absolutePath = "";
 					}
 
+					if (assetType == "texture")
+					{
+						SharedPtr<TextureAssetInfo> textureInfo = CreateSharedPtr<TextureAssetInfo>();
+						textureInfo->isTilemap = false;
+						textureInfo->tileWidth = 0;
+						textureInfo->tileHeight = 0;
+						descriptor.assetInfo = textureInfo;
+						descriptor.absolutePath = destnationAssetPath.string();
+						descriptor.assetName = assetName;
+					}
+
 					else
 					{
 						descriptor.absolutePath = destnationAssetPath.string();
+						descriptor.assetName = assetName;
 					}
 		
 

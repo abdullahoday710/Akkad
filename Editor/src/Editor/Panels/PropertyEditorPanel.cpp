@@ -101,6 +101,10 @@ namespace Akkad {
 				DrawGUIButtonComponent();
 			}
 
+			if (m_ActiveEntity.HasComponent<AnimatedSpriteRendererComponent>())
+			{
+				DrawAnimatedSpriteRendererComponent();
+			}
 			DrawAddComponent();
 		}
 		
@@ -130,6 +134,14 @@ namespace Akkad {
 					if (!m_ActiveEntity.HasComponent<SpriteRendererComponent>())
 					{
 						m_ActiveEntity.AddComponent<SpriteRendererComponent>();
+					}
+				}
+
+				if (ImGui::Button("Animated Sprite Renderer"))
+				{
+					if (!m_ActiveEntity.HasComponent<AnimatedSpriteRendererComponent>())
+					{
+						m_ActiveEntity.AddComponent<AnimatedSpriteRendererComponent>();
 					}
 				}
 
@@ -516,8 +528,8 @@ namespace Akkad {
 				}
 			}
 
-		}
 		ImGui::TreePop();
+		}
 	}
 
 	void PropertyEditorPanel::DrawGUIContainerComponent()
@@ -528,8 +540,8 @@ namespace Akkad {
 		if (ImGui::TreeNode("container"))
 		{
 			ImGui::InputFloat2("size", glm::value_ptr(size));
+			ImGui::TreePop();
 		}
-		ImGui::TreePop();
 	}
 
 	std::string ConstraintTypeToStr_(GUI::ConstraintType type)
@@ -728,8 +740,8 @@ namespace Akkad {
 			{
 				rectTransformComp.rect.SetYConstraint(yConstraint);
 			}
+			ImGui::TreePop();
 		}
-		ImGui::TreePop();
 	}
 
 	void PropertyEditorPanel::DrawGUIButtonComponent()
@@ -743,8 +755,102 @@ namespace Akkad {
 			{
 				guibutton.button.SetColor(color);
 			}
+			ImGui::TreePop();
 		}
-		ImGui::TreePop();
+	}
+
+	void PropertyEditorPanel::DrawAnimatedSpriteRendererComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		auto& animatedSprite = m_ActiveEntity.GetComponent<AnimatedSpriteRendererComponent>();
+		if (ImGui::TreeNode("animated sprite"))
+		{
+			auto material = animatedSprite.sprite.GetMaterial();
+
+			ImGui::Text("Material :");
+
+			if (material != nullptr && material->isValid())
+			{
+				if (ImGui::Button(material->GetName().c_str()))
+				{
+					auto desc = Application::GetAssetManager()->GetDescriptorByID(animatedSprite.materialID);
+					MaterialEditorPanel::SetActiveMaterial(material, animatedSprite.materialID);
+					PanelManager::AddPanel(new MaterialEditorPanel());
+				}
+
+
+			}
+			else
+			{
+				std::string buf;
+				ImGui::InputText("Material", &buf, ImGuiInputTextFlags_ReadOnly);
+			}
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_DRAG_DROP"))
+				{
+					const char* id = (const char*)payload->Data;
+					AssetDescriptor desc = Application::GetAssetManager()->GetDescriptorByID(id);
+
+					if (desc.assetType == AssetType::MATERIAL)
+					{
+						animatedSprite.materialID = desc.assetID;
+						animatedSprite.sprite.SetMaterial(desc.absolutePath);
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			auto layers = SortingLayer2DHandler::GetRegisteredLayers();
+			static int item_current_idx = 0;
+			if (ImGui::BeginCombo("Sorting Layer", animatedSprite.sprite.GetSortingLayer().c_str()))
+			{
+				for (int i = 0; i < layers.size(); i++)
+				{
+					const bool is_selected = (item_current_idx == i);
+					if (ImGui::Selectable(layers[i].name.c_str(), is_selected))
+					{
+						item_current_idx = i;
+						animatedSprite.sprite.SetSortingLayer(layers[i].name);
+					}
+
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+
+			if (ImGui::ListBoxHeader("Animations"))
+			{
+				for (auto& it : animatedSprite.sprite.m_Animations)
+				{
+					if (ImGui::Button(it.first.c_str()))
+					{
+
+					}
+				}
+				ImGui::ListBoxFooter();
+			}
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_DRAG_DROP"))
+				{
+					const char* id = (const char*)payload->Data;
+					AssetDescriptor desc = Application::GetAssetManager()->GetDescriptorByID(id);
+
+					if (desc.assetType == AssetType::SPRITE_ANIMATION)
+					{
+						auto animation = animatedSprite.sprite.AddAnimation(desc.assetID);
+						animatedSprite.sprite.m_ActiveAnimation = animation->name;
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+			
+			ImGui::TreePop();
+		}
 	}
 
 }

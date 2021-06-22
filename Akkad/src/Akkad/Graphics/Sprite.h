@@ -36,6 +36,52 @@ namespace Akkad {
 			friend class SpriteRendererComponentSerializer;
 			friend class TexturePreviewPanel;
 		};
+
+		class SpriteAnimation
+		{
+		public:
+			std::string spriteSheetAssetID = "";
+			std::string name;
+			unsigned int startingRow = 0;
+			unsigned int startingColumn = 0;
+			unsigned int endRow = 0;
+			float interval = 25.0f;
+			float currentTime = 0.0f;
+			float currentRow = 0;
+
+			static SharedPtr<SpriteAnimation> LoadFile(std::string path);
+		};
+
+		struct AnimationFrame
+		{
+			glm::vec2 minTextureCoords = { 0,0 };
+			glm::vec2 maxTextureCoords = { 0,0 };
+			bool isValid = false;
+		};
+
+		class AnimatedSprite {
+		public:
+			void SetMaterial(std::string filepath);
+			void SetSortingLayer(std::string layer) { m_SortingLayer = layer; };
+			void SetActiveAnimation(std::string AnimationName) { m_ActiveAnimation = AnimationName; }
+
+			SharedPtr<SpriteAnimation> AddAnimation(std::string assetID);
+			SharedPtr<SpriteAnimation> GetAnimation(std::string AnimationName);
+
+			AnimationFrame GetFrame(float deltaTime);
+
+			std::string GetSortingLayer() { return m_SortingLayer; };
+			SharedPtr<Material> GetMaterial() { return m_Material; };
+
+		private:
+			std::map<std::string, SharedPtr<SpriteAnimation>> m_Animations;
+			SharedPtr<Material> m_Material;
+			std::string m_SortingLayer;
+			std::string m_ActiveAnimation;
+
+			friend class PropertyEditorPanel;
+			friend class SpriteAnimationPreviewPanel;
+		};
 	}
 }
 

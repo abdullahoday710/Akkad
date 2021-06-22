@@ -175,6 +175,8 @@ namespace Akkad {
 			return "shader";
 		case AssetType::FONT:
 			return "font";
+		case AssetType::SPRITE_ANIMATION:
+			return "sprite_animation";
 		default:
 			return "unkown";
 		}
@@ -189,7 +191,7 @@ namespace Akkad {
 			assetType = AssetType::TEXTURE;
 		}
 
-		if (extension == ".ttf")
+		else if (extension == ".ttf")
 		{
 			assetType = AssetType::FONT;
 		}
@@ -197,6 +199,11 @@ namespace Akkad {
 		else if (extension == ".glsl")
 		{
 			assetType = AssetType::SHADER;
+		}
+
+		else if (extension == ".ak_sprite_anim")
+		{
+			assetType = AssetType::SPRITE_ANIMATION;
 		}
 
 		return assetType;

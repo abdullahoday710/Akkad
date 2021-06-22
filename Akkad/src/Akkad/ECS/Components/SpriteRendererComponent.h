@@ -10,4 +10,9 @@ namespace Akkad {
 		Graphics::Sprite sprite;
 		std::string materialID;
 	};
+
+	struct AnimatedSpriteRendererComponent {
+		Graphics::AnimatedSprite sprite;
+		std::string materialID;
+	};
 }

@@ -9,6 +9,7 @@
 #include "Akkad/Asset/AssetManager.h"
 #include "Akkad/Scripting/LoadedGameAssembly.h"
 #include "Akkad/Graphics/SortingLayer2D.h"
+#include "Akkad/Application/TimeManager.h"
 
 #include "Components/Components.h"
 
@@ -93,6 +94,7 @@ namespace Akkad {
 	{
 		auto command = Application::GetRenderPlatform()->GetRenderCommand();
 		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
+		auto animatedView = m_Registry.view<TransformComponent, AnimatedSpriteRendererComponent>();
 		command->Clear();
 
 		for (auto it : SortingLayer2DHandler::GetRegisteredLayers())
@@ -114,6 +116,17 @@ namespace Akkad {
 					}
 				}
 
+			}
+
+			for (auto entity : animatedView)
+			{
+				auto& animatedSprite = animatedView.get<AnimatedSpriteRendererComponent>(entity);
+				auto& transform = animatedView.get<TransformComponent>(entity);
+
+				auto dt = Application::GetTimeManager()->GetDeltaTime();
+				auto frame = animatedSprite.sprite.GetFrame(dt);
+
+				Renderer2D::DrawAnimatedSprite(animatedSprite.sprite, frame, transform.GetTransformMatrix());
 			}
 		}
 

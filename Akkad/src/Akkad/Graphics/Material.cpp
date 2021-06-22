@@ -78,6 +78,18 @@ namespace Akkad {
 			return false;
 		}
 
+		bool Material::SetTexture(std::string samplerName, std::string assetID)
+		{
+			if (HasTexture(samplerName))
+			{
+				auto& textureprop = m_Textures[samplerName];
+				textureprop.assetID = assetID;
+				return true;
+			}
+			AK_WARNING("Material doesn't have the specified texture sampler {}", samplerName);
+			return false;
+		}
+
 		SharedPtr<Texture> Material::GetTexture(std::string samplerName)
 		{
 			auto it = m_Textures[samplerName];

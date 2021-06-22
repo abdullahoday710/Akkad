@@ -29,6 +29,7 @@ namespace Akkad {
 			void ClearResources();
 			bool isValid();
 			bool HasTexture(std::string samplerName);
+			bool SetTexture(std::string samplerName, std::string assetID);
 
 			SharedPtr<Texture> GetTexture(std::string samplerName);
 			std::string GetName() { return m_Name; }

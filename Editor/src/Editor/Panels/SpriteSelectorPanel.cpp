@@ -29,7 +29,7 @@ namespace Akkad {
 				auto& sprite = m_ActiveEntity.GetComponent<SpriteRendererComponent>();
 				if (sprite.sprite.IsValid())
 				{
-					glm::vec2 tilemapPreviewSize = { 400,400 };
+					glm::vec2 tilemapPreviewSize = { 512,512 };
 					auto tilemap = sprite.sprite.GetMaterial()->GetTexture("main_sprite_tex");
 					ImGui::Image((void*)tilemap->GetID(), { tilemapPreviewSize.x, tilemapPreviewSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 

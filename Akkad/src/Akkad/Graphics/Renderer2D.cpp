@@ -230,6 +230,35 @@ namespace Akkad {
 
 		}
 
+		void Renderer2D::DrawAnimatedSpriteImpl(AnimatedSprite& sprite, AnimationFrame& frame, glm::mat4& transform)
+		{
+			if (sprite.GetMaterial() != nullptr)
+			{
+				if (sprite.GetMaterial()->isValid())
+				{
+					auto mintexcoords = frame.minTextureCoords;
+					auto maxtexcoords = frame.maxTextureCoords;
+					float vertices[] = {
+						// positions             // texture coords
+						 0.5f,  0.5f, 0.0f,      maxtexcoords.x, maxtexcoords.y,    // top right
+						 0.5f, -0.5f, 0.0f,      maxtexcoords.x, mintexcoords.y,    // bottom right
+						-0.5f, -0.5f, 0.0f,      mintexcoords.x, mintexcoords.y,    // bottom left
+						-0.5f,  0.5f, 0.0f,      mintexcoords.x, maxtexcoords.y,    // top left 
+					};
+
+					m_QuadVB->SetSubData(0, &vertices, sizeof(vertices));
+					auto command = Application::GetRenderPlatform()->GetRenderCommand();
+					sprite.GetMaterial()->BindShaders();
+					sprite.GetMaterial()->BindTextures();
+					m_SceneProps->SetData("sys_transform", transform);
+
+					m_QuadVB->Bind();
+					m_QuadIB->Bind();
+					command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+				}
+			}
+		}
+
 		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color, bool filled)
 		{
 			DrawRectImpl(rect.GetMin(), rect.GetMax(), color, filled);

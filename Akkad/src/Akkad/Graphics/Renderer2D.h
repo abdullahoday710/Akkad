@@ -30,6 +30,7 @@ namespace Akkad {
 			static void DrawRect(Rect rect, glm::vec3 color, bool filled, glm::mat4 projection) { GetInstance().DrawRectImpl(rect, color, filled, projection); }
 
 			static void DrawSprite(Sprite& sprite, glm::mat4& transform) { GetInstance().DrawSpriteImpl(sprite, transform); };
+			static void DrawAnimatedSprite(AnimatedSprite& sprite, AnimationFrame& frame, glm::mat4& transform) { GetInstance().DrawAnimatedSpriteImpl(sprite, frame, transform); };
 
 			static void Draw(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount) { GetInstance().DrawImpl(vb, shader, vertexCount); };
 			static void RenderText(GUI::GUIText& uitext, glm::mat4 projection) { GetInstance().RenderTextImpl(uitext, projection); }
@@ -60,6 +61,7 @@ namespace Akkad {
 			void DrawRectImpl(Rect rect, SharedPtr<Texture> texture, glm::mat4 projection);
 
 			void DrawSpriteImpl(Sprite& sprite, glm::mat4& transform);
+			void DrawAnimatedSpriteImpl(AnimatedSprite& sprite, AnimationFrame& frame, glm::mat4& transform);
 
 			void DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount);
 

@@ -1,15 +1,18 @@
 #include "AssetBrowserPanel.h"
 #include "MaterialEditorPanel.h"
 #include "TexturePreviewPanel.h"
+#include "SpriteAnimationPreviewPanel.h"
 
 #include "Editor/EditorLayer.h"
 #include "Editor/Serializers/MaterialSerializer.h"
+#include "Editor/Serializers/SpriteAnimationSerializer.h"
 
 #include <Akkad/Application/Application.h>
 #include <Akkad/PlatformUtils.h>
 #include <Akkad/Random.h>
 #include <Akkad/Asset/AssetManager.h>
 #include <Akkad/Graphics/Material.h>
+#include <Akkad/Graphics/Sprite.h>
 
 #include <filesystem>
 #include <fstream>
@@ -42,6 +45,11 @@ namespace Akkad {
 				if (ImGui::MenuItem("Material"))
 				{
 					NewAssetType = "material";
+					showNewAsset = true;
+				}
+				if (ImGui::MenuItem("Sprite animation"))
+				{
+					NewAssetType = "sprite_animation";
 					showNewAsset = true;
 				}
 
@@ -135,19 +143,32 @@ namespace Akkad {
 				case Akkad::AssetType::MATERIAL:
 					fileExtension = ".mat";
 					break;
+				case Akkad::AssetType::SPRITE_ANIMATION:
+					fileExtension = ".ak_sprite_anim";
+					break;
 				}
 
 				filesystem::path destPath = project.GetAssetsPath().append(assetName + fileExtension);
-				if (NewAssetType == "material")
+
+				switch (desc.assetType)
+				{
+				case Akkad::AssetType::UNKNOWN:
+					break;
+				case Akkad::AssetType::MATERIAL:
 				{
 					SharedPtr<Graphics::Material> mat = CreateSharedPtr<Graphics::Material>(assetName);
 					MaterialSerializer::Serialize(mat, destPath.string());
-
+					break;
 				}
-
-				else
+				case Akkad::AssetType::SPRITE_ANIMATION:
 				{
+					SharedPtr<Graphics::SpriteAnimation> animation = CreateSharedPtr<Graphics::SpriteAnimation>();
+					SpriteAnimationSerializer::Serialize(animation, assetName, destPath.string());
+					break;
+				}
+				default:
 					std::ofstream file(destPath);
+					break;
 				}
 
 				project.projectData["project"]["Assets"][desc.assetID]["path"] = "assets/" + assetName + fileExtension;
@@ -221,6 +242,13 @@ namespace Akkad {
 					{
 						PanelManager::AddPanel(new TexturePreviewPanel());
 						TexturePreviewPanel::SetActiveTexture(assetID);
+					}
+
+					if (assetType == "sprite_animation")
+					{
+						auto animation = Graphics::SpriteAnimation::LoadFile(assetAbsolutePath);
+						PanelManager::AddPanel(new SpriteAnimationPreviewPanel());
+						SpriteAnimationPreviewPanel::SetActiveAnimation(animation, assetID);
 					}
 				}
 

@@ -75,6 +75,11 @@ namespace Akkad {
 			GUIButtonComponentSerializer::Serialize(entity, entity_data);
 		}
 
+		if (entity.HasComponent<AnimatedSpriteRendererComponent>())
+		{
+			AnimatedSpriteRendererComponentSerializer::Serialize(entity, entity_data);
+		}
+
 		auto& entity_relation = entity.GetComponent<RelationShipComponent>();
 		Entity current_child = entity_relation.first_child;
 
@@ -182,6 +187,11 @@ namespace Akkad {
 				GUIButtonComponentSerializer::Deserialize(entity, componentData);
 				continue;
 
+			}
+
+			else if (component.key() == "AnimatedSpriteRenderer")
+			{
+				AnimatedSpriteRendererComponentSerializer::Deserialize(entity, componentData);
 			}
 
 			else if (component.key() == "children")

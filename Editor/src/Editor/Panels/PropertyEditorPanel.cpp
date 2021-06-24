@@ -823,12 +823,28 @@ namespace Akkad {
 
 			if (ImGui::ListBoxHeader("Animations"))
 			{
+				int id = 0;
 				for (auto& it : animatedSprite.sprite.m_Animations)
 				{
+					bool isActive = false;
+					if (it.first == animatedSprite.sprite.m_ActiveAnimation)
+					{
+						isActive = true;
+					}
 					if (ImGui::Button(it.first.c_str()))
 					{
 
 					}
+					ImGui::SameLine();
+
+					ImGui::PushID(id);
+					if (ImGui::Checkbox("active", &isActive))
+					{
+						animatedSprite.sprite.m_ActiveAnimation = it.first;
+					}
+					ImGui::PopID();
+
+					id++;
 				}
 				ImGui::ListBoxFooter();
 			}
@@ -843,7 +859,6 @@ namespace Akkad {
 					if (desc.assetType == AssetType::SPRITE_ANIMATION)
 					{
 						auto animation = animatedSprite.sprite.AddAnimation(desc.assetID);
-						animatedSprite.sprite.m_ActiveAnimation = animation->name;
 					}
 				}
 				ImGui::EndDragDropTarget();

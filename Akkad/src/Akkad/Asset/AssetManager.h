@@ -86,6 +86,7 @@ namespace Akkad {
 
 		void SetAssetsRootPath(std::string path) { m_AssetsRootPath = path; };
 		std::string GetAssetsRootPath() { return m_AssetsRootPath; };
+		AssetDescriptor GetAssetByName(std::string name);
 		/*--------------------------------*/
 
 

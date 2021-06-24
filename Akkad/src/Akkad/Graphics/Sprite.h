@@ -81,6 +81,7 @@ namespace Akkad {
 
 			friend class PropertyEditorPanel;
 			friend class SpriteAnimationPreviewPanel;
+			friend class AnimatedSpriteRendererComponentSerializer;
 		};
 	}
 }

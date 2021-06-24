@@ -140,6 +140,7 @@ namespace Akkad {
 
 		{
 			auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
+			auto animview = m_Registry.view<TransformComponent, AnimatedSpriteRendererComponent>();
 
 			for (auto it : SortingLayer2DHandler::GetRegisteredLayers())
 			{
@@ -150,6 +151,24 @@ namespace Akkad {
 					if (spriteRenderer.sprite.GetSortingLayer() == it.name)
 					{
 						auto& transform = view.get<TransformComponent>(entity);
+
+						uint32_t entityID = (uint32_t)entity;
+
+						entityID += 1;
+
+						glm::vec3 color = { entityID , entityID , entityID };
+						Renderer2D::DrawQuad(color, transform.GetTransformMatrix());
+					}
+
+				}
+
+				for (auto entity : animview)
+				{
+					auto& spriteRenderer = animview.get<AnimatedSpriteRendererComponent>(entity);
+
+					if (spriteRenderer.sprite.GetSortingLayer() == it.name)
+					{
+						auto& transform = animview.get<TransformComponent>(entity);
 
 						uint32_t entityID = (uint32_t)entity;
 

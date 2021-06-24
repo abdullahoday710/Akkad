@@ -8,3 +8,4 @@
 #include "GUITextComponentSerializer.h"
 #include "RectTransformComponentSerializer.h"
 #include "GUIButtonComponentSerializer.h"
+#include "AnimatedSpriteRendererComponentSerializer.h"

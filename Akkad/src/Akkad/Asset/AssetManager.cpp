@@ -38,6 +38,21 @@ namespace Akkad {
 		m_LoadedTextures.clear();
 	}
 
+	AssetDescriptor AssetManager::GetAssetByName(std::string name)
+	{
+		for (auto it : m_RegisteredAssets)
+		{
+			if (it.second.assetName == name)
+			{
+				return it.second;
+			}
+		}
+		AK_ERROR("Can't find asset : {}", name);
+
+		AssetDescriptor err;
+		return err;
+	}
+
 	AssetDescriptor& AssetManager::GetDescriptorByID(std::string assetID)
 	{
 		auto it = m_RegisteredAssets.count(assetID);

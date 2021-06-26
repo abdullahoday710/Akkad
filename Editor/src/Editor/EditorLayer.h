@@ -43,6 +43,8 @@ namespace Akkad {
 		static void LoadScene(std::string& filepath);
 		void LoadProject();
 
+		void PatchProjectEngineFiles();
+
 		friend class AssetBrowserPanel;
 		friend class NewScenePanel;
 		friend class StartupPanel;

@@ -59,6 +59,18 @@ namespace Akkad {
 		PanelManager::AddPanel(new StartupPanel());
 	}
 
+	void EditorLayer::PatchProjectEngineFiles()
+	{
+		std::string path = s_ActiveProject.GetProjectDirectory().string();
+		path += "GameAssembly/Engine/Akkad/src";
+
+		std::filesystem::remove_all(path);
+
+		// path relative to the Editor exe directory !
+		std::string srcpath = "GameAssembly/Engine/Akkad/src";
+		std::filesystem::copy(srcpath, path, std::filesystem::copy_options::recursive);
+	}
+
 	void EditorLayer::SaveActiveScene()
 	{
 		std::string path = s_ActiveProject.GetAssetsPath().append("scenes/").string() + s_ActiveScene->m_Name + ".AKSCENE";
@@ -399,6 +411,17 @@ namespace Akkad {
 
 				ImGui::EndMenu();
 			}
+
+			#ifdef AK_DEBUG
+			if (ImGui::BeginMenu("Debug"))
+			{
+				if (ImGui::MenuItem("Patch engine code for project"))
+				{
+					PatchProjectEngineFiles();
+				}
+				ImGui::EndMenu();
+			}
+			#endif
 
 			ImGui::EndMainMenuBar();
 		}

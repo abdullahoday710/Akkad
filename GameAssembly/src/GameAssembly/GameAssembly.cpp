@@ -6,6 +6,12 @@ namespace Akkad {
 	void GameAssembly::Init(ApplicationComponents& appComponents)
 	{
 		m_ApplicationComponents = &appComponents;
+
+		// Because we have functions inside the engine static library that directly accesses
+		// the application singleton, we have to make sure that the dll's Application singleton has the initilized application components.
+		Application::GetInstance().m_ApplicationComponents.m_platform = appComponents.m_platform;
+		Application::GetInstance().m_ApplicationComponents.m_AssetManager = appComponents.m_AssetManager;
+		Application::GetInstance().m_ApplicationComponents.m_TimeManager = appComponents.m_TimeManager;
 	}
 }
 
@@ -38,4 +44,3 @@ Akkad::ScriptableEntity* InstantiateScript(const char* scriptName)
 
 	return factory.createObject(scriptName);
 }
-

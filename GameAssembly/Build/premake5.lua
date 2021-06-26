@@ -5,15 +5,34 @@ workspace "GameAssembly"
 		"Debug",
 		"Release",
 	}
+	flags
+	{
+		"MultiProcessorCompile"
+    }
+    outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+    IncludeDir = {}
+    IncludeDir["Glad"] = "%{wks.location}/3rdparty/glad/include"
+    IncludeDir["imgui"] = "%{wks.location}/3rdparty/imgui"
+    IncludeDir["glm"] = "%{wks.location}/3rdparty/glm/include"
+    IncludeDir["stb"] = "%{wks.location}/3rdparty/stb/include"
+    IncludeDir["spdlog"] = "%{wks.location}/3rdparty/spdlog/include"
+    IncludeDir["entt"] = "%{wks.location}/3rdparty/entt/single_include"
+    IncludeDir["json"] = "%{wks.location}/3rdparty/json/include"
+    IncludeDir["box2d"] = "%{wks.location}/3rdparty/box2d/include"
 
-	IncludeDir = {}
-	IncludeDir["glm"] = "%{wks.location}/include/glm/include"
-	IncludeDir["entt"] = "%{wks.location}/include/entt/single_include"
-	IncludeDir["spdlog"] = "%{wks.location}/include/spdlog/include"
-	IncludeDir["box2d"] = "%{wks.location}/include/box2d/include"
-	IncludeDir["stb"] = "%{wks.location}/include/stb/include"
+	IncludeDir["Akkad"] = "%{wks.location}/Engine/Akkad/src"
 
-	IncludeDir["Akkad"] = "%{wks.location}/include/Akkad/"
+    group "Dependencies"
+      include "3rdparty/glad"
+      include "3rdparty/imgui"
+      include "3rdparty/spdlog"
+      include "3rdparty/SPIRV-Cross"
+      include "3rdparty/box2d"
+    group ""
+
+	group "Engine"
+		include "Engine/Akkad"
+	group ""
 
 	project "GameAssembly"
 		kind "SharedLib"
@@ -39,6 +58,8 @@ workspace "GameAssembly"
 		}
 
 		defines {"AK_GAME_ASSEMBLY"}
+
+		links {"Akkad"}
 
 		filter "system:windows"
 			systemversion "latest"

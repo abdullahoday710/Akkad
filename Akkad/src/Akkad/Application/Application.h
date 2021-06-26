@@ -97,6 +97,7 @@ namespace Akkad {
 		LoadedGameAssembly* m_LoadedGameAssembly = nullptr;
 
 		friend class GameAssemblyHandler;
+		friend class GameAssembly;
 		
 	};
 }

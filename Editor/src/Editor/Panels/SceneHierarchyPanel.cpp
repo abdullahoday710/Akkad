@@ -105,7 +105,15 @@ namespace Akkad {
 		{
 			if (ImGui::Button("Delete"))
 			{
-				EditorLayer::GetActiveScene()->RemoveEntity(entity);
+				ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
+				if (viewport->IsPlaying)
+				{
+					Application::GetSceneManager()->GetActiveScene()->RemoveEntity(entity);
+				}
+				else
+				{
+					EditorLayer::GetActiveScene()->RemoveEntity(entity);
+				}
 			}
 
 			if (ImGui::Button("Add child entity"))

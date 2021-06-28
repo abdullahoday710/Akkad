@@ -27,6 +27,8 @@ namespace Akkad {
 
 		virtual void OnStart() {}
 		virtual void OnUpdate() {}
+		virtual void OnColliderEnter2D(Entity other) {}
+		virtual void OnColliderExit2D(Entity other) {}
 
 	private:
 		Entity m_Entity;

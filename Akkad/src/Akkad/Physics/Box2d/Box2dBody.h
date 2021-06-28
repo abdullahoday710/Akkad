@@ -46,6 +46,7 @@ namespace Akkad {
 		void DrawBoundingBox();
 	private:
 		b2Body* m_Body = nullptr;
+
 		friend class RigidBody2dComponent;
 
 	protected:

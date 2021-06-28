@@ -36,6 +36,7 @@ namespace Akkad {
 	{
 		// Initialize physics
 		{
+			m_PhysicsWorld2D.SetContactListener(&m_PhysicsListener2D);
 			m_PhysicsWorld2D.Clear();
 			auto view = m_Registry.view<TransformComponent,RigidBody2dComponent>();
 
@@ -56,7 +57,7 @@ namespace Akkad {
 				settings.halfX = transform.GetScale().x / 2;
 				settings.halfY = transform.GetScale().y / 2;
 
-				rigidbody2dcomp.body = m_PhysicsWorld2D.CreateBody(settings);
+				rigidbody2dcomp.body = m_PhysicsWorld2D.CreateBody(settings, this, (uint32_t)entity);
 			}
 			
 		}
@@ -401,6 +402,7 @@ namespace Akkad {
 
 		// Update physics
 		{
+			m_PhysicsWorld2D.SetContactListener(&m_PhysicsListener2D);
 			m_PhysicsWorld2D.Step();
 
 			auto view = m_Registry.view<TransformComponent, RigidBody2dComponent>();

@@ -1,5 +1,8 @@
 #include "Box2dWorld.h"
 
+#include "Akkad/ECS/Scene.h"
+#include "Akkad/ECS/Entity.h"
+
 namespace Akkad {
 
 	Box2dWorld::Box2dWorld()
@@ -18,11 +21,14 @@ namespace Akkad {
 	{
 	}
 
-	Box2dBody Box2dWorld::CreateBody(BodySettings settings)
+	Box2dBody Box2dWorld::CreateBody(BodySettings settings, Scene* scene, uint32_t entityid)
 	{
 		b2BodyDef bodyDef;
+		Entity* entity = new Entity((entt::entity)entityid, scene);
+
 		bodyDef.position.Set(settings.position.x, settings.position.y);
 		bodyDef.angle = settings.rotation;
+		bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(entity);
 		
 		switch (settings.type)
 		{
@@ -53,6 +59,11 @@ namespace Akkad {
 		}
 
 		return Box2dBody(body);
+	}
+
+	void Box2dWorld::SetContactListener(Box2dContactListener* listener)
+	{
+		m_World->SetContactListener(listener);
 	}
 
 	void Box2dWorld::Step()

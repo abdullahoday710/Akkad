@@ -5,12 +5,6 @@
 #include <glm/glm.hpp>
 
 namespace Akkad {
-
-	namespace Graphics {
-		class VertexBuffer;
-		class Shader;
-	}
-
 	enum class BodyType {
 		STATIC, DYNAMIC
 	};
@@ -43,15 +37,10 @@ namespace Akkad {
 		glm::vec2 GetPosition();
 		float GetRotation();
 
-		void DrawBoundingBox();
 	private:
 		b2Body* m_Body = nullptr;
 
 		friend class RigidBody2dComponent;
-
-	protected:
-		SharedPtr<Graphics::VertexBuffer> m_VertexBuffer;
-		static SharedPtr<Graphics::Shader> m_DebugShader;
 
 	};
 }

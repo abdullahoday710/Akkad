@@ -112,8 +112,9 @@ namespace Akkad {
 					transform.RecalculateTransformMatrix();
 					if (m_Registry.has<RigidBody2dComponent>(entity))
 					{
-						auto& rigidbody2dcomponent = m_Registry.get<RigidBody2dComponent>(entity);
-						rigidbody2dcomponent.body.DrawBoundingBox();
+						auto& rb = m_Registry.get<RigidBody2dComponent>(entity);
+
+						m_PhysicsWorld2D.DebugDrawBody(rb.GetBody());
 					}
 				}
 
@@ -128,6 +129,13 @@ namespace Akkad {
 				auto frame = animatedSprite.sprite.GetFrame(dt);
 
 				Renderer2D::DrawAnimatedSprite(animatedSprite.sprite, frame, transform.GetTransformMatrix());
+
+				if (m_Registry.has<RigidBody2dComponent>(entity))
+				{
+					auto& rb = m_Registry.get<RigidBody2dComponent>(entity);
+
+					m_PhysicsWorld2D.DebugDrawBody(rb.GetBody());
+				}
 			}
 		}
 

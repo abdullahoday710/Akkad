@@ -8,6 +8,12 @@
 
 namespace Akkad {
 
+	namespace Graphics {
+		class Shader;
+		class VertexBuffer;
+		class UniformBuffer;
+	}
+
 	class Scene;
 
 	class Box2dWorld
@@ -25,7 +31,14 @@ namespace Akkad {
 
 	private:
 		SharedPtr<b2World> m_World;
+		SharedPtr<Graphics::Shader> m_DebugShader;
+		SharedPtr<Graphics::VertexBuffer> m_DebugVertexBuffer;
+		SharedPtr<Graphics::UniformBuffer> m_DebugShaderProps;
 		glm::vec2 m_Gravity = {0.0f, -10.0f};
+
+		void DebugDrawBody(b2Body* body);
+
+		friend class Scene;
 	};
 }
 

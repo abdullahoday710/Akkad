@@ -15,6 +15,7 @@ namespace Akkad {
 		Application::GetInstance().m_ApplicationComponents.m_platform = appComponents.m_platform;
 		Application::GetInstance().m_ApplicationComponents.m_AssetManager = appComponents.m_AssetManager;
 		Application::GetInstance().m_ApplicationComponents.m_TimeManager = appComponents.m_TimeManager;
+		Application::GetInstance().m_ApplicationComponents.m_Window = appComponents.m_Window;
 
 		// Apply the workaround class, not sure if I will keep it this way.
 		Application::GetInstance().m_LoadedGameAssembly = new FakeLoadedAssembly();

@@ -12,6 +12,14 @@ namespace Akkad {
 		auto assetManager = Application::GetAssetManager();
 		std::string filePath = assetManager->GetAssetsRootPath() + "/scenes/" + sceneName + ".AKSCENE";
 		SceneSerializer::Deserialize(m_ActiveScene, filePath);
+
+		auto window = Application::GetInstance().GetWindow();
+
+		Graphics::Rect windowRect;
+		windowRect.SetBounds(window->GetWindowRectMin(), window->GetWindowRectMax());
+		m_ActiveScene->SetViewportRect(windowRect);
+		m_ActiveScene->SetViewportSize({ window->GetWidth(), window->GetHeight() });
+
 		m_ActiveScene->Start();
 	}
 

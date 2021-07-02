@@ -31,19 +31,7 @@ namespace Akkad {
             
             return 0;
         }
-        case WM_SIZING:
-        {
-            RECT* rect;
-            rect = (RECT*)lParam;
 
-            unsigned int width = rect->right - rect->left;
-            unsigned int height = rect->bottom - rect->top;
-
-            WindowResizeEvent e(width, height);
-            window->m_EventCallback(e);
-            window->_SetSize(width, height);
-            return 0;
-        }
         case WM_SIZE:
         {
             if (window == nullptr)
@@ -51,8 +39,10 @@ namespace Akkad {
                 return 0;
             }
             else {
-                UINT width = LOWORD(lParam);
-                UINT height = HIWORD(lParam);
+                RECT rect;
+                GetWindowRect((HWND)window->GetNativeWindow(), &rect);
+                unsigned int width = rect.right - rect.left;
+                unsigned int height = rect.bottom - rect.top;
                 WindowResizeEvent e(width, height);
                 window->m_EventCallback(e);
                 window->_SetSize(width, height);

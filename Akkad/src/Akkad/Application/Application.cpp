@@ -90,8 +90,6 @@ namespace Akkad {
 
 	Application::~Application()
 	{
-		delete m_ApplicationComponents.m_Window;
-
 		for (auto layer : m_Layers)
 		{
 			layer->OnDetach();

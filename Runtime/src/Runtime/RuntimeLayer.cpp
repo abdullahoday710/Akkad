@@ -56,7 +56,7 @@ namespace Akkad {
 		Graphics::Rect windowRect;
 		windowRect.SetBounds(window->GetWindowRectMin(), window->GetWindowRectMax());
 		sceneManager->GetActiveScene()->SetViewportRect(windowRect);
-		sceneManager->GetActiveScene()->SetViewportSize({ e.m_Width, e.m_Height });
+		sceneManager->GetActiveScene()->SetViewportSize({ window->GetWidth(),  window->GetHeight() });
 	}
 
 	void RuntimeLayer::LoadPackageInfo()

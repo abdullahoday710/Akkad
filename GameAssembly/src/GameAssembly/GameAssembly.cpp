@@ -1,8 +1,11 @@
 #include "GameAssembly.h"
 
+#include <Akkad/Graphics/Renderer2D.h>
+
 #include <iostream>
 
 namespace Akkad {
+
 	void GameAssembly::Init(ApplicationComponents& appComponents)
 	{
 		m_ApplicationComponents = &appComponents;
@@ -12,6 +15,11 @@ namespace Akkad {
 		Application::GetInstance().m_ApplicationComponents.m_platform = appComponents.m_platform;
 		Application::GetInstance().m_ApplicationComponents.m_AssetManager = appComponents.m_AssetManager;
 		Application::GetInstance().m_ApplicationComponents.m_TimeManager = appComponents.m_TimeManager;
+
+		// Apply the workaround class, not sure if I will keep it this way.
+		Application::GetInstance().m_LoadedGameAssembly = new FakeLoadedAssembly();
+
+		Graphics::Renderer2D::Init();
 	}
 }
 

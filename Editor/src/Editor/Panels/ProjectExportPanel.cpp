@@ -97,7 +97,12 @@ namespace Akkad {
 		nlohmann::json package_info;
 
 		package_info["name"] = project.projectData["project"]["name"];
-		package_info["startupScene"] = startup_scene;
+
+		/* removing the file extension from the startup scene name */
+		size_t lastindex = startup_scene.find_last_of(".");
+		std::string rawname = startup_scene.substr(0, lastindex);
+
+		package_info["startupScene"] = rawname;
 
 		for (auto sceneName : scenes)
 		{

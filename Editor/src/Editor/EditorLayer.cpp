@@ -51,7 +51,7 @@ namespace Akkad {
 		SceneSerializer::Deserialize(s_ActiveScene, filepath);
 
 		auto sceneManager = Application::GetSceneManager();
-		sceneManager->LoadScene(filepath);
+		sceneManager->LoadSceneEditor(filepath);
 	}
 
 	void EditorLayer::LoadProject()

@@ -199,7 +199,7 @@ namespace Akkad {
 
 			auto sceneManager = Application::GetSceneManager();
 
-			sceneManager->LoadScene(EditorLayer::GetActiveScenePath());
+			sceneManager->LoadSceneEditor(EditorLayer::GetActiveScenePath());
 			sceneManager->GetActiveScene()->Start();
 		}
 
@@ -217,7 +217,7 @@ namespace Akkad {
 		auto sceneManager = Application::GetSceneManager();
 
 		sceneManager->GetActiveScene()->Stop();
-		sceneManager->LoadScene(EditorLayer::GetActiveScenePath());
+		sceneManager->LoadSceneEditor(EditorLayer::GetActiveScenePath());
 	}
 
 	void ViewPortPanel::RenderScene()

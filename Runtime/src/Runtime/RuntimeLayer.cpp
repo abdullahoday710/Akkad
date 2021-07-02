@@ -122,8 +122,7 @@ namespace Akkad {
 	void RuntimeLayer::LoadStartupScene()
 	{
 		std::string startupsceneName = m_packageInfo["startupScene"];
-		std::string scenePath = "assets/scenes/" + startupsceneName;
-		Application::GetSceneManager()->LoadScene(scenePath);
-		Application::GetSceneManager()->GetActiveScene()->Start();
+
+		Application::GetSceneManager()->LoadScene(startupsceneName);
 	}
 }

@@ -98,6 +98,7 @@ namespace Akkad {
 
 		friend class GameAssemblyHandler;
 		friend class GameAssembly;
+		friend class RuntimeLayer;
 		
 	};
 }

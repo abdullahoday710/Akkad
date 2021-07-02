@@ -420,10 +420,14 @@ namespace Akkad {
 				auto& transform = view.get<TransformComponent>(entity);
 				auto& rigidbody2dcomponent = view.get<RigidBody2dComponent>(entity);
 
-				glm::vec2 position = rigidbody2dcomponent.body.GetPosition();
-				float rotation = rigidbody2dcomponent.body.GetRotation();
-				transform.SetPostion({position.x, position.y, 0.0f});
-				transform.SetRotation({ 0, 0, rotation });
+				if (rigidbody2dcomponent.body.IsValid())
+				{
+					glm::vec2 position = rigidbody2dcomponent.body.GetPosition();
+					float rotation = rigidbody2dcomponent.body.GetRotation();
+					transform.SetPostion({ position.x, position.y, 0.0f });
+					transform.SetRotation({ 0, 0, rotation });
+				}
+
 
 			}
 		}

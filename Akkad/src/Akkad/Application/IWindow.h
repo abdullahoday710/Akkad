@@ -1,7 +1,8 @@
 #pragma once
-#include <functional>
 #include "Event.h"
 #include "Akkad/Graphics/RenderPlatform.h"
+
+#include <glm/glm.hpp>
 namespace Akkad {
 	
 	struct WindowSettings {
@@ -18,6 +19,8 @@ namespace Akkad {
 		virtual void SetEventCallback(std::function<void(Event&)> func) = 0;
 		virtual unsigned int GetWidth() = 0;
 		virtual unsigned int GetHeight() = 0;
+		virtual glm::vec2 GetWindowRectMin() = 0;
+		virtual glm::vec2 GetWindowRectMax() = 0;
 		virtual void* GetNativeWindow() = 0;
 	};
 

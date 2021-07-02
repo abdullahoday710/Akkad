@@ -12,10 +12,18 @@ namespace Akkad {
 		virtual void SetEventCallback(std::function<void(Event&)> func) override { m_EventCallback = func; };
 		virtual unsigned int GetWidth() { return m_Width; };
 		virtual unsigned int GetHeight() { return m_Height; };
+		virtual glm::vec2 GetWindowRectMin() override;
+		virtual glm::vec2 GetWindowRectMax() override;
 		virtual void* GetNativeWindow() override { return m_WindowHandle; };
 		std::function<void(Event&)> m_EventCallback;
 
 		bool isCursorTracked = false;
+
+		void _SetSize(unsigned int width, unsigned int height)
+		{
+			m_Width = width;
+			m_Height = height;
+		}
 	private:
 		bool m_IsClosed = true;
 		HWND m_WindowHandle = nullptr;

@@ -101,6 +101,10 @@ namespace Akkad {
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
 		m_ApplicationComponents.m_platform->OnWindowResize(e.m_Width, e.m_Height);
+		for (auto layer : m_Layers)
+		{
+			layer->OnWindowResize(e);
+		}
 		return true;
 	}
 

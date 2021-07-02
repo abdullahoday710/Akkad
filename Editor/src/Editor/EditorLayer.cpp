@@ -13,6 +13,7 @@
 #include "Panels/NewScenePanel.h"
 #include "Panels/MaterialEditorPanel.h"
 #include "Panels/SortingLayersPanel.h"
+#include "Panels/ProjectExportPanel.h"
 
 #include <Akkad/Application/Application.h>
 #include <Akkad/Logging.h>
@@ -315,6 +316,11 @@ namespace Akkad {
 				if (ImGui::MenuItem("Close"))
 				{
 					Application::Shutdown();
+				}
+
+				if (ImGui::MenuItem("Export project"))
+				{
+					PanelManager::AddPanel(new ProjectExportPanel());
 				}
 				ImGui::EndMenu();
 			}

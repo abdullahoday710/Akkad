@@ -35,6 +35,16 @@ dependencies_src_path = workspace_location + "/3rdparty/"
 
 game_assembly_dst_path = workspace_location + "/bin/" + project_output_dir + "/" + project_name + "/GameAssembly"
 
+
+def copy_runtime_files():
+    runtime_src_path = workspace_location + "/bin/" + project_output_dir + "/Runtime"
+    runtime_dest_path = workspace_location + "/bin/" + project_output_dir + "/" + project_name + "/Runtime"
+
+    if(os.path.isdir(runtime_dest_path)):
+        rmtree(runtime_dest_path)
+    copytree(runtime_src_path, runtime_dest_path, ignore=include_patterns('*.exe'))
+
+
 def copy_base_game_assembly_files():
     game_assembly_src_path = workspace_location + "/GameAssembly/src"
 
@@ -120,6 +130,7 @@ if __name__ == "__main__":
     copy_resource_files()
     copy_dependencies()
     copy_header_only_dependencies()
+    copy_runtime_files()
 
 
 

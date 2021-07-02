@@ -65,5 +65,33 @@ namespace Akkad {
         
     }
 
+    glm::vec2 Win32Window::GetWindowRectMin()
+    {
+        RECT windowrect;
+        GetClientRect(m_WindowHandle, &windowrect);
+        /* Getting the window rect without the title bar */
+        POINT winrectmin;
+        winrectmin.x = windowrect.left;
+        winrectmin.y = windowrect.top;
+        ClientToScreen(m_WindowHandle, &winrectmin);
+
+        glm::vec2 min = { winrectmin.x, winrectmin.y};
+        return min;
+    }
+
+    glm::vec2 Win32Window::GetWindowRectMax()
+    {
+        RECT windowrect;
+        GetClientRect(m_WindowHandle, &windowrect);
+        /* Getting the window rect without the title bar */
+        POINT winrectmin;
+        winrectmin.x = windowrect.right;
+        winrectmin.y = windowrect.bottom;
+        ClientToScreen(m_WindowHandle, &winrectmin);
+
+        glm::vec2 max = { winrectmin.x, winrectmin.y };
+        return max;
+    }
+
 }
 

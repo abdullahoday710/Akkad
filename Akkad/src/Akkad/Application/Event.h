@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 namespace Akkad {
 
 	enum class EventType {

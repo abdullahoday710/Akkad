@@ -69,6 +69,7 @@ namespace Akkad {
 		friend class SpriteAnimationPreviewPanel;
 		friend class SceneManager;
 		friend class GUIFactory;
+		friend class RuntimeLayer;
 
 	};
 

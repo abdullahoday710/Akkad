@@ -41,6 +41,7 @@ namespace Akkad {
 
             WindowResizeEvent e(width, height);
             window->m_EventCallback(e);
+            window->_SetSize(width, height);
             return 0;
         }
         case WM_SIZE:
@@ -54,6 +55,7 @@ namespace Akkad {
                 UINT height = HIWORD(lParam);
                 WindowResizeEvent e(width, height);
                 window->m_EventCallback(e);
+                window->_SetSize(width, height);
                 return 0;
             }
         }
@@ -92,6 +94,16 @@ namespace Akkad {
         case WM_MOUSELEAVE:
         {
             window->isCursorTracked = false;
+            return 0;
+        }
+        
+        case WM_MOVE:
+        {
+            if (window != nullptr)
+            {
+                WindowResizeEvent e(window->GetWidth(), window->GetHeight());
+                window->m_EventCallback(e);
+            }
             return 0;
         }
 

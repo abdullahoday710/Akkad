@@ -22,6 +22,8 @@ namespace Akkad {
 		virtual glm::vec2 GetWindowRectMin() = 0;
 		virtual glm::vec2 GetWindowRectMax() = 0;
 		virtual void* GetNativeWindow() = 0;
+		virtual void ToggleFullScreen() = 0;
+		virtual bool IsFullScreen() = 0;
 	};
 
 	class WindowResizeEvent : public Event {

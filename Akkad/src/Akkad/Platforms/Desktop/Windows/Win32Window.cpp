@@ -83,5 +83,37 @@ namespace Akkad {
         return max;
     }
 
+    void Win32Window::ToggleFullScreen()
+    {
+        if (!m_FullScreen)
+        {
+            SetWindowLongPtr(m_WindowHandle, GWL_STYLE,
+                WS_SYSMENU | WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE);
+            MoveWindow(m_WindowHandle, 0, 0, 1920, 1080, TRUE);
+
+            DEVMODE dm;
+            ZeroMemory(&dm, sizeof(dm));
+            EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm);
+            ChangeDisplaySettings(&dm, 0);
+            m_FullScreen = true;
+        }
+
+        else
+        {
+            RECT rect;
+            rect.left = 0;
+            rect.top = 0;
+            rect.right = 800;
+            rect.bottom = 600;
+            SetWindowLongPtr(m_WindowHandle, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+            AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
+            MoveWindow(m_WindowHandle, 0, 0, rect.right - rect.left, rect.bottom - rect.top, TRUE);
+
+            ChangeDisplaySettings(0, 0);
+            m_FullScreen = false;
+        }
+        
+    }
+
 }
 

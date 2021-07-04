@@ -15,6 +15,9 @@ namespace Akkad {
 		virtual glm::vec2 GetWindowRectMin() override;
 		virtual glm::vec2 GetWindowRectMax() override;
 		virtual void* GetNativeWindow() override { return m_WindowHandle; };
+		virtual void ToggleFullScreen() override;
+		virtual bool IsFullScreen() { return m_FullScreen; };
+
 		std::function<void(Event&)> m_EventCallback;
 
 		bool isCursorTracked = false;
@@ -26,6 +29,7 @@ namespace Akkad {
 		}
 	private:
 		bool m_IsClosed = true;
+		bool m_FullScreen = false;
 		HWND m_WindowHandle = nullptr;
 		unsigned int m_Width = 0;
 		unsigned int m_Height = 0;

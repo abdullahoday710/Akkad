@@ -24,6 +24,7 @@ namespace Akkad {
 		RegisterSortingLayers();
 		LoadGameAssembly();
 		LoadStartupScene();
+		
 	}
 
 	void RuntimeLayer::OnDetach()
@@ -41,7 +42,6 @@ namespace Akkad {
 		sceneManager->GetActiveScene()->RenderPickingBuffer2D();
 
 		sceneManager->GetActiveScene()->Update();
-
 	}
 
 	void RuntimeLayer::RenderImGui()
@@ -56,7 +56,7 @@ namespace Akkad {
 		Graphics::Rect windowRect;
 		windowRect.SetBounds(window->GetWindowRectMin(), window->GetWindowRectMax());
 		sceneManager->GetActiveScene()->SetViewportRect(windowRect);
-		sceneManager->GetActiveScene()->SetViewportSize({ window->GetWidth(),  window->GetHeight() });
+		sceneManager->GetActiveScene()->SetViewportSize({ e.m_Width, e.m_Height });
 	}
 
 	void RuntimeLayer::LoadPackageInfo()

@@ -71,6 +71,13 @@ namespace Akkad {
 				}
 
 				PropertyEditorPanel::SetActiveEntity(entity);
+
+				ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
+				if (viewport != nullptr)
+				{
+					viewport->SetSelectedEntity(entity);
+				}
+				
 			}
 			DrawEntityContextMenu(entity);
 			if (node_open)

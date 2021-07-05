@@ -80,6 +80,7 @@ namespace Akkad {
 
 		friend class Scene;
 		friend class SceneHierarchyPanel;
+		friend class ViewPortPanel;
 	};
 
 	struct RelationShipComponent {

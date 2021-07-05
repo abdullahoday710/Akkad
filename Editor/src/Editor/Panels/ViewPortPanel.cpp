@@ -76,7 +76,6 @@ namespace Akkad {
 			
 			/* mouse picking entities */
 			auto input = Application::GetInputManager();
-			static entt::entity lastPickedEntity;
 			if (input->GetMouseDown(MouseButtons::LEFT))
 			{
 				int mouseX = input->GetMouseX();
@@ -98,10 +97,12 @@ namespace Akkad {
 							entt::entity entity = (entt::entity)entityID;
 							if (EditorLayer::GetActiveScene()->m_Registry.valid(entity))
 							{
-								lastPickedEntity = entity;
-								auto scene = EditorLayer::GetActiveScene();
-								Entity e = Entity(entity, scene.get());
-								auto tag = e.GetComponent<TagComponent>();
+								if (!ImGuizmo::IsUsing())
+								{
+									m_SelectedEntity = { entity, EditorLayer::GetActiveScene().get() };
+									auto scene = EditorLayer::GetActiveScene();
+								}
+
 							}
 						}
 					}
@@ -109,7 +110,7 @@ namespace Akkad {
 			}
 
 			/* Rendering gizmos */
-			if (EditorLayer::GetActiveScene()->m_Registry.valid(lastPickedEntity))
+			if (m_SelectedEntity.IsValid())
 			{
 				glm::vec2 viewportRects[2];
 				viewportRects[0] = { viewportRectMin.x, viewportRectMin.y};
@@ -135,10 +136,9 @@ namespace Akkad {
 				}
 
 				ImGuizmo::SetDrawlist();
-				Entity pickedEntity = Entity(lastPickedEntity, EditorLayer::GetActiveScene().get());
-				if (pickedEntity.HasComponent<TransformComponent>())
+				if (m_SelectedEntity.HasComponent<TransformComponent>())
 				{
-					auto& comp = EditorLayer::GetActiveScene()->m_Registry.get<TransformComponent>(lastPickedEntity);
+					auto& comp = m_SelectedEntity.GetComponent<TransformComponent>();
 					const auto& projection = m_EditorCamera.GetProjection();
 					auto view = glm::inverse(m_EditorCamera.GetTransformMatrix());
 					auto transform = comp.GetTransformMatrix();

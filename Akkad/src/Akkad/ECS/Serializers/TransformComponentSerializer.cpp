@@ -6,8 +6,8 @@ namespace Akkad {
 	void TransformComponentSerializer::Serialize(Entity entity, json& entity_data)
 	{
 		auto& transform = entity.GetComponent<TransformComponent>();
-		glm::vec3 position = transform.GetPosition();
-		glm::vec3 rotation = transform.GetRotation();
+		glm::vec3 position = transform.GetPosition() - transform.m_ParentPosition;
+		glm::vec3 rotation = transform.GetRotation() - transform.m_ParentRotation;
 		glm::vec3 scale = transform.GetScale();
 
 		entity_data["Transform"]["Position"] = { position.x, position.y, position.z };

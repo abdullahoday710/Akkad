@@ -167,10 +167,10 @@ namespace Akkad {
 					if (ImGuizmo::IsUsing())
 					{
 						glm::vec3 translation, rotation, scale;
-						Akkad::DecomposeTransform(transform, translation, rotation, scale);
+						DecomposeTransform(transform, translation, rotation, scale);
 
 						glm::vec3 deltaRotation = rotation - comp.GetRotation();
-						comp.SetPostion(translation);
+						comp.SetPostion(translation - comp.m_ParentPosition);
 						comp.SetScale(scale);
 						auto& rotationc = comp.GetRotation();
 						rotationc += deltaRotation;
@@ -243,6 +243,7 @@ namespace Akkad {
 			m_EditorCamera.Update();
 			EditorLayer::GetActiveScene()->SetViewportSize({ m_buffer->GetDescriptor().width, m_buffer->GetDescriptor().height });
 			EditorLayer::GetActiveScene()->SetViewportRect(m_ViewportRect);
+			EditorLayer::GetActiveScene()->UpdateTransforms();
 			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
 
 			EditorLayer::GetActiveScene()->RenderPickingBuffer2D();

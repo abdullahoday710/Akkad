@@ -61,7 +61,6 @@ namespace Akkad {
 			}
 			
 		}
-		
 		{
 			auto view = m_Registry.view<ScriptComponent>();
 
@@ -89,6 +88,8 @@ namespace Akkad {
 				}
 			}
 		}
+
+		UpdateTransforms();
 	}
 
 	void Scene::Render2D()
@@ -109,7 +110,6 @@ namespace Akkad {
 					auto& transform = view.get<TransformComponent>(entity);
 
 					Renderer2D::DrawSprite(spriteRenderer.sprite, transform.GetTransformMatrix());
-					transform.RecalculateTransformMatrix();
 					if (m_Registry.has<RigidBody2dComponent>(entity))
 					{
 						auto& rb = m_Registry.get<RigidBody2dComponent>(entity);
@@ -375,7 +375,6 @@ namespace Akkad {
 
 			if (camera.isActive)
 			{
-				transform.RecalculateTransformMatrix();
 				camera.camera.SetAspectRatio(aspectRatio);
 				Renderer2D::BeginScene(camera.camera, transform.GetTransformMatrix());
 				break;
@@ -431,6 +430,8 @@ namespace Akkad {
 
 			}
 		}
+
+		UpdateTransforms();
 
 		// Handle GUI mouse events
 		{
@@ -502,6 +503,29 @@ namespace Akkad {
 			}
 		}
 		
+	}
+
+	void Scene::UpdateTransforms()
+	{
+		auto view = m_Registry.view<TransformComponent, RelationShipComponent>();
+
+		for (auto entity : view)
+		{
+			auto& relation_ship = view.get<RelationShipComponent>(entity);
+			auto& child_transform = view.get<TransformComponent>(entity);
+
+			if (relation_ship.parent.IsValid())
+			{
+				if (relation_ship.parent.HasComponent<TransformComponent>())
+				{
+					auto& parent_transform = relation_ship.parent.GetComponent<TransformComponent>();
+					child_transform.m_ParentPosition = parent_transform.GetPosition();
+					child_transform.m_ParentRotation = parent_transform.GetRotation();
+				}
+			}
+
+			child_transform.RecalculateTransformMatrix();
+		}
 	}
 
 	void Scene::SetViewportSize(glm::vec2 size)

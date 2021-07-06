@@ -195,9 +195,22 @@ namespace Akkad {
 		if (ImGui::TreeNode("Transform"))
 		{
 			auto& transform = m_ActiveEntity.GetComponent<TransformComponent>();
-			ImGui::DragFloat3("Position", glm::value_ptr(transform.GetPosition()));
-			ImGui::DragFloat3("Rotation", glm::value_ptr(transform.GetRotation()));
-			ImGui::DragFloat3("Scale", glm::value_ptr(transform.GetScale()));
+			glm::vec3 position = transform.GetPosition();
+			glm::vec3 rotation = transform.GetRotation();
+			glm::vec3 scale = transform.GetScale();
+
+			if (ImGui::DragFloat3("Position", glm::value_ptr(position)))
+			{
+				transform.SetPostion(position - transform.m_ParentPosition);
+			}
+			if (ImGui::DragFloat3("Rotation", glm::value_ptr(rotation)))
+			{
+				transform.SetRotation(rotation - transform.m_ParentRotation);
+			}
+			if (ImGui::DragFloat3("Scale", glm::value_ptr(scale)))
+			{
+				transform.SetScale(scale);
+			}
 			ImGui::TreePop();
 		}
 

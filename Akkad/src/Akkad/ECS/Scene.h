@@ -18,11 +18,6 @@ namespace Akkad {
 		Scene(std::string& name) : m_Name(name) {}
 		~Scene();
 
-		void Start();
-		void Update();
-		void Stop();
-		void SetViewportSize(glm::vec2 size);
-		void SetViewportRect(Graphics::Rect rect) { m_ViewportRect = rect; }
 
 		Graphics::Rect GetViewportRect() { return m_ViewportRect; }
 		SharedPtr<Graphics::FrameBuffer> GetPickingBuffer() { return m_PickingBuffer; }
@@ -36,6 +31,12 @@ namespace Akkad {
 		std::string GetName() { return m_Name; }
 
 	private:
+		void Start();
+		void Update();
+		void Stop();
+		void SetViewportSize(glm::vec2 size);
+		void SetViewportRect(Graphics::Rect rect) { m_ViewportRect = rect; }
+		void UpdateTransforms();
 
 		void BeginRenderer2D(float aspectRatio);
 		void Render2D();
@@ -44,6 +45,7 @@ namespace Akkad {
 		void UpdateGUIPositions();
 		void RenderGUIElement(Entity parent, bool pickingPhase);
 		void RenderGUI(bool pickingPhase = false);
+
 
 		Entity GetEntity(entt::entity handle);
 		Entity GetGuiContainer();

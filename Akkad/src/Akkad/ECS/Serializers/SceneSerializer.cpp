@@ -6,14 +6,11 @@
 #include "Akkad/Application/Application.h"
 #include "Akkad/Asset/AssetManager.h"
 
-#include <json.hpp>
 #include <fstream>
 #include <iomanip>
 
 namespace Akkad {
-	using json = nlohmann::ordered_json;
-
-	void SerializeEntity(Entity entity, std::string parent_id, json& data)
+	void SceneSerializer::SerializeEntity(Entity entity, std::string parent_id, nlohmann::ordered_json& data)
 	{
 		std::string entityID = Random::GenerateRandomUUID();
 		json& entity_data = data["Scene"]["Entities"][entityID];
@@ -119,7 +116,7 @@ namespace Akkad {
 		
 	}
 
-	void DeserializeEntity(Entity entity, std::string entity_key, SharedPtr<Scene> scene, json& data)
+	void SceneSerializer::DeserializeEntity(Entity entity, std::string entity_key, Scene* scene, nlohmann::ordered_json& data)
 	{
 		auto& entity_relation = entity.GetComponent<RelationShipComponent>();
 
@@ -227,7 +224,7 @@ namespace Akkad {
 			if (value["ParentID"].is_null())
 			{
 				Entity e = scene->AddEntity();
-				DeserializeEntity(e, key, scene, data);
+				DeserializeEntity(e, key, scene.get(), data);
 			}
 		}
 		file.close();

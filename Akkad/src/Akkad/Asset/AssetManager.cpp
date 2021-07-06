@@ -2,6 +2,7 @@
 
 #include "Akkad/Logging.h"
 #include "Akkad/Application/Application.h"
+#include "Akkad/ECS/Serializers/InstantiableEntitySerializer.h"
 
 #include "Akkad/Graphics/Texture.h"
 #include "Akkad/Graphics/Shader.h"
@@ -178,6 +179,25 @@ namespace Akkad {
 		return err;
 	}
 
+	SharedPtr<nlohmann::ordered_json> AssetManager::GetInstantiableEntityByName(std::string name)
+	{
+		auto desc = GetAssetByName(name);
+		auto it = m_LoadedInstantiableEntities.find(desc.assetID);
+		if (it != m_LoadedInstantiableEntities.end())
+		{
+			return it->second;
+		}
+
+		else
+		{
+			auto data = InstantiableEntitySerializer::Deserialize(desc.absolutePath);
+			auto instantiableObject = CreateSharedPtr<nlohmann::ordered_json>(data);
+			m_LoadedInstantiableEntities[desc.assetID] = instantiableObject;
+
+			return instantiableObject;
+		}
+	}
+
 	std::string AssetManager::AssetTypeToStr(AssetType type)
 	{
 		switch (type)
@@ -219,6 +239,11 @@ namespace Akkad {
 		else if (extension == ".ak_sprite_anim")
 		{
 			assetType = AssetType::SPRITE_ANIMATION;
+		}
+
+		else if (extension == ".akentity")
+		{
+			assetType == AssetType::INSTANTIABLE_ENTITY;
 		}
 
 		return assetType;

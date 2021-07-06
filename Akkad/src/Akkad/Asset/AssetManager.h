@@ -1,13 +1,14 @@
 #pragma once
 #include "Akkad/core.h"
 
+#include <json.hpp>
 #include <vector>
 #include <map>
 #include <string>
 
 namespace Akkad {
 	enum class AssetType {
-		UNKNOWN, TEXTURE, SHADER, MATERIAL, FONT, SPRITE_ANIMATION
+		UNKNOWN, TEXTURE, SHADER, MATERIAL, FONT, SPRITE_ANIMATION, INSTANTIABLE_ENTITY,
 	};
 
 	// forward declarations
@@ -64,6 +65,11 @@ namespace Akkad {
 				assetType = AssetType::SPRITE_ANIMATION;
 			}
 
+			else if (type == "instantiable_entity")
+			{
+				assetType = AssetType::INSTANTIABLE_ENTITY;
+			}
+
 			else if (type == "unknown")
 			{
 				assetType = AssetType::UNKNOWN;
@@ -106,6 +112,10 @@ namespace Akkad {
 		AssetDescriptor GetFontByName(std::string fontname);
 		/*----------------------------*/
 
+		/*----- Instantiable objects handler -----*/
+		SharedPtr<nlohmann::ordered_json> GetInstantiableEntityByName(std::string name);
+		/*----------------------------*/
+
 		/*---- Helper functions ----*/
 		static std::string AssetTypeToStr(AssetType type);
 		static AssetType GetAssetTypeFromFileExtension(std::string extension);
@@ -116,6 +126,7 @@ namespace Akkad {
 
 		std::map<std::string, SharedPtr<Graphics::Texture>> m_LoadedTextures;
 		std::map<std::string, SharedPtr<Graphics::Shader>> m_LoadedShaders;
+		std::map<std::string, SharedPtr<nlohmann::ordered_json>> m_LoadedInstantiableEntities;
 
 		std::string m_AssetsRootPath;
 

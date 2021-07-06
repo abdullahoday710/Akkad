@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "Serializers/SceneSerializer.h"
+#include "Serializers/InstantiableEntitySerializer.h"
 
 #include "Akkad/Logging.h"
 #include "Akkad/Application/Application.h"
@@ -676,6 +677,29 @@ namespace Akkad {
 		}
 
 		return false;
+	}
+
+	void Scene::InstantiateEntity(std::string instantiableEntityName, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+	{
+		auto assetManager = Application::GetAssetManager();
+		auto desc = assetManager->GetAssetByName(instantiableEntityName);
+		if (desc.assetType == AssetType::INSTANTIABLE_ENTITY)
+		{
+			auto entity = AddEntity();
+			nlohmann::ordered_json instantiable_data = *assetManager->GetInstantiableEntityByName(instantiableEntityName);
+
+			auto entity_data = instantiable_data["Scene"]["Entities"].items().begin();
+			SceneSerializer::DeserializeEntity(entity, entity_data.key(), this, instantiable_data);
+
+			auto& transform = entity.GetComponent<TransformComponent>();
+			transform.SetPostion(position);
+			transform.SetRotation(rotation);
+			transform.SetScale(scale);
+		}
+		else
+		{
+			AK_ERROR("Could not instantiate entity : {} maybe the entity file was deleted or it doesen't exist !", instantiableEntityName);
+		}
 	}
 
 	void Scene::RemoveEntity(Entity entity)

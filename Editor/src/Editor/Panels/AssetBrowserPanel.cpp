@@ -2,6 +2,7 @@
 #include "MaterialEditorPanel.h"
 #include "TexturePreviewPanel.h"
 #include "SpriteAnimationPreviewPanel.h"
+#include "InstantiableEntityPreviewPanel.h"
 
 #include "Editor/EditorLayer.h"
 #include "Editor/Serializers/MaterialSerializer.h"
@@ -13,6 +14,7 @@
 #include <Akkad/Asset/AssetManager.h>
 #include <Akkad/Graphics/Material.h>
 #include <Akkad/Graphics/Sprite.h>
+#include <Akkad/ECS/Serializers/InstantiableEntitySerializer.h>
 
 #include <filesystem>
 #include <fstream>
@@ -50,6 +52,12 @@ namespace Akkad {
 				if (ImGui::MenuItem("Sprite animation"))
 				{
 					NewAssetType = "sprite_animation";
+					showNewAsset = true;
+				}
+
+				if (ImGui::MenuItem("Instantiable entity"))
+				{
+					NewAssetType = "instantiable_entity";
 					showNewAsset = true;
 				}
 
@@ -135,16 +143,19 @@ namespace Akkad {
 
 				switch (desc.assetType)
 				{
-				case Akkad::AssetType::UNKNOWN:
+				case AssetType::UNKNOWN:
 					break;
-				case Akkad::AssetType::SHADER:
+				case AssetType::SHADER:
 					fileExtension = ".glsl";
 					break;
-				case Akkad::AssetType::MATERIAL:
+				case AssetType::MATERIAL:
 					fileExtension = ".mat";
 					break;
-				case Akkad::AssetType::SPRITE_ANIMATION:
+				case AssetType::SPRITE_ANIMATION:
 					fileExtension = ".ak_sprite_anim";
+					break;
+				case AssetType::INSTANTIABLE_ENTITY:
+					fileExtension = ".akentity";
 					break;
 				}
 
@@ -152,18 +163,23 @@ namespace Akkad {
 
 				switch (desc.assetType)
 				{
-				case Akkad::AssetType::UNKNOWN:
+				case AssetType::UNKNOWN:
 					break;
-				case Akkad::AssetType::MATERIAL:
+				case AssetType::MATERIAL:
 				{
 					SharedPtr<Graphics::Material> mat = CreateSharedPtr<Graphics::Material>(assetName);
 					MaterialSerializer::Serialize(mat, destPath.string());
 					break;
 				}
-				case Akkad::AssetType::SPRITE_ANIMATION:
+				case AssetType::SPRITE_ANIMATION:
 				{
 					SharedPtr<Graphics::SpriteAnimation> animation = CreateSharedPtr<Graphics::SpriteAnimation>();
 					SpriteAnimationSerializer::Serialize(animation, assetName, destPath.string());
+					break;
+				}
+				case AssetType::INSTANTIABLE_ENTITY:
+				{
+					InstantiableEntitySerializer::SerializeEmpty(destPath.string());
 					break;
 				}
 				default:
@@ -249,6 +265,12 @@ namespace Akkad {
 						auto animation = Graphics::SpriteAnimation::LoadFile(assetAbsolutePath);
 						PanelManager::AddPanel(new SpriteAnimationPreviewPanel());
 						SpriteAnimationPreviewPanel::SetActiveAnimation(animation, assetID);
+					}
+
+					if (assetType == "instantiable_entity")
+					{
+						PanelManager::AddPanel(new InstantiableEntityPreviewPanel());
+						InstantiableEntityPreviewPanel::SetEntityFile(assetID);
 					}
 				}
 

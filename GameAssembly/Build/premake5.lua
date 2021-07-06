@@ -55,6 +55,7 @@ workspace "GameAssembly"
 			"%{IncludeDir.entt}",
 			"%{IncludeDir.box2d}",
 			"%{IncludeDir.stb}",
+			"%{IncludeDir.json}",
 		}
 
 		defines {"AK_GAME_ASSEMBLY"}

@@ -13,6 +13,7 @@
 #include <Akkad/Math/Math.h>
 #include <Akkad/GUI/GUIText.h>
 #include <Akkad/GUI/GUIContainer.h>
+#include <Akkad/Asset/AssetManager.h>
 
 #include <imgui.h>
 #include <ImGuizmo.h>
@@ -62,6 +63,27 @@ namespace Akkad {
 
 			auto ViewPortPos = ImGui::GetCursorScreenPos();
 			ImGui::Image((void*)m_buffer->GetColorAttachmentTexture(), viewportPanelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_DRAG_DROP"))
+				{
+					if (!IsPlaying)
+					{
+						const char* id = (const char*)payload->Data;
+						AssetDescriptor desc = Application::GetAssetManager()->GetDescriptorByID(id);
+
+						if (desc.assetType == AssetType::INSTANTIABLE_ENTITY)
+						{
+
+							EditorLayer::GetActiveScene()->InstantiateEntity(desc.assetName, m_EditorCamera.GetPosition(), { 0,0,0 }, { 1,1,1 });
+						}
+					}
+
+				}
+				ImGui::EndDragDropTarget();
+			}
+
 
 			auto viewportRectMin = ImGui::GetItemRectMin();
 			auto viewportRectMax = ImGui::GetItemRectMax();

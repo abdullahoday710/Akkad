@@ -25,6 +25,7 @@ namespace Akkad {
 			m_Transform = glm::mat4(1.0f);
 			m_Transform = glm::translate(m_Transform, m_Position);
 		}
+		glm::vec3 GetPosition() { return m_Position; }
 
 	private:
 		glm::vec3 m_Position = glm::vec3(0.0f);

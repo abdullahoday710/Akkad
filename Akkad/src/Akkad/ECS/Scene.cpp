@@ -550,6 +550,25 @@ namespace Akkad {
 		return entity;
 	}
 
+	Entity Scene::GetEntityByTag(std::string tag)
+	{
+		auto view = m_Registry.view<TagComponent>();
+
+		for (auto entity : view)
+		{
+			auto& tagComponent = view.get<TagComponent>(entity);
+
+			if (tagComponent.Tag == tag)
+			{
+				Entity found = {entity, this};
+				return found;
+			}
+		}
+		AK_ERROR("Could not get entity by tag : {}", tag);
+		// return an invalid entity.
+		return Entity();
+	}
+
 	void Scene::AssignEntityToParent(Entity parent, Entity child)
 	{
 		auto& child_relation = child.GetComponent<RelationShipComponent>();

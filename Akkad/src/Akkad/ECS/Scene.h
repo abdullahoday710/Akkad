@@ -23,6 +23,7 @@ namespace Akkad {
 		SharedPtr<Graphics::FrameBuffer> GetPickingBuffer() { return m_PickingBuffer; }
 
 		Entity AddEntity(std::string tag = "Entity");
+		Entity GetEntityByTag(std::string tag);
 		void AssignEntityToParent(Entity parent, Entity child);
 		bool EntityHasChild(Entity parent, Entity child);
 		bool EntityHasHierarchyChild(Entity parent, Entity child);

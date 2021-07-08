@@ -190,27 +190,27 @@ namespace Akkad {
 			}
 		}
 
-		auto scene = EditorLayer::GetActiveScene();
-
-		auto view = scene->m_Registry.view<SpriteRendererComponent>();
-
-		for (auto entity : view)
-		{
-			auto& sprite = view.get<SpriteRendererComponent>(entity);
-			if (sprite.materialID == m_MaterialAssetID)
-			{
-				auto desc = Application::GetAssetManager()->GetDescriptorByID(m_MaterialAssetID);
-
-				sprite.sprite.SetMaterial(desc.absolutePath);
-			}
-		}
-
 		if (ImGui::Button("Save material"))
 		{
 			std::string path = EditorLayer::GetActiveProject().GetAssetsPath().string();
 
 			path += m_Material->m_Name + ".mat";
 			MaterialSerializer::Serialize(m_Material, path);
+
+			auto scene = EditorLayer::GetActiveScene();
+
+			auto view = scene->m_Registry.view<SpriteRendererComponent>();
+
+			for (auto entity : view)
+			{
+				auto& sprite = view.get<SpriteRendererComponent>(entity);
+				if (sprite.materialID == m_MaterialAssetID)
+				{
+					auto desc = Application::GetAssetManager()->GetDescriptorByID(m_MaterialAssetID);
+
+					sprite.sprite.SetMaterial(desc.absolutePath);
+				}
+			}
 		}
 
 		ImGui::End();

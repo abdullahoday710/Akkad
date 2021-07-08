@@ -30,6 +30,13 @@ namespace Akkad {
 
 	namespace filesystem = std::filesystem;
 
+	AssetBrowserPanel::AssetBrowserPanel()
+	{
+		auto platform = Application::GetRenderPlatform();
+
+		m_FileIcon = platform->CreateTexture("res/icons/file-icon.png");
+	}
+
 	void AssetBrowserPanel::DrawImGui()
 	{
 		ImGui::Begin("Asset Browser", &showPanel);
@@ -232,20 +239,31 @@ namespace Akkad {
 				}
 				ImGui::TreePop();
 			}
-			
+
+			float padding = 16.0f;
+			float iconSize = 128.0f;
+			float cellSize = padding + iconSize;
+			auto panelSize = ImGui::GetContentRegionAvail();
+
+			int coloumnCount = (int)(panelSize.x / cellSize);
+
+			if (coloumnCount <= 0)
+			{
+				coloumnCount = 1;
+			}
+			ImGui::Columns(coloumnCount, 0 , false);
+			int id = 1;
 			for (auto& asset : project.projectData["project"]["Assets"].items())
 			{
 				std::string assetID = asset.key();
 				std::string assetName = project.projectData["project"]["Assets"][assetID]["name"];
-				std::string assetNameIcon = ICON_FK_FILE + std::string(" ") + assetName;
+				std::string assetNameIcon = ICON_FK_FILE;
 				std::string assetType = project.projectData["project"]["Assets"][assetID]["type"];
 				std::string assetPath = project.projectData["project"]["Assets"][assetID]["path"];
 
 				std::string assetAbsolutePath = project.GetProjectDirectory().string() + assetPath;
-
-
-
-				if (ImGui::Button(assetNameIcon.c_str()))
+				ImGui::PushID(id);
+				if (ImGui::ImageButton((ImTextureID)m_FileIcon->GetID(), { iconSize,iconSize }, { 0, 1 }, { 1, 0 }))
 				{
 					if (assetType == "material")
 					{
@@ -273,15 +291,19 @@ namespace Akkad {
 						InstantiableEntityPreviewPanel::SetEntityFile(assetID);
 					}
 				}
-
+				ImGui::PopID();
+				id++;
 				if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 				{
 					ImGui::Text(assetName.c_str());
 					const char* id = assetID.c_str();
-					ImGui::SetDragDropPayload("ASSET_DRAG_DROP", id, strlen(id)+1);
+					ImGui::SetDragDropPayload("ASSET_DRAG_DROP", id, strlen(id) + 1);
 					ImGui::EndDragDropSource();
 				}
+				ImGui::TextWrapped(assetName.c_str());
+				ImGui::NextColumn();
 			}
+			ImGui::Columns(1);
 
 		}
 

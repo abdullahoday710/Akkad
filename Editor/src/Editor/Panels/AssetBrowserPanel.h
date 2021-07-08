@@ -1,12 +1,17 @@
 #pragma once
 #include "Panel.h"
+#include <Akkad/core.h>
 
 namespace Akkad {
+
+	namespace Graphics {
+		class Texture;
+	}
 
 	class AssetBrowserPanel : public Panel
 	{
 	public:
-		AssetBrowserPanel() {};
+		AssetBrowserPanel();
 		~AssetBrowserPanel() {};
 
 		virtual void DrawImGui() override;
@@ -16,5 +21,6 @@ namespace Akkad {
 
 	private:
 		static bool showPanel;
+		SharedPtr<Graphics::Texture> m_FileIcon;
 	};
 }

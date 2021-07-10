@@ -58,8 +58,11 @@ namespace Akkad {
 		entt::registry m_Registry;
 		std::string m_Name = "Scene";
 		glm::vec2 m_ViewportSize = { 0,0 };
+
 		Box2dWorld m_PhysicsWorld2D;
 		Box2dContactListener m_PhysicsListener2D;
+		Box2dDraw m_PhysicsDebugDraw2D;
+
 		SharedPtr<Graphics::FrameBuffer> m_PickingBuffer;
 		Graphics::Rect m_ViewportRect;
 

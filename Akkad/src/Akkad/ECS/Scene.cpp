@@ -38,6 +38,7 @@ namespace Akkad {
 		// Initialize physics
 		{
 			m_PhysicsWorld2D.SetContactListener(&m_PhysicsListener2D);
+			m_PhysicsWorld2D.SetDebugDraw(&m_PhysicsDebugDraw2D);
 			m_PhysicsWorld2D.Clear();
 			auto view = m_Registry.view<TransformComponent,RigidBody2dComponent>();
 
@@ -111,12 +112,6 @@ namespace Akkad {
 					auto& transform = view.get<TransformComponent>(entity);
 
 					Renderer2D::DrawSprite(spriteRenderer.sprite, transform.GetTransformMatrix());
-					if (m_Registry.has<RigidBody2dComponent>(entity))
-					{
-						auto& rb = m_Registry.get<RigidBody2dComponent>(entity);
-
-						m_PhysicsWorld2D.DebugDrawBody(rb.GetBody());
-					}
 				}
 
 			}
@@ -131,13 +126,10 @@ namespace Akkad {
 
 				Renderer2D::DrawAnimatedSprite(animatedSprite.sprite, frame, transform.GetTransformMatrix());
 
-				if (m_Registry.has<RigidBody2dComponent>(entity))
-				{
-					auto& rb = m_Registry.get<RigidBody2dComponent>(entity);
-
-					m_PhysicsWorld2D.DebugDrawBody(rb.GetBody());
-				}
 			}
+			m_PhysicsWorld2D.SetDebugDraw(&m_PhysicsDebugDraw2D);
+			m_PhysicsDebugDraw2D.SetFlags(b2Draw::e_shapeBit);
+			m_PhysicsWorld2D.m_World->DebugDraw();
 		}
 
 	}

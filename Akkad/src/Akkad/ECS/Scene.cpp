@@ -550,6 +550,21 @@ namespace Akkad {
 		return entity;
 	}
 
+	Entity Scene::AddEntity(uint32_t hint, std::string tag)
+	{
+		Entity entity = { m_Registry.create((entt::entity)hint), this };
+
+		// any entity must have these components by default
+		auto& tag_comp = entity.AddComponent<TagComponent>();
+		auto& transform_comp = entity.AddComponent<TransformComponent>();
+		auto& relation_ship = entity.AddComponent<RelationShipComponent>();
+
+		relation_ship.children = 0;
+		tag_comp.Tag = tag;
+
+		return entity;
+	}
+
 	Entity Scene::GetEntityByTag(std::string tag)
 	{
 		auto view = m_Registry.view<TagComponent>();

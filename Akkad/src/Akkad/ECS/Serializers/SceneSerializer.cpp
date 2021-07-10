@@ -8,11 +8,12 @@
 
 #include <fstream>
 #include <iomanip>
+#include <sstream>
 
 namespace Akkad {
 	void SceneSerializer::SerializeEntity(Entity entity, std::string parent_id, nlohmann::ordered_json& data)
 	{
-		std::string entityID = Random::GenerateRandomUUID();
+		std::string entityID = std::to_string(entity._GetHandle());
 		json& entity_data = data["Scene"]["Entities"][entityID];
 		if (!parent_id.empty())
 		{
@@ -196,7 +197,9 @@ namespace Akkad {
 				for (auto& child : data["Scene"]["Entities"][entity_key]["children"].items())
 				{
 					std::string child_id = child.value()["ID"];
-					Entity child_entity = scene->AddEntity();
+					uint32_t id = GetEntityIDFromString(child_id);
+
+					Entity child_entity = scene->AddEntity(id);
 
 					scene->AssignEntityToParent(entity, child_entity);
 
@@ -208,6 +211,16 @@ namespace Akkad {
 
 
 		}
+	}
+
+	uint32_t SceneSerializer::GetEntityIDFromString(std::string str)
+	{
+		std::istringstream reader(str);
+
+		uint32_t id;
+		reader >> id;
+
+		return id;
 	}
 
 	void SceneSerializer::Deserialize(SharedPtr<Scene> scene, std::string filepath)
@@ -223,7 +236,8 @@ namespace Akkad {
 		for (auto& [key, value] : data["Scene"]["Entities"].items()) {
 			if (value["ParentID"].is_null())
 			{
-				Entity e = scene->AddEntity();
+				uint32_t id = GetEntityIDFromString(key);
+				Entity e = scene->AddEntity(id);
 				DeserializeEntity(e, key, scene.get(), data);
 			}
 		}

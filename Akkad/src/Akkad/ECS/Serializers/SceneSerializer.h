@@ -14,5 +14,7 @@ namespace Akkad {
 		static void SerializeEntity(Entity entity, std::string parent_id, nlohmann::ordered_json& data);
 		static void DeserializeEntity(Entity entity, std::string entity_key, Scene* scene, nlohmann::ordered_json& data);
 
+		static uint32_t GetEntityIDFromString(std::string str);
+
 	};
 }

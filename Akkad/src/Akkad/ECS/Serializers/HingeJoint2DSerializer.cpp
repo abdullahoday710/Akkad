@@ -17,6 +17,10 @@ namespace Akkad {
 		entity_data["HingeJoint2D"]["LocalAnchorB"][1] = hinge.localAnchorB.y;
 
 		entity_data["HingeJoint2D"]["CollideConnected"] = hinge.collideConnected;
+
+		entity_data["HingeJoint2D"]["EnableMotor"] = hinge.enableMotor;
+		entity_data["HingeJoint2D"]["MotorSpeed"] = hinge.motorSpeed;
+		entity_data["HingeJoint2D"]["MaxMotorTorque"] = hinge.maxMotorTorque;
 	}
 
 	void HingeJoint2DSerializer::Deserialize(Entity entity, json& component_data)
@@ -35,11 +39,19 @@ namespace Akkad {
 
 		bool collideConnected = component_data["CollideConnected"];
 
+		bool enableMotor = component_data["EnableMotor"];
+		float motorSpeed = component_data["MotorSpeed"];
+		float maxMotorTorque = component_data["MaxMotorTorque"];
+
 		hinge.bodyA = { (entt::entity)entity_id_A, entity._GetScene() };
 		hinge.bodyB = { (entt::entity)entity_id_B, entity._GetScene() };
 		hinge.localAnchorA = localAnchorA;
 		hinge.localAnchorB = localAnchorB;
 		hinge.collideConnected = collideConnected;
+
+		hinge.enableMotor = enableMotor;
+		hinge.motorSpeed = motorSpeed;
+		hinge.maxMotorTorque = maxMotorTorque;
 
 	}
 }

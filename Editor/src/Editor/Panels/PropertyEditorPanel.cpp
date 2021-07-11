@@ -950,6 +950,10 @@ namespace Akkad {
 			ImGui::InputFloat2("Local anchor B", glm::value_ptr(hinge.localAnchorB));
 
 			ImGui::Checkbox("Collide connected", &hinge.collideConnected);
+
+			ImGui::Checkbox("Enable motor", &hinge.enableMotor);
+			ImGui::InputFloat("Motor speed", &hinge.motorSpeed);
+			ImGui::InputFloat("Max motor torque", &hinge.maxMotorTorque);
 			ImGui::TreePop();
 		}
 	}

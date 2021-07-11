@@ -546,6 +546,10 @@ namespace Akkad {
 
 					def.collideConnected = hinge.collideConnected;
 
+					def.enableMotor = hinge.enableMotor;
+					def.motorSpeed = hinge.motorSpeed;
+					def.maxMotorTorque = hinge.maxMotorTorque;
+
 					hinge.joint = (b2RevoluteJoint*)m_PhysicsWorld2D.m_World->CreateJoint(&def);
 				}
 			}

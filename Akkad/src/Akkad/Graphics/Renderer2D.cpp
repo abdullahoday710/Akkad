@@ -4,9 +4,22 @@
 #include "Akkad/Asset/AssetManager.h"
 #include "Akkad/GUI/GUIText.h"
 
+#include <glad/glad.h>
 namespace Akkad {
 
 	namespace Graphics {
+
+		void GLAPIENTRY
+			MessageCallback(GLenum source,
+				GLenum type,
+				GLuint id,
+				GLenum severity,
+				GLsizei length,
+				const GLchar* message,
+				const void* userParam)
+		{
+			std::cout << message << std::endl;
+		}
 
 		Renderer2D Renderer2D::s_Instance;
 
@@ -26,26 +39,42 @@ namespace Akkad {
 			};
 
 			auto platform = Application::GetRenderPlatform();
-			VertexBufferLayout layout;
-			layout.isDynamic = true;
-			layout.Push(ShaderDataType::FLOAT, 3); // positions
-			layout.Push(ShaderDataType::FLOAT, 2); // texture coords
+			// setting up quad vertex buffer
+			{
+				VertexBufferLayout layout;
+				layout.isDynamic = true;
+				layout.Push(ShaderDataType::FLOAT, 3); // positions
+				layout.Push(ShaderDataType::FLOAT, 2); // texture coords
 
-			auto vertexbuffer = platform->CreateVertexBuffer();
-			auto indexbuffer = platform->CreateIndexBuffer();
+				auto vertexbuffer = platform->CreateVertexBuffer();
+				auto indexbuffer = platform->CreateIndexBuffer();
 
-			vertexbuffer->SetLayout(layout);
-			vertexbuffer->SetData(vertices, sizeof(vertices));
-			indexbuffer->SetData(indices, sizeof(indices));
+				vertexbuffer->SetLayout(layout);
+				vertexbuffer->SetData(vertices, sizeof(vertices));
+				indexbuffer->SetData(indices, sizeof(indices));
 
-			m_QuadVB = vertexbuffer;
-			m_QuadIB = indexbuffer;
+				m_QuadVB = vertexbuffer;
+				m_QuadIB = indexbuffer;
+			}
+			
+			// setting up line vertex buffer
+			{
+				VertexBufferLayout layout;
+				layout.isDynamic = true;
+				layout.Push(ShaderDataType::FLOAT, 2); // positions
+
+				auto vertexbuffer = platform->CreateVertexBuffer();
+				vertexbuffer->SetLayout(layout);
+				m_LineVB = vertexbuffer;
+				m_LineVB->SetData(0, 4 * GetSizeOfType(ShaderDataType::FLOAT));
+			}
 
 			UniformBufferLayout scenePropsLayout;
 			scenePropsLayout.Push("sys_transform", ShaderDataType::MAT4);
 			scenePropsLayout.Push("sys_viewProjection", ShaderDataType::MAT4);
 
 			m_SceneProps = platform->CreateUniformBuffer(scenePropsLayout);
+			m_SceneProps->SetName("sys_SceneProps");
 		}
 
 		void Renderer2D::BeginSceneImpl(Camera& camera, glm::mat4& cameraTransform)
@@ -259,6 +288,24 @@ namespace Akkad {
 			}
 		}
 
+		void Renderer2D::DrawLineImpl(glm::vec2 point1, glm::vec2 point2, glm::vec3 color)
+		{
+			auto platform = Application::GetRenderPlatform();
+			auto command = platform->GetRenderCommand();
+
+			float verts[] = {
+				point1.x, point1.y,
+				point2.x, point2.y
+			};
+			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
+			m_LineShader->Bind();
+			m_LineShaderProps->SetData("props_color", color);
+			m_LineVB->SetSubData(0, &verts, sizeof(verts));
+			m_LineVB->Bind();
+			command->DrawArrays(PrimitiveType::LINE, 2);
+
+		}
+
 		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color, bool filled)
 		{
 			DrawRectImpl(rect.GetMin(), rect.GetMax(), color, filled);
@@ -326,6 +373,20 @@ namespace Akkad {
 
 				m_ColorShader->SetUniformBuffer(m_ColorShaderProps);
 				m_ColorShader->SetUniformBuffer(m_SceneProps);
+
+			}
+
+			{
+				auto lineShader = assetManager->GetShaderByName("r2d_lineShader");
+				m_LineShader = platform->CreateShader(lineShader.absolutePath.c_str());
+
+				UniformBufferLayout layout;
+				layout.Push("props_color", ShaderDataType::FLOAT3);
+				m_LineShaderProps = platform->CreateUniformBuffer(layout);
+				m_LineShaderProps->SetName("line_shader_props");
+
+				m_LineShader->SetUniformBuffer(m_SceneProps);
+				m_LineShader->SetUniformBuffer(m_LineShaderProps);
 
 			}
 

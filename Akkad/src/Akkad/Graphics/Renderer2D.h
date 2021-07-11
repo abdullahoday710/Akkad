@@ -32,6 +32,8 @@ namespace Akkad {
 			static void DrawSprite(Sprite& sprite, glm::mat4& transform) { GetInstance().DrawSpriteImpl(sprite, transform); };
 			static void DrawAnimatedSprite(AnimatedSprite& sprite, AnimationFrame& frame, glm::mat4& transform) { GetInstance().DrawAnimatedSpriteImpl(sprite, frame, transform); };
 
+			static void DrawLine(glm::vec2 point1, glm::vec2 point2, glm::vec3 color) { GetInstance().DrawLineImpl(point1, point2, color); }
+
 			static void Draw(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount) { GetInstance().DrawImpl(vb, shader, vertexCount); };
 			static void RenderText(GUI::GUIText& uitext, glm::mat4 projection) { GetInstance().RenderTextImpl(uitext, projection); }
 			static void InitShaders() { GetInstance().InitShadersImpl(); }
@@ -63,6 +65,8 @@ namespace Akkad {
 			void DrawSpriteImpl(Sprite& sprite, glm::mat4& transform);
 			void DrawAnimatedSpriteImpl(AnimatedSprite& sprite, AnimationFrame& frame, glm::mat4& transform);
 
+			void DrawLineImpl(glm::vec2 point1, glm::vec2 point2, glm::vec3 color);
+
 			void DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount);
 
 			void RenderTextImpl(GUI::GUIText& uitext, glm::mat4 projection);
@@ -75,6 +79,11 @@ namespace Akkad {
 
 			SharedPtr<VertexBuffer> m_QuadVB;
 			SharedPtr<IndexBuffer> m_QuadIB;
+
+			SharedPtr<VertexBuffer> m_LineVB;
+			SharedPtr<Shader> m_LineShader;
+			SharedPtr<UniformBuffer> m_LineShaderProps;
+
 			SharedPtr<UniformBuffer> m_SceneProps;
 
 			SharedPtr<Shader> m_ColorShader;

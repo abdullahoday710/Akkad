@@ -14,7 +14,7 @@ namespace Akkad {
 			case PrimitiveType::POINTS:
 				return GL_POINTS;
 			case PrimitiveType::LINE:
-				return GL_LINE;
+				return GL_LINES;
 			default:
 				AK_ASSERT(false, "unkown primitive type");
 			}

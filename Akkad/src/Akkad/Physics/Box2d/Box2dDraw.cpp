@@ -59,6 +59,7 @@ namespace Akkad {
 
 	void Box2dDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 	{
+		Graphics::Renderer2D::DrawLine({ p1.x, p1.y }, { p2.x, p2.y }, { color.r, color.g, color.b });
 	}
 
 	void Box2dDraw::DrawTransform(const b2Transform& xf)

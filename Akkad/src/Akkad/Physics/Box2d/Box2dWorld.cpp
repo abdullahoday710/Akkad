@@ -83,6 +83,11 @@ namespace Akkad {
 		m_World->Step(timeStep, velocityIterations, positionIterations);
 	}
 
+	void Box2dWorld::DestroyJoint(b2Joint* joint)
+	{
+		m_World->DestroyJoint(joint);
+	}
+
 	void Box2dWorld::Clear()
 	{
 		m_World.reset(new b2World({m_Gravity.x, m_Gravity.y}));

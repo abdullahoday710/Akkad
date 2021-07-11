@@ -105,6 +105,10 @@ namespace Akkad {
 			{
 				DrawAnimatedSpriteRendererComponent();
 			}
+			if (m_ActiveEntity.HasComponent<HingeJoint2DComponent>())
+			{
+				DrawHingeJoint2DComponent();
+			}
 			DrawAddComponent();
 		}
 		
@@ -150,6 +154,15 @@ namespace Akkad {
 					if (!m_ActiveEntity.HasComponent<RigidBody2dComponent>())
 					{
 						m_ActiveEntity.AddComponent<RigidBody2dComponent>();
+					}
+				}
+
+
+				if (ImGui::Button("Hinge joint 2D"))
+				{
+					if (!m_ActiveEntity.HasComponent<HingeJoint2DComponent>())
+					{
+						m_ActiveEntity.AddComponent<HingeJoint2DComponent>();
 					}
 				}
 
@@ -877,6 +890,66 @@ namespace Akkad {
 				ImGui::EndDragDropTarget();
 			}
 			
+			ImGui::TreePop();
+		}
+	}
+
+	void PropertyEditorPanel::DrawHingeJoint2DComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		auto& hinge = m_ActiveEntity.GetComponent<HingeJoint2DComponent>();
+		if (ImGui::TreeNode("Hinge joint 2D"))
+		{
+			std::string tagA;
+			std::string tagB;
+
+			if (hinge.bodyA.IsValid())
+			{
+				tagA = hinge.bodyA.GetComponent<TagComponent>().Tag;
+			}
+
+			if (hinge.bodyB.IsValid())
+			{
+				tagB = hinge.bodyB.GetComponent<TagComponent>().Tag;
+			}
+
+			ImGui::InputText("Body A", &tagA, ImGuiInputTextFlags_ReadOnly);
+			if (ImGui::BeginDragDropTarget())
+			{
+				auto scene = EditorLayer::GetActiveScene();
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_DROP"))
+				{
+					size_t* entity_id = (size_t*)payload->Data;
+					Entity bodyA = { (entt::entity)*entity_id, scene.get() };
+					if (bodyA != hinge.bodyB)
+					{
+						hinge.bodyA = bodyA;
+					}
+
+				}
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::InputText("Body B", &tagB, ImGuiInputTextFlags_ReadOnly);
+			if (ImGui::BeginDragDropTarget())
+			{
+				auto scene = EditorLayer::GetActiveScene();
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_DROP"))
+				{
+					size_t* entity_id = (size_t*)payload->Data;
+					Entity bodyB = { (entt::entity) * entity_id, scene.get() };
+					if (bodyB != hinge.bodyA)
+					{
+						hinge.bodyB = bodyB;
+					}
+
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			ImGui::InputFloat2("Local anchor A", glm::value_ptr(hinge.localAnchorA));
+			ImGui::InputFloat2("Local anchor B", glm::value_ptr(hinge.localAnchorB));
+
+			ImGui::Checkbox("Collide connected", &hinge.collideConnected);
 			ImGui::TreePop();
 		}
 	}

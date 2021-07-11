@@ -9,3 +9,4 @@
 #include "RectTransformComponentSerializer.h"
 #include "GUIButtonComponentSerializer.h"
 #include "AnimatedSpriteRendererComponentSerializer.h"
+#include "HingeJoint2DSerializer.h"

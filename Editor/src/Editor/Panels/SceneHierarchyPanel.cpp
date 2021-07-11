@@ -39,7 +39,7 @@ namespace Akkad {
 			if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 			{
 				ImGui::Text(entity_tag.Tag.c_str());
-				size_t entity_id = (size_t)entity.m_Handle;
+				uint32_t entity_id = (uint32_t)entity.m_Handle;
 				ImGui::SetDragDropPayload("HIERARCHY_DRAG_DROP", &entity_id, sizeof(size_t));
 				ImGui::EndDragDropSource();
 			}
@@ -49,7 +49,7 @@ namespace Akkad {
 				auto scene = EditorLayer::GetActiveScene();
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("HIERARCHY_DRAG_DROP"))
 				{
-					size_t* entity_id = (size_t*)payload->Data;
+					uint32_t* entity_id = (uint32_t*)payload->Data;
 
 					if ((entt::entity)*entity_id != entity.m_Handle)
 					{
@@ -62,7 +62,7 @@ namespace Akkad {
 				ImGui::EndDragDropTarget();
 			}
 
-			if (ImGui::IsItemClicked(0))
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0))
 			{
 				if (!PropertyEditorPanel::showPanel)
 				{

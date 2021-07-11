@@ -40,54 +40,37 @@ namespace Akkad {
 			m_PhysicsWorld2D.SetContactListener(&m_PhysicsListener2D);
 			m_PhysicsWorld2D.SetDebugDraw(&m_PhysicsDebugDraw2D);
 			m_PhysicsWorld2D.Clear();
-			auto view = m_Registry.view<TransformComponent,RigidBody2dComponent>();
 
-			for (auto entity : view)
+			// Init bodies
 			{
-				auto& rigidbody2dcomp = view.get<RigidBody2dComponent>(entity);
-				auto& transform = view.get<TransformComponent>(entity);
+				auto view = m_Registry.view<TransformComponent,RigidBody2dComponent>();
+				
+				for (auto entity : view)
+				{
+					InitilizePhysicsBodies2D({ entity, this });
+				
+				}
+			}
 
-				BodySettings settings;
-				settings.density = rigidbody2dcomp.density;
-				settings.friction = rigidbody2dcomp.friction;
-				settings.shape = rigidbody2dcomp.shape;
-				settings.type = rigidbody2dcomp.type;
+			// Init joints
+			{
+				auto view = m_Registry.view<HingeJoint2DComponent>();
 
-				settings.position = { transform.GetPosition().x, transform.GetPosition().y };
-				settings.rotation = { transform.GetRotation().z };
+				for (auto entity : view)
+				{
+					InitilizePhysicsJoints2D({ entity, this });
 
-				settings.halfX = transform.GetScale().x / 2;
-				settings.halfY = transform.GetScale().y / 2;
-
-				rigidbody2dcomp.body = m_PhysicsWorld2D.CreateBody(settings, this, (uint32_t)entity);
+				}
 			}
 			
 		}
+
 		{
 			auto view = m_Registry.view<ScriptComponent>();
 
 			for (auto entity : view)
 			{
-				auto& script = view.get<ScriptComponent>(entity);
-
-
-				if (script.Instance == nullptr)
-				{
-					auto gameAssembly = Application::GetGameAssembly();
-					script.Instance = gameAssembly->InstantiateScript(script.ScriptName.c_str());
-					Entity e(entity, this);
-					script.Instance->m_Entity = e;
-
-					try
-					{
-						script.Instance->OnStart();
-					}
-					catch (const std::exception& e)
-					{
-						AK_ERROR(e.what());
-					}
-					
-				}
+				InitilizeEntitiyScript({ entity, this });
 			}
 		}
 
@@ -128,7 +111,7 @@ namespace Akkad {
 
 			}
 			m_PhysicsWorld2D.SetDebugDraw(&m_PhysicsDebugDraw2D);
-			m_PhysicsDebugDraw2D.SetFlags(b2Draw::e_shapeBit);
+			m_PhysicsDebugDraw2D.SetFlags(b2Draw::e_shapeBit | b2Draw::e_jointBit);
 			m_PhysicsWorld2D.m_World->DebugDraw();
 		}
 
@@ -518,6 +501,80 @@ namespace Akkad {
 			}
 
 			child_transform.RecalculateTransformMatrix();
+		}
+	}
+
+	void Scene::InitilizePhysicsBodies2D(Entity entity)
+	{
+		if (entity.HasComponent<RigidBody2dComponent>())
+		{
+			auto& rigidbody2dcomp = entity.GetComponent<RigidBody2dComponent>();
+			auto& transform = entity.GetComponent<TransformComponent>();
+
+			BodySettings settings;
+			settings.density = rigidbody2dcomp.density;
+			settings.friction = rigidbody2dcomp.friction;
+			settings.shape = rigidbody2dcomp.shape;
+			settings.type = rigidbody2dcomp.type;
+
+			settings.position = { transform.GetPosition().x, transform.GetPosition().y };
+			settings.rotation = { transform.GetRotation().z };
+
+			settings.halfX = transform.GetScale().x / 2;
+			settings.halfY = transform.GetScale().y / 2;
+
+			rigidbody2dcomp.body = m_PhysicsWorld2D.CreateBody(settings, this, (uint32_t)entity.m_Handle);
+		}
+	}
+
+	void Scene::InitilizePhysicsJoints2D(Entity entity)
+	{
+		if (entity.HasComponent<HingeJoint2DComponent>())
+		{
+			auto& hinge = entity.GetComponent<HingeJoint2DComponent>();
+
+			if (hinge.bodyA.IsValid() && hinge.bodyB.IsValid())
+			{
+				if (hinge.bodyA.HasComponent<RigidBody2dComponent>() && hinge.bodyA.HasComponent<RigidBody2dComponent>())
+				{
+					b2RevoluteJointDef def;
+					def.bodyA = hinge.bodyA.GetComponent<RigidBody2dComponent>().GetBody();
+					def.bodyB = hinge.bodyB.GetComponent<RigidBody2dComponent>().GetBody();
+
+					def.localAnchorA = { hinge.localAnchorA.x, hinge.localAnchorA.y };
+					def.localAnchorB = { hinge.localAnchorB.x, hinge.localAnchorB.y };
+
+					def.collideConnected = hinge.collideConnected;
+
+					hinge.joint = (b2RevoluteJoint*)m_PhysicsWorld2D.m_World->CreateJoint(&def);
+				}
+			}
+		}
+	}
+
+	void Scene::InitilizeEntitiyScript(Entity entity)
+	{
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			auto& script = entity.GetComponent<ScriptComponent>();
+
+
+			if (script.Instance == nullptr)
+			{
+				auto gameAssembly = Application::GetGameAssembly();
+				script.Instance = gameAssembly->InstantiateScript(script.ScriptName.c_str());
+				script.Instance->m_Entity = entity;
+
+				try
+				{
+					script.Instance->OnStart();
+				}
+				catch (const std::exception& e)
+				{
+					AK_ERROR(e.what());
+				}
+
+			}
 		}
 	}
 

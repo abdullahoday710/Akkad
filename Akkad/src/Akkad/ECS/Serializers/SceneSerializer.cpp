@@ -78,6 +78,11 @@ namespace Akkad {
 			AnimatedSpriteRendererComponentSerializer::Serialize(entity, entity_data);
 		}
 
+		if (entity.HasComponent<HingeJoint2DComponent>())
+		{
+			HingeJoint2DSerializer::Serialize(entity, entity_data);
+		}
+
 		auto& entity_relation = entity.GetComponent<RelationShipComponent>();
 		Entity current_child = entity_relation.first_child;
 
@@ -190,6 +195,11 @@ namespace Akkad {
 			else if (component.key() == "AnimatedSpriteRenderer")
 			{
 				AnimatedSpriteRendererComponentSerializer::Deserialize(entity, componentData);
+			}
+
+			else if (component.key() == "HingeJoint2D")
+			{
+				HingeJoint2DSerializer::Deserialize(entity, componentData);
 			}
 
 			else if (component.key() == "children")

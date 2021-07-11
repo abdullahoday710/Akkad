@@ -42,6 +42,11 @@ namespace Akkad {
 		void SetViewportRect(Graphics::Rect rect) { m_ViewportRect = rect; }
 		void UpdateTransforms();
 
+		void InitilizePhysicsBodies2D(Entity entity);
+		void InitilizePhysicsJoints2D(Entity entity);
+		
+		void InitilizeEntitiyScript(Entity entity);
+
 		void BeginRenderer2D(float aspectRatio);
 		void Render2D();
 		void RenderPickingBuffer2D();

@@ -74,6 +74,7 @@ namespace Akkad {
 		}
 
 		uint32_t _GetHandle() { return (uint32_t)m_Handle; };
+		Scene* _GetScene() { return m_Scene; };
 	private:
 		entt::entity m_Handle = entt::null;
 		Scene* m_Scene = nullptr;

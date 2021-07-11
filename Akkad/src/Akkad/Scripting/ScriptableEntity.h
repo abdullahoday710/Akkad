@@ -25,6 +25,12 @@ namespace Akkad {
 			}
 		}
 
+		template<typename T>
+		bool HasComponent()
+		{
+			return m_Entity.HasComponent<T>();
+		}
+
 		virtual void OnStart() {}
 		virtual void OnUpdate() {}
 		virtual void OnColliderEnter2D(Entity other) {}

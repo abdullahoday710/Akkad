@@ -45,6 +45,7 @@ namespace Akkad {
 		m_ApplicationComponents.m_SceneManager = CreateSharedPtr<SceneManager>();
 
 		Renderer2D::Init();
+		m_ApplicationComponents.m_Renderer2D = &Renderer2D::GetInstance();
 		m_Running = true;
 
 		#ifdef AK_ENABLE_IMGUI

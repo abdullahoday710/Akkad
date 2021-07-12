@@ -16,6 +16,7 @@ namespace Akkad {
 	{
 		class ImGuiHandler;
 		class RenderPlatform;
+		class Renderer2D;
 	}
 	/*----------------------------------*/
 
@@ -29,6 +30,7 @@ namespace Akkad {
 		Window* m_Window = nullptr;
 		TimeManager* m_TimeManager = nullptr;
 		Input* m_InputManager = nullptr;
+		Graphics::Renderer2D* m_Renderer2D = nullptr;
 
 		SharedPtr<Graphics::ImGuiHandler> m_ImguiHandler;
 		SharedPtr<Graphics::RenderPlatform> m_platform;

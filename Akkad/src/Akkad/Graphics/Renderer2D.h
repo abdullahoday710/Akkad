@@ -99,6 +99,8 @@ namespace Akkad {
 			SharedPtr<IndexBuffer> m_GUITextIB;
 			SharedPtr<Shader> m_GUITextShader;
 			SharedPtr<UniformBuffer> m_GUITextShaderProps;
+
+			friend class GameAssembly;
 		};
 	}
 }

@@ -4,22 +4,9 @@
 #include "Akkad/Asset/AssetManager.h"
 #include "Akkad/GUI/GUIText.h"
 
-#include <glad/glad.h>
 namespace Akkad {
 
 	namespace Graphics {
-
-		void GLAPIENTRY
-			MessageCallback(GLenum source,
-				GLenum type,
-				GLuint id,
-				GLenum severity,
-				GLsizei length,
-				const GLchar* message,
-				const void* userParam)
-		{
-			std::cout << message << std::endl;
-		}
 
 		Renderer2D Renderer2D::s_Instance;
 

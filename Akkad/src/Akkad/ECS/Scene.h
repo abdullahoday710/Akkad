@@ -25,6 +25,7 @@ namespace Akkad {
 		Entity AddEntity(std::string tag = "Entity");
 		Entity AddEntity(uint32_t hint, std::string tag = "Entity");
 		Entity GetEntityByTag(std::string tag);
+
 		void AssignEntityToParent(Entity parent, Entity child);
 		bool EntityHasChild(Entity parent, Entity child);
 		bool EntityHasHierarchyChild(Entity parent, Entity child);
@@ -33,6 +34,7 @@ namespace Akkad {
 
 		void RemoveEntity(Entity entity);
 		std::string GetName() { return m_Name; }
+		Box2dWorld& GetPhysicsWorld2D() { return m_PhysicsWorld2D; };
 
 	private:
 		void Start();

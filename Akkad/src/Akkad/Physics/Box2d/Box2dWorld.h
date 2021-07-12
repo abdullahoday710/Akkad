@@ -28,6 +28,7 @@ namespace Akkad {
 		void SetContactListener(Box2dContactListener* listener);
 		void SetDebugDraw(Box2dDraw* draw);
 		void Step();
+		b2Joint* CreateJoint(b2JointDef* def);
 		void DestroyJoint(b2Joint* joint);
 
 		void Clear();

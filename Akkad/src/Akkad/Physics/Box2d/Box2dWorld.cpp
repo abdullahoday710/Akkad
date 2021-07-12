@@ -83,6 +83,11 @@ namespace Akkad {
 		m_World->Step(timeStep, velocityIterations, positionIterations);
 	}
 
+	b2Joint* Box2dWorld::CreateJoint(b2JointDef* def)
+	{
+		return m_World->CreateJoint(def);
+	}
+
 	void Box2dWorld::DestroyJoint(b2Joint* joint)
 	{
 		m_World->DestroyJoint(joint);

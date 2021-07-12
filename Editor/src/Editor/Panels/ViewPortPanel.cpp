@@ -76,7 +76,7 @@ namespace Akkad {
 						if (desc.assetType == AssetType::INSTANTIABLE_ENTITY)
 						{
 
-							EditorLayer::GetActiveScene()->InstantiateEntity(desc.assetName, m_EditorCamera.GetPosition(), { 0,0,0 }, { 1,1,1 });
+							EditorLayer::GetActiveScene()->InstantiateEntityStatic(desc.assetName, m_EditorCamera.GetPosition(), { 0,0,0 }, { 1,1,1 });
 						}
 					}
 

@@ -550,7 +550,7 @@ namespace Akkad {
 					def.motorSpeed = hinge.motorSpeed;
 					def.maxMotorTorque = hinge.maxMotorTorque;
 
-					hinge.joint = (b2RevoluteJoint*)m_PhysicsWorld2D.m_World->CreateJoint(&def);
+					hinge.joint = (b2RevoluteJoint*)m_PhysicsWorld2D.CreateJoint(&def);
 				}
 			}
 		}
@@ -766,7 +766,20 @@ namespace Akkad {
 		return false;
 	}
 
-	void Scene::InstantiateEntity(std::string instantiableEntityName, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+	Entity Scene::InstantiateEntity(std::string instantiableEntityName, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+	{
+		auto entity = InstantiateEntityStatic(instantiableEntityName, position, rotation, scale);
+		if (entity.IsValid())
+		{
+			InitilizePhysicsBodies2D(entity);
+			InitilizePhysicsJoints2D(entity);
+			InitilizeEntitiyScript(entity);
+			return entity;
+		}
+		return Entity();
+	}
+
+	Entity Scene::InstantiateEntityStatic(std::string instantiableEntityName, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 	{
 		auto assetManager = Application::GetAssetManager();
 		auto desc = assetManager->GetAssetByName(instantiableEntityName);
@@ -782,10 +795,12 @@ namespace Akkad {
 			transform.SetPostion(position);
 			transform.SetRotation(rotation);
 			transform.SetScale(scale);
+			return entity;
 		}
 		else
 		{
 			AK_ERROR("Could not instantiate entity : {} maybe the entity file was deleted or it doesen't exist !", instantiableEntityName);
+			return Entity();
 		}
 	}
 

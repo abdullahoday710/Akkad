@@ -30,8 +30,8 @@ namespace Akkad {
 		bool EntityHasChild(Entity parent, Entity child);
 		bool EntityHasHierarchyChild(Entity parent, Entity child);
 
-		void InstantiateEntity(std::string instantiableEntityName, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
-
+		Entity InstantiateEntity(std::string instantiableEntityName, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
+		Entity InstantiateEntityStatic(std::string instantiableEntityName, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 		void RemoveEntity(Entity entity);
 		std::string GetName() { return m_Name; }
 		Box2dWorld& GetPhysicsWorld2D() { return m_PhysicsWorld2D; };

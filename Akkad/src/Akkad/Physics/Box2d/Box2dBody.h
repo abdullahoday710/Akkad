@@ -6,7 +6,7 @@
 
 namespace Akkad {
 	enum class BodyType {
-		STATIC, DYNAMIC
+		STATIC, DYNAMIC, KINEMATIC
 	};
 
 	enum class BodyShape {

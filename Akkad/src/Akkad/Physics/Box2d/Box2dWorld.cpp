@@ -41,6 +41,9 @@ namespace Akkad {
 		case BodyType::DYNAMIC:
 			bodyDef.type = b2_dynamicBody;
 			break;
+		case BodyType::KINEMATIC:
+			bodyDef.type = b2_kinematicBody;
+			break;
 		}
 
 		b2Body* body = m_World->CreateBody(&bodyDef);

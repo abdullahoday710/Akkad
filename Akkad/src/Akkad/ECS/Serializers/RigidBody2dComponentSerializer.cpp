@@ -33,6 +33,11 @@ namespace Akkad {
 			entity_data["RigidBody2D"]["Type"] = "Dynamic";
 			break;
 		}
+		case BodyType::KINEMATIC:
+		{
+			entity_data["RigidBody2D"]["Type"] = "Kinematic";
+			break;
+		}
 
 		}
 	}
@@ -52,6 +57,11 @@ namespace Akkad {
 		else if (component_data["Type"] == "Dynamic")
 		{
 			type = BodyType::DYNAMIC;
+		}
+
+		else if (component_data["Type"] == "Kinematic")
+		{
+			type = BodyType::KINEMATIC;
 		}
 
 		if (component_data["Shape"] == "Polygon")

@@ -424,6 +424,8 @@ namespace Akkad {
 			return "Static";
 		case BodyType::DYNAMIC:
 			return "Dynamic";
+		case BodyType::KINEMATIC:
+			return "Kinematic";
 		}
 	}
 	void PropertyEditorPanel::DrawRigidBody2dComponent()
@@ -439,7 +441,7 @@ namespace Akkad {
 			auto& rigidBody = m_ActiveEntity.GetComponent<RigidBody2dComponent>();
 			ImGui::Text("Rigid body :");
 
-			const char* body_types[] = { "Static", "Dynamic" };
+			const char* body_types[] = { "Static", "Dynamic", "Kinematic" };
 			std::string bodytypestr = BodyTypeToStr(rigidBody.type);
 			static const char* current_body_type = bodytypestr.c_str();
 
@@ -451,6 +453,18 @@ namespace Akkad {
 					if (ImGui::Selectable(body_types[n], is_selected))
 					{
 						current_body_type = body_types[n];
+						if (current_body_type == "Static")
+						{
+							rigidBody.type = BodyType::STATIC;
+						}
+						if (current_body_type == "Dynamic")
+						{
+							rigidBody.type = BodyType::DYNAMIC;
+						}
+						if (current_body_type == "Kinematic")
+						{
+							rigidBody.type = BodyType::KINEMATIC;
+						}
 					}
 					if (is_selected)
 					{
@@ -458,15 +472,6 @@ namespace Akkad {
 					}
 				}
 				ImGui::EndCombo();
-			}
-
-			if (current_body_type == "Static")
-			{
-				rigidBody.type = BodyType::STATIC;
-			}
-			if (current_body_type == "Dynamic")
-			{
-				rigidBody.type = BodyType::DYNAMIC;
 			}
 
 			rigidBody.shape = BodyShape::POLYGON_SHAPE; // TODO : make the shapes selectable and add more shapes.

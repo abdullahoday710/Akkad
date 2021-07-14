@@ -36,6 +36,8 @@ namespace Akkad {
 		virtual void OnColliderEnter2D(Entity other) {}
 		virtual void OnColliderExit2D(Entity other) {}
 
+		Entity GetEntity() { return m_Entity; }
+
 	private:
 		Entity m_Entity;
 		friend class Scene;

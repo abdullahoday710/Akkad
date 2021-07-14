@@ -45,9 +45,9 @@ namespace Akkad {
 			}
 
 			bool operator==(const Rect& other) {
-				if (other.m_Max.x == m_Max.x && other.m_Max.y == m_Max.y)
+				if (other.m_Position.x == m_Position.x)
 				{
-					if (other.m_Min.x == m_Min.x && other.m_Min.y == m_Min.y) {
+					if (other.m_Position.y == m_Position.y) {
 
 						return true;
 					}
@@ -56,9 +56,9 @@ namespace Akkad {
 			}
 
 			bool operator!=(const Rect& other) {
-				if (other.m_Max.x != m_Max.x && other.m_Max.y != m_Max.y)
+				if (other.m_Position.x != m_Position.x)
 				{
-					if (other.m_Min.x != m_Min.x && other.m_Min.y != m_Min.y) {
+					if (other.m_Position.y != m_Position.y) {
 
 						return true;
 					}

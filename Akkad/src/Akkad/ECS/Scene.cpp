@@ -254,7 +254,6 @@ namespace Akkad {
 						if (current_child.HasComponent<GUITextComponent>())
 						{
 							auto& guitext = current_child.GetComponent<GUITextComponent>();
-							auto& uitextbb = current_child.GetComponent<RectTransformComponent>();
 							if (!guitext.fontAssetID.empty())
 							{
 								auto fontdesc = Application::GetAssetManager()->GetDescriptorByID(guitext.fontAssetID);
@@ -266,7 +265,7 @@ namespace Akkad {
 							}
 							if (guitext.uitext.IsValid())
 							{
-								guitext.uitext.SetBoundingBox(uitextbb.GetRect());
+								guitext.uitext.SetBoundingBox(rect_transform.GetRect());
 
 								if (guitext.text != guitext.uitext.GetText())
 								{

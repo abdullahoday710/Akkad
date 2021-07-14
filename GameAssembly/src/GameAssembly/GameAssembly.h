@@ -47,6 +47,8 @@ namespace Akkad {
 		GameAssembly() : m_Factory() {}
 		~GameAssembly() {}
 
+		void InitBox2D();
+
 		ScriptFactory m_Factory;
 		ApplicationComponents* m_ApplicationComponents = nullptr;
 	};

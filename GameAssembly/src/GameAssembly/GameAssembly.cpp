@@ -1,9 +1,9 @@
 #include "GameAssembly.h"
 
 #include <Akkad/Graphics/Renderer2D.h>
-
 #include <iostream>
 
+#include <box2d/b2_world.h>
 namespace Akkad {
 
 	void GameAssembly::Init(ApplicationComponents& appComponents)
@@ -17,13 +17,36 @@ namespace Akkad {
 		Application::GetInstance().m_ApplicationComponents.m_TimeManager = appComponents.m_TimeManager;
 		Application::GetInstance().m_ApplicationComponents.m_Window = appComponents.m_Window;
 
-		// same thing goes for Renderer2D or any other singleton
-		Graphics::Renderer2D::s_Instance = *appComponents.m_Renderer2D;
-
 		// Apply the workaround class, not sure if I will keep it this way.
 		Application::GetInstance().m_LoadedGameAssembly = new FakeLoadedAssembly();
 
+		Graphics::Renderer2D::s_Instance = *appComponents.m_Renderer2D;
 
+		InitBox2D();
+	}
+
+	// HACK : Box2d have some static variables that can only be initialized when creating a temporary world.
+	void GameAssembly::InitBox2D()
+	{
+		b2World* world = new b2World({ 10,10 });
+
+		b2BodyDef myBodyDef;
+		myBodyDef.type = b2_dynamicBody;
+		myBodyDef.position.Set(0, 0);
+		myBodyDef.angle = 0;
+		b2PolygonShape boxShape;
+		boxShape.SetAsBox(1, 1);
+
+		b2FixtureDef boxFixtureDef;
+		boxFixtureDef.shape = &boxShape;
+		boxFixtureDef.density = 1;
+		b2Body* dynamicBody = world->CreateBody(&myBodyDef);
+		b2Body* dynamicBody1 = world->CreateBody(&myBodyDef);
+		dynamicBody->CreateFixture(&boxFixtureDef);
+		dynamicBody1->CreateFixture(&boxFixtureDef);
+		world->Step(10, 10, 10);
+
+		delete world;
 	}
 }
 

@@ -409,6 +409,8 @@ namespace Akkad {
 
 		UpdateTransforms();
 
+		CleanUpDestroyedEntities();
+
 		// Handle GUI mouse events
 		{
 			auto input = Application::GetInputManager();
@@ -804,6 +806,11 @@ namespace Akkad {
 		}
 	}
 
+	void Scene::DestroyEntity(Entity entity)
+	{
+		m_EntitiesToDestroy.push_back(entity.m_Handle);
+	}
+
 	void Scene::RemoveEntity(Entity entity)
 	{
 		auto& entity_relation = entity.GetComponent<RelationShipComponent>();
@@ -876,6 +883,34 @@ namespace Akkad {
 
 		return guicontainer;
 		
+	}
+
+	void Scene::CleanUpDestroyedEntities()
+	{
+		for (auto e : m_EntitiesToDestroy)
+		{
+			Entity entity = { e, this };
+			if (entity.HasComponent<RigidBody2dComponent>())
+			{
+				auto& rb = entity.GetComponent<RigidBody2dComponent>();
+				m_PhysicsWorld2D.m_World->DestroyBody(rb.GetBody());
+				rb.body = Box2dBody();
+			}
+
+			if (entity.HasComponent<ScriptComponent>())
+			{
+				auto& script = entity.GetComponent<ScriptComponent>();
+
+				if (script.Instance != nullptr)
+				{
+					delete script.Instance;
+					script.Instance = nullptr;
+				}
+			}
+
+			RemoveEntity(entity);
+			m_EntitiesToDestroy.erase(std::remove(m_EntitiesToDestroy.begin(), m_EntitiesToDestroy.end(), e), m_EntitiesToDestroy.end());
+		}
 	}
 
 	Entity Scene::GetEntity(entt::entity handle)

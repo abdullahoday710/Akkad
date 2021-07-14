@@ -1,6 +1,7 @@
 #pragma once
 #include "Akkad/Graphics/Rect.h"
 #include "Akkad/Physics/Box2d/Box2dWorld.h"
+
 #include <entt/entt.hpp>
 
 namespace Akkad {
@@ -32,7 +33,7 @@ namespace Akkad {
 
 		Entity InstantiateEntity(std::string instantiableEntityName, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 		Entity InstantiateEntityStatic(std::string instantiableEntityName, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
-		void RemoveEntity(Entity entity);
+		void DestroyEntity(Entity entity);
 		std::string GetName() { return m_Name; }
 		Box2dWorld& GetPhysicsWorld2D() { return m_PhysicsWorld2D; };
 
@@ -57,10 +58,13 @@ namespace Akkad {
 		void RenderGUIElement(Entity parent, bool pickingPhase);
 		void RenderGUI(bool pickingPhase = false);
 
-
+		void CleanUpDestroyedEntities();
 		Entity GetEntity(entt::entity handle);
 		Entity GetGuiContainer();
 		Entity AddGuiContainer();
+		void RemoveEntity(Entity entity);
+
+		std::vector<entt::entity> m_EntitiesToDestroy;
 
 		entt::registry m_Registry;
 		std::string m_Name = "Scene";

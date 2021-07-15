@@ -18,6 +18,14 @@ namespace Akkad {
 			SetYConstraint(y_const);
 		}
 
+		void GUIRect::SetParent(Graphics::Rect parent)
+		{
+			if (m_ParentRect != parent)
+			{
+				m_ParentRect = parent;
+			}
+		}
+
 		void GUIRect::SetWidth(ConstraintType type, float width)
 		{
 			switch (type)

@@ -8,6 +8,7 @@ namespace Akkad {
 
 	void SceneManager::LoadScene(std::string sceneName)
 	{
+		m_ActiveScene->Stop();
 		m_ActiveScene.reset(new Scene());
 		auto assetManager = Application::GetAssetManager();
 		std::string filePath = assetManager->GetAssetsRootPath() + "/scenes/" + sceneName + ".AKSCENE";

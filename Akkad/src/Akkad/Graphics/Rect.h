@@ -58,10 +58,12 @@ namespace Akkad {
 			bool operator!=(const Rect& other) {
 				if (other.m_Position.x != m_Position.x)
 				{
-					if (other.m_Position.y != m_Position.y) {
+					return true;
+				}
 
-						return true;
-					}
+				else if (other.m_Position.y != m_Position.y)
+				{
+					return true;
 				}
 				return false;
 			}

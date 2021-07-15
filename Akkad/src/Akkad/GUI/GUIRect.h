@@ -17,7 +17,7 @@ namespace Akkad {
 		public:
 			GUIRect();
 
-			void SetParent(Graphics::Rect parent) { m_ParentRect = parent; };
+			void SetParent(Graphics::Rect parent);
 
 			void SetWidthConstraint(Constraint constraint);
 			void SetHeightConstraint(Constraint constraint);

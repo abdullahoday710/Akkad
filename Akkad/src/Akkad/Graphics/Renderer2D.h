@@ -43,6 +43,9 @@ namespace Akkad {
 			static bool GetGUIDebugDrawState() { return GetInstance().m_DrawDebugGUIRects; }
 			static void SetGUIDebugDrawState(bool state) { GetInstance().m_DrawDebugGUIRects = state; }
 
+			static bool GetPhysicsDebugDrawState() { return GetInstance().m_DrawDebugPhysics; }
+			static void SetPhysicsDebugDrawState(bool state) { GetInstance().m_DrawDebugPhysics = state; }
+
 		private:
 			Renderer2D() {};
 			~Renderer2D() {};
@@ -74,6 +77,8 @@ namespace Akkad {
 			void InitShadersImpl();
 
 			bool m_DrawDebugGUIRects = true;
+			bool m_DrawDebugPhysics = true;
+
 			Camera m_Camera;
 			glm::mat4 m_SceneCameraViewProjection = glm::mat4(1.0f);
 

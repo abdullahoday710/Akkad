@@ -376,6 +376,12 @@ namespace Akkad {
 						Renderer2D::SetGUIDebugDrawState(guidebug);
 					}
 
+					bool physicsdebug = Renderer2D::GetPhysicsDebugDrawState();
+					if (ImGui::Checkbox("Draw debug physics bodies", &physicsdebug))
+					{
+						Renderer2D::SetPhysicsDebugDrawState(physicsdebug);
+					}
+
 					ImGui::EndMenu();
 				}
 				if (ImGui::MenuItem("Recompile shaders"))

@@ -110,9 +110,13 @@ namespace Akkad {
 				Renderer2D::DrawAnimatedSprite(animatedSprite.sprite, frame, transform.GetTransformMatrix());
 
 			}
-			m_PhysicsWorld2D.SetDebugDraw(&m_PhysicsDebugDraw2D);
-			m_PhysicsDebugDraw2D.SetFlags(b2Draw::e_shapeBit | b2Draw::e_jointBit);
-			m_PhysicsWorld2D.m_World->DebugDraw();
+			if (Renderer2D::GetPhysicsDebugDrawState())
+			{
+				m_PhysicsWorld2D.SetDebugDraw(&m_PhysicsDebugDraw2D);
+				m_PhysicsDebugDraw2D.SetFlags(b2Draw::e_shapeBit | b2Draw::e_jointBit);
+				m_PhysicsWorld2D.m_World->DebugDraw();
+			}
+
 		}
 
 	}

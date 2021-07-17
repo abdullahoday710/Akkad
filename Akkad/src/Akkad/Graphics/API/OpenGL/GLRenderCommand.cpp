@@ -47,6 +47,8 @@ namespace Akkad {
 			{
 			case BlendDestFactor::INVERSE_SRC_ALPHA:
 				return GL_ONE_MINUS_SRC_ALPHA;
+			case BlendDestFactor::ONE:
+				return GL_ONE;
 			}
 		}
 

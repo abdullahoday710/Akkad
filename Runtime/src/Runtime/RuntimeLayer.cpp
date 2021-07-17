@@ -99,6 +99,8 @@ namespace Akkad {
 				{
 					bool ismap = asset["IsAtlas"];
 					textureInfo->isTilemap = ismap;
+					textureInfo->tileWidth = asset["AtlasTileSize"][0];
+					textureInfo->tileHeight = asset["AtlasTileSize"][1];
 				}
 				desc.assetInfo = textureInfo;
 			}

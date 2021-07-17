@@ -11,6 +11,7 @@ namespace Akkad {
 
 	void MaterialSerializer::Serialize(SharedPtr<Graphics::Material> material, std::string outputPath)
 	{
+		using namespace Graphics;
 		auto& project = EditorLayer::GetActiveProject();
 
 		// Material serialization should be ordered so it can match the underlying property buffer.
@@ -92,11 +93,28 @@ namespace Akkad {
 					break;
 				}
 				}
-
-
 			}
 		}
+
+		unsigned int flags = material->GetRenderFlags();
+		materialData["material"]["RenderFlags"]["BlendEnable"] = false;
+		materialData["material"]["RenderFlags"]["BlendInverseAlpha"] = false;
+		materialData["material"]["RenderFlags"]["BlendAlphaAdd"] = false;
+
+		if (flags & Material::RenderFlags::BLEND_ENABLE)
+		{
+			materialData["material"]["RenderFlags"]["BlendEnable"] = true;
+		}
+
+		if (flags & Material::RenderFlags::BLEND_INVERSE_ALPHA)
+		{
+			materialData["material"]["RenderFlags"]["BlendInverseAlpha"] = true;
+		}
 		
+		if (flags & Material::RenderFlags::BLEND_ALPHA_ADD)
+		{
+			materialData["material"]["RenderFlags"]["BlendAlphaAdd"] = true;
+		}
 
 		std::ofstream output;
 		output.open(outputPath, std::ios::trunc);

@@ -190,6 +190,76 @@ namespace Akkad {
 			}
 		}
 
+		ImGui::Text("Render flags");
+		{
+			using namespace Graphics;
+
+			unsigned int flags = m_Material->GetRenderFlags();
+
+			bool blend_enable = false;
+			bool blend_inverse_alpha = false;
+			bool blend_alpha_add = false;
+
+			if (flags & Material::RenderFlags::BLEND_ENABLE)
+			{
+				blend_enable = true;
+			}
+
+			if (flags & Material::RenderFlags::BLEND_INVERSE_ALPHA && !(flags & Material::RenderFlags::BLEND_ALPHA_ADD))
+			{
+				blend_inverse_alpha = true;
+			}
+
+			if (flags & Material::RenderFlags::BLEND_ALPHA_ADD && !(flags & Material::RenderFlags::BLEND_INVERSE_ALPHA))
+			{
+				blend_alpha_add = true;
+			}
+
+			if (ImGui::Checkbox("Enable blending", &blend_enable))
+			{
+				if (blend_enable)
+				{
+					flags |= Material::RenderFlags::BLEND_ENABLE;
+				}
+				else
+				{
+					flags &= ~Material::RenderFlags::BLEND_ENABLE;
+				}
+				m_Material->SetRenderFlags(flags);
+			}
+
+			if (blend_enable)
+			{
+				if (ImGui::Checkbox("Blend : inverse alpha", &blend_inverse_alpha))
+				{
+					if (!blend_alpha_add && blend_inverse_alpha)
+					{
+						flags |= Material::RenderFlags::BLEND_INVERSE_ALPHA;
+					}
+					else
+					{
+						flags &= ~Material::RenderFlags::BLEND_INVERSE_ALPHA;
+					}
+					m_Material->SetRenderFlags(flags);
+				}
+
+				if (ImGui::Checkbox("Blend : alpha add", &blend_alpha_add))
+				{
+					if (blend_alpha_add && !blend_inverse_alpha)
+					{
+						flags |= Material::RenderFlags::BLEND_ALPHA_ADD;
+					}
+					else
+					{
+						flags &= ~Material::RenderFlags::BLEND_ALPHA_ADD;
+					}
+					m_Material->SetRenderFlags(flags);
+				}
+			}
+
+
+		}
+
 		if (ImGui::Button("Save material"))
 		{
 			std::string path = EditorLayer::GetActiveProject().GetAssetsPath().string();

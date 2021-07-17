@@ -17,7 +17,7 @@ namespace Akkad {
 		};
 
 		enum class BlendDestFactor {
-			INVERSE_SRC_ALPHA,
+			INVERSE_SRC_ALPHA, ONE
 		};
 
 		class RenderCommand

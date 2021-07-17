@@ -119,6 +119,31 @@ namespace Akkad {
 				std::string name = data["material"]["name"];
 				material->m_Name = name;
 
+				if (!data["material"]["RenderFlags"].is_null())
+				{
+					unsigned int flags = 0;
+					bool blend_enable = data["material"]["RenderFlags"]["BlendEnable"];
+					bool blend_inverse_alpha = data["material"]["RenderFlags"]["BlendInverseAlpha"];
+					bool blend_alpha_add = data["material"]["RenderFlags"]["BlendAlphaAdd"];
+
+					if (blend_enable)
+					{
+						flags |= RenderFlags::BLEND_ENABLE;
+					}
+
+					if (blend_inverse_alpha)
+					{
+						flags |= RenderFlags::BLEND_INVERSE_ALPHA;
+					}
+
+					if (blend_alpha_add)
+					{
+						flags |= RenderFlags::BLEND_ALPHA_ADD;
+					}
+
+					material->SetRenderFlags(flags);
+				}
+
 				if (!data["material"]["shaderID"].is_null())
 				{
 					std::string shaderID = data["material"]["shaderID"];

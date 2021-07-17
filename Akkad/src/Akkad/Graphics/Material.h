@@ -18,6 +18,14 @@ namespace Akkad {
 		class Material
 		{
 		public:
+
+			enum RenderFlags
+			{
+				BLEND_ENABLE = 0x01,
+				BLEND_INVERSE_ALPHA = 0x02,
+				BLEND_ALPHA_ADD = 0x04,
+			};
+
 			Material() {};
 			Material(std::string name) { m_Name = name; }
 
@@ -30,6 +38,11 @@ namespace Akkad {
 			bool isValid();
 			bool HasTexture(std::string samplerName);
 			bool SetTexture(std::string samplerName, std::string assetID);
+
+			unsigned int GetRenderFlags() { return m_RenderFlags; };
+			void SetRenderFlags(unsigned int flags) { m_RenderFlags = flags; };
+			void AppendRenderFlag(unsigned int flag) { m_RenderFlags |= flag; };
+			void ClearRenderFlags() { m_RenderFlags = 0; };
 
 			SharedPtr<Texture> GetTexture(std::string samplerName);
 			std::string GetName() { return m_Name; }
@@ -50,8 +63,10 @@ namespace Akkad {
 
 			std::map<std::string, TextureProps> m_Textures;
 			std::string m_ShaderID;
+			unsigned int m_RenderFlags = 0;
 
 			static std::string DEFAULT_PROPERTY_BUFFER_NAME;
+
 
 			friend class MaterialSerializer;
 			friend class MaterialEditorPanel;

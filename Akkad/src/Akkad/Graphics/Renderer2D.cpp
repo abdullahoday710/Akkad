@@ -240,7 +240,30 @@ namespace Akkad {
 
 					m_QuadVB->Bind();
 					m_QuadIB->Bind();
+					
+					unsigned int renderFlags = sprite.GetMaterial()->GetRenderFlags();
+					if (renderFlags & Material::RenderFlags::BLEND_ENABLE)
+					{
+						command->EnableBlending();
+						
+						if (renderFlags & Material::RenderFlags::BLEND_INVERSE_ALPHA)
+						{
+							command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::INVERSE_SRC_ALPHA);
+						}
+
+						if (renderFlags & Material::RenderFlags::BLEND_ALPHA_ADD)
+						{
+							command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::ONE);
+						}
+
+					}
+
 					command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+
+					if (renderFlags & Material::RenderFlags::BLEND_ENABLE)
+					{
+						command->DisableBlending();
+					}
 				}
 			}
 
@@ -270,7 +293,29 @@ namespace Akkad {
 
 					m_QuadVB->Bind();
 					m_QuadIB->Bind();
+
+					unsigned int renderFlags = sprite.GetMaterial()->GetRenderFlags();
+					if (renderFlags & Material::RenderFlags::BLEND_ENABLE)
+					{
+						command->EnableBlending();
+
+						if (renderFlags & Material::RenderFlags::BLEND_INVERSE_ALPHA)
+						{
+							command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::INVERSE_SRC_ALPHA);
+						}
+
+						if (renderFlags & Material::RenderFlags::BLEND_ALPHA_ADD)
+						{
+							command->SetBlendState(BlendSourceFactor::ALPHA, BlendDestFactor::ONE);
+						}
+					}
+
 					command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+
+					if (renderFlags & Material::RenderFlags::BLEND_ENABLE)
+					{
+						command->DisableBlending();
+					}
 				}
 			}
 		}

@@ -19,6 +19,7 @@ project "sandbox"
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.stb}",
+		"%{IncludeDir.json}",
 
 	}
 

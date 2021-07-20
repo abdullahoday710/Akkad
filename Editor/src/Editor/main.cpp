@@ -9,6 +9,7 @@ int main() {
 		settings.window_settings.title = "Akkad Editor";
 		settings.window_settings.width = 800;
 		settings.window_settings.height = 600;
+		settings.enable_ImGui = true;
 
 		EditorLayer* editorlayer = new EditorLayer();
 

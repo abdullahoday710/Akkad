@@ -23,6 +23,7 @@ namespace Akkad {
 	struct ApplicationSettings
 	{
 		WindowSettings window_settings;
+		bool enable_ImGui = false;
 	};
 
 	struct ApplicationComponents
@@ -54,6 +55,7 @@ namespace Akkad {
 		/*------------------------------*/
 
 		/*---- Getters -----*/
+		static bool IsImGuiEnabled() { return GetInstance().m_ImGuiEnabled; }
 
 		static LoadedGameAssembly* GetGameAssembly() { return GetInstance().m_LoadedGameAssembly; }
 		static TimeManager* GetTimeManager() { return GetInstance().m_ApplicationComponents.m_TimeManager; }
@@ -75,6 +77,7 @@ namespace Akkad {
 		void InitImpl(ApplicationSettings& settings);
 		void RunImpl();
 		bool m_Running = false;
+		bool m_ImGuiEnabled = false;
 
 		// -------- Event Handlers -----------------
 		void OnEvent(Event& e);

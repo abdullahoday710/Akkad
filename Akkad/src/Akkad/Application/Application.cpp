@@ -48,10 +48,12 @@ namespace Akkad {
 		m_ApplicationComponents.m_Renderer2D = &Renderer2D::GetInstance();
 		m_Running = true;
 
-		#ifdef AK_ENABLE_IMGUI
+		if (settings.enable_ImGui)
+		{
 			m_ApplicationComponents.m_ImguiHandler = ImGuiHandler::create(RenderAPI::OPENGL);
 			m_ApplicationComponents.m_ImguiHandler->Init();
-		#endif // AK_ENABLE_IMGUI
+			m_ImGuiEnabled = true;
+		}
 	}
 
 	void Application::RunImpl()
@@ -68,12 +70,14 @@ namespace Akkad {
 				auto layer = *it;
 				layer->OnUpdate();
 
-				#ifdef AK_ENABLE_IMGUI
+				if (m_ImGuiEnabled)
+				{
 					m_ApplicationComponents.m_ImguiHandler->NewFrame();
 					layer->RenderImGui();
 					m_ApplicationComponents.m_ImguiHandler->Render();
 					m_ApplicationComponents.m_ImguiHandler->UpdateRenderPlatforms();
-				#endif
+				}
+					
 			}
 
 			m_ApplicationComponents.m_TimeManager->CalculateDeltaTime();

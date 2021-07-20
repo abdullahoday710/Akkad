@@ -1,8 +1,11 @@
 #include "Win32WindowProcedure.h"
 #include "Win32Window.h"
-#include <tchar.h>
-#include "Akkad/Input/KeyEvent.h"
 #include "WindowsKeyCodes.h"
+
+#include "Akkad/Input/KeyEvent.h"
+#include "Akkad/Application/Application.h"
+
+#include <tchar.h>
 
 // compile imgui for windows
 #include "backends/imgui_impl_win32.cpp"
@@ -11,9 +14,10 @@ namespace Akkad {
 
     LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-        #ifdef AK_ENABLE_IMGUI
+        if (Application::IsImGuiEnabled())
+        {
             ImGui_ImplWin32_WndProcHandler(hwnd, uMsg, wParam, lParam);
-        #endif
+        }
 
         Win32Window* window = (Win32Window*)GetProp(hwnd, L"windowclass");
 

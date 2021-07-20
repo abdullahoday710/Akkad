@@ -55,6 +55,14 @@ project "Akkad"
         defines
         {
         }
+    
+    configuration "target-emscripten"
+        excludes
+        {
+        "src/Akkad/Platforms/**.h",
+        "src/Akkad/Platforms/**.cpp",
+        "src/Akkad/Graphics/API/**",
+        }
 
 
 

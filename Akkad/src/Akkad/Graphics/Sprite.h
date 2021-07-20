@@ -2,6 +2,7 @@
 #include "Material.h"
 
 namespace Akkad {
+	class AnimatedSpriteRendererComponentSerializer;
 	namespace Graphics {
 
 		class Sprite
@@ -81,7 +82,7 @@ namespace Akkad {
 
 			friend class PropertyEditorPanel;
 			friend class SpriteAnimationPreviewPanel;
-			friend class AnimatedSpriteRendererComponentSerializer;
+			friend class ::Akkad::AnimatedSpriteRendererComponentSerializer;
 		};
 	}
 }

@@ -2,6 +2,7 @@
 #include "Akkad/Graphics/Rect.h"
 
 namespace Akkad {
+	class Scene;
 	namespace GUI {
 		enum class ConstraintType { CENTER_CONSTRAINT,
 			RELATIVE_CONSTRAINT, PIXEL_CONSTRAINT, ASPECT_CONSTRAINT, SNAP_LEFT_CONSTRAINT };
@@ -49,7 +50,7 @@ namespace Akkad {
 			Graphics::Rect m_Rect;
 			Graphics::Rect m_ParentRect;
 
-			friend class Scene;
+			friend class ::Akkad::Scene;
 		};
 	}
 }

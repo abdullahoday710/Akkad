@@ -8,7 +8,7 @@
 #include <vector>
 
 namespace Akkad {
-
+	class Scene;
 	namespace GUI {
 
 		class GUIText
@@ -68,7 +68,7 @@ namespace Akkad {
 			
 			glm::vec3 m_Color = { 1.0f, 1.0f, 1.0f };
 
-			friend class Scene;
+			friend class ::Akkad::Scene;
 
 		};
 	}

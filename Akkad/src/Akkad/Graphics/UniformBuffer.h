@@ -168,7 +168,7 @@ namespace Akkad {
 
 			template<typename T>
 			T GetData(std::string index) {
-				AK_ASSERT(false, "trying to get an unkown data type")
+				AK_ASSERT(false, "trying to get an unkown data type");
 			}
 
 			template<>

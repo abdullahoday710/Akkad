@@ -12,12 +12,12 @@ public:
 
 	virtual void OnDetach() override {};
 	virtual void OnUpdate() override {
-		Application::GetRenderPlatform()->GetRenderCommand()->Clear();
+		//std::cout << "on update" << std::endl;
 	};
 
 	virtual void RenderImGui() override {
 
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
 	};
 };
 int main()

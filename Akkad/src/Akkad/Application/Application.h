@@ -76,6 +76,8 @@ namespace Akkad {
 
 		void InitImpl(ApplicationSettings& settings);
 		void RunImpl();
+		static void Update();
+
 		bool m_Running = false;
 		bool m_ImGuiEnabled = false;
 

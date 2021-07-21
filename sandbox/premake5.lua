@@ -27,7 +27,7 @@ project "sandbox"
 	"Akkad"
 	}
 
-		filter "system:windows"
+	filter "system:windows"
 		systemversion "latest"
 
 	filter "configurations:Debug"
@@ -39,3 +39,9 @@ project "sandbox"
 		defines "AK_RELEASE"
 		runtime "Release"
 		optimize "on"
+	
+	configuration "target-emscripten"
+		executable_suffix (".html")
+		filter "configurations:Debug"
+			buildoptions   {"-s NO_DISABLE_EXCEPTION_CATCHING"}
+			linkoptions    {"-s NO_DISABLE_EXCEPTION_CATCHING"}

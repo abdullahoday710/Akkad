@@ -67,6 +67,10 @@ project "Akkad"
         "src/Akkad/Platforms/**.cpp",
         "src/Akkad/Graphics/API/**",
         }
+        files {
+            "src/Akkad/Platforms/Web/**.h",
+            "src/Akkad/Platforms/Web/**.cpp"
+        }
 
 
 

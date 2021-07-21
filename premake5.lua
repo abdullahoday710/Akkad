@@ -1,7 +1,11 @@
 require "premake_modules/cmake"
 
 workspace "Akkad"
-    architecture "x86_64"
+    if _OPTIONS['target-emscripten'] then
+      architecture "x86"
+    else
+      architecture "x86_64"
+    end
     startproject "Editor"
 
     newoption {
@@ -32,7 +36,9 @@ workspace "Akkad"
     IncludeDir["box2d"] = "%{wks.location}/3rdparty/box2d/include"
 
     group "Dependencies"
-      include "3rdparty/glad"
+      if not _OPTIONS['target-emscripten'] then
+        include "3rdparty/glad"
+      end
       include "3rdparty/imgui"
       include "3rdparty/spdlog"
       include "3rdparty/glslang"

@@ -40,3 +40,9 @@ project "Runtime"
 		defines "AK_RELEASE"
 		runtime "Release"
 		optimize "on"
+	
+	configuration "target-emscripten"
+		executable_suffix (".html")
+		filter "configurations:Debug"
+			buildoptions   {"-s NO_DISABLE_EXCEPTION_CATCHING"}
+			linkoptions    {"-s NO_DISABLE_EXCEPTION_CATCHING"}

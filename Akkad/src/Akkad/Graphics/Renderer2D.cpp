@@ -363,7 +363,8 @@ namespace Akkad {
 			{
 				auto atlasSize = uitext.GetFont()->GetTextureAtlasSize();
 				unsigned int has_tint = 1;
-				m_TexturedRectShaderProps->SetData("tint_color", uitext.GetColor());
+				glm::vec3 color = uitext.GetColor();
+				m_TexturedRectShaderProps->SetData("tint_color", color);
 				m_TexturedRectShaderProps->SetData("has_tint", has_tint);
 
 				for (auto& line : uitext.GetLines())

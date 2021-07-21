@@ -35,8 +35,6 @@ project "Akkad"
     
     links
 	{
-        "opengl32.lib",
-        "Glad",
         "imgui",
         "spdlog",
         "SPIRV-Cross",
@@ -45,7 +43,13 @@ project "Akkad"
     
     filter "system:windows"
         systemversion "latest"
-        
+        if not _OPTIONS['target-emscripten'] then
+            links
+            {
+                "opengl32.lib",
+                "Glad",
+            }
+        end
         files
         {
             "src/Akkad/Platforms/Desktop/Windows/**.h",

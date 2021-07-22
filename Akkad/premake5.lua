@@ -69,7 +69,8 @@ project "Akkad"
         }
         files {
             "src/Akkad/Platforms/Web/**.h",
-            "src/Akkad/Platforms/Web/**.cpp"
+            "src/Akkad/Platforms/Web/**.cpp",
+            "src/Akkad/Graphics/API/OpenGLES/**"
         }
 
 

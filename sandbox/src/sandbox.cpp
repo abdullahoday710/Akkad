@@ -1,6 +1,7 @@
 #include <Akkad/Akkad.h>
 #include <imgui.h>
 
+#include <GLES3/gl3.h>
 using namespace Akkad;
 using namespace Graphics;
 
@@ -12,7 +13,8 @@ public:
 
 	virtual void OnDetach() override {};
 	virtual void OnUpdate() override {
-		//std::cout << "on update" << std::endl;
+		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
 	};
 
 	virtual void RenderImGui() override {

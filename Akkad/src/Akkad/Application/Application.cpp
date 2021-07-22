@@ -47,6 +47,7 @@ namespace Akkad {
 			window = new WebWindow();
 			input = new WebInput();
 			timeManager = new WebTime();
+			targetRenderAPI = RenderAPI::OPENGLES;
 		#endif // AK_PLATFORM_WEB
 
 
@@ -58,8 +59,8 @@ namespace Akkad {
 		m_ApplicationComponents.m_TimeManager = timeManager;
 		m_LoadedGameAssembly = loadedGameAssembly;
 			
-		//m_ApplicationComponents.m_platform = RenderPlatform::Create(RenderAPI::OPENGL);
-		//m_ApplicationComponents.m_platform->Init();
+		m_ApplicationComponents.m_platform = RenderPlatform::Create(targetRenderAPI);
+		m_ApplicationComponents.m_platform->Init();
 
 		m_ApplicationComponents.m_AssetManager = CreateSharedPtr<AssetManager>();
 		m_ApplicationComponents.m_SceneManager = CreateSharedPtr<SceneManager>();
@@ -119,7 +120,7 @@ namespace Akkad {
 		}
 
 		GetInstance().m_ApplicationComponents.m_TimeManager->CalculateDeltaTime();
-		//GetInstance().m_ApplicationComponents.m_platform->GetRenderContext()->SwapWindowBuffers();
+		GetInstance().m_ApplicationComponents.m_platform->GetRenderContext()->SwapWindowBuffers();
 		GetInstance().m_ApplicationComponents.m_Window->OnUpdate();
 	}
 

@@ -61,6 +61,7 @@ namespace Akkad {
 			std::vector<std::pair<std::string, UniformBufferElement>> m_DataMap;
 			unsigned int m_BufferSize = 0;
 			friend class GLUniformBuffer;
+			friend class GLESUniformBuffer;
 		};
 
 		/* -------------- Templates to check if the data type we are passing is supported ------------------- */

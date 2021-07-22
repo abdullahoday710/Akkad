@@ -1,5 +1,6 @@
 #include "RenderPlatform.h"
 #include "API/OpenGL/OpenGLPlatform.h"
+#include "API/OpenGLES/GLESPlatform.h"
 
 namespace Akkad {
 	namespace Graphics {
@@ -8,7 +9,9 @@ namespace Akkad {
 			switch (api)
 			{
 			case RenderAPI::OPENGL:
-				return CreateSharedPtr<OpenGLPlatform>();
+				//return CreateSharedPtr<OpenGLPlatform>();
+			case RenderAPI::OPENGLES:
+				return CreateSharedPtr<GLESPlatform>();
 			default:
 				break;
 			}

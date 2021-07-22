@@ -44,5 +44,5 @@ project "Runtime"
 	configuration "target-emscripten"
 		executable_suffix (".html")
 		filter "configurations:Debug"
-			buildoptions   {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s USE_WEBGL2=1", "-s FULL_ES3=1"}
-			linkoptions    {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s USE_WEBGL2=1", "-s FULL_ES3=1"}
+			buildoptions   {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1"}
+			linkoptions    {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1"}

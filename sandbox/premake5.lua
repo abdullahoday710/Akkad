@@ -3,7 +3,6 @@ project "sandbox"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "off"
-
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
@@ -43,5 +42,5 @@ project "sandbox"
 	configuration "target-emscripten"
 		executable_suffix (".html")
 		filter "configurations:Debug"
-			buildoptions   {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s USE_WEBGL2=1", "-s FULL_ES3=1"}
-			linkoptions    {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s USE_WEBGL2=1", "-s FULL_ES3=1"}
+			buildoptions   {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1"}
+			linkoptions    {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1"}

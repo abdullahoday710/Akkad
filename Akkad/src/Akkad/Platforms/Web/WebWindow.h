@@ -1,5 +1,14 @@
 #pragma once
 #include "Akkad/Application/IWindow.h"
+
+#include "Akkad/PlatformMacros.h"
+#ifdef AK_PLATFORM_WEB
+#include <emscripten.h>
+#include <emscripten/html5.h>
+#endif // AK_PLATFORM_WEB
+
+#include <map>
+
 namespace Akkad {
 
 	class WebWindow : public Window
@@ -15,6 +24,16 @@ namespace Akkad {
 		virtual void* GetNativeWindow();
 		virtual void ToggleFullScreen();
 		virtual bool IsFullScreen();
+	private:
+
+		void MakeWebKeyCodes();
+		static std::function<void(Event&)> m_EventCallbackFN;
+		static EM_BOOL EmKeyDownCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData);
+		static EM_BOOL EmKeyUpCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData);
+		static std::map<size_t, uint32_t> m_KeyCodes;
+		static bool m_KeyStates[512];
+
+		friend class WebInput;
 	};
 }
 

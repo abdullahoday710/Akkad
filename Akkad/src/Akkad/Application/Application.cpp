@@ -11,7 +11,7 @@
 #endif
 
 #ifdef AK_PLATFORM_WEB
-	#include "Akkad/Platforms/Web/WebWindow.h"
+	#include "Akkad/Platforms/Web/WebPlatform.h"
 	#include <emscripten.h>
 #endif
 
@@ -45,6 +45,7 @@ namespace Akkad {
 
 		#ifdef AK_PLATFORM_WEB
 			window = new WebWindow();
+			input = new WebInput();
 		#endif // AK_PLATFORM_WEB
 
 
@@ -56,20 +57,20 @@ namespace Akkad {
 		m_ApplicationComponents.m_TimeManager = timeManager;
 		m_LoadedGameAssembly = loadedGameAssembly;
 			
-		m_ApplicationComponents.m_platform = RenderPlatform::Create(RenderAPI::OPENGL);
-		m_ApplicationComponents.m_platform->Init();
+		//m_ApplicationComponents.m_platform = RenderPlatform::Create(RenderAPI::OPENGL);
+		//m_ApplicationComponents.m_platform->Init();
 
 		m_ApplicationComponents.m_AssetManager = CreateSharedPtr<AssetManager>();
 		m_ApplicationComponents.m_SceneManager = CreateSharedPtr<SceneManager>();
 
-		Renderer2D::Init();
-		m_ApplicationComponents.m_Renderer2D = &Renderer2D::GetInstance();
+		//Renderer2D::Init();
+		//m_ApplicationComponents.m_Renderer2D = &Renderer2D::GetInstance();
 		m_Running = true;
 
 		if (settings.enable_ImGui)
 		{
-			m_ApplicationComponents.m_ImguiHandler = ImGuiHandler::create(RenderAPI::OPENGL);
-			m_ApplicationComponents.m_ImguiHandler->Init();
+			//m_ApplicationComponents.m_ImguiHandler = ImGuiHandler::create(RenderAPI::OPENGL);
+			//m_ApplicationComponents.m_ImguiHandler->Init();
 			m_ImGuiEnabled = true;
 		}
 	}
@@ -101,7 +102,6 @@ namespace Akkad {
 		{
 			auto layer = *it;
 			layer->OnUpdate();
-
 			if (GetInstance().m_ImGuiEnabled)
 			{
 				#ifndef AK_PLATFORM_WEB
@@ -114,9 +114,9 @@ namespace Akkad {
 
 		}
 
-		GetInstance().m_ApplicationComponents.m_TimeManager->CalculateDeltaTime();
-		GetInstance().m_ApplicationComponents.m_platform->GetRenderContext()->SwapWindowBuffers();
-		GetInstance().m_ApplicationComponents.m_Window->OnUpdate();
+		//GetInstance().m_ApplicationComponents.m_TimeManager->CalculateDeltaTime();
+		//GetInstance().m_ApplicationComponents.m_platform->GetRenderContext()->SwapWindowBuffers();
+		//GetInstance().m_ApplicationComponents.m_Window->OnUpdate();
 	}
 
 	void Application::OnEvent(Event& e)

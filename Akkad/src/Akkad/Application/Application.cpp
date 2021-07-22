@@ -1,5 +1,5 @@
 #include "Application.h"
-#include "Time.h"
+#include "TimeManager.h"
 
 #include "Akkad/PlatformMacros.h"
 
@@ -46,6 +46,7 @@ namespace Akkad {
 		#ifdef AK_PLATFORM_WEB
 			window = new WebWindow();
 			input = new WebInput();
+			timeManager = new WebTime();
 		#endif // AK_PLATFORM_WEB
 
 
@@ -69,9 +70,12 @@ namespace Akkad {
 
 		if (settings.enable_ImGui)
 		{
-			//m_ApplicationComponents.m_ImguiHandler = ImGuiHandler::create(RenderAPI::OPENGL);
-			//m_ApplicationComponents.m_ImguiHandler->Init();
-			m_ImGuiEnabled = true;
+			#ifndef AK_PLATFORM_WEB
+				m_ApplicationComponents.m_ImguiHandler = ImGuiHandler::create(RenderAPI::OPENGL);
+				m_ApplicationComponents.m_ImguiHandler->Init();
+				m_ImGuiEnabled = true;
+			#endif
+			
 		}
 	}
 
@@ -114,9 +118,9 @@ namespace Akkad {
 
 		}
 
-		//GetInstance().m_ApplicationComponents.m_TimeManager->CalculateDeltaTime();
+		GetInstance().m_ApplicationComponents.m_TimeManager->CalculateDeltaTime();
 		//GetInstance().m_ApplicationComponents.m_platform->GetRenderContext()->SwapWindowBuffers();
-		//GetInstance().m_ApplicationComponents.m_Window->OnUpdate();
+		GetInstance().m_ApplicationComponents.m_Window->OnUpdate();
 	}
 
 	void Application::OnEvent(Event& e)

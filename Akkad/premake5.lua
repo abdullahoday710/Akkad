@@ -17,6 +17,7 @@ project "Akkad"
     {
      "src/Akkad/Platforms/**.h",
      "src/Akkad/Platforms/**.cpp",
+     "src/Akkad/Graphics/API/**",
     }
     
     includedirs
@@ -54,6 +55,8 @@ project "Akkad"
         {
             "src/Akkad/Platforms/Desktop/Windows/**.h",
             "src/Akkad/Platforms/Desktop/Windows/**.cpp",
+            "src/Akkad/Graphics/API/OpenGL/**.h",
+            "src/Akkad/Graphics/API/OpenGL/**.cpp",
         }
 
         defines

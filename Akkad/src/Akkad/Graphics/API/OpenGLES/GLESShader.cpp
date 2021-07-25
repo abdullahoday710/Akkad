@@ -97,7 +97,7 @@ namespace Akkad {
 			spirv_cross::CompilerGLSL glsl(std::move(spv));
 
 			spirv_cross::CompilerGLSL::Options options;
-			options.version = 400;
+			options.version = 300;
 			options.es = true;
 			glsl.set_common_options(options);
 

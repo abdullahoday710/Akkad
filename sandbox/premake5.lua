@@ -39,8 +39,10 @@ project "sandbox"
 		runtime "Release"
 		optimize "on"
 	
-	configuration "target-emscripten"
-		executable_suffix (".html")
-		filter "configurations:Debug"
-			buildoptions   {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1"}
-			linkoptions    {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1"}
+	filter "configurations:Debug"
+		if _OPTIONS['target-emscripten'] then
+				executable_suffix (".html")
+				buildoptions   {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s FORCE_FILESYSTEM=1", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1"}
+				preload_dir = path.getabsolute("assets/")
+				linkoptions    {"-s NO_DISABLE_EXCEPTION_CATCHING", "-s ALLOW_MEMORY_GROWTH", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1", "--preload-file " .. preload_dir .. "@assets", "-s FORCE_FILESYSTEM=1"}
+		end

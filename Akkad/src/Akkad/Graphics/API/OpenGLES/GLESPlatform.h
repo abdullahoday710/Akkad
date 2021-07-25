@@ -6,7 +6,7 @@ namespace Akkad {
 		class GLESPlatform : public RenderPlatform
 		{
 		public:
-			~GLESPlatform();
+			~GLESPlatform() { delete m_Command; };
 
 			virtual RenderAPI GetRenderAPI() override { return m_API; }
 			virtual RenderCommand* GetRenderCommand() override { return m_Command; }

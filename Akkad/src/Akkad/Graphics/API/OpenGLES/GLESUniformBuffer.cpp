@@ -44,7 +44,7 @@ namespace Akkad {
 		{
 			glBindBuffer(GL_UNIFORM_BUFFER, m_ResourceID);
 			
-			void* data = glMapBufferRange(GL_UNIFORM_BUFFER,0, m_Layout.m_BufferSize, GL_MAP_READ_BIT);
+			void* data = glMapBufferRange(GL_UNIFORM_BUFFER,0, m_Layout.m_BufferSize, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
 			memcpy(data, m_BufferData.data(), m_Layout.m_BufferSize);
 			glUnmapBuffer(GL_UNIFORM_BUFFER);
 

@@ -12,10 +12,6 @@
 
 namespace Akkad {
 	namespace Graphics {
-		GLESPlatform::~GLESPlatform()
-		{
-			delete m_Command;
-		}
 		void GLESPlatform::Init()
 		{
 			auto context = RenderContext::Create();

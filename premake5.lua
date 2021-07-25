@@ -22,8 +22,14 @@ workspace "Akkad"
 	flags
 	{
 		"MultiProcessorCompile"
-    }
-    outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+  }
+    outputdir = ""
+    if _OPTIONS['target-emscripten'] then
+      outputdir = "%{cfg.buildcfg}-Web-%{cfg.architecture}"
+    else
+      outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+    end
+
     IncludeDir = {}
     IncludeDir["Glad"] = "%{wks.location}/3rdparty/glad/include"
     IncludeDir["imgui"] = "%{wks.location}/3rdparty/imgui"

@@ -1,5 +1,5 @@
 #include "GLESIndexBuffer.h"
-#include <glad/glad.h>
+#include <GLES3/gl3.h>
 
 namespace Akkad {
 	namespace Graphics {

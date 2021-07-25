@@ -65,8 +65,8 @@ namespace Akkad {
 		m_ApplicationComponents.m_AssetManager = CreateSharedPtr<AssetManager>();
 		m_ApplicationComponents.m_SceneManager = CreateSharedPtr<SceneManager>();
 
-		//Renderer2D::Init();
-		//m_ApplicationComponents.m_Renderer2D = &Renderer2D::GetInstance();
+		Renderer2D::Init();
+		m_ApplicationComponents.m_Renderer2D = &Renderer2D::GetInstance();
 		m_Running = true;
 
 		if (settings.enable_ImGui)

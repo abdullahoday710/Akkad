@@ -6,21 +6,20 @@
 #include <box2d/b2_world.h>
 namespace Akkad {
 
-	void GameAssembly::Init(ApplicationComponents& appComponents)
+	void GameAssembly::Init(ApplicationComponents* appComponents)
 	{
-		m_ApplicationComponents = &appComponents;
+		m_ApplicationComponents = appComponents;
 
 		// Because we have functions inside the engine static library that directly accesses
 		// the application singleton, we have to make sure that the dll's Application singleton has the initilized application components.
-		Application::GetInstance().m_ApplicationComponents.m_platform = appComponents.m_platform;
-		Application::GetInstance().m_ApplicationComponents.m_AssetManager = appComponents.m_AssetManager;
-		Application::GetInstance().m_ApplicationComponents.m_TimeManager = appComponents.m_TimeManager;
-		Application::GetInstance().m_ApplicationComponents.m_Window = appComponents.m_Window;
+		Application::GetInstance().m_ApplicationComponents.m_platform = appComponents->m_platform;
+		Application::GetInstance().m_ApplicationComponents.m_AssetManager = appComponents->m_AssetManager;
+		Application::GetInstance().m_ApplicationComponents.m_TimeManager = appComponents->m_TimeManager;
+		Application::GetInstance().m_ApplicationComponents.m_Window = appComponents->m_Window;
 
 		// Apply the workaround class, not sure if I will keep it this way.
 		Application::GetInstance().m_LoadedGameAssembly = new FakeLoadedAssembly();
-
-		Graphics::Renderer2D::s_Instance = *appComponents.m_Renderer2D;
+		Graphics::Renderer2D::s_Instance = *appComponents->m_Renderer2D;
 
 		InitBox2D();
 	}
@@ -32,31 +31,35 @@ namespace Akkad {
 
 		b2BodyDef myBodyDef;
 		myBodyDef.type = b2_dynamicBody;
-		myBodyDef.position.Set(0, 0);
+		myBodyDef.position.Set(0.0f, 0.0f);
+
 		myBodyDef.angle = 0;
 		b2PolygonShape boxShape;
-		boxShape.SetAsBox(1, 1);
+
+		boxShape.SetAsBox(1.0f, 1.0f);
 
 		b2FixtureDef boxFixtureDef;
 		boxFixtureDef.shape = &boxShape;
 		boxFixtureDef.density = 1;
 		b2Body* dynamicBody = world->CreateBody(&myBodyDef);
 		b2Body* dynamicBody1 = world->CreateBody(&myBodyDef);
+
 		dynamicBody->CreateFixture(&boxFixtureDef);
 		dynamicBody1->CreateFixture(&boxFixtureDef);
-		world->Step(10, 10, 10);
+
+		world->Step(10.0f, 10, 10);
 
 		delete world;
 	}
 }
 
 
-void Init(Akkad::ApplicationComponents& appComponents)
+void InitGameAssembly(Akkad::ApplicationComponents* appComponents)
 {
 	Akkad::GameAssembly::GetInstance().Init(appComponents);
 }
 
-std::vector<std::string>& GetScripts()
+std::vector<std::string>& GetScriptsGameAssembly()
 {
 	static std::vector<std::string> scripts;
 	scripts.clear();
@@ -71,7 +74,7 @@ std::vector<std::string>& GetScripts()
 	return scripts;
 }
 
-Akkad::ScriptableEntity* InstantiateScript(const char* scriptName)
+Akkad::ScriptableEntity* InstantiateScriptGameAssembly(const char* scriptName)
 {
 	std::string name = scriptName;
 

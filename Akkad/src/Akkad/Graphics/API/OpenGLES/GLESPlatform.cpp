@@ -8,8 +8,7 @@
 #include "GLESFrameBuffer.h"
 #include "GLESUniformBuffer.h"
 
-#include <glad/glad.h>
-
+#include <GLES3/gl3.h>
 namespace Akkad {
 	namespace Graphics {
 		void GLESPlatform::Init()

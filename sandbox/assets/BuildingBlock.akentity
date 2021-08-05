@@ -1,0 +1,42 @@
+{
+    "Scene": {
+        "Name": "BuildingBlock",
+        "Entities": {
+            "1048585": {
+                "Tag": "BuildingBlock",
+                "Transform": {
+                    "Position": [
+                        0.6050714254379272,
+                        -1.3745213747024536,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 1.0,
+                    "Density": 10.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                }
+            }
+        }
+    }
+}

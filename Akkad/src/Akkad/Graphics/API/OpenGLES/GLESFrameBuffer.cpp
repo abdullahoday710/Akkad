@@ -1,7 +1,7 @@
 #include "GLESFrameBuffer.h"
 #include "GLESTexture.h"
 
-#include <glad/glad.h>
+#include <GLES3/gl3.h>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <vector>

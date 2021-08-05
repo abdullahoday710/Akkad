@@ -19,7 +19,11 @@
 #define AK_GAME_ASSEMBLY_API __declspec(dllimport)
 #endif // AK_GAME_ASSEMBLY
 
-#endif // AK_PLATFORM_WINDOWS
+#elif defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#define AK_GAME_ASSEMBLY_API EMSCRIPTEN_KEEPALIVE
+#endif // __EMSCRIPTEN__
+
 
 namespace Akkad {
 
@@ -31,7 +35,7 @@ namespace Akkad {
 			static GameAssembly instance;
 			return instance;
 		}
-		void Init(ApplicationComponents& appComponents);
+		void Init(ApplicationComponents* appComponents);
 		ApplicationComponents* GetApplicationComponents() { return m_ApplicationComponents; }
 		ScriptFactory& GetFactory() { return m_Factory; }
 
@@ -47,7 +51,7 @@ namespace Akkad {
 		GameAssembly() : m_Factory() {}
 		~GameAssembly() {}
 
-		void InitBox2D();
+		AK_GAME_ASSEMBLY_API void InitBox2D();
 
 		ScriptFactory m_Factory;
 		ApplicationComponents* m_ApplicationComponents = nullptr;
@@ -80,8 +84,8 @@ namespace {\
 
 // ----------------- Exports ---------------------
 
-extern "C" AK_GAME_ASSEMBLY_API void Init(Akkad::ApplicationComponents & appComponents);
-extern "C" AK_GAME_ASSEMBLY_API std::vector<std::string> & GetScripts();
-extern "C" AK_GAME_ASSEMBLY_API Akkad::ScriptableEntity * InstantiateScript(const char* scriptName);
+extern "C" AK_GAME_ASSEMBLY_API void InitGameAssembly(Akkad::ApplicationComponents * appComponents);
+extern "C" AK_GAME_ASSEMBLY_API std::vector<std::string> & GetScriptsGameAssembly();
+extern "C" AK_GAME_ASSEMBLY_API Akkad::ScriptableEntity * InstantiateScriptGameAssembly(const char* scriptName);
 
 // -----------------------------------------------

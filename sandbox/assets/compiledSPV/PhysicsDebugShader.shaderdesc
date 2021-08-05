@@ -1,0 +1,4 @@
+#VERTEX_SHADER
+PhysicsDebugShader.vertex.spv
+#FRAGMENT_SHADER
+PhysicsDebugShader.fragment.spv

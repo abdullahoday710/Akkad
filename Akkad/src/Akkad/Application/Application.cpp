@@ -47,6 +47,7 @@ namespace Akkad {
 			window = new WebWindow();
 			input = new WebInput();
 			timeManager = new WebTime();
+			loadedGameAssembly = new WebGameAssembly();
 			targetRenderAPI = RenderAPI::OPENGLES;
 		#endif // AK_PLATFORM_WEB
 

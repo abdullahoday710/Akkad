@@ -1,0 +1,26 @@
+{
+    "material": {
+        "name": "sprite",
+        "shaderID": "4918540d-0a62-4e59-f6d3-6dc4167fabbf",
+        "textures": {
+            "56be0920-7943-1e32-524c-82a24d9719f9": {
+                "samplerName": "main_sprite_tex",
+                "bindingUnit": 0
+            }
+        },
+        "properties": {
+            "color_tint": {
+                "type": "float3",
+                "value": {
+                    "x": 0.4941176474094391,
+                    "y": 1.0,
+                    "z": 0.46666666865348816
+                }
+            },
+            "tintColorIntensity": {
+                "type": "float",
+                "value": 0.0
+            }
+        }
+    }
+}

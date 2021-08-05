@@ -1,0 +1,624 @@
+{
+    "Scene": {
+        "Name": "scene1",
+        "Entities": {
+            "17": {
+                "Tag": "Tree_Base",
+                "Transform": {
+                    "Position": [
+                        3.5269224643707275,
+                        -4.913650989532471,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Trees",
+                    "TileRow": 0.0,
+                    "TileColoumn": 1.0
+                },
+                "children": [
+                    {
+                        "ID": "18"
+                    }
+                ]
+            },
+            "18": {
+                "ParentID": "17",
+                "Tag": "Tree_Top",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.9523341655731201,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 2.0
+                }
+            },
+            "15": {
+                "Tag": "Tree_Base",
+                "Transform": {
+                    "Position": [
+                        1.9442334175109863,
+                        -4.913661479949951,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Trees",
+                    "TileRow": 0.0,
+                    "TileColoumn": 1.0
+                },
+                "children": [
+                    {
+                        "ID": "16"
+                    }
+                ]
+            },
+            "16": {
+                "ParentID": "15",
+                "Tag": "Tree_Top",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.952333927154541,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 2.0
+                }
+            },
+            "13": {
+                "Tag": "Tree_Base",
+                "Transform": {
+                    "Position": [
+                        -2.336366891860962,
+                        -4.953128814697266,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Trees",
+                    "TileRow": 0.0,
+                    "TileColoumn": 1.0
+                },
+                "children": [
+                    {
+                        "ID": "14"
+                    }
+                ]
+            },
+            "14": {
+                "ParentID": "13",
+                "Tag": "Tree_Top",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.8827390670776367,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 2.0
+                }
+            },
+            "11": {
+                "Tag": "text",
+                "GUITextComponent": {
+                    "Text": "Retry",
+                    "FontSize": 55,
+                    "FontAssetID": "9d913827-68e0-3617-fc50-3b06bceb786f",
+                    "Color": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Alignment": "Center",
+                    "FittingMode": "SCALE_TO_FIT"
+                },
+                "RectTransformComponent": {
+                    "WidthConstraint": {
+                        "Type": "RELATIVE_CONSTRAINT",
+                        "Value": 1.0
+                    },
+                    "HeightConstraint": {
+                        "Type": "ASPECT_CONSTRAINT",
+                        "Value": 0.20000000298023224
+                    },
+                    "XConstraint": {
+                        "Type": "CENTER_CONSTRAINT",
+                        "Value": 0.0
+                    },
+                    "YConstraint": {
+                        "Type": "CENTER_CONSTRAINT",
+                        "Value": 0.0
+                    }
+                }
+            },
+            "1048583": {
+                "Tag": "gui container",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "GUIContainerComponent": true,
+                "children": [
+                    {
+                        "ID": "2097158"
+                    },
+                    {
+                        "ID": "0"
+                    }
+                ]
+            },
+            "2097158": {
+                "ParentID": "1048583",
+                "Tag": "text_strikes",
+                "GUITextComponent": {
+                    "Text": "Strikes 0/3",
+                    "FontSize": 64,
+                    "FontAssetID": "9d913827-68e0-3617-fc50-3b06bceb786f",
+                    "Color": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Alignment": "Left",
+                    "FittingMode": "SCALE_TO_FIT"
+                },
+                "RectTransformComponent": {
+                    "WidthConstraint": {
+                        "Type": "RELATIVE_CONSTRAINT",
+                        "Value": 0.30000001192092896
+                    },
+                    "HeightConstraint": {
+                        "Type": "ASPECT_CONSTRAINT",
+                        "Value": 0.15000000596046448
+                    },
+                    "XConstraint": {
+                        "Type": "PIXEL_CONSTRAINT",
+                        "Value": 0.30000001192092896
+                    },
+                    "YConstraint": {
+                        "Type": "PIXEL_CONSTRAINT",
+                        "Value": 45.29999923706055
+                    }
+                }
+            },
+            "0": {
+                "ParentID": "1048583",
+                "Tag": "text_GameOver",
+                "GUITextComponent": {
+                    "Text": "Game over !",
+                    "FontSize": 64,
+                    "FontAssetID": "9d913827-68e0-3617-fc50-3b06bceb786f",
+                    "Color": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Alignment": "Center",
+                    "FittingMode": "SCALE_TO_FIT"
+                },
+                "RectTransformComponent": {
+                    "WidthConstraint": {
+                        "Type": "RELATIVE_CONSTRAINT",
+                        "Value": 0.30000001192092896
+                    },
+                    "HeightConstraint": {
+                        "Type": "ASPECT_CONSTRAINT",
+                        "Value": 1.0
+                    },
+                    "XConstraint": {
+                        "Type": "CENTER_CONSTRAINT",
+                        "Value": 0.0
+                    },
+                    "YConstraint": {
+                        "Type": "CENTER_CONSTRAINT",
+                        "Value": 0.0
+                    }
+                }
+            },
+            "1": {
+                "Tag": "Ground",
+                "Transform": {
+                    "Position": [
+                        -0.5700260400772095,
+                        -5.851286888122559,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        21.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Default",
+                    "TileRow": 5.0,
+                    "TileColoumn": 12.0
+                },
+                "RigidBody2D": {
+                    "Friction": 100000.0,
+                    "Density": 0.0,
+                    "Shape": "Polygon",
+                    "Type": "Static"
+                }
+            },
+            "4": {
+                "Tag": "CraneHandle",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        1.0817737579345703,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Default",
+                    "TileRow": 7.0,
+                    "TileColoumn": 3.0
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 0.0,
+                    "Shape": "Polygon",
+                    "Type": "Kinematic"
+                },
+                "HingeJoint2D": {
+                    "BodyA": 4,
+                    "BodyB": 5,
+                    "LocalAnchorA": [
+                        0.0,
+                        -0.5
+                    ],
+                    "LocalAnchorB": [
+                        0.0,
+                        0.5
+                    ],
+                    "CollideConnected": true,
+                    "EnableMotor": true,
+                    "MotorSpeed": 100.0,
+                    "MaxMotorTorque": 0.0
+                },
+                "children": [
+                    {
+                        "ID": "2"
+                    }
+                ]
+            },
+            "2": {
+                "ParentID": "4",
+                "Tag": "Camera",
+                "Transform": {
+                    "Position": [
+                        0.0484289824962616,
+                        -3.772838592529297,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Script": {
+                    "Name": "CameraController"
+                },
+                "CameraComponent": {
+                    "Camera": {
+                        "Projection": "Orthographic"
+                    }
+                }
+            },
+            "5": {
+                "Tag": "Crane",
+                "Transform": {
+                    "Position": [
+                        -0.017336487770080566,
+                        -0.19354236125946045,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Default",
+                    "TileRow": 7.0,
+                    "TileColoumn": 3.0
+                },
+                "Script": {
+                    "Name": "CraneController"
+                },
+                "RigidBody2D": {
+                    "Friction": 1.0,
+                    "Density": 1.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                },
+                "HingeJoint2D": {
+                    "BodyA": 5,
+                    "BodyB": 1048585,
+                    "LocalAnchorA": [
+                        0.0,
+                        -0.5
+                    ],
+                    "LocalAnchorB": [
+                        0.0,
+                        0.5
+                    ],
+                    "CollideConnected": false,
+                    "EnableMotor": true,
+                    "MotorSpeed": 1000.0,
+                    "MaxMotorTorque": 1.0
+                }
+            },
+            "8": {
+                "Tag": "Base",
+                "Transform": {
+                    "Position": [
+                        -4.470348358154297e-07,
+                        -5.102504730224609,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        2.0,
+                        0.5,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Default",
+                    "TileRow": 9.0,
+                    "TileColoumn": 6.0
+                },
+                "RigidBody2D": {
+                    "Friction": 10000.0,
+                    "Density": 0.0,
+                    "Shape": "Polygon",
+                    "Type": "Static"
+                }
+            },
+            "1048585": {
+                "Tag": "BuildingBlock",
+                "Transform": {
+                    "Position": [
+                        -0.0033800899982452393,
+                        -1.3745213747024536,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 1.0,
+                    "Density": 10.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                }
+            },
+            "3": {
+                "Tag": "GameState",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Script": {
+                    "Name": "GameStateScript"
+                }
+            },
+            "10": {
+                "Tag": "Tree_Base",
+                "Transform": {
+                    "Position": [
+                        -3.952993631362915,
+                        -4.882030010223389,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Trees",
+                    "TileRow": 0.0,
+                    "TileColoumn": 1.0
+                },
+                "children": [
+                    {
+                        "ID": "12"
+                    }
+                ]
+            },
+            "12": {
+                "ParentID": "10",
+                "Tag": "Tree_Top",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.9430191516876221,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 2.0
+                }
+            }
+        }
+    }
+}

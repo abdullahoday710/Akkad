@@ -64,17 +64,21 @@ project "Akkad"
         }
     
     configuration "target-emscripten"
-        excludes
-        {
+    excludes
+    {
         "src/Akkad/Platforms/**.h",
         "src/Akkad/Platforms/**.cpp",
         "src/Akkad/Graphics/API/**",
-        }
-        files {
-            "src/Akkad/Platforms/Web/**.h",
-            "src/Akkad/Platforms/Web/**.cpp",
-            "src/Akkad/Graphics/API/OpenGLES/**"
-        }
+    }
+    files
+    {
+        "src/Akkad/Platforms/Web/**.h",
+        "src/Akkad/Platforms/Web/**.cpp",
+        "src/Akkad/Graphics/API/OpenGLES/**"
+    }
+    
+    buildoptions{"-fPIC "};
+    linkoptions{"-fPIC "};
 
 
 

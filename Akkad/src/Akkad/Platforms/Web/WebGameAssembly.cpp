@@ -5,11 +5,12 @@
 #include <dlfcn.h>
 
 #ifndef AK_GAME_ASSEMBLY
-EM_JS(void, doLoadLibrary, (), {
+EM_JS(int, doLoadLibrary, (), {
 	Asyncify.handleAsync(async() => {
 	try {
 		var handle = await loadDynamicLibrary('GameAssembly.wasm', { loadAsync: true, global : true, nodelete : true, fs : FS });
 		console.log(handle);
+		return handle;
 	}
 	catch (error) {
 		console.log(error);
@@ -23,7 +24,7 @@ namespace Akkad {
 	bool WebGameAssembly::LoadAssembly(const char* filename)
 	{
 		#ifndef AK_GAME_ASSEMBLY
-			doLoadLibrary();
+			m_Handle = (void*)doLoadLibrary();
 		#endif
 		return true;
 	}

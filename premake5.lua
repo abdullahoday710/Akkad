@@ -54,8 +54,8 @@ workspace "Akkad"
     group ""
     
     include "Akkad"
-    include "sandbox"
-    --include "Runtime"
+    --include "sandbox"
+    include "Runtime"
     
     if not _OPTIONS['target-emscripten'] then
       include "Editor"

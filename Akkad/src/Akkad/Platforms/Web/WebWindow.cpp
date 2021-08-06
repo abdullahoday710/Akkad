@@ -45,11 +45,11 @@ namespace Akkad {
 	}
 	glm::vec2 WebWindow::GetWindowRectMin()
 	{
-		return glm::vec2();
+		return {0,0};
 	}
 	glm::vec2 WebWindow::GetWindowRectMax()
 	{
-		return glm::vec2();
+		return {GetWidth(), GetHeight()};
 	}
 	void* WebWindow::GetNativeWindow()
 	{

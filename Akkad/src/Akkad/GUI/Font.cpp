@@ -104,7 +104,7 @@ namespace Akkad {
 			/* uploading bitmap atlas to a GPU texture */
 			Graphics::TextureDescriptor desc;
 			desc.Type = Graphics::TextureType::TEXTURE2D;
-			desc.Format = Graphics::TextureFormat::R16;
+			desc.Format = Graphics::TextureFormat::SINGLE_CHANNEL;
 			desc.Width = texture_size;
 			desc.Height = texture_size;
 			m_FontAtlasSize.x = texture_size;

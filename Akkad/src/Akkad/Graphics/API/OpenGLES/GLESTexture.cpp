@@ -26,7 +26,7 @@ namespace Akkad {
 			InitilizeTexture();
 
 			glBindTexture(textureType, m_ResourceID);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, desc.Width, desc.Height, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
+			glTexImage2D(textureType, 0, textureFormat, desc.Width, desc.Height, 0, textureFormat, GL_UNSIGNED_BYTE, 0);
 			glBindTexture(textureType, 0);
 
 		}
@@ -99,7 +99,7 @@ namespace Akkad {
 			unsigned int textureFormat = TextureFormatToGLFormat(m_desc.Format);
 			glBindTexture(textureType, m_ResourceID);
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			glTexSubImage2D(textureType, 0, x, y, width, height, GL_RED, GL_UNSIGNED_BYTE, data);
+			glTexSubImage2D(textureType, 0, x, y, width, height, textureFormat, GL_UNSIGNED_BYTE, data);
 			glBindTexture(textureType, 0);
 		}
 
@@ -127,6 +127,8 @@ namespace Akkad {
 				return GL_R8;
 			case TextureFormat::R32_FLOAT:
 				return GL_R32F;
+			case TextureFormat::SINGLE_CHANNEL:
+				return GL_LUMINANCE;
 			default:
 				break;
 			}

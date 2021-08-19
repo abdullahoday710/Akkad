@@ -32,6 +32,8 @@ namespace Akkad {
 		static EM_BOOL EmKeyUpCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData);
 		static std::map<size_t, uint32_t> m_KeyCodes;
 		static bool m_KeyStates[512];
+		unsigned int m_Width = 0;
+		unsigned int m_Height = 0;
 
 		friend class WebInput;
 	};

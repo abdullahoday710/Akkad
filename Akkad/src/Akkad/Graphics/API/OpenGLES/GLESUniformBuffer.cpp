@@ -11,6 +11,7 @@ namespace Akkad {
 
 		GLESUniformBuffer::GLESUniformBuffer(UniformBufferLayout layout)
 		{
+			std::cout << "creating new uniform buffer" << std::endl;
 			m_Layout = layout;
 			glGenBuffers(1, &m_ResourceID);
 
@@ -33,6 +34,7 @@ namespace Akkad {
 		GLESUniformBuffer::~GLESUniformBuffer()
 		{
 			glDeleteBuffers(1, &m_ResourceID);
+			s_LastBindingPoint -= 1;
 		}
 
 		UniformBufferLayout& GLESUniformBuffer::GetLayout()

@@ -16,12 +16,20 @@ namespace Akkad {
 		MakeWebKeyCodes();
 		emscripten_set_keypress_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, WebWindow::EmKeyDownCallback);
 		emscripten_set_keyup_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, WebWindow::EmKeyUpCallback);
-
+		m_Width = width;
+		m_Height = height;
 		return 0;
 	}
 
 	void WebWindow::OnUpdate()
 	{
+		#ifndef AK_GAME_ASSEMBLY
+			int width;
+			int height;
+			emscripten_get_canvas_element_size("#canvas", &width, &height);
+			m_Width = width;
+			m_Height = height;
+		#endif
 	}
 
 	void WebWindow::SetEventCallback(std::function<void(Event&)> func)
@@ -31,17 +39,11 @@ namespace Akkad {
 
 	unsigned int WebWindow::GetWidth()
 	{
-		int width = 0;
-		int height = 0;
-		emscripten_get_canvas_element_size("#canvas", &width, &height);
-		return width;
+		return m_Width;
 	}
 	unsigned int WebWindow::GetHeight()
 	{
-		int width = 0;
-		int height = 0;
-		emscripten_get_canvas_element_size("#canvas", &width, &height);
-		return height;
+		return m_Height;
 	}
 	glm::vec2 WebWindow::GetWindowRectMin()
 	{

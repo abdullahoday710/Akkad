@@ -33,6 +33,7 @@ namespace Akkad {
 		GLUniformBuffer::~GLUniformBuffer()
 		{
 			glDeleteBuffers(1, &m_ResourceID);
+			s_LastBindingPoint -= 1;
 		}
 
 		UniformBufferLayout& GLUniformBuffer::GetLayout()

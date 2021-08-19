@@ -8,7 +8,7 @@ namespace Akkad {
 
 	void SceneManager::LoadScene(std::string sceneName)
 	{
-		if (m_ActiveScene != nullptr)
+		if (m_ActiveScene)
 		{
 			m_ActiveScene->Stop();
 		}

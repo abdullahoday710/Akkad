@@ -56,7 +56,8 @@ namespace Akkad {
 			}
 
 			std::vector<std::pair<std::string, UniformBufferElement>>& GetElements() { return m_DataMap; }
-
+			bool UseBindingPointCounter = true;
+			
 		private:
 			std::vector<std::pair<std::string, UniformBufferElement>> m_DataMap;
 			unsigned int m_BufferSize = 0;
@@ -133,12 +134,18 @@ namespace Akkad {
 
 		class UniformBuffer {
 		public:
+			enum RESERVED_BINDING_POINTS
+			{
+				_POINTS_MIN, MATERIAL_POINT, _POINTS_MAX
+			};
+
 			virtual UniformBufferLayout& GetLayout() = 0;
 
 			virtual std::string GetName() { return ""; };
 			virtual void SetName(std::string name) {};
 
 			virtual void ResetData() = 0;
+			virtual void SetReservedBindingPoint(RESERVED_BINDING_POINTS point) = 0;
 
 			template<typename T>
 			void SetData(std::string index, T& data)

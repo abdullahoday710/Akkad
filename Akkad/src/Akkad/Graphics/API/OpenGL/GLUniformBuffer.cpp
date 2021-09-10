@@ -25,15 +25,20 @@ namespace Akkad {
 				m_BufferData.push_back('\0'); // pushing "empty" bytes into the buffer
 			}
 
-			glBindBufferRange(GL_UNIFORM_BUFFER, s_LastBindingPoint, m_ResourceID, 0 , m_Layout.m_BufferSize);
-			m_BindingPoint = s_LastBindingPoint;
-			s_LastBindingPoint += 1;
+			if (m_Layout.UseBindingPointCounter)
+			{
+				SetBindingPoint();
+			}
+			
 		}
 
 		GLUniformBuffer::~GLUniformBuffer()
 		{
+			if (m_Layout.UseBindingPointCounter)
+			{
+				s_LastBindingPoint -= 1;
+			}
 			glDeleteBuffers(1, &m_ResourceID);
-			s_LastBindingPoint -= 1;
 		}
 
 		UniformBufferLayout& GLUniformBuffer::GetLayout()
@@ -52,9 +57,33 @@ namespace Akkad {
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		}
 
+		void GLUniformBuffer::SetReservedBindingPoint(RESERVED_BINDING_POINTS point)
+		{
+			AK_ASSERT(point != RESERVED_BINDING_POINTS::_POINTS_MIN, "Trying to set an invalid binding point '_POINTS_MIN !'");
+			AK_ASSERT(point != RESERVED_BINDING_POINTS::_POINTS_MAX, "Trying to set an invalid binding point '_POINTS_MAX !'");
+			glBindBufferRange(GL_UNIFORM_BUFFER, point, NULL, 0, 0);
+			glBindBufferRange(GL_UNIFORM_BUFFER, point, m_ResourceID, 0, m_Layout.m_BufferSize);
+			m_BindingPoint = point;
+		}
+
 		int roundUp(int numToRound, int multiple)
 		{
 			return ((numToRound + multiple - 1) / multiple) * multiple;
+		}
+
+		void GLUniformBuffer::SetBindingPoint()
+		{
+			if (s_LastBindingPoint >= RESERVED_BINDING_POINTS::_POINTS_MIN && s_LastBindingPoint <= RESERVED_BINDING_POINTS::_POINTS_MAX)
+			{
+				s_LastBindingPoint += 1;
+				SetBindingPoint();
+			}
+			else
+			{
+				glBindBufferRange(GL_UNIFORM_BUFFER, s_LastBindingPoint, m_ResourceID, 0, m_Layout.m_BufferSize);
+				m_BindingPoint = s_LastBindingPoint;
+				s_LastBindingPoint += 1;
+			}
 		}
 
 		void GLUniformBuffer::CookLayout()

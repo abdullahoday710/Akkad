@@ -20,10 +20,10 @@ namespace Akkad {
 
 		auto window = Application::GetInstance().GetWindow();
 
-		Graphics::Rect windowRect;
-		windowRect.SetBounds(window->GetWindowRectMin(), window->GetWindowRectMax());
-		m_ActiveScene->SetViewportRect(windowRect);
-		m_ActiveScene->SetViewportSize({ window->GetWidth(), window->GetHeight() });
+		//Graphics::Rect windowRect;
+		//windowRect.SetBounds(window->GetWindowRectMin(), window->GetWindowRectMax());
+		//m_ActiveScene->SetViewportRect(windowRect);
+		//m_ActiveScene->SetViewportSize({ window->GetWidth(), window->GetHeight() });
 
 		m_ActiveScene->Start();
 	}

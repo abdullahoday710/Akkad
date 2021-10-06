@@ -17,8 +17,10 @@ namespace Akkad {
 			virtual void ResetData() override;
 
 			unsigned int GetBindingPoint() { return m_BindingPoint; };
+			virtual void SetReservedBindingPoint(RESERVED_BINDING_POINTS point) override;
 
 		private:
+			void SetBindingPoint();
 			void CookLayout(); // cooks the layout according to the std140 specs
 			unsigned int GetBaseAlignmentSTD140(ShaderDataType type);
 			unsigned int m_ResourceID;

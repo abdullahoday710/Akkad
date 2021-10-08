@@ -73,14 +73,45 @@ namespace Akkad {
 			ImGui::ListBoxFooter();
 		}
 
+		static const char* Platforms[] = { "Windows", "Web" };
+		auto current_platform_str = ExportPlatformToStr(m_TargetPlatform);
+		static const char* selected_platform = current_platform_str.c_str();
+
+		if (ImGui::BeginCombo("Platform", selected_platform))
+		{
+			for (int n = 0; n < IM_ARRAYSIZE(Platforms); n++)
+			{
+				bool is_selected = (selected_platform == Platforms[n]);
+				if (ImGui::Selectable(Platforms[n], is_selected))
+				{
+					selected_platform = Platforms[n];
+					if (selected_platform == "Windows")
+					{
+						m_TargetPlatform = ExportPlatform::WINDOWS;
+					}
+					else if (selected_platform == "Web")
+					{
+						m_TargetPlatform = ExportPlatform::WEB;
+					}
+	
+				}
+				if (is_selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+
 		if (ImGui::Button("Begin export"))
 		{
 			if (!export_path.empty())
 			{
 				WritePackageInfo(export_path, selected_scenes, startup_scene);
 				CopyRuntimeExecutable(export_path);
-				CopyAssets(export_path);
 				CopyGameAssembly(export_path);
+				CopyAssets(export_path);
+
 			}
 		}
 		ImGui::End();
@@ -139,43 +170,123 @@ namespace Akkad {
 		auto& project = EditorLayer::GetActiveProject();
 
 		std::string projectName = project.projectData["project"]["name"];
-		std::string srcpath = "Runtime/Runtime.exe";
-		std::string destpath = exportPath + "/" + projectName + ".exe";
-
-		if (std::filesystem::exists(destpath))
+		if (m_TargetPlatform == ExportPlatform::WINDOWS)
 		{
-			std::filesystem::remove(destpath);
+			std::string srcpath = "Runtime/Runtime.exe";
+			std::string destpath = exportPath + "/" + projectName + ".exe";
+
+			if (std::filesystem::exists(destpath))
+			{
+				std::filesystem::remove(destpath);
+			}
+			std::filesystem::copy(srcpath, destpath);
 		}
-		std::filesystem::copy(srcpath, destpath);
+
+		else if (m_TargetPlatform == ExportPlatform::WEB)
+		{
+			std::string htmlsrcpath = "Runtime/Web/Runtime.html";
+			std::string htmldestpath = exportPath + "/" + projectName + ".html";
+			
+			std::string jsSrcPath = "Runtime/Web/Runtime.js";
+			std::string jsDestPath = exportPath + "/" + "Runtime.js";
+
+			std::string wasmSrcPath = "Runtime/Web/Runtime.wasm";
+			std::string wasmDestPath = exportPath + "/" + "Runtime.wasm";
+
+			if (std::filesystem::exists(htmldestpath))
+			{
+				std::filesystem::remove(htmldestpath);
+			}
+
+			if (std::filesystem::exists(wasmDestPath))
+			{
+				std::filesystem::remove(wasmDestPath);
+			}
+
+			if (std::filesystem::exists(jsDestPath))
+			{
+				std::filesystem::remove(jsDestPath);
+			}
+
+			std::filesystem::copy(htmlsrcpath, htmldestpath);
+			std::filesystem::copy(jsSrcPath, jsDestPath);
+			std::filesystem::copy(wasmSrcPath, wasmDestPath);
+		}
+
+
 	}
 
 	void ProjectExportPanel::CopyAssets(std::string exportPath)
 	{
 		auto& project = EditorLayer::GetActiveProject();
-		
-		std::string assetsSrcPath = project.GetAssetsPath().string();
-		std::string assetsDestPath = exportPath + "/assets";
-
-		if (std::filesystem::exists(assetsDestPath))
+		if (m_TargetPlatform == ExportPlatform::WINDOWS)
 		{
-			std::filesystem::remove_all(assetsDestPath);
+			std::string assetsSrcPath = project.GetAssetsPath().string();
+			std::string assetsDestPath = exportPath + "/assets";
+
+			if (std::filesystem::exists(assetsDestPath))
+			{
+				std::filesystem::remove_all(assetsDestPath);
+			}
+			std::filesystem::copy(assetsSrcPath, assetsDestPath, std::filesystem::copy_options::recursive);
 		}
-		std::filesystem::copy(assetsSrcPath, assetsDestPath, std::filesystem::copy_options::recursive);
+
+		if (m_TargetPlatform == ExportPlatform::WEB)
+		{
+			std::string emsdk_path = std::getenv("AK_EMSDK");
+			std::string file_packager_path = emsdk_path + "/upstream/emscripten/file_packager.py ";
+
+			std::string assets_preload_export_path = exportPath + "/assets_preload ";
+			std::string package_info_preload = "--preload "+exportPath+"/package_info.akpkg@/ ";
+			std::string game_assembly_preload = "--preload " + project.GetProjectDirectory().string() + "GameAssembly/build/GameAssembly.js@/ ";
+			std::string assets_preload = "--preload " + project.GetAssetsPath().string() + "@assets ";
+			std::string js_output = "--js-output=" + exportPath + "/assets_preload.js ";
+
+			std::string package_files_command = file_packager_path + assets_preload_export_path + package_info_preload + game_assembly_preload + assets_preload + js_output;
+			system(package_files_command.c_str());
+		}
+		
+
 	}
 
 	void ProjectExportPanel::CopyGameAssembly(std::string exportPath)
 	{
 		auto& project = EditorLayer::GetActiveProject();
 		std::string assemblySrcPath = project.GetProjectDirectory().string();
-		assemblySrcPath += "/GameAssembly/build/GameAssembly.dll";
+		std::string assemblyDestPath;
 
-		std::string assemblyDestPath = exportPath + "/GameAssembly.dll";
-
-		if (std::filesystem::exists(assemblyDestPath))
+		if (m_TargetPlatform == ExportPlatform::WINDOWS)
 		{
-			std::filesystem::remove(assemblyDestPath);
-		}
-		std::filesystem::copy(assemblySrcPath, assemblyDestPath);
+			assemblySrcPath += "/GameAssembly/build/GameAssembly.dll";
 
+			assemblyDestPath = exportPath + "/GameAssembly.dll";
+
+			if (std::filesystem::exists(assemblyDestPath))
+			{
+				std::filesystem::remove(assemblyDestPath);
+			}
+			std::filesystem::copy(assemblySrcPath, assemblyDestPath);
+
+		}
+
+		else if (m_TargetPlatform == ExportPlatform::WEB)
+		{
+			std::string compilePath = assemblySrcPath + "GameAssembly";
+			std::string compileCommand = "cd " + compilePath + "&& ninja";
+			system(compileCommand.c_str());
+
+		}
+
+
+	}
+	std::string ProjectExportPanel::ExportPlatformToStr(ExportPlatform platform)
+	{
+		switch (platform)
+		{
+		case ExportPlatform::WINDOWS:
+			return "Windows";
+		case ExportPlatform::WEB:
+			return "Web";
+		}
 	}
 }

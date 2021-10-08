@@ -8,7 +8,7 @@
 EM_JS(int, doLoadLibrary, (), {
 	Asyncify.handleAsync(async() => {
 	try {
-		var handle = await loadDynamicLibrary('GameAssembly.wasm', { loadAsync: true, global : true, nodelete : true, fs : FS });
+		var handle = await loadDynamicLibrary('GameAssembly.js', { loadAsync: true, global : true, nodelete : true, fs : FS });
 		console.log(handle);
 		return handle;
 	}

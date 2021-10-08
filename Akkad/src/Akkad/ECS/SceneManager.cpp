@@ -8,7 +8,7 @@ namespace Akkad {
 
 	void SceneManager::LoadScene(std::string sceneName)
 	{
-		if (m_ActiveScene != nullptr)
+		if (m_ActiveScene)
 		{
 			m_ActiveScene->Stop();
 		}
@@ -24,6 +24,8 @@ namespace Akkad {
 		windowRect.SetBounds(window->GetWindowRectMin(), window->GetWindowRectMax());
 		m_ActiveScene->SetViewportRect(windowRect);
 		m_ActiveScene->SetViewportSize({ window->GetWidth(), window->GetHeight() });
+
+
 
 		m_ActiveScene->Start();
 	}

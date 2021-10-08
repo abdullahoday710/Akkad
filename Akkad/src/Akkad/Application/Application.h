@@ -3,8 +3,8 @@
 
 #include "Layer.h"
 
+	class SandboxLayer;
 namespace Akkad {
-
 	/* ---- Forward declarations ---- */
 	class AssetManager;
 	class SceneManager;
@@ -76,6 +76,8 @@ namespace Akkad {
 
 		void InitImpl(ApplicationSettings& settings);
 		void RunImpl();
+		static void Update();
+
 		bool m_Running = false;
 		bool m_ImGuiEnabled = false;
 
@@ -104,6 +106,7 @@ namespace Akkad {
 		friend class GameAssemblyHandler;
 		friend class GameAssembly;
 		friend class RuntimeLayer;
+		friend class ::SandboxLayer;
 		
 	};
 }

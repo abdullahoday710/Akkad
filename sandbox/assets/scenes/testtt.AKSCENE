@@ -1,0 +1,59 @@
+{
+    "Scene": {
+        "Name": "testtt",
+        "Entities": {
+            "1ddfa3e2-f320-8aa4-e9c3-bfa4ab9b1fd4": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            },
+            "4385b633-6ec6-4a70-5cda-716d1fc3372b": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        1.3287184238433838,
+                        0.0,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        0.9999963641166687,
+                        0.9999964237213135,
+                        0.9999963641166687
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            }
+        }
+    }
+}

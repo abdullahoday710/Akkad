@@ -1,0 +1,31 @@
+{
+    "material": {
+        "name": "mat_tileset",
+        "shaderID": "4918540d-0a62-4e59-f6d3-6dc4167fabbf",
+        "textures": {
+            "ba662067-2152-d640-3db3-30bc25ea85a4": {
+                "samplerName": "main_sprite_tex",
+                "bindingUnit": 0
+            }
+        },
+        "properties": {
+            "color_tint": {
+                "type": "float3",
+                "value": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                }
+            },
+            "tintColorIntensity": {
+                "type": "float",
+                "value": 0.0
+            }
+        },
+        "RenderFlags": {
+            "BlendEnable": true,
+            "BlendInverseAlpha": true,
+            "BlendAlphaAdd": false
+        }
+    }
+}

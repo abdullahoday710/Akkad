@@ -6,24 +6,28 @@
 #include <fstream>
 #include <sstream>
 
+#include <algorithm>
 namespace Akkad {
 	namespace Graphics {
 
-		std::vector<unsigned int> Shader::LoadSpirV(const char* spirvPath)
+		std::vector<unsigned int> Shader::LoadSpirV(std::string spirvPath)
 		{
 			std::vector<unsigned int> spirv_data;
-
-			std::ifstream spirv_file;
-			spirv_file.open(spirvPath, std::ios::in);
+			spirvPath.erase(std::remove_if(spirvPath.begin(), spirvPath.end(), isspace), spirvPath.end());
+			std::ifstream spirv_file(spirvPath);
 
 			std::string line;
 			while (std::getline(spirv_file, line))
 			{
-				std::istringstream iss(line);
-				unsigned int value;
-				if (!(iss >> value)) { break; }
+				if (!line.empty())
+				{
+					std::istringstream iss(line);
+					unsigned int value = 0;
+					if (!(iss >> value)) { break; }
 
-				spirv_data.push_back(value);
+					spirv_data.push_back(value);
+				}
+
 			}
 
 			return spirv_data;
@@ -81,9 +85,8 @@ namespace Akkad {
 			std::string vertexAbsolutePath = assetRootPath + vertexPath.str();
 			std::string fragmentAbsolutePath = assetRootPath + fragmentPath.str();
 
-			desc.VertexData = LoadSpirV(vertexAbsolutePath.c_str());
-			desc.FragmentData = LoadSpirV(fragmentAbsolutePath.c_str());
-
+			desc.VertexData = LoadSpirV(vertexAbsolutePath);
+			desc.FragmentData = LoadSpirV(fragmentAbsolutePath);
 			return desc;
 		}
 

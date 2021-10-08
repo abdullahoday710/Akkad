@@ -1,0 +1,125 @@
+{
+    "Scene": {
+        "Name": "scene2",
+        "Entities": {
+            "0": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "Script": {
+                    "Name": "InstantiateTest"
+                }
+            },
+            "1": {
+                "Tag": "gui container",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "GUIContainerComponent": true,
+                "children": [
+                    {
+                        "ID": "2"
+                    }
+                ]
+            },
+            "2": {
+                "ParentID": "1",
+                "Tag": "text",
+                "GUITextComponent": {
+                    "Text": "scene 2",
+                    "FontSize": 64,
+                    "FontAssetID": "9d913827-68e0-3617-fc50-3b06bceb786f",
+                    "Color": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Alignment": "Left",
+                    "FittingMode": "KEEP_FONT_SIZE"
+                },
+                "RectTransformComponent": {
+                    "WidthConstraint": {
+                        "Type": "RELATIVE_CONSTRAINT",
+                        "Value": 0.30000001192092896
+                    },
+                    "HeightConstraint": {
+                        "Type": "ASPECT_CONSTRAINT",
+                        "Value": 1.0
+                    },
+                    "XConstraint": {
+                        "Type": "CENTER_CONSTRAINT",
+                        "Value": 0.0
+                    },
+                    "YConstraint": {
+                        "Type": "CENTER_CONSTRAINT",
+                        "Value": 0.0
+                    }
+                }
+            },
+            "3": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 0.0,
+                    "Shape": "Polygon",
+                    "Type": "Static"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,4 @@
+#VERTEX_SHADER
+r2d_texturedRect.vertex.spv
+#FRAGMENT_SHADER
+r2d_texturedRect.fragment.spv

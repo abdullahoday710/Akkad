@@ -15,12 +15,16 @@ namespace Akkad {
 		virtual bool IsOpen() override { return showPanel; };
 
 		virtual std::string GetName() override { return "ProjectExportPanel"; }
+		enum class ExportPlatform {WINDOWS, WEB};
 
 	private:
 		void WritePackageInfo(std::string exportPath, std::vector<std::string> scenes, std::string startup_scene);
 		void CopyRuntimeExecutable(std::string exportPath);
 		void CopyAssets(std::string exportPath);
 		void CopyGameAssembly(std::string exportPath);
+
+		ExportPlatform m_TargetPlatform = ExportPlatform::WINDOWS;
+		std::string ExportPlatformToStr(ExportPlatform platform);
 		static bool showPanel;
 
 	};

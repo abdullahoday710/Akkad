@@ -23,6 +23,7 @@ namespace Akkad {
 		class RenderCommand
 		{
 		public:
+			virtual ~RenderCommand() {};
 			virtual void Clear() = 0;
 			virtual void SetClearColor(float r, float g, float b) = 0;
 			virtual void DrawArrays(PrimitiveType type, unsigned int count) = 0;

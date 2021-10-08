@@ -44,6 +44,7 @@ namespace Akkad {
 			{
 				if (m_PropertyBuffer != nullptr)
 				{
+					m_PropertyBuffer->SetReservedBindingPoint(UniformBuffer::RESERVED_BINDING_POINTS::MATERIAL_POINT);
 					m_Shader->SetUniformBuffer(m_PropertyBuffer);
 				}
 				m_Shader->Bind();
@@ -350,6 +351,7 @@ namespace Akkad {
 							unsigned member_count = type.member_types.size();
 
 							UniformBufferLayout uniformLayout;
+							uniformLayout.UseBindingPointCounter = false;
 							for (unsigned i = 0; i < member_count; i++)
 							{
 								const spirv_cross::SPIRType& member_type = shader->get_type(type.member_types[i]);

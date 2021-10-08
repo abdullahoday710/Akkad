@@ -1,0 +1,65 @@
+{
+    "Scene": {
+        "Name": "Tree_Base",
+        "Entities": {
+            "10": {
+                "Tag": "Tree_Base",
+                "Transform": {
+                    "Position": [
+                        -3.952993631362915,
+                        -4.882030010223389,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Trees",
+                    "TileRow": 0.0,
+                    "TileColoumn": 1.0
+                },
+                "children": [
+                    {
+                        "ID": "12"
+                    }
+                ]
+            },
+            "12": {
+                "ParentID": "10",
+                "Tag": "Tree_Top",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.9430191516876221,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "0c0c81ff-241f-5864-e5f1-4aac4e6fa72b",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 2.0
+                }
+            }
+        }
+    }
+}

@@ -21,7 +21,7 @@ namespace Akkad {
 			else
 			{
 				std::string msg = "Entity does not have the component : " + std::string(typeid(T).name());
-				throw std::exception(msg.c_str());
+				throw msg.c_str();
 			}
 		}
 

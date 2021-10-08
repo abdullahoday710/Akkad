@@ -1,5 +1,5 @@
 #include "Application.h"
-#include "Time.h"
+#include "TimeManager.h"
 
 #include "Akkad/PlatformMacros.h"
 
@@ -8,6 +8,11 @@
 	#include "Akkad/Platforms/Desktop/Windows/Win32GameAssembly.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32Time.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32Input.h"
+#endif
+
+#ifdef AK_PLATFORM_WEB
+	#include "Akkad/Platforms/Web/WebPlatform.h"
+	#include <emscripten.h>
 #endif
 
 #include "Akkad/Logging.h"
@@ -24,21 +29,38 @@ namespace Akkad {
 
 	void Application::InitImpl(ApplicationSettings& settings)
 	{
+		Window* window;
+		Input* input;
+		TimeManager* timeManager;
+		LoadedGameAssembly* loadedGameAssembly;
+		EventFN event_cb = std::bind(&Application::OnEvent, this, std::placeholders::_1);
+		RenderAPI targetRenderAPI = RenderAPI::OPENGL;
+
 		#ifdef AK_PLATFORM_WINDOWS
-			Win32Window* window = new Win32Window();
-			EventFN event_cb = std::bind(&Application::OnEvent, this, std::placeholders::_1);
-
-			window->SetEventCallback(event_cb);
-			window->Init(settings.window_settings);
-
-			m_ApplicationComponents.m_Window = window;
-			m_ApplicationComponents.m_InputManager = new Win32Input();
-			m_ApplicationComponents.m_TimeManager = new Win32TimeManager();
-			m_LoadedGameAssembly = new Win32GameAssembly();
-
+			window = new Win32Window();
+			input = new Win32Input();
+			timeManager = new Win32TimeManager();
+			loadedGameAssembly = new Win32GameAssembly();
 		#endif //AK_PLATFORM_WINDOWS
+
+		#ifdef AK_PLATFORM_WEB
+			window = new WebWindow();
+			input = new WebInput();
+			timeManager = new WebTime();
+			loadedGameAssembly = new WebGameAssembly();
+			targetRenderAPI = RenderAPI::OPENGLES;
+		#endif // AK_PLATFORM_WEB
+
+
+		window->SetEventCallback(event_cb);
+		window->Init(settings.window_settings);
+
+		m_ApplicationComponents.m_Window = window;
+		m_ApplicationComponents.m_InputManager = input;
+		m_ApplicationComponents.m_TimeManager = timeManager;
+		m_LoadedGameAssembly = loadedGameAssembly;
 			
-		m_ApplicationComponents.m_platform = RenderPlatform::Create(RenderAPI::OPENGL);
+		m_ApplicationComponents.m_platform = RenderPlatform::Create(targetRenderAPI);
 		m_ApplicationComponents.m_platform->Init();
 
 		m_ApplicationComponents.m_AssetManager = CreateSharedPtr<AssetManager>();
@@ -50,9 +72,12 @@ namespace Akkad {
 
 		if (settings.enable_ImGui)
 		{
-			m_ApplicationComponents.m_ImguiHandler = ImGuiHandler::create(RenderAPI::OPENGL);
-			m_ApplicationComponents.m_ImguiHandler->Init();
-			m_ImGuiEnabled = true;
+			#ifndef AK_PLATFORM_WEB
+				m_ApplicationComponents.m_ImguiHandler = ImGuiHandler::create(RenderAPI::OPENGL);
+				m_ApplicationComponents.m_ImguiHandler->Init();
+				m_ImGuiEnabled = true;
+			#endif
+			
 		}
 	}
 
@@ -63,27 +88,41 @@ namespace Akkad {
 			layer->OnAttach();
 		}
 
+		#ifdef AK_PLATFORM_WEB
+		emscripten_set_main_loop(&Application::Update, 0, 1);
+		#endif
+
+		#ifndef AK_PLAFORM_WEB
 		while (m_Running)
 		{
-			for (auto it = m_Layers.rbegin(); it != m_Layers.rend(); ++it)
-			{
-				auto layer = *it;
-				layer->OnUpdate();
+			Update();
+		}
+		#endif // !AK_PLAFORM_WEB
 
-				if (m_ImGuiEnabled)
-				{
-					m_ApplicationComponents.m_ImguiHandler->NewFrame();
-					layer->RenderImGui();
-					m_ApplicationComponents.m_ImguiHandler->Render();
-					m_ApplicationComponents.m_ImguiHandler->UpdateRenderPlatforms();
-				}
-					
+
+	}
+
+	void Application::Update()
+	{
+		for (auto it = GetInstance().m_Layers.rbegin(); it != GetInstance().m_Layers.rend(); ++it)
+		{
+			auto layer = *it;
+			layer->OnUpdate();
+			if (GetInstance().m_ImGuiEnabled)
+			{
+				#ifndef AK_PLATFORM_WEB
+				GetInstance().m_ApplicationComponents.m_ImguiHandler->NewFrame();
+				layer->RenderImGui();
+				GetInstance().m_ApplicationComponents.m_ImguiHandler->Render();
+				GetInstance().m_ApplicationComponents.m_ImguiHandler->UpdateRenderPlatforms();
+				#endif // !AK_PLATFORM_WEB
 			}
 
-			m_ApplicationComponents.m_TimeManager->CalculateDeltaTime();
-			m_ApplicationComponents.m_platform->GetRenderContext()->SwapWindowBuffers();
-			m_ApplicationComponents.m_Window->OnUpdate();
 		}
+
+		GetInstance().m_ApplicationComponents.m_TimeManager->CalculateDeltaTime();
+		GetInstance().m_ApplicationComponents.m_platform->GetRenderContext()->SwapWindowBuffers();
+		GetInstance().m_ApplicationComponents.m_Window->OnUpdate();
 	}
 
 	void Application::OnEvent(Event& e)

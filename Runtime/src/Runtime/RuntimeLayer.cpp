@@ -18,12 +18,12 @@ namespace Akkad {
 
 	void RuntimeLayer::OnAttach()
 	{
+		LoadGameAssembly();
 		RegisterAssets();
 		Graphics::Renderer2D::InitShaders();
 		Graphics::Renderer2D::SetGUIDebugDrawState(false);
 		Graphics::Renderer2D::SetPhysicsDebugDrawState(false);
 		RegisterSortingLayers();
-		LoadGameAssembly();
 		LoadStartupScene();
 		
 	}

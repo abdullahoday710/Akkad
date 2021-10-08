@@ -1,0 +1,737 @@
+{
+    "Scene": {
+        "Name": "askdoskd",
+        "Entities": {
+            "20": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        0.3334490656852722,
+                        -0.19192534685134888,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 1.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                },
+                "children": [
+                    {
+                        "ID": "21"
+                    }
+                ]
+            },
+            "21": {
+                "ParentID": "20",
+                "Tag": "child",
+                "Transform": {
+                    "Position": [
+                        3.2579050064086914,
+                        0.24970769882202148,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            },
+            "18": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        0.3334490656852722,
+                        -0.19192534685134888,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 1.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                },
+                "children": [
+                    {
+                        "ID": "19"
+                    }
+                ]
+            },
+            "19": {
+                "ParentID": "18",
+                "Tag": "child",
+                "Transform": {
+                    "Position": [
+                        3.2579050064086914,
+                        0.24970769882202148,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            },
+            "16": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        0.3334490656852722,
+                        -0.19192534685134888,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 1.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                },
+                "children": [
+                    {
+                        "ID": "17"
+                    }
+                ]
+            },
+            "17": {
+                "ParentID": "16",
+                "Tag": "child",
+                "Transform": {
+                    "Position": [
+                        3.2579050064086914,
+                        0.24970769882202148,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            },
+            "14": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        -0.01284855604171753,
+                        -5.06373405456543,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 1.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                },
+                "children": [
+                    {
+                        "ID": "15"
+                    }
+                ]
+            },
+            "15": {
+                "ParentID": "14",
+                "Tag": "child",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            },
+            "12": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        -4.215595722198486,
+                        1.3365452289581299,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 1.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                },
+                "children": [
+                    {
+                        "ID": "13"
+                    }
+                ]
+            },
+            "13": {
+                "ParentID": "12",
+                "Tag": "child",
+                "Transform": {
+                    "Position": [
+                        3.2579050064086914,
+                        0.24970769882202148,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            },
+            "10": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        -2.028841257095337,
+                        -2.3008129596710205,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 1.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                },
+                "children": [
+                    {
+                        "ID": "11"
+                    }
+                ]
+            },
+            "11": {
+                "ParentID": "10",
+                "Tag": "child",
+                "Transform": {
+                    "Position": [
+                        -0.010601997375488281,
+                        1.031496524810791,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            },
+            "8": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        0.07164981961250305,
+                        -0.799876868724823,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 1.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                },
+                "children": [
+                    {
+                        "ID": "9"
+                    }
+                ]
+            },
+            "9": {
+                "ParentID": "8",
+                "Tag": "child",
+                "Transform": {
+                    "Position": [
+                        3.2579047679901123,
+                        0.24970769882202148,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            },
+            "6": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        1.7580235004425049,
+                        3.091824769973755,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 1.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                },
+                "children": [
+                    {
+                        "ID": "7"
+                    }
+                ]
+            },
+            "7": {
+                "ParentID": "6",
+                "Tag": "child",
+                "Transform": {
+                    "Position": [
+                        3.2579047679901123,
+                        0.24970769882202148,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            },
+            "4": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        -0.10915542393922806,
+                        -2.6703333854675293,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 1.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                },
+                "children": [
+                    {
+                        "ID": "5"
+                    }
+                ]
+            },
+            "5": {
+                "ParentID": "4",
+                "Tag": "child",
+                "Transform": {
+                    "Position": [
+                        3.2579050064086914,
+                        0.24970769882202148,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            },
+            "2": {
+                "Tag": "gui container",
+                "Transform": {
+                    "Position": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "GUIContainerComponent": true,
+                "children": [
+                    {
+                        "ID": "3"
+                    }
+                ]
+            },
+            "3": {
+                "ParentID": "2",
+                "Tag": "text",
+                "GUITextComponent": {
+                    "Text": "Text",
+                    "FontSize": 64,
+                    "FontAssetID": "9d913827-68e0-3617-fc50-3b06bceb786f",
+                    "Color": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "Alignment": "Left",
+                    "FittingMode": "KEEP_FONT_SIZE"
+                },
+                "RectTransformComponent": {
+                    "WidthConstraint": {
+                        "Type": "RELATIVE_CONSTRAINT",
+                        "Value": 0.30000001192092896
+                    },
+                    "HeightConstraint": {
+                        "Type": "ASPECT_CONSTRAINT",
+                        "Value": 1.0
+                    },
+                    "XConstraint": {
+                        "Type": "CENTER_CONSTRAINT",
+                        "Value": 0.0
+                    },
+                    "YConstraint": {
+                        "Type": "CENTER_CONSTRAINT",
+                        "Value": 0.0
+                    }
+                }
+            },
+            "0": {
+                "Tag": "Entity",
+                "Transform": {
+                    "Position": [
+                        -0.4241687059402466,
+                        -2.534473419189453,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                },
+                "Script": {
+                    "Name": "TestScript"
+                },
+                "RigidBody2D": {
+                    "Friction": 0.0,
+                    "Density": 1.0,
+                    "Shape": "Polygon",
+                    "Type": "Dynamic"
+                },
+                "children": [
+                    {
+                        "ID": "1"
+                    }
+                ]
+            },
+            "1": {
+                "ParentID": "0",
+                "Tag": "child",
+                "Transform": {
+                    "Position": [
+                        3.2579050064086914,
+                        0.24970769882202148,
+                        0.0
+                    ],
+                    "Rotation": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "Scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "SpriteRenderer": {
+                    "MaterialID": "53cf9a2e-0e42-b956-148e-a3c21ff5f1a0",
+                    "SortingLayer": "Default",
+                    "TileRow": 0.0,
+                    "TileColoumn": 0.0
+                }
+            }
+        }
+    }
+}

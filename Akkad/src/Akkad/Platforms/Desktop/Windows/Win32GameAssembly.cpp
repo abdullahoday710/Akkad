@@ -49,17 +49,17 @@ namespace Akkad {
 	void Win32GameAssembly::Initialize(ApplicationComponents& appComponents)
 	{
 		AK_ASSERT(m_Handle != nullptr, "Game assembly not present !");
-		INITLIBFN InitLibraryFn = (INITLIBFN)GetProcAddress((HMODULE)m_Handle, "Init");
+		INITLIBFN InitLibraryFn = (INITLIBFN)GetProcAddress((HMODULE)m_Handle, "InitGameAssembly");
 		AK_ASSERT(InitLibraryFn != NULL, "Required function is not found !");
 
-		InitLibraryFn(appComponents);
+		InitLibraryFn(&appComponents);
 	
 	}
 
 	std::vector<std::string> Win32GameAssembly::GetScripts()
 	{
 		AK_ASSERT(m_Handle != nullptr, "Game assembly not present !!!");
-		GETSCRIPTSFN getScriptsFn = (GETSCRIPTSFN)GetProcAddress((HMODULE)m_Handle, "GetScripts");
+		GETSCRIPTSFN getScriptsFn = (GETSCRIPTSFN)GetProcAddress((HMODULE)m_Handle, "GetScriptsGameAssembly");
 		AK_ASSERT(getScriptsFn != NULL, "Required function is not found !");
 
 		std::vector<std::string> scripts;
@@ -71,7 +71,7 @@ namespace Akkad {
 	ScriptableEntity* Win32GameAssembly::InstantiateScript(const char* scriptName)
 	{
 		AK_ASSERT(m_Handle != nullptr, "Game assembly not present !!!");
-		INSTANTIATESCRIPTFN instantiateScriptFn = (INSTANTIATESCRIPTFN)GetProcAddress((HMODULE)m_Handle, "InstantiateScript");
+		INSTANTIATESCRIPTFN instantiateScriptFn = (INSTANTIATESCRIPTFN)GetProcAddress((HMODULE)m_Handle, "InstantiateScriptGameAssembly");
 		AK_ASSERT(instantiateScriptFn != NULL, "Required function is not found !");
 
 		ScriptableEntity* entity;

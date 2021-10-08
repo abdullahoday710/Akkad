@@ -31,7 +31,7 @@ namespace Akkad {
 
 			virtual void SetUniformBuffer(SharedPtr<UniformBuffer> buffer) = 0;
 
-			static std::vector<unsigned int> LoadSpirV(const char* spirvPath);
+			static std::vector<unsigned int> LoadSpirV(std::string spirvPath);
 
 			static ShaderDescriptor LoadShader(const char* shaderdescPath);
 		};

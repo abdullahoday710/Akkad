@@ -7,6 +7,8 @@
 
 namespace Akkad {
 
+	class GameAssembly;
+
 	namespace GUI {
 		class GUIText;
 	}
@@ -105,7 +107,7 @@ namespace Akkad {
 			SharedPtr<Shader> m_GUITextShader;
 			SharedPtr<UniformBuffer> m_GUITextShaderProps;
 
-			friend class GameAssembly;
+			friend class ::Akkad::GameAssembly;
 		};
 	}
 }

@@ -28,6 +28,10 @@
 #elif defined(__linux__)
 #define AK_PLATFORM_LINUX
 #error "Linux is not supported!"
+
+/* Web / emscripten */
+#elif defined(__EMSCRIPTEN__)
+#define AK_PLATFORM_WEB
 #else
 	/* Unknown compiler/platform */
 #error "Unknown platform!"

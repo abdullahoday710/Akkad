@@ -8,3 +8,11 @@ bin-int/
 **.vcxproj.user
 
 imgui.ini
+
+CMakeLists.txt
+CMakeCache.txt
+CmakeFiles/
+build.ninja
+.ninja_deps
+.ninja_log
+**.cmake

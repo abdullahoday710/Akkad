@@ -18,23 +18,33 @@ namespace Akkad {
 				static auto shader = Application::GetAssetManager()->GetShaderByName("PhysicsDebugShader");
 				static SharedPtr<Graphics::Shader> debugShader = platform->CreateShader(shader.absolutePath.c_str());
 
-				Graphics::UniformBufferLayout layout;
-				layout.Push("color", Graphics::ShaderDataType::FLOAT3);
-				m_DebugShaderProps = Application::GetRenderPlatform()->CreateUniformBuffer(layout);
-				m_DebugShaderProps->SetName("shader_props");
-
-				m_DebugShader = debugShader;
-				m_DebugShader->SetUniformBuffer(Graphics::Renderer2D::GetSystemUniforms());
-				m_DebugShader->SetUniformBuffer(m_DebugShaderProps);
-
-				// creating the polygon vertex buffer;
+				if (m_DebugShaderProps == nullptr)
 				{
-					VertexBufferLayout bufferLayout;
-					bufferLayout.Push(ShaderDataType::FLOAT, 2);
-					bufferLayout.isDynamic = true;
-					m_PolygonVB = platform->CreateVertexBuffer();
-					m_PolygonVB->SetLayout(bufferLayout);
+					Graphics::UniformBufferLayout layout;
+					layout.Push("color", Graphics::ShaderDataType::FLOAT3);
+					m_DebugShaderProps = Application::GetRenderPlatform()->CreateUniformBuffer(layout);
+					m_DebugShaderProps->SetName("shader_props");
 				}
+
+				if (m_DebugShader == nullptr)
+				{
+					m_DebugShader = debugShader;
+					m_DebugShader->SetUniformBuffer(Graphics::Renderer2D::GetSystemUniforms());
+					m_DebugShader->SetUniformBuffer(m_DebugShaderProps);
+				}
+
+				if (m_PolygonVB == nullptr)
+				{
+					// creating the polygon vertex buffer;
+					{
+						VertexBufferLayout bufferLayout;
+						bufferLayout.Push(ShaderDataType::FLOAT, 2);
+						bufferLayout.isDynamic = true;
+						m_PolygonVB = platform->CreateVertexBuffer();
+						m_PolygonVB->SetLayout(bufferLayout);
+					}
+				}
+
 			}
 		}
 	}

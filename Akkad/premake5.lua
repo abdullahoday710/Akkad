@@ -17,6 +17,7 @@ project "Akkad"
     {
      "src/Akkad/Platforms/**.h",
      "src/Akkad/Platforms/**.cpp",
+     "src/Akkad/Graphics/API/**",
     }
     
     includedirs
@@ -35,8 +36,6 @@ project "Akkad"
     
     links
 	{
-        "opengl32.lib",
-        "Glad",
         "imgui",
         "spdlog",
         "SPIRV-Cross",
@@ -45,16 +44,41 @@ project "Akkad"
     
     filter "system:windows"
         systemversion "latest"
-        
+        if not _OPTIONS['target-emscripten'] then
+            links
+            {
+                "opengl32.lib",
+                "Glad",
+            }
+        end
         files
         {
             "src/Akkad/Platforms/Desktop/Windows/**.h",
             "src/Akkad/Platforms/Desktop/Windows/**.cpp",
+            "src/Akkad/Graphics/API/OpenGL/**.h",
+            "src/Akkad/Graphics/API/OpenGL/**.cpp",
         }
 
         defines
         {
         }
+    
+    configuration "target-emscripten"
+    excludes
+    {
+        "src/Akkad/Platforms/**.h",
+        "src/Akkad/Platforms/**.cpp",
+        "src/Akkad/Graphics/API/**",
+    }
+    files
+    {
+        "src/Akkad/Platforms/Web/**.h",
+        "src/Akkad/Platforms/Web/**.cpp",
+        "src/Akkad/Graphics/API/OpenGLES/**"
+    }
+    
+    buildoptions{"-fPIC "};
+    linkoptions{"-fPIC "};
 
 
 

@@ -5,7 +5,7 @@ namespace Akkad {
 	namespace Graphics {
 
 		enum class RenderAPI {
-			OPENGL
+			OPENGL, OPENGLES
 		};
 
 		class RenderContext

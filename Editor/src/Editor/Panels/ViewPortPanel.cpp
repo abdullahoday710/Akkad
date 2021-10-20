@@ -39,7 +39,8 @@ namespace Akkad {
 
 	void ViewPortPanel::DrawImGui()
 	{
-		ImGui::Begin("Viewport");
+		if (ImGui::Begin("Viewport"))
+		{
 			if (!IsPlaying)
 			{
 				if (ImGui::Button("Play"))
@@ -95,7 +96,7 @@ namespace Akkad {
 			{
 				Application::GetSceneManager()->GetActiveScene()->SetViewportRect(sceneViewportRect);
 			}
-			
+
 			/* mouse picking entities */
 			auto input = Application::GetInputManager();
 			if (input->GetMouseDown(MouseButtons::LEFT))
@@ -135,10 +136,10 @@ namespace Akkad {
 			if (m_SelectedEntity.IsValid())
 			{
 				glm::vec2 viewportRects[2];
-				viewportRects[0] = { viewportRectMin.x, viewportRectMin.y};
-				viewportRects[1] = { viewportRectMax.x, viewportRectMax.y};
+				viewportRects[0] = { viewportRectMin.x, viewportRectMin.y };
+				viewportRects[1] = { viewportRectMax.x, viewportRectMax.y };
 
-				
+
 				if (m_EditorCamera.GetProjectionType() == CameraProjection::Orthographic)
 				{
 					ImGuizmo::SetOrthographic(true);
@@ -198,11 +199,18 @@ namespace Akkad {
 						rotationc += deltaRotation;
 					}
 				}
-				
+
 			}
-			
+
 			m_buffer->Unbind();
+			IsSelected = true;
+		}
+		else
+		{
+			IsSelected = false;
+		}
 		ImGui::End();
+			
 	}
 
 	void ViewPortPanel::OnClose()
@@ -216,7 +224,7 @@ namespace Akkad {
 		{
 			PropertyEditorPanel::SetActiveEntity({});
 			EditorLayer::SaveActiveScene();
-			EditorLayer::ReloadGameAssembly();
+			//EditorLayer::ReloadGameAssembly();
 			IsPlaying = true;
 
 			auto sceneManager = Application::GetSceneManager();

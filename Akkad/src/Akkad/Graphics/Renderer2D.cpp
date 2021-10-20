@@ -111,10 +111,25 @@ namespace Akkad {
 			m_ColorShader->Bind();
 			m_ColorShaderProps->SetData("props_color", color);
 			m_SceneProps->SetData("sys_transform", transform);
+			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
 
 			m_QuadVB->Bind();
 			m_QuadIB->Bind();
 			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+		}
+
+		void Renderer2D::DrawQuadImpl(glm::vec3 color, glm::mat4& transform, glm::mat4 projection)
+		{
+			auto command = Application::GetRenderPlatform()->GetRenderCommand();
+			m_ColorShader->Bind();
+			m_ColorShaderProps->SetData("props_color", color);
+			m_SceneProps->SetData("sys_viewProjection", projection);
+			m_SceneProps->SetData("sys_transform", transform);
+
+			m_QuadVB->Bind();
+			m_QuadIB->Bind();
+			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
 		}
 
 		void Renderer2D::DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, bool filled)

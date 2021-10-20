@@ -25,6 +25,7 @@ namespace Akkad {
 		virtual std::string GetName() { return "viewport"; }
 
 		bool IsPlaying = false;
+		bool IsSelected = false;
 
 		void SetSelectedEntity(Entity selectedEntity)
 		{

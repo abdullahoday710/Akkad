@@ -57,7 +57,7 @@ namespace Akkad {
 		}
 
 		float GetAspectRatio() { return m_AspectRatio; }
-		glm::mat4& GetProjection() { return m_ProjectionMatrix; }
+		glm::mat4 GetProjection() { return m_ProjectionMatrix; }
 
 		CameraProjection GetProjectionType() { return m_ProjectionType; }
 		

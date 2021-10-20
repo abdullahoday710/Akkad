@@ -83,6 +83,8 @@ namespace Akkad {
 		auto command = Application::GetRenderPlatform()->GetRenderCommand();
 		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
 		auto animatedView = m_Registry.view<TransformComponent, AnimatedSpriteRendererComponent>();
+		auto colorView = m_Registry.view<TransformComponent, ColoredSpriteRendererComponent>();
+		auto scriptView = m_Registry.view<ScriptComponent>();
 		command->Clear();
 
 		for (auto it : SortingLayer2DHandler::GetRegisteredLayers())
@@ -110,6 +112,22 @@ namespace Akkad {
 
 				Renderer2D::DrawAnimatedSprite(animatedSprite.sprite, frame, transform.GetTransformMatrix());
 
+			}
+
+			for (auto entity : colorView)
+			{
+				auto& color = colorView.get<ColoredSpriteRendererComponent>(entity);
+				auto& transform = colorView.get<TransformComponent>(entity);
+				Renderer2D::DrawQuad(color.color, transform.GetTransformMatrix());
+			}
+
+			for (auto entity : scriptView)
+			{
+				auto& script = scriptView.get<ScriptComponent>(entity);
+				if (script.Instance)
+				{
+					script.Instance->OnRender2D(it.name);
+				}
 			}
 
 		}

@@ -36,6 +36,11 @@ namespace Akkad {
 			m_buffer->Bind();
 			ImGui::Image((void*)m_buffer->GetColorAttachmentTexture(), panelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			m_buffer->Unbind();
+			IsSelected = true;
+		}
+		else
+		{
+			IsSelected = false;
 		}
 		ImGui::End();
 	}

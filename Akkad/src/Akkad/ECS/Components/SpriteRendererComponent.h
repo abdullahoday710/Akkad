@@ -15,4 +15,8 @@ namespace Akkad {
 		Graphics::AnimatedSprite sprite;
 		std::string materialID;
 	};
+
+	struct ColoredSpriteRendererComponent {
+		glm::vec3 color;
+	};
 }

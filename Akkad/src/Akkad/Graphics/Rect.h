@@ -44,6 +44,14 @@ namespace Akkad {
 				SetPosition(position);
 			}
 
+			void Reset(glm::vec2 position, float width, float height)
+			{
+				m_Width = width;
+				m_Height = height;
+
+				SetPosition(position);
+			}
+
 			bool operator==(const Rect& other) {
 				if (other.m_Position.x == m_Position.x)
 				{

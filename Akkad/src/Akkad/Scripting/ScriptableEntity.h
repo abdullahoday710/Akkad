@@ -35,6 +35,7 @@ namespace Akkad {
 		virtual void OnUpdate() {}
 		virtual void OnColliderEnter2D(Entity other) {}
 		virtual void OnColliderExit2D(Entity other) {}
+		virtual void OnRender2D(std::string sortingLayer) {}
 
 		Entity GetEntity() { return m_Entity; }
 

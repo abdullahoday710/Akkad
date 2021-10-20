@@ -187,12 +187,18 @@ namespace Akkad {
 
 			if (viewport != nullptr)
 			{
-				viewport->RenderScene();
+				if (viewport->IsSelected)
+				{
+					viewport->RenderScene();
+				}
 			}
 
 			if (gameview != nullptr)
 			{
-				gameview->RenderScene();
+				if (gameview->IsSelected)
+				{
+					gameview->RenderScene();
+				}
 			}
 		}
 	}

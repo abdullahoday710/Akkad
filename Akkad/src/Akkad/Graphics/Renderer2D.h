@@ -26,7 +26,7 @@ namespace Akkad {
 			static void DrawQuad(SharedPtr<Texture> texture, glm::mat4& transform) { GetInstance().DrawQuadImpl(texture, transform); }
 			static void DrawQuad(Material& material, glm::mat4& transform) { GetInstance().DrawQuadImpl(material, transform); }
 			static void DrawQuad(glm::vec3 color, glm::mat4& transform) { GetInstance().DrawQuadImpl(color, transform); }
-
+			static void DrawQuad(glm::vec3 color, glm::mat4& transform, glm::mat4 projection) { GetInstance().DrawQuadImpl(color, transform, projection); }
 			static void DrawRect(glm::vec2 min, glm::vec2 max, glm::vec3 color, bool filled) { GetInstance().DrawRectImpl(min, max, color, filled); }
 			static void DrawRect(Rect rect, glm::vec3 color, bool filled) { GetInstance().DrawRectImpl(rect, color, filled); }
 			static void DrawRect(Rect rect, glm::vec3 color, bool filled, glm::mat4 projection) { GetInstance().DrawRectImpl(rect, color, filled, projection); }
@@ -60,6 +60,7 @@ namespace Akkad {
 			void DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform);
 			void DrawQuadImpl(Material& material, glm::mat4& transform);
 			void DrawQuadImpl(glm::vec3 color, glm::mat4& transform);
+			void DrawQuadImpl(glm::vec3 color, glm::mat4& transform, glm::mat4 projection);
 
 			void DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, bool filled);
 			void DrawRectImpl(glm::vec2 min, glm::vec2 max, glm::vec3 color, bool filled, glm::mat4 projection);

@@ -20,6 +20,8 @@ namespace Akkad {
 		virtual bool IsOpen() override { return showPanel; };
 		virtual std::string GetName() override { return "Game View"; }
 
+		bool IsSelected = false;
+
 	private:
 		static bool showPanel;
 		float m_AspectRatio;

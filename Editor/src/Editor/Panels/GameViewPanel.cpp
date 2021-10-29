@@ -6,6 +6,7 @@
 #include <Akkad/Application/Application.h>
 #include <Akkad/ECS/SceneManager.h>
 #include <Akkad/Graphics/FrameBuffer.h>
+#include <Akkad/Graphics/Renderer2D.h>
 
 #include <imgui.h>
 namespace Akkad {
@@ -61,6 +62,7 @@ namespace Akkad {
 			sceneManager->GetActiveScene()->BeginRenderer2D(m_AspectRatio);
 			sceneManager->GetActiveScene()->Render2D();
 			sceneManager->GetActiveScene()->RenderGUI();
+			Renderer2D::EndScene();
 
 		}
 
@@ -70,6 +72,7 @@ namespace Akkad {
 			scene->BeginRenderer2D(m_AspectRatio);
 			scene->Render2D();
 			scene->RenderGUI();
+			Renderer2D::EndScene();
 		}
 
 		m_buffer->Unbind();

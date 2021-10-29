@@ -18,10 +18,15 @@ namespace Akkad {
 		class Renderer2D
 		{
 		public:
+			struct QuadVertex {
+				glm::vec3 position;
+				glm::vec3 color;
+			};
 			static Renderer2D& GetInstance() { return s_Instance; }
 
 			static void Init() { GetInstance().InitImpl(); }
 			static void BeginScene(Camera& camera, glm::mat4& cameraTransform) { GetInstance().BeginSceneImpl(camera, cameraTransform); }
+			static void EndScene() { GetInstance().EndSceneImpl(); }
 
 			static void DrawQuad(SharedPtr<Texture> texture, glm::mat4& transform) { GetInstance().DrawQuadImpl(texture, transform); }
 			static void DrawQuad(Material& material, glm::mat4& transform) { GetInstance().DrawQuadImpl(material, transform); }
@@ -56,6 +61,7 @@ namespace Akkad {
 
 			void InitImpl();
 			void BeginSceneImpl(Camera& camera, glm::mat4& cameraTransform);
+			void EndSceneImpl();
 
 			void DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform);
 			void DrawQuadImpl(Material& material, glm::mat4& transform);
@@ -73,6 +79,10 @@ namespace Akkad {
 
 			void DrawLineImpl(glm::vec2 point1, glm::vec2 point2, glm::vec3 color);
 
+			void StartBatch();
+			void NewBatch();
+			void FlushBatch();
+
 			void DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount);
 
 			void RenderTextImpl(GUI::GUIText& uitext, glm::mat4 projection);
@@ -87,6 +97,14 @@ namespace Akkad {
 
 			SharedPtr<VertexBuffer> m_QuadVB;
 			SharedPtr<IndexBuffer> m_QuadIB;
+
+			enum {MAX_BATCH_QUADS = 4000, MAX_BATCH_VERTS = MAX_BATCH_QUADS * 4, MAX_BATCH_INDICES = MAX_BATCH_QUADS * 6};
+			SharedPtr<VertexBuffer> m_BatchVB;
+			SharedPtr<IndexBuffer> m_BatchIB;
+			QuadVertex* m_BatchData = nullptr;
+			QuadVertex* m_LastVertexPtr = nullptr;
+			glm::vec4 m_QuadVertexPositions[4] = {};
+			unsigned int m_BatchIndexCount = 0;
 
 			SharedPtr<VertexBuffer> m_LineVB;
 			SharedPtr<Shader> m_LineShader;

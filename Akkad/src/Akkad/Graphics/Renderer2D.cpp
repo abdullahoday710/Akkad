@@ -62,6 +62,47 @@ namespace Akkad {
 
 			m_SceneProps = platform->CreateUniformBuffer(scenePropsLayout);
 			m_SceneProps->SetName("sys_SceneProps");
+
+			// setting up batch renderer
+			{
+
+				m_BatchData = new QuadVertex[MAX_BATCH_VERTS];
+				uint32_t* batchIndices = new uint32_t[MAX_BATCH_INDICES];
+				uint32_t offset = 0;
+				for (uint32_t i = 0; i < MAX_BATCH_INDICES; i += 6)
+				{
+					batchIndices[i + 0] = offset + 0;
+					batchIndices[i + 1] = offset + 1;
+					batchIndices[i + 2] = offset + 2;
+
+					batchIndices[i + 3] = offset + 2;
+					batchIndices[i + 4] = offset + 3;
+					batchIndices[i + 5] = offset + 0;
+
+					offset += 4;
+				}
+
+				VertexBufferLayout batchLayout;
+				batchLayout.isDynamic = true;
+				batchLayout.Push(ShaderDataType::FLOAT, 3);
+				batchLayout.Push(ShaderDataType::FLOAT, 3);
+				m_BatchVB = platform->CreateVertexBuffer();
+				m_BatchVB->SetLayout(batchLayout);
+
+				m_BatchVB->SetData(0, sizeof(QuadVertex) * MAX_BATCH_VERTS);
+				
+				m_BatchIB = platform->CreateIndexBuffer();
+				m_BatchIB->SetData(batchIndices, MAX_BATCH_INDICES * sizeof(uint32_t));
+
+				delete[] batchIndices;
+				m_LastVertexPtr = m_BatchData;
+
+
+				m_QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+				m_QuadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
+				m_QuadVertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
+				m_QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+			}
 		}
 
 		void Renderer2D::BeginSceneImpl(Camera& camera, glm::mat4& cameraTransform)
@@ -73,6 +114,13 @@ namespace Akkad {
 			m_SceneProps->SetData("sys_viewProjection", viewProjection);
 
 			m_SceneCameraViewProjection = viewProjection;
+
+			StartBatch();
+		}
+
+		void Renderer2D::EndSceneImpl()
+		{
+			FlushBatch();
 		}
 
 		void Renderer2D::DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform)
@@ -107,15 +155,19 @@ namespace Akkad {
 		}
 		void Renderer2D::DrawQuadImpl(glm::vec3 color, glm::mat4& transform)
 		{
-			auto command = Application::GetRenderPlatform()->GetRenderCommand();
-			m_ColorShader->Bind();
-			m_ColorShaderProps->SetData("props_color", color);
-			m_SceneProps->SetData("sys_transform", transform);
-			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
+			if (m_BatchIndexCount >= MAX_BATCH_INDICES)
+			{
+				NewBatch();
+			}
+			constexpr int quadVertexCount = 4;
+			for (size_t i = 0; i < quadVertexCount; i++)
+			{
+				m_LastVertexPtr->position = transform * m_QuadVertexPositions[i];
+				m_LastVertexPtr->color = color;
+				m_LastVertexPtr++;
+			}
 
-			m_QuadVB->Bind();
-			m_QuadIB->Bind();
-			command->DrawIndexed(PrimitiveType::TRIANGLE, 6);
+			m_BatchIndexCount += 6;
 		}
 
 		void Renderer2D::DrawQuadImpl(glm::vec3 color, glm::mat4& transform, glm::mat4 projection)
@@ -353,6 +405,18 @@ namespace Akkad {
 
 		}
 
+		void Renderer2D::StartBatch()
+		{
+			m_LastVertexPtr = m_BatchData;
+			m_BatchIndexCount = 0;
+		}
+
+		void Renderer2D::NewBatch()
+		{
+			FlushBatch();
+			StartBatch();
+		}
+
 		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color, bool filled)
 		{
 			DrawRectImpl(rect.GetMin(), rect.GetMax(), color, filled);
@@ -363,6 +427,20 @@ namespace Akkad {
 			DrawRectImpl(rect.GetMin(), rect.GetMax(), color, filled, projection);
 		}
 
+
+		void Renderer2D::FlushBatch()
+		{
+			auto command = Application::GetRenderPlatform()->GetRenderCommand();
+			m_ColorShader->Bind();
+
+			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
+
+			uint32_t dataSize = (uint32_t)((uint8_t*)m_LastVertexPtr - (uint8_t*)m_BatchData);
+			m_BatchVB->SetSubData(0, m_BatchData, dataSize);
+			m_BatchVB->Bind();
+			m_BatchIB->Bind();
+			command->DrawIndexed(PrimitiveType::TRIANGLE, m_BatchIndexCount);
+		}
 
 		void Renderer2D::DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount)
 		{
@@ -477,6 +555,7 @@ namespace Akkad {
 			}
 
 		}
+
 	}
 }
 

@@ -46,14 +46,15 @@ namespace Akkad {
 			
 			// setting up line vertex buffer
 			{
+				m_LineBatchData = new LineVertex[MAX_BATCH_VERTS];
 				VertexBufferLayout layout;
 				layout.isDynamic = true;
 				layout.Push(ShaderDataType::FLOAT, 2); // positions
-
+				layout.Push(ShaderDataType::FLOAT, 3); // colors
 				auto vertexbuffer = platform->CreateVertexBuffer();
 				vertexbuffer->SetLayout(layout);
 				m_LineVB = vertexbuffer;
-				m_LineVB->SetData(0, 4 * GetSizeOfType(ShaderDataType::FLOAT));
+				m_LineVB->SetData(0, sizeof(LineVertex) * MAX_BATCH_VERTS);
 			}
 
 			UniformBufferLayout scenePropsLayout;
@@ -66,7 +67,7 @@ namespace Akkad {
 			// setting up batch renderer
 			{
 
-				m_BatchData = new QuadVertex[MAX_BATCH_VERTS];
+				m_QuadBatchData = new QuadVertex[MAX_BATCH_VERTS];
 				uint32_t* batchIndices = new uint32_t[MAX_BATCH_INDICES];
 				uint32_t offset = 0;
 				for (uint32_t i = 0; i < MAX_BATCH_INDICES; i += 6)
@@ -95,7 +96,7 @@ namespace Akkad {
 				m_BatchIB->SetData(batchIndices, MAX_BATCH_INDICES * sizeof(uint32_t));
 
 				delete[] batchIndices;
-				m_LastVertexPtr = m_BatchData;
+				m_LastQuadVertexPtr = m_QuadBatchData;
 
 
 				m_QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
@@ -116,11 +117,13 @@ namespace Akkad {
 			m_SceneCameraViewProjection = viewProjection;
 
 			StartBatch();
+			StartLineBatch();
 		}
 
 		void Renderer2D::EndSceneImpl()
 		{
 			FlushBatch();
+			FlushLineBatch();
 		}
 
 		void Renderer2D::DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform)
@@ -155,19 +158,19 @@ namespace Akkad {
 		}
 		void Renderer2D::DrawQuadImpl(glm::vec3 color, glm::mat4& transform)
 		{
-			if (m_BatchIndexCount >= MAX_BATCH_INDICES)
+			if (m_QuadBatchIndexCount >= MAX_BATCH_INDICES)
 			{
 				NewBatch();
 			}
 			constexpr int quadVertexCount = 4;
 			for (size_t i = 0; i < quadVertexCount; i++)
 			{
-				m_LastVertexPtr->position = transform * m_QuadVertexPositions[i];
-				m_LastVertexPtr->color = color;
-				m_LastVertexPtr++;
+				m_LastQuadVertexPtr->position = transform * m_QuadVertexPositions[i];
+				m_LastQuadVertexPtr->color = color;
+				m_LastQuadVertexPtr++;
 			}
 
-			m_BatchIndexCount += 6;
+			m_QuadBatchIndexCount += 6;
 		}
 
 		void Renderer2D::DrawQuadImpl(glm::vec3 color, glm::mat4& transform, glm::mat4 projection)
@@ -389,6 +392,25 @@ namespace Akkad {
 
 		void Renderer2D::DrawLineImpl(glm::vec2 point1, glm::vec2 point2, glm::vec3 color)
 		{
+			if (m_LineBatchVertexCount >= MAX_BATCH_VERTS)
+			{
+				NewLineBatch();
+			}
+
+			m_LastLineVertexPtr->position = point1;
+			m_LastLineVertexPtr->color = color;
+
+			m_LastLineVertexPtr++;
+
+			m_LastLineVertexPtr->position = point2;
+			m_LastLineVertexPtr->color = color;
+
+			m_LineBatchVertexCount += 2;
+
+		}
+
+		void Renderer2D::DrawLineImpl(glm::vec2 point1, glm::vec2 point2, glm::vec3 color, glm::mat4& projection)
+		{
 			auto platform = Application::GetRenderPlatform();
 			auto command = platform->GetRenderCommand();
 
@@ -396,19 +418,18 @@ namespace Akkad {
 				point1.x, point1.y,
 				point2.x, point2.y
 			};
-			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
+			m_SceneProps->SetData("sys_viewProjection", projection);
 			m_LineShader->Bind();
 			m_LineShaderProps->SetData("props_color", color);
 			m_LineVB->SetSubData(0, &verts, sizeof(verts));
 			m_LineVB->Bind();
 			command->DrawArrays(PrimitiveType::LINE, 2);
-
 		}
 
 		void Renderer2D::StartBatch()
 		{
-			m_LastVertexPtr = m_BatchData;
-			m_BatchIndexCount = 0;
+			m_LastQuadVertexPtr = m_QuadBatchData;
+			m_QuadBatchIndexCount = 0;
 		}
 
 		void Renderer2D::NewBatch()
@@ -435,11 +456,35 @@ namespace Akkad {
 
 			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
 
-			uint32_t dataSize = (uint32_t)((uint8_t*)m_LastVertexPtr - (uint8_t*)m_BatchData);
-			m_BatchVB->SetSubData(0, m_BatchData, dataSize);
+			uint32_t dataSize = (uint32_t)((uint8_t*)m_LastQuadVertexPtr - (uint8_t*)m_QuadBatchData);
+			m_BatchVB->SetSubData(0, m_QuadBatchData, dataSize);
 			m_BatchVB->Bind();
 			m_BatchIB->Bind();
-			command->DrawIndexed(PrimitiveType::TRIANGLE, m_BatchIndexCount);
+			command->DrawIndexed(PrimitiveType::TRIANGLE, m_QuadBatchIndexCount);
+		}
+
+		void Renderer2D::StartLineBatch()
+		{
+			m_LastLineVertexPtr = m_LineBatchData;
+			m_LineBatchVertexCount = 0;
+		}
+
+		void Renderer2D::NewLineBatch()
+		{
+			FlushLineBatch();
+			StartLineBatch();
+		}
+
+		void Renderer2D::FlushLineBatch()
+		{
+			auto platform = Application::GetRenderPlatform();
+			auto command = platform->GetRenderCommand();
+
+			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
+			m_LineShader->Bind();
+			m_LineVB->SetSubData(0, m_LineBatchData, m_LineBatchVertexCount * sizeof(LineVertex));
+			m_LineVB->Bind();
+			command->DrawArrays(PrimitiveType::LINE, m_LineBatchVertexCount);
 		}
 
 		void Renderer2D::DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount)

@@ -1,5 +1,6 @@
 #include "RuntimeLayer.h"
 
+#include <Akkad/Graphics/Renderer2D.h>
 #include <Akkad/Graphics/SortingLayer2D.h>
 #include <fstream>
 #include <sstream>
@@ -41,6 +42,7 @@ namespace Akkad {
 		sceneManager->GetActiveScene()->Render2D();
 		sceneManager->GetActiveScene()->RenderGUI();
 		sceneManager->GetActiveScene()->RenderPickingBuffer2D();
+		Graphics::Renderer2D::EndScene();
 
 		sceneManager->GetActiveScene()->Update();
 	}

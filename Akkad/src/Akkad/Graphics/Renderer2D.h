@@ -22,6 +22,11 @@ namespace Akkad {
 				glm::vec3 position;
 				glm::vec3 color;
 			};
+
+			struct LineVertex {
+				glm::vec2 position;
+				glm::vec3 color;
+			};
 			static Renderer2D& GetInstance() { return s_Instance; }
 
 			static void Init() { GetInstance().InitImpl(); }
@@ -40,6 +45,7 @@ namespace Akkad {
 			static void DrawAnimatedSprite(AnimatedSprite& sprite, AnimationFrame& frame, glm::mat4& transform) { GetInstance().DrawAnimatedSpriteImpl(sprite, frame, transform); };
 
 			static void DrawLine(glm::vec2 point1, glm::vec2 point2, glm::vec3 color) { GetInstance().DrawLineImpl(point1, point2, color); }
+			static void DrawLine(glm::vec2 point1, glm::vec2 point2, glm::vec3 color, glm::mat4& projection) { GetInstance().DrawLineImpl(point1, point2, color, projection); }
 
 			static void Draw(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount) { GetInstance().DrawImpl(vb, shader, vertexCount); };
 			static void RenderText(GUI::GUIText& uitext, glm::mat4 projection) { GetInstance().RenderTextImpl(uitext, projection); }
@@ -78,10 +84,15 @@ namespace Akkad {
 			void DrawAnimatedSpriteImpl(AnimatedSprite& sprite, AnimationFrame& frame, glm::mat4& transform);
 
 			void DrawLineImpl(glm::vec2 point1, glm::vec2 point2, glm::vec3 color);
+			void DrawLineImpl(glm::vec2 point1, glm::vec2 point2, glm::vec3 color, glm::mat4& projection);
 
 			void StartBatch();
 			void NewBatch();
 			void FlushBatch();
+
+			void StartLineBatch();
+			void NewLineBatch();
+			void FlushLineBatch();
 
 			void DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount);
 
@@ -101,12 +112,16 @@ namespace Akkad {
 			enum {MAX_BATCH_QUADS = 4000, MAX_BATCH_VERTS = MAX_BATCH_QUADS * 4, MAX_BATCH_INDICES = MAX_BATCH_QUADS * 6};
 			SharedPtr<VertexBuffer> m_BatchVB;
 			SharedPtr<IndexBuffer> m_BatchIB;
-			QuadVertex* m_BatchData = nullptr;
-			QuadVertex* m_LastVertexPtr = nullptr;
+			QuadVertex* m_QuadBatchData = nullptr;
+			QuadVertex* m_LastQuadVertexPtr = nullptr;
 			glm::vec4 m_QuadVertexPositions[4] = {};
-			unsigned int m_BatchIndexCount = 0;
+			unsigned int m_QuadBatchIndexCount = 0;
 
 			SharedPtr<VertexBuffer> m_LineVB;
+			LineVertex* m_LineBatchData = nullptr;
+			LineVertex* m_LastLineVertexPtr = nullptr;
+			unsigned int m_LineBatchVertexCount = 0;
+
 			SharedPtr<Shader> m_LineShader;
 			SharedPtr<UniformBuffer> m_LineShaderProps;
 

@@ -283,7 +283,6 @@ namespace Akkad {
 			m_buffer->Bind();
 			EditorLayer::GetActiveScene()->Render2D();
 			EditorLayer::GetActiveScene()->RenderGUI();
-			Renderer2D::DrawLine({ 0,0 }, { 0,4 }, { 1,0,0 });
 			Renderer2D::EndScene();
 			m_buffer->Unbind();
 		}

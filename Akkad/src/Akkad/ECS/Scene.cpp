@@ -85,6 +85,8 @@ namespace Akkad {
 		auto animatedView = m_Registry.view<TransformComponent, AnimatedSpriteRendererComponent>();
 		auto colorView = m_Registry.view<TransformComponent, ColoredSpriteRendererComponent>();
 		auto scriptView = m_Registry.view<ScriptComponent>();
+		auto lineView = m_Registry.view<LineRendererComponent>();
+
 		command->Clear();
 
 		for (auto it : SortingLayer2DHandler::GetRegisteredLayers())
@@ -131,6 +133,17 @@ namespace Akkad {
 			}
 
 		}
+
+		for (auto entity : lineView)
+		{
+			auto& lineComponent = lineView.get<LineRendererComponent>(entity);
+
+			for (auto& line : lineComponent.lines)
+			{
+				Renderer2D::DrawLine({ line.x, line.y }, { line.z, line.w }, lineComponent.color);
+			}
+		}
+
 		if (Renderer2D::GetPhysicsDebugDrawState())
 		{
 			m_PhysicsWorld2D.SetDebugDraw(&m_PhysicsDebugDraw2D);

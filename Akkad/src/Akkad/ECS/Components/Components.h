@@ -10,3 +10,4 @@
 #include "RectTransformComponent.h"
 #include "GUIButtonComponent.h"
 #include "HingeJoint2DComponent.h"
+#include "LineRendererComponent.h"

@@ -405,6 +405,8 @@ namespace Akkad {
 			m_LastLineVertexPtr->position = point2;
 			m_LastLineVertexPtr->color = color;
 
+			m_LastLineVertexPtr++;
+
 			m_LineBatchVertexCount += 2;
 
 		}

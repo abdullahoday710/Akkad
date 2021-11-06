@@ -40,6 +40,7 @@ namespace Akkad {
 		void DrawGUIButtonComponent();
 		void DrawAnimatedSpriteRendererComponent();
 		void DrawHingeJoint2DComponent();
+		void DrawLineRendererComponent();
 
 	};
 }

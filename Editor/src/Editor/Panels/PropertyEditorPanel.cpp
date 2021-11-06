@@ -109,6 +109,10 @@ namespace Akkad {
 			{
 				DrawHingeJoint2DComponent();
 			}
+			if (m_ActiveEntity.HasComponent<LineRendererComponent>())
+			{
+				DrawLineRendererComponent();
+			}
 			DrawAddComponent();
 		}
 		
@@ -138,6 +142,14 @@ namespace Akkad {
 					if (!m_ActiveEntity.HasComponent<SpriteRendererComponent>())
 					{
 						m_ActiveEntity.AddComponent<SpriteRendererComponent>();
+					}
+				}
+
+				if (ImGui::Button("Line Renderer"))
+				{
+					if (!m_ActiveEntity.HasComponent<LineRendererComponent>())
+					{
+						m_ActiveEntity.AddComponent<LineRendererComponent>();
 					}
 				}
 
@@ -960,6 +972,40 @@ namespace Akkad {
 			ImGui::InputFloat("Motor speed", &hinge.motorSpeed);
 			ImGui::InputFloat("Max motor torque", &hinge.maxMotorTorque);
 			ImGui::TreePop();
+		}
+	}
+
+	void PropertyEditorPanel::DrawLineRendererComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		auto& lineRenderer = m_ActiveEntity.GetComponent<LineRendererComponent>();
+		glm::vec3 color = lineRenderer.color;
+		if (ImGui::InputFloat3("Color", glm::value_ptr(color)))
+		{
+			lineRenderer.color = color;
+		}
+		
+		if (ImGui::ListBoxHeader("Lines"))
+		{
+			int id = 0;
+			for (auto& it : lineRenderer.lines)
+			{
+				ImGui::PushID(id);
+				ImGui::InputFloat4("Line position", glm::value_ptr(it));
+				ImGui::PopID();
+				id++;
+			}
+			ImGui::ListBoxFooter();
+		}
+
+		if (ImGui::Button("+"))
+		{
+			lineRenderer.lines.push_back({});
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("-"))
+		{
+			lineRenderer.lines.pop_back();
 		}
 	}
 

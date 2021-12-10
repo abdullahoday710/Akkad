@@ -2,6 +2,7 @@
 #include "Panel.h"
 
 #include "Akkad/core.h"
+#include "Akkad/Graphics/Rect.h"
 namespace Akkad {
 
 	namespace Graphics {
@@ -27,6 +28,7 @@ namespace Akkad {
 		float m_AspectRatio;
 		void RenderScene();
 		SharedPtr<Graphics::FrameBuffer> m_buffer;
+		Graphics::Rect m_ViewportRect;
 
 		friend class EditorLayer;
 	};

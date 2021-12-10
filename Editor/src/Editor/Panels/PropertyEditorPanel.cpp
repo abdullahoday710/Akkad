@@ -113,6 +113,10 @@ namespace Akkad {
 			{
 				DrawLineRendererComponent();
 			}
+			if (m_ActiveEntity.HasComponent<ColoredSpriteRendererComponent>())
+			{
+				DrawColoredSpriteRendererComponent();
+			}
 			DrawAddComponent();
 		}
 		
@@ -1006,6 +1010,18 @@ namespace Akkad {
 		if (ImGui::Button("-"))
 		{
 			lineRenderer.lines.pop_back();
+		}
+	}
+
+	void PropertyEditorPanel::DrawColoredSpriteRendererComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		auto& coloredSprite = m_ActiveEntity.GetComponent<ColoredSpriteRendererComponent>();
+		glm::vec3 color = coloredSprite.color;
+
+		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
+		{
+			coloredSprite.color = color;
 		}
 	}
 

@@ -38,6 +38,13 @@ namespace Akkad {
 			ImGui::Image((void*)m_buffer->GetColorAttachmentTexture(), panelSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			m_buffer->Unbind();
 			IsSelected = true;
+
+			auto viewportRectMin = ImGui::GetItemRectMin();
+			auto viewportRectMax = ImGui::GetItemRectMax();
+			Graphics::Rect sceneViewportRect;
+			sceneViewportRect.SetBounds({ viewportRectMin.x, viewportRectMin.y }, { viewportRectMax.x, viewportRectMax.y });
+
+			m_ViewportRect = sceneViewportRect;
 		}
 		else
 		{
@@ -59,6 +66,7 @@ namespace Akkad {
 		if (viewport->IsPlaying)
 		{
 			auto sceneManager = Application::GetSceneManager();
+			sceneManager->GetActiveScene()->SetViewportRect(m_ViewportRect);
 			sceneManager->GetActiveScene()->BeginRenderer2D(m_AspectRatio);
 			sceneManager->GetActiveScene()->Render2D();
 			sceneManager->GetActiveScene()->RenderGUI();
@@ -69,6 +77,7 @@ namespace Akkad {
 		else
 		{
 			auto scene = EditorLayer::GetActiveScene();
+			scene->SetViewportRect(m_ViewportRect);
 			scene->BeginRenderer2D(m_AspectRatio);
 			scene->Render2D();
 			scene->RenderGUI();

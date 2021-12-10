@@ -948,6 +948,23 @@ namespace Akkad {
 		}
 	}
 
+	Entity Scene::GetActiveCamera()
+	{
+		auto view = m_Registry.view<TransformComponent, CameraComponent>();
+		bool foundCamera = false;
+
+		for (auto entity : view)
+		{
+			auto& transform = view.get<TransformComponent>(entity);
+			auto& camera = view.get<CameraComponent>(entity);
+
+			if (camera.isActive)
+			{
+				return {entity, this};
+			}
+		}
+	}
+
 	Entity Scene::GetEntity(entt::entity handle)
 	{
 		Entity entity = { handle, this };

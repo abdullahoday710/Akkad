@@ -31,6 +31,7 @@ namespace Akkad {
 		bool EntityHasChild(Entity parent, Entity child);
 		bool EntityHasHierarchyChild(Entity parent, Entity child);
 
+		Entity GetActiveCamera();
 		Entity InstantiateEntity(std::string instantiableEntityName, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 		Entity InstantiateEntityStatic(std::string instantiableEntityName, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 		void DestroyEntity(Entity entity);

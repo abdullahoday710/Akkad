@@ -108,16 +108,33 @@ namespace Akkad {
 
 			void SetX(float xpos)
 			{
-				m_Min.x = xpos - (m_Width / 2);
-				m_Max.x = xpos + (m_Width / 2);
+				if (xpos < 0)
+				{
+					m_Min.x = xpos + (m_Width / 2);
+					m_Max.x = xpos - (m_Width / 2);
+				}
+				else
+				{
+					m_Min.x = xpos - (m_Width / 2);
+					m_Max.x = xpos + (m_Width / 2);
+				}
 
 				m_Position.x = xpos;
 			}
 
 			void SetY(float ypos)
 			{
-				m_Min.y = ypos - (m_Height / 2);
-				m_Max.y = ypos + (m_Height / 2);
+				if (ypos < 0)
+				{
+					m_Min.y = ypos + (m_Height / 2);
+					m_Max.y = ypos - (m_Height / 2);
+				}
+
+				else
+				{
+					m_Min.y = ypos - (m_Height / 2);
+					m_Max.y = ypos + (m_Height / 2);
+				}
 
 				m_Position.y = ypos;
 			}

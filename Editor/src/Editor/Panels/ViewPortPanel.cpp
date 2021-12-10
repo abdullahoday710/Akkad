@@ -258,7 +258,6 @@ namespace Akkad {
 		{
 			auto sceneManager = Application::GetSceneManager();
 			sceneManager->GetActiveScene()->SetViewportSize({ m_buffer->GetDescriptor().width, m_buffer->GetDescriptor().height });
-			sceneManager->GetActiveScene()->SetViewportRect(m_ViewportRect);
 			Renderer2D::BeginScene(m_EditorCamera, m_EditorCamera.GetTransformMatrix());
 			sceneManager->GetActiveScene()->RenderPickingBuffer2D();
 

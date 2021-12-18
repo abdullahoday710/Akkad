@@ -896,6 +896,55 @@ namespace Akkad {
 		m_Registry.destroy(entity.m_Handle);
 	}
 
+	void Scene::RemoveEntityWithAllChildren(Entity entity)
+	{
+		auto& entity_relation = entity.GetComponent<RelationShipComponent>();
+
+		Entity current_child = entity_relation.last_child;
+		for (size_t i = 0; i < entity_relation.children; i++)
+		{
+			if (current_child.IsValid())
+			{
+				auto& current_child_relation = current_child.GetComponent<RelationShipComponent>();
+				Entity cache = current_child;
+				current_child = current_child_relation.prev;
+
+				m_Registry.destroy(cache.m_Handle);
+
+			}
+		}
+
+		if (entity_relation.parent.IsValid())
+		{
+			auto& parent_relation = entity_relation.parent.GetComponent<RelationShipComponent>();
+			if (parent_relation.first_child == entity)
+			{
+				parent_relation.first_child = entity_relation.next;
+			}
+
+			else if (parent_relation.last_child == entity)
+			{
+				parent_relation.last_child = entity_relation.prev;
+			}
+
+			parent_relation.children -= 1;
+		}
+
+		if (entity_relation.next.IsValid())
+		{
+			auto& next_relation = entity_relation.next.GetComponent<RelationShipComponent>();
+			next_relation.prev = entity_relation.prev;
+		}
+
+		if (entity_relation.prev.IsValid())
+		{
+			auto& prev_relation = entity_relation.prev.GetComponent<RelationShipComponent>();
+			prev_relation.next = entity_relation.next;
+		}
+
+		m_Registry.destroy(entity.m_Handle);
+	}
+
 	Entity Scene::GetGuiContainer()
 	{
 		auto containerView = m_Registry.view<GUIContainerComponent>();

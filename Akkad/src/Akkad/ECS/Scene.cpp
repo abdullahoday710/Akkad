@@ -532,12 +532,12 @@ namespace Akkad {
 				if (relation_ship.parent.HasComponent<TransformComponent>())
 				{
 					auto& parent_transform = relation_ship.parent.GetComponent<TransformComponent>();
-					child_transform.m_ParentPosition = parent_transform.GetPosition();
-					child_transform.m_ParentRotation = parent_transform.GetRotation();
+					//child_transform.m_ParentPosition = parent_transform.GetPosition();
+					//child_transform.m_ParentRotation = parent_transform.GetRotation();
+					child_transform.SetParentPosition(parent_transform.GetPosition());
+					child_transform.SetParentRotation(parent_transform.GetRotation());
 				}
 			}
-
-			child_transform.RecalculateTransformMatrix();
 		}
 	}
 

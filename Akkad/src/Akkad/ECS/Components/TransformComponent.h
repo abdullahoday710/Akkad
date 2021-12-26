@@ -32,15 +32,27 @@ namespace Akkad {
 		}
 
 		void SetPostion(glm::vec3 newpos) {
-			m_Position = newpos;
+			if (newpos != m_Position)
+			{
+				m_Position = newpos;
+				RecalculateTransformMatrix();
+			}
 		}
 
 		void SetRotation(glm::vec3 rotation) {
-			m_Rotation = rotation;
+			if (m_Rotation != rotation)
+			{
+				m_Rotation = rotation;
+				RecalculateTransformMatrix();
+			}
 		}
 
 		void SetScale(glm::vec3 scale) {
-			m_Scale = scale;
+			if (m_Scale != scale)
+			{
+				m_Scale = scale;
+				RecalculateTransformMatrix();
+			}
 		}
 
 	private:
@@ -50,6 +62,24 @@ namespace Akkad {
 		glm::vec3 m_ParentRotation;
 		glm::vec3 m_Scale;
 		glm::mat4 m_TransformMatrix;
+
+		void SetParentPosition(glm::vec3 position)
+		{
+			if (m_ParentPosition != position)
+			{
+				m_ParentPosition = position;
+				RecalculateTransformMatrix();
+			}
+		}
+
+		void SetParentRotation(glm::vec3 rotation)
+		{
+			if (m_ParentRotation != rotation)
+			{
+				m_ParentRotation = rotation;
+				RecalculateTransformMatrix();
+			}
+		}
 
 		void RecalculateTransformMatrix() {
 			m_TransformMatrix = glm::mat4(1.0f);

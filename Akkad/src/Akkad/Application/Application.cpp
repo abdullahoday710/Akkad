@@ -8,6 +8,9 @@
 	#include "Akkad/Platforms/Desktop/Windows/Win32GameAssembly.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32Time.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32Input.h"
+
+	#undef min
+	#undef max
 #endif
 
 #ifdef AK_PLATFORM_WEB
@@ -21,6 +24,7 @@
 #include "Akkad/Graphics/Renderer2D.h"
 #include "Akkad/Asset/AssetManager.h"
 #include "Akkad/ECS/SceneManager.h"
+#include "Akkad/ECS/Entity.h"
 
 namespace Akkad {
 	using namespace Graphics;

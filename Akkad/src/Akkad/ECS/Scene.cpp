@@ -18,7 +18,6 @@ namespace Akkad {
 	using namespace Graphics;
 	Scene::Scene()
 	{
-
 		FrameBufferDescriptor pickingBufferDescriptor;
 		pickingBufferDescriptor.width = 800;
 		pickingBufferDescriptor.height = 800;
@@ -116,12 +115,19 @@ namespace Akkad {
 
 			}
 
-			for (auto entity : colorView)
+			if (colorView)
 			{
-				auto& color = colorView.get<ColoredSpriteRendererComponent>(entity);
-				auto& transform = colorView.get<TransformComponent>(entity);
-				Renderer2D::DrawQuad(color.color, transform.GetTransformMatrix());
+				for (auto entity : colorView)
+				{
+					if (colorView.contains(entity))
+					{
+						auto& color = colorView.get<ColoredSpriteRendererComponent>(entity);
+						auto& transform = colorView.get<TransformComponent>(entity);
+						Renderer2D::DrawQuad(color.color, transform.GetTransformMatrix());
+					}
+				}
 			}
+
 
 			for (auto entity : scriptView)
 			{
@@ -521,24 +527,31 @@ namespace Akkad {
 	void Scene::UpdateTransforms()
 	{
 		auto view = m_Registry.view<TransformComponent, RelationShipComponent>();
-
-		for (auto entity : view)
+		if (view)
 		{
-			auto& relation_ship = view.get<RelationShipComponent>(entity);
-			auto& child_transform = view.get<TransformComponent>(entity);
-
-			if (relation_ship.parent.IsValid())
+			for (auto entity : view)
 			{
-				if (relation_ship.parent.HasComponent<TransformComponent>())
+				if (view.contains(entity))
 				{
-					auto& parent_transform = relation_ship.parent.GetComponent<TransformComponent>();
-					//child_transform.m_ParentPosition = parent_transform.GetPosition();
-					//child_transform.m_ParentRotation = parent_transform.GetRotation();
-					child_transform.SetParentPosition(parent_transform.GetPosition());
-					child_transform.SetParentRotation(parent_transform.GetRotation());
+					auto& relation_ship = view.get<RelationShipComponent>(entity);
+					auto& child_transform = view.get<TransformComponent>(entity);
+
+					if (relation_ship.parent.IsValid())
+					{
+						if (relation_ship.parent.HasComponent<TransformComponent>())
+						{
+							auto& parent_transform = relation_ship.parent.GetComponent<TransformComponent>();
+							//child_transform.m_ParentPosition = parent_transform.GetPosition();
+							//child_transform.m_ParentRotation = parent_transform.GetRotation();
+							child_transform.SetParentPosition(parent_transform.GetPosition());
+							child_transform.SetParentRotation(parent_transform.GetRotation());
+						}
+					}
 				}
+
 			}
 		}
+
 	}
 
 	void Scene::InitilizePhysicsBodies2D(Entity entity)

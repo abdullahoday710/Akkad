@@ -144,10 +144,14 @@ namespace Akkad {
 		{
 			auto& lineComponent = lineView.get<LineRendererComponent>(entity);
 
-			for (auto& line : lineComponent.lines)
+			if (lineComponent.isActive)
 			{
-				Renderer2D::DrawLine({ line.x, line.y }, { line.z, line.w }, lineComponent.color);
+				for (auto& line : lineComponent.lines)
+				{
+					Renderer2D::DrawLine({ line.x, line.y }, { line.z, line.w }, lineComponent.color);
+				}
 			}
+
 		}
 
 		if (Renderer2D::GetPhysicsDebugDrawState())
@@ -674,13 +678,22 @@ namespace Akkad {
 
 		for (auto entity : view)
 		{
-			auto& tagComponent = view.get<TagComponent>(entity);
-
-			if (tagComponent.Tag == tag)
+			if (view.contains(entity))
 			{
-				Entity found = {entity, this};
-				return found;
+				auto& tagComponent = view.get<TagComponent>(entity);
+
+				if (tagComponent.Tag == tag)
+				{
+					Entity found = { entity, this };
+					return found;
+				}
 			}
+			else
+			{
+				AK_ERROR("Could not get entity by tag : {}, view does not contain the entity !", tag);
+				return Entity();
+			}
+
 		}
 		AK_ERROR("Could not get entity by tag : {}", tag);
 		// return an invalid entity.

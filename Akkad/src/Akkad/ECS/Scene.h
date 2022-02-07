@@ -4,6 +4,9 @@
 
 #include <entt/entt.hpp>
 
+#include <condition_variable>
+#include <mutex>
+
 namespace Akkad {
 
 	namespace Graphics {
@@ -40,6 +43,12 @@ namespace Akkad {
 		void DestroyEntity(Entity entity);
 		std::string GetName() { return m_Name; }
 		Box2dWorld& GetPhysicsWorld2D() { return m_PhysicsWorld2D; };
+
+		// shitty workarounds for infinityplace world threading, disgusting but I don't have time for clean implementation now.
+		std::condition_variable m_conditionalVar;
+		std::mutex m_mutex;
+		bool shouldChunkLoaderWork = false;
+
 
 	private:
 		void Start();

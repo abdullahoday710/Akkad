@@ -35,6 +35,8 @@ namespace Akkad {
 
 	void Scene::Start()
 	{
+		shouldChunkLoaderWork = false;
+
 		// Initialize physics
 		{
 			m_PhysicsWorld2D.SetContactListener(&m_PhysicsListener2D);
@@ -75,10 +77,16 @@ namespace Akkad {
 		}
 
 		UpdateTransforms();
+
+		std::lock_guard<std::mutex> lck(m_mutex);
+		shouldChunkLoaderWork = true;
+		m_conditionalVar.notify_one();
 	}
 
 	void Scene::Render2D()
 	{
+		shouldChunkLoaderWork = false;
+
 		auto command = Application::GetRenderPlatform()->GetRenderCommand();
 		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
 		auto animatedView = m_Registry.view<TransformComponent, AnimatedSpriteRendererComponent>();
@@ -160,6 +168,10 @@ namespace Akkad {
 			m_PhysicsDebugDraw2D.SetFlags(b2Draw::e_shapeBit | b2Draw::e_jointBit);
 			m_PhysicsWorld2D.m_World->DebugDraw();
 		}
+
+		std::lock_guard<std::mutex> lck(m_mutex);
+		shouldChunkLoaderWork = true;
+		m_conditionalVar.notify_one();
 
 	}
 
@@ -530,6 +542,8 @@ namespace Akkad {
 
 	void Scene::UpdateTransforms()
 	{
+		shouldChunkLoaderWork = false;
+
 		auto view = m_Registry.view<TransformComponent, RelationShipComponent>();
 		if (view)
 		{
@@ -552,9 +566,13 @@ namespace Akkad {
 						}
 					}
 				}
-
+				
 			}
 		}
+
+		std::lock_guard<std::mutex> lck(m_mutex);
+		shouldChunkLoaderWork = true;
+		m_conditionalVar.notify_one();
 
 	}
 

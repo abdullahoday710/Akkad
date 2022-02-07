@@ -367,11 +367,6 @@ namespace Akkad {
 		{
 			if (GameAssemblyHandler::HasLoadedGameAssembly())
 			{
-				if (DrawComponentContextMenu<ScriptComponent>(m_ActiveEntity))
-				{
-					ImGui::TreePop();
-					return;
-				}
 
 				auto gameAssembly = Application::GetGameAssembly();
 				std::vector<std::string> scriptNames;

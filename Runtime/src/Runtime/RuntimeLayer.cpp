@@ -3,7 +3,9 @@
 #include <Akkad/Graphics/Renderer2D.h>
 #include <Akkad/Graphics/SortingLayer2D.h>
 #include <fstream>
+#include <map>
 #include <sstream>
+
 namespace Akkad {
 
 	void RuntimeLayer::InitializeEngine()
@@ -38,13 +40,14 @@ namespace Akkad {
 		auto sceneManager = Application::GetSceneManager();
 		auto window = Application::GetInstance().GetWindow();
 
+		sceneManager->GetActiveScene()->Update();
+
 		sceneManager->GetActiveScene()->BeginRenderer2D((float)window->GetWidth() / (float)window->GetHeight());
 		sceneManager->GetActiveScene()->Render2D();
 		sceneManager->GetActiveScene()->RenderGUI();
-		sceneManager->GetActiveScene()->RenderPickingBuffer2D();
+		//sceneManager->GetActiveScene()->RenderPickingBuffer2D();
 		Graphics::Renderer2D::EndScene();
 
-		sceneManager->GetActiveScene()->Update();
 	}
 
 	void RuntimeLayer::RenderImGui()
@@ -112,9 +115,13 @@ namespace Akkad {
 	}
 	void RuntimeLayer::LoadGameAssembly()
 	{
-		bool loaded = Application::GetGameAssembly()->LoadAssembly("GameAssembly");
-		AK_ASSERT(loaded, "Game startup failed, Because the game assembly could not be loaded !");
+		//bool loaded = Application::GetGameAssembly()->LoadAssembly("GameAssembly");
+		//AK_ASSERT(loaded, "Game startup failed, Because the game assembly could not be loaded !");
 		Application::GetGameAssembly()->Initialize(Application::GetInstance().m_ApplicationComponents);
+		auto script = Application::GetGameAssembly()->InstantiateScript("CameraController");
+		script->OnStart();
+		//std::cout << "getting scripts..." << std::endl;
+		//std::vector<std::string> test = Application::GetGameAssembly()->GetScripts();
 	}
 
 	void RuntimeLayer::RegisterSortingLayers()

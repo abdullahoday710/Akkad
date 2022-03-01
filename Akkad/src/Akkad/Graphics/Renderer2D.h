@@ -21,6 +21,13 @@ namespace Akkad {
 			struct QuadVertex {
 				glm::vec3 position;
 				glm::vec3 color;
+				glm::mat4 transform;
+			};
+
+			struct QuadInstance
+			{
+				glm::vec3 color;
+				glm::mat4 transform;
 			};
 
 			struct LineVertex {
@@ -41,6 +48,7 @@ namespace Akkad {
 			static void DrawRect(Rect rect, glm::vec3 color, bool filled) { GetInstance().DrawRectImpl(rect, color, filled); }
 			static void DrawRect(Rect rect, glm::vec3 color, bool filled, glm::mat4 projection) { GetInstance().DrawRectImpl(rect, color, filled, projection); }
 
+			static void DrawColoredQuadInstanced(glm::vec3 color, glm::mat4& transform) { GetInstance().DrawColoredQuadInstancedImpl(color, transform); }
 			static void DrawSprite(Sprite& sprite, glm::mat4& transform) { GetInstance().DrawSpriteImpl(sprite, transform); };
 			static void DrawAnimatedSprite(AnimatedSprite& sprite, AnimationFrame& frame, glm::mat4& transform) { GetInstance().DrawAnimatedSpriteImpl(sprite, frame, transform); };
 
@@ -100,6 +108,10 @@ namespace Akkad {
 
 			void InitShadersImpl();
 
+			void StartColoredQuadInstancedImpl();
+			void DrawColoredQuadInstancedImpl(glm::vec3 color, glm::mat4& transform);
+			void FlushColoredQuadInstancedImpl();
+
 			bool m_DrawDebugGUIRects = true;
 			bool m_DrawDebugPhysics = true;
 
@@ -109,11 +121,19 @@ namespace Akkad {
 			SharedPtr<VertexBuffer> m_QuadVB;
 			SharedPtr<IndexBuffer> m_QuadIB;
 
-			enum {MAX_BATCH_QUADS = 20000, MAX_BATCH_VERTS = MAX_BATCH_QUADS * 4, MAX_BATCH_INDICES = MAX_BATCH_QUADS * 6};
+			enum {MAX_BATCH_QUADS = 10000, MAX_BATCH_VERTS = MAX_BATCH_QUADS * 4, MAX_BATCH_INDICES = MAX_BATCH_QUADS * 6};
 			SharedPtr<VertexBuffer> m_BatchVB;
 			SharedPtr<IndexBuffer> m_BatchIB;
+
+			glm::mat4 m_InstanceMatrices[MAX_BATCH_QUADS];
+			QuadInstance* m_QuadInstanceData = nullptr;
+			unsigned int m_QuadInstanceAmount = 0;
+			
+			SharedPtr<VertexBuffer> m_InstanceVB;
+
 			QuadVertex* m_QuadBatchData = nullptr;
 			QuadVertex* m_LastQuadVertexPtr = nullptr;
+			QuadInstance* m_LastQuadInstancePtr = nullptr;
 			glm::vec4 m_QuadVertexPositions[4] = {};
 			unsigned int m_QuadBatchIndexCount = 0;
 

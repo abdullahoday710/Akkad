@@ -131,7 +131,8 @@ namespace Akkad {
 					{
 						auto& color = colorView.get<ColoredSpriteRendererComponent>(entity);
 						auto& transform = colorView.get<TransformComponent>(entity);
-						Renderer2D::DrawQuad(color.color, transform.GetTransformMatrix());
+						//Renderer2D::DrawQuad(color.color, transform.GetTransformMatrix());
+						Renderer2D::DrawColoredQuadInstanced(color.color, transform.GetTransformMatrix());
 					}
 				}
 			}
@@ -443,7 +444,7 @@ namespace Akkad {
 		// Update physics
 		{
 			m_PhysicsWorld2D.SetContactListener(&m_PhysicsListener2D);
-			m_PhysicsWorld2D.Step();
+			//m_PhysicsWorld2D.Step();
 
 			auto view = m_Registry.view<TransformComponent, RigidBody2dComponent>();
 
@@ -542,6 +543,7 @@ namespace Akkad {
 
 	void Scene::UpdateTransforms()
 	{
+		std::lock_guard<std::mutex> lck(m_mutex);
 		shouldChunkLoaderWork = false;
 
 		auto view = m_Registry.view<TransformComponent, RelationShipComponent>();
@@ -549,28 +551,33 @@ namespace Akkad {
 		{
 			for (auto entity : view)
 			{
-				if (view.contains(entity))
+				Entity e = { entity, this };
+				if (!e.HasComponent<ColoredSpriteRendererComponent>())
 				{
-					auto& relation_ship = view.get<RelationShipComponent>(entity);
-					auto& child_transform = view.get<TransformComponent>(entity);
-
-					if (relation_ship.parent.IsValid())
+					if (view.contains(entity))
 					{
-						if (relation_ship.parent.HasComponent<TransformComponent>())
+						auto& relation_ship = view.get<RelationShipComponent>(entity);
+						auto& child_transform = view.get<TransformComponent>(entity);
+
+						if (relation_ship.parent.IsValid())
 						{
-							auto& parent_transform = relation_ship.parent.GetComponent<TransformComponent>();
-							//child_transform.m_ParentPosition = parent_transform.GetPosition();
-							//child_transform.m_ParentRotation = parent_transform.GetRotation();
-							child_transform.SetParentPosition(parent_transform.GetPosition());
-							child_transform.SetParentRotation(parent_transform.GetRotation());
+							if (relation_ship.parent.HasComponent<TransformComponent>())
+							{
+								auto& parent_transform = relation_ship.parent.GetComponent<TransformComponent>();
+								//child_transform.m_ParentPosition = parent_transform.GetPosition();
+								//child_transform.m_ParentRotation = parent_transform.GetRotation();
+								child_transform.SetParentPosition(parent_transform.GetPosition());
+								child_transform.SetParentRotation(parent_transform.GetRotation());
+							}
 						}
 					}
 				}
+
 				
 			}
 		}
 
-		std::lock_guard<std::mutex> lck(m_mutex);
+		
 		shouldChunkLoaderWork = true;
 		m_conditionalVar.notify_one();
 
@@ -634,11 +641,11 @@ namespace Akkad {
 		{
 			auto& script = entity.GetComponent<ScriptComponent>();
 
-
 			if (script.Instance == nullptr)
 			{
 				auto gameAssembly = Application::GetGameAssembly();
-				script.Instance = gameAssembly->InstantiateScript(script.ScriptName.c_str());
+				const char* name = script.ScriptName.c_str();
+				script.Instance = gameAssembly->InstantiateScript(name);
 				script.Instance->m_Entity = entity;
 
 				try
@@ -807,7 +814,7 @@ namespace Akkad {
 					return true;
 				}
 
-				const auto& current_child_relation = current_child.GetComponent<RelationShipComponent>();
+				auto& current_child_relation = current_child.GetComponent<RelationShipComponent>();
 
 				current_child = current_child_relation.next;
 			}

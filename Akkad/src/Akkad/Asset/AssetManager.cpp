@@ -79,7 +79,8 @@ namespace Akkad {
 		else
 		{
 			auto desc = GetDescriptorByID(assetID);
-			auto textureinfo = DynamicCastPtr<TextureAssetInfo>(desc.assetInfo);
+			
+			auto textureinfo = std::static_pointer_cast<TextureAssetInfo>(desc.assetInfo);
 			if (textureinfo->isTilemap)
 			{
 				auto texture = Application::GetInstance().GetRenderPlatform()->CreateTexture(desc.absolutePath.c_str(), textureinfo->tileWidth, textureinfo->tileHeight);

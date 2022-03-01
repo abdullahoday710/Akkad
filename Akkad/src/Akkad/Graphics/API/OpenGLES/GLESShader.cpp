@@ -86,7 +86,7 @@ namespace Akkad {
 
 		void GLESShader::SetUniformBuffer(SharedPtr<UniformBuffer> buffer)
 		{
-			SharedPtr<GLESUniformBuffer> glesBuffer = DynamicCastPtr<GLESUniformBuffer>(buffer);
+			SharedPtr<GLESUniformBuffer> glesBuffer = std::static_pointer_cast<GLESUniformBuffer>(buffer);
 			unsigned int bufferIndex = glGetUniformBlockIndex(m_ResourceID, glesBuffer->GetName().c_str());
 			glUniformBlockBinding(m_ResourceID, bufferIndex, glesBuffer->GetBindingPoint());
 		}

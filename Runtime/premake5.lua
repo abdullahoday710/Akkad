@@ -43,9 +43,12 @@ project "Runtime"
 	
 	if _OPTIONS['target-emscripten'] then
 		webmodules = path.getabsolute("WebModules/include_assets.js")
+		GameAssembly = path.getabsolute("gameassembly/libGameAssembly.a")
+		Common = path.getabsolute("gameassembly/libCommon.a")
+		LZ4 = path.getabsolute("gameassembly/liblz4.a")
 		executable_suffix (".html")
 		filter "configurations:Debug"
 		executable_suffix (".html")
-		buildoptions   {"-s MAIN_MODULE=1", "-s FORCE_FILESYSTEM=1", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1"}
-		linkoptions    {"-O3","-s ASYNCIFY","-s ASYNCIFY_IMPORTS=['doLoadLibrary']","-s ALLOW_MEMORY_GROWTH=1","-s ALLOW_TABLE_GROWTH", "-s EXPORTED_RUNTIME_METHODS=['FS']", "-s DYNCALLS=1","-s MAIN_MODULE=1", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1","-s FORCE_FILESYSTEM=1", "--profiling", "--pre-js=" .. webmodules}
+		buildoptions   {"-s NO_DISABLE_EXCEPTION_CATCHING", "-fPIC", "-pthread", "-s FORCE_FILESYSTEM=1", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1"}
+		linkoptions    {"-O3", "-s LLD_REPORT_UNDEFINED", "-fPIC","-s NO_DISABLE_EXCEPTION_CATCHING", "-s TOTAL_MEMORY=2500MB", "-pthread", "-s PTHREAD_POOL_SIZE=3", "-s USE_PTHREADS=1", "-s ALLOW_TABLE_GROWTH", "-s ASSERTIONS=1", "-s EXPORTED_RUNTIME_METHODS=['FS']", "-s DYNCALLS=1", "-s USE_WEBGL2=1", "-s FULL_ES3=1", "-s OFFSCREEN_FRAMEBUFFER=1","-s FORCE_FILESYSTEM=1", "--profiling","-s EXPORT_ALL=1", "--pre-js=" .. webmodules .. " " .. GameAssembly .. " " .. Common .. " " .. LZ4}
 	end

@@ -17,7 +17,7 @@ namespace Akkad {
 			CookLayout();
 
 			glBindBuffer(GL_UNIFORM_BUFFER, m_ResourceID);
-			glBufferData(GL_UNIFORM_BUFFER, m_Layout.m_BufferSize, NULL, GL_STATIC_DRAW); //allocate memory for the buffer on the GPU side
+			glBufferData(GL_UNIFORM_BUFFER, m_Layout.m_BufferSize, NULL, GL_DYNAMIC_DRAW); //allocate memory for the buffer on the GPU side
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 			for (int i = 0; i < m_Layout.m_BufferSize; i++)
@@ -49,9 +49,11 @@ namespace Akkad {
 		{
 			glBindBuffer(GL_UNIFORM_BUFFER, m_ResourceID);
 			
-			void* data = glMapBufferRange(GL_UNIFORM_BUFFER,0, m_Layout.m_BufferSize, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-			memcpy(data, m_BufferData.data(), m_Layout.m_BufferSize);
-			glUnmapBuffer(GL_UNIFORM_BUFFER);
+			//void* data = glMapBufferRange(GL_UNIFORM_BUFFER,0, m_Layout.m_BufferSize, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+			//memcpy(data, m_BufferData.data(), m_Layout.m_BufferSize);
+			//glUnmapBuffer(GL_UNIFORM_BUFFER);
+
+			glBufferSubData(GL_UNIFORM_BUFFER, 0, m_Layout.m_BufferSize, m_BufferData.data());
 
 			glBindBuffer(GL_UNIFORM_BUFFER, 0);
 		}

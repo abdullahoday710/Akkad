@@ -6,10 +6,12 @@ namespace Akkad {
 	class ScriptableEntity;
 	struct ApplicationComponents;
 
+#ifndef __EMSCRIPTEN__
 	// Types for "exported" dynamic library functions
 	typedef void (*INITLIBFN)(Akkad::ApplicationComponents* appComponents);
 	typedef std::vector<std::string>& (*GETSCRIPTSFN)();
 	typedef ScriptableEntity* (*INSTANTIATESCRIPTFN)(const char* scriptName);
+#endif
 
 	class LoadedGameAssembly
 	{

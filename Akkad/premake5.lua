@@ -77,8 +77,8 @@ project "Akkad"
         "src/Akkad/Graphics/API/OpenGLES/**"
     }
     
-    buildoptions{"-fPIC "};
-    linkoptions{"-fPIC "};
+    buildoptions{"-fPIC -g -pthread -O3"};
+    linkoptions{"-fPIC -g -pthread -O3"};
 
 
 

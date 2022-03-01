@@ -15,6 +15,7 @@ namespace Akkad {
 			attrs.majorVersion = 2;
 			attrs.minorVersion = 0;
 			attrs.explicitSwapControl = true;
+			attrs.renderViaOffscreenBackBuffer = true;
 
 			m_Context = emscripten_webgl_create_context("#canvas", &attrs);
 			emscripten_webgl_make_context_current(m_Context);

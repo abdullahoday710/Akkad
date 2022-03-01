@@ -30,13 +30,19 @@ namespace Akkad {
 
 		GLVertexBuffer::~GLVertexBuffer()
 		{
-			glDeleteVertexArrays(1, &m_VA);
+			if (!m_Layout.isStaticBuffer)
+			{
+				glDeleteVertexArrays(1, &m_VA);
+			}
 			glDeleteBuffers(1, &m_ResourceID);
 		}
 
 		void GLVertexBuffer::Bind()
 		{
-			glBindVertexArray(m_VA);
+			if (!m_Layout.isStaticBuffer)
+			{
+				glBindVertexArray(m_VA);
+			}
 			glBindBuffer(GL_ARRAY_BUFFER, m_ResourceID);
 		}
 
@@ -70,22 +76,65 @@ namespace Akkad {
 
 		void GLVertexBuffer::SetLayout(VertexBufferLayout layout)
 		{
+			if (!layout.isStaticBuffer)
+			{
+				glGenVertexArrays(1, &m_VA);
+			}
 			Bind();
 			m_Layout = layout;
-			auto& elements = layout.GetElements();
+			auto& elements = m_Layout.GetElements();
 			unsigned int offset = 0;
 
 			for (unsigned int i = 0; i < elements.size(); i++)
 			{
-				auto element = elements[i];
+				auto& element = elements[i];
 				auto glType = ElementTypeToGLType(element.type);
 				auto glNormalized = element.normalized ? GL_TRUE : GL_FALSE;
 
-				glEnableVertexAttribArray(i);
-				glVertexAttribPointer(i, element.count, glType, glNormalized, layout.GetStride(), (const void*)offset);
+				if (!m_Layout.isStaticBuffer)
+				{
+					glEnableVertexAttribArray(i);
+					glVertexAttribPointer(i, element.count, glType, glNormalized, layout.GetStride(), (const void*)offset);
+					if (element.isInstanced)
+					{
+						glVertexAttribDivisor(i, 1);
+					}
+				}
+				element.offset = offset;
 				offset += element.count * GetSizeOfType(element.type);
+				m_AvailableVertexAttribute++;
 			}
 			UnBind();
+		}
+
+		void GLVertexBuffer::ExtendLayout(SharedPtr<VertexBuffer> vb)
+		{
+			auto otherLayout = vb->GetLayout();
+			AK_ASSERT(otherLayout.isStaticBuffer, "Other buffer must be a static buffer in order to extend it's layout !");
+			AK_ASSERT(!m_Layout.isStaticBuffer, "buffer must not be a static buffer in order to extend it's layout !");
+
+			vb->Bind();
+			glBindVertexArray(m_VA);
+
+			auto& elements = otherLayout.GetElements();
+
+			for (size_t i = 0; i < elements.size(); i++)
+			{
+				auto& element = elements[i];
+				auto glType = ElementTypeToGLType(element.type);
+				auto glNormalized = element.normalized ? GL_TRUE : GL_FALSE;
+
+				glEnableVertexAttribArray(m_AvailableVertexAttribute);
+				glVertexAttribPointer(m_AvailableVertexAttribute, element.count, glType, glNormalized, otherLayout.GetStride(), (const void*)element.offset);
+				if (element.isInstanced)
+				{
+					glVertexAttribDivisor(m_AvailableVertexAttribute, 1);
+				}
+				m_AvailableVertexAttribute++;
+			}
+
+
+
 		}
 
 		VertexBufferLayout& GLVertexBuffer::GetLayout()

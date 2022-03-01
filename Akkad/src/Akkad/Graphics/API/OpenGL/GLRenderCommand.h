@@ -15,6 +15,7 @@ namespace Akkad {
 			virtual void EnableBlending() override;
 			virtual void DisableBlending() override;
 			virtual void SetBlendState(BlendSourceFactor sfactor, BlendDestFactor dfactor) override;
+			virtual void DrawElementsInstanced(PrimitiveType type, unsigned int count, unsigned int amount) override;
 		};
 	}
 }

@@ -107,6 +107,7 @@ namespace Akkad {
 		friend class GameAssembly;
 		friend class RuntimeLayer;
 		friend class ::SandboxLayer;
+		friend class WebGameAssembly;
 		
 	};
 }

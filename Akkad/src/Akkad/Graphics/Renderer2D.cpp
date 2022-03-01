@@ -7,11 +7,12 @@
 namespace Akkad {
 
 	namespace Graphics {
-
+		// TODO : CLEAN THIS SHIT UP
 		Renderer2D Renderer2D::s_Instance;
 
 		void Renderer2D::InitImpl()
 		{
+			// During init, enable debug output
 			float vertices[] = {
 				// positions             // texture coords
 				 0.5f,  0.5f, 0.0f,      1.0f, 1.0f,   // top right
@@ -54,7 +55,7 @@ namespace Akkad {
 				auto vertexbuffer = platform->CreateVertexBuffer();
 				vertexbuffer->SetLayout(layout);
 				m_LineVB = vertexbuffer;
-				m_LineVB->SetData(0, sizeof(LineVertex) * MAX_BATCH_VERTS);
+				m_LineVB->SetData(0, sizeof(LineVertex) * (MAX_BATCH_VERTS * 2));
 			}
 
 			UniformBufferLayout scenePropsLayout;
@@ -68,6 +69,10 @@ namespace Akkad {
 			{
 
 				m_QuadBatchData = new QuadVertex[MAX_BATCH_VERTS];
+
+				m_QuadInstanceData = new QuadInstance[MAX_BATCH_VERTS];
+				m_LastQuadInstancePtr = m_QuadInstanceData;
+
 				uint32_t* batchIndices = new uint32_t[MAX_BATCH_INDICES];
 				uint32_t offset = 0;
 				for (uint32_t i = 0; i < MAX_BATCH_INDICES; i += 6)
@@ -84,13 +89,39 @@ namespace Akkad {
 				}
 
 				VertexBufferLayout batchLayout;
-				batchLayout.isDynamic = true;
+				// vertex positions
 				batchLayout.Push(ShaderDataType::FLOAT, 3);
-				batchLayout.Push(ShaderDataType::FLOAT, 3);
+
 				m_BatchVB = platform->CreateVertexBuffer();
 				m_BatchVB->SetLayout(batchLayout);
+				float vertices[] = {
+					// positions
+					 0.5f,  0.5f, 0.0f,
+					 0.5f, -0.5f, 0.0f,
+					-0.5f, -0.5f, 0.0f,
+					-0.5f,  0.5f, 0.0f,
+				};
+				m_BatchVB->SetData(&vertices, sizeof(vertices));
 
-				m_BatchVB->SetData(0, sizeof(QuadVertex) * MAX_BATCH_VERTS);
+				VertexBufferLayout instanceLayout;
+				instanceLayout.isDynamic = true;
+				instanceLayout.isStaticBuffer = true;
+				// instance color
+				instanceLayout.Push(ShaderDataType::FLOAT, 3, true);
+
+				// instance transform matrix
+				instanceLayout.Push(ShaderDataType::FLOAT, 4, true);
+				instanceLayout.Push(ShaderDataType::FLOAT, 4, true);
+				instanceLayout.Push(ShaderDataType::FLOAT, 4, true);
+				instanceLayout.Push(ShaderDataType::FLOAT, 4, true);
+
+				m_InstanceVB = platform->CreateVertexBuffer();
+				m_InstanceVB->SetLayout(instanceLayout);
+				m_InstanceVB->SetData(0, MAX_BATCH_QUADS * sizeof(QuadInstance));
+
+				m_BatchVB->ExtendLayout(m_InstanceVB);
+
+				
 				
 				m_BatchIB = platform->CreateIndexBuffer();
 				m_BatchIB->SetData(batchIndices, MAX_BATCH_INDICES * sizeof(uint32_t));
@@ -98,10 +129,9 @@ namespace Akkad {
 				delete[] batchIndices;
 				m_LastQuadVertexPtr = m_QuadBatchData;
 
-
-				m_QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+				m_QuadVertexPositions[0] = { 0.5f,  0.5f, 0.0f, 1.0f };
 				m_QuadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
-				m_QuadVertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
+				m_QuadVertexPositions[2] = { -0.5f, -0.5f, 0.0f, 1.0f };
 				m_QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
 			}
 		}
@@ -122,8 +152,10 @@ namespace Akkad {
 
 		void Renderer2D::EndSceneImpl()
 		{
-			FlushBatch();
-			FlushLineBatch();
+			//FlushBatch();
+			//FlushLineBatch();
+
+			FlushColoredQuadInstancedImpl();
 		}
 
 		void Renderer2D::DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform)
@@ -158,19 +190,20 @@ namespace Akkad {
 		}
 		void Renderer2D::DrawQuadImpl(glm::vec3 color, glm::mat4& transform)
 		{
-			if (m_QuadBatchIndexCount >= MAX_BATCH_INDICES)
-			{
-				NewBatch();
-			}
-			constexpr int quadVertexCount = 4;
-			for (size_t i = 0; i < quadVertexCount; i++)
-			{
-				m_LastQuadVertexPtr->position = transform * m_QuadVertexPositions[i];
-				m_LastQuadVertexPtr->color = color;
-				m_LastQuadVertexPtr++;
-			}
+			//if (m_QuadBatchIndexCount >= MAX_BATCH_INDICES)
+			//{
+			//	NewBatch();
+			//}
+			//constexpr int quadVertexCount = 4;
+			//for (size_t i = 0; i < quadVertexCount; i++)
+			//{
+			//	// TODO : compute the transform inside the shader...
+			//	m_LastQuadVertexPtr->position = transform * m_QuadVertexPositions[i];
+			//	m_LastQuadVertexPtr->color = color;
+			//	m_LastQuadVertexPtr++;
+			//}
 
-			m_QuadBatchIndexCount += 6;
+			//m_QuadBatchIndexCount += 6;
 		}
 
 		void Renderer2D::DrawQuadImpl(glm::vec3 color, glm::mat4& transform, glm::mat4 projection)
@@ -392,52 +425,52 @@ namespace Akkad {
 
 		void Renderer2D::DrawLineImpl(glm::vec2 point1, glm::vec2 point2, glm::vec3 color)
 		{
-			if (m_LineBatchVertexCount >= MAX_BATCH_VERTS)
-			{
-				NewLineBatch();
-			}
+			//if (m_LineBatchVertexCount >= MAX_BATCH_VERTS)
+			//{
+			//	NewLineBatch();
+			//}
 
-			m_LastLineVertexPtr->position = point1;
-			m_LastLineVertexPtr->color = color;
+			//m_LastLineVertexPtr->position = point1;
+			//m_LastLineVertexPtr->color = color;
 
-			m_LastLineVertexPtr++;
+			//m_LastLineVertexPtr++;
 
-			m_LastLineVertexPtr->position = point2;
-			m_LastLineVertexPtr->color = color;
+			//m_LastLineVertexPtr->position = point2;
+			//m_LastLineVertexPtr->color = color;
 
-			m_LastLineVertexPtr++;
+			//m_LastLineVertexPtr++;
 
-			m_LineBatchVertexCount += 2;
+			//m_LineBatchVertexCount += 2;
 
 		}
 
 		void Renderer2D::DrawLineImpl(glm::vec2 point1, glm::vec2 point2, glm::vec3 color, glm::mat4& projection)
 		{
-			auto platform = Application::GetRenderPlatform();
-			auto command = platform->GetRenderCommand();
+			//auto platform = Application::GetRenderPlatform();
+			//auto command = platform->GetRenderCommand();
 
-			float verts[] = {
-				point1.x, point1.y,
-				point2.x, point2.y
-			};
-			m_SceneProps->SetData("sys_viewProjection", projection);
-			m_LineShader->Bind();
-			m_LineShaderProps->SetData("props_color", color);
-			m_LineVB->SetSubData(0, &verts, sizeof(verts));
-			m_LineVB->Bind();
-			command->DrawArrays(PrimitiveType::LINE, 2);
+			//float verts[] = {
+			//	point1.x, point1.y,
+			//	point2.x, point2.y
+			//};
+			//m_SceneProps->SetData("sys_viewProjection", projection);
+			//m_LineShader->Bind();
+			//m_LineShaderProps->SetData("props_color", color);
+			//m_LineVB->SetSubData(0, &verts, sizeof(verts));
+			//m_LineVB->Bind();
+			//command->DrawArrays(PrimitiveType::LINE, 2);
 		}
 
 		void Renderer2D::StartBatch()
 		{
-			m_LastQuadVertexPtr = m_QuadBatchData;
-			m_QuadBatchIndexCount = 0;
+			//m_LastQuadVertexPtr = m_QuadBatchData;
+			//m_QuadBatchIndexCount = 0;
 		}
 
 		void Renderer2D::NewBatch()
 		{
-			FlushBatch();
-			StartBatch();
+			//FlushBatch();
+			//StartBatch();
 		}
 
 		void Renderer2D::DrawRectImpl(Rect rect, glm::vec3 color, bool filled)
@@ -453,16 +486,16 @@ namespace Akkad {
 
 		void Renderer2D::FlushBatch()
 		{
-			auto command = Application::GetRenderPlatform()->GetRenderCommand();
-			m_ColorShader->Bind();
+			//auto command = Application::GetRenderPlatform()->GetRenderCommand();
+			//m_ColorShader->Bind();
 
-			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
+			//m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
 
-			uint32_t dataSize = (uint32_t)((uint8_t*)m_LastQuadVertexPtr - (uint8_t*)m_QuadBatchData);
-			m_BatchVB->SetSubData(0, m_QuadBatchData, dataSize);
-			m_BatchVB->Bind();
-			m_BatchIB->Bind();
-			command->DrawIndexed(PrimitiveType::TRIANGLE, m_QuadBatchIndexCount);
+			//uint32_t dataSize = (uint32_t)((uint8_t*)m_LastQuadVertexPtr - (uint8_t*)m_QuadBatchData);
+			//m_BatchVB->SetSubData(0, m_QuadBatchData, dataSize);
+			//m_BatchVB->Bind();
+			//m_BatchIB->Bind();
+			//command->DrawIndexed(PrimitiveType::TRIANGLE, m_QuadBatchIndexCount);
 		}
 
 		void Renderer2D::StartLineBatch()
@@ -543,7 +576,6 @@ namespace Akkad {
 				layout.Push("props_color", ShaderDataType::FLOAT3);
 				m_ColorShaderProps = platform->CreateUniformBuffer(layout);
 				m_ColorShaderProps->SetName("shader_props");
-
 				m_ColorShader->SetUniformBuffer(m_ColorShaderProps);
 				m_ColorShader->SetUniformBuffer(m_SceneProps);
 
@@ -552,14 +584,7 @@ namespace Akkad {
 			{
 				auto lineShader = assetManager->GetShaderByName("r2d_lineShader");
 				m_LineShader = platform->CreateShader(lineShader.absolutePath.c_str());
-
-				UniformBufferLayout layout;
-				layout.Push("props_color", ShaderDataType::FLOAT3);
-				m_LineShaderProps = platform->CreateUniformBuffer(layout);
-				m_LineShaderProps->SetName("line_shader_props");
-
 				m_LineShader->SetUniformBuffer(m_SceneProps);
-				m_LineShader->SetUniformBuffer(m_LineShaderProps);
 
 			}
 
@@ -595,12 +620,50 @@ namespace Akkad {
 
 				m_TexturedRectShaderProps = platform->CreateUniformBuffer(layout);
 				m_TexturedRectShaderProps->SetName("shader_props");
-
 				m_TexturedRectShader->SetUniformBuffer(m_TexturedRectShaderProps);
 				m_TexturedRectShader->SetUniformBuffer(m_SceneProps);
 
 			}
 
+		}
+
+		void Renderer2D::StartColoredQuadInstancedImpl()
+		{
+			m_LastQuadInstancePtr = m_QuadInstanceData;
+			m_QuadInstanceAmount = 0;
+		}
+
+		void Renderer2D::DrawColoredQuadInstancedImpl(glm::vec3 color, glm::mat4& transform)
+		{
+			if (m_QuadInstanceAmount >= MAX_BATCH_QUADS)
+			{
+				FlushColoredQuadInstancedImpl();
+				StartColoredQuadInstancedImpl();
+			}
+			
+			m_LastQuadInstancePtr->color = color;
+			m_LastQuadInstancePtr->transform = transform;
+			m_LastQuadInstancePtr++;
+
+			m_QuadInstanceAmount++;
+		}
+
+		void Renderer2D::FlushColoredQuadInstancedImpl()
+		{
+			auto command = Application::GetRenderPlatform()->GetRenderCommand();
+
+			m_ColorShader->Bind();
+			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
+
+			uint32_t dataSize = (uint32_t)((uint8_t*)m_LastQuadInstancePtr - (uint8_t*)m_QuadInstanceData);
+			m_InstanceVB->SetSubData(0, m_QuadInstanceData, dataSize);
+
+			m_BatchVB->Bind();
+			m_QuadIB->Bind();
+
+			command->DrawElementsInstanced(PrimitiveType::TRIANGLE, 6, m_QuadInstanceAmount);
+
+			
 		}
 
 	}

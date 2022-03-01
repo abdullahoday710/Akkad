@@ -44,13 +44,13 @@ workspace "Akkad"
     group "Dependencies"
       if not _OPTIONS['target-emscripten'] then
         include "3rdparty/glad"
+        include "3rdparty/glslang"
+        include "3rdparty/ImGuizmo"
       end
       include "3rdparty/imgui"
       include "3rdparty/spdlog"
-      include "3rdparty/glslang"
       include "3rdparty/SPIRV-Cross"
       include "3rdparty/box2d"
-      include "3rdparty/ImGuizmo"
     group ""
     
     include "Akkad"

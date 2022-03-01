@@ -93,5 +93,9 @@ namespace Akkad {
 			unsigned int destfactor = BlendDestToGLDest(dfactor);
 			glBlendFunc(sourcefactor, destfactor);
 		}
+		void GLRenderCommand::DrawElementsInstanced(PrimitiveType type, unsigned int count, unsigned int amount)
+		{
+			glDrawElementsInstanced(PrimitiveTypeToGLType(type), count, GL_UNSIGNED_INT, 0, amount);
+		}
 	}
 }

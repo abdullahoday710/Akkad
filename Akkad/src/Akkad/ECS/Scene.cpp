@@ -85,6 +85,7 @@ namespace Akkad {
 
 	void Scene::Render2D()
 	{
+		std::lock_guard<std::mutex> lck(m_mutex);
 		shouldChunkLoaderWork = false;
 
 		auto command = Application::GetRenderPlatform()->GetRenderCommand();
@@ -170,7 +171,7 @@ namespace Akkad {
 			m_PhysicsWorld2D.m_World->DebugDraw();
 		}
 
-		std::lock_guard<std::mutex> lck(m_mutex);
+
 		shouldChunkLoaderWork = true;
 		m_conditionalVar.notify_one();
 

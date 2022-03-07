@@ -40,6 +40,7 @@ workspace "Akkad"
     IncludeDir["json"] = "%{wks.location}/3rdparty/json/include"
     IncludeDir["iconfontcpp"] = "%{wks.location}/3rdparty/iconfontcpp/include"
     IncludeDir["box2d"] = "%{wks.location}/3rdparty/box2d/include"
+    IncludeDir["concurrentqueue"] = "%{wks.location}/3rdparty/concurrentqueue"
 
     group "Dependencies"
       if not _OPTIONS['target-emscripten'] then

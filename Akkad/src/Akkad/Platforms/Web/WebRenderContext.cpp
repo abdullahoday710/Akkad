@@ -16,10 +16,11 @@ namespace Akkad {
 			attrs.minorVersion = 0;
 			attrs.explicitSwapControl = true;
 			attrs.renderViaOffscreenBackBuffer = true;
+			attrs.preserveDrawingBuffer = true;
 
 			m_Context = emscripten_webgl_create_context("#canvas", &attrs);
 			emscripten_webgl_make_context_current(m_Context);
-
+			
 			
 		}
 
@@ -30,6 +31,7 @@ namespace Akkad {
 
 		void WebRenderContext::SetVsync(bool status)
 		{
+			
 		}
 	}
 

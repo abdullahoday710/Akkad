@@ -28,6 +28,7 @@ project "Editor"
 		"%{IncludeDir.iconfontcpp}",
 		"%{IncludeDir.box2d}",
 		"%{IncludeDir.stb}",
+		"%{IncludeDir.concurrentqueue}",
 	}
 		
     postbuildcommands {

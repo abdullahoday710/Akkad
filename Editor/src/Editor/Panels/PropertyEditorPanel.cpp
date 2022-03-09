@@ -117,6 +117,11 @@ namespace Akkad {
 			{
 				DrawColoredSpriteRendererComponent();
 			}
+			if (m_ActiveEntity.HasComponent<GUIPanelComponent>())
+			{
+				DrawGUIPanelComponent();
+			}
+
 			DrawAddComponent();
 		}
 		
@@ -603,6 +608,23 @@ namespace Akkad {
 		}
 	}
 
+	std::string AnchorTypeToStr_(GUI::AnchorType type)
+	{
+		switch (type)
+		{
+		case GUI::AnchorType::TOP_LEFT:
+			return "top left";
+		case GUI::AnchorType::TOP_RIGHT:
+			return "top right";
+		case GUI::AnchorType::BOTTOM_LEFT:
+			return "bottom left";
+		case GUI::AnchorType::BOTTOM_RIGHT:
+			return "bottom right";
+		default:
+			break;
+		}
+	}
+
 	void PropertyEditorPanel::DrawRectTransformComponent()
 	{
 		ImGui::SetNextItemOpen(true);
@@ -612,7 +634,7 @@ namespace Akkad {
 		{
 			glm::vec2 pos = rectTransformComp.GetRect().GetPosition();
 			glm::vec2 size = { rectTransformComp.GetRect().GetWidth(), rectTransformComp.GetRect().GetHeight() };
-			
+
 			auto wConstraint = rectTransformComp.rect.GetWidthConstraint();
 			auto hConstraint = rectTransformComp.rect.GetHeightConstraint();
 
@@ -781,6 +803,45 @@ namespace Akkad {
 			if (ImGui::DragFloat("Y constraint", &yConstraint.constraintValue))
 			{
 				rectTransformComp.rect.SetYConstraint(yConstraint);
+			}
+
+			auto anchorType = rectTransformComp.rect.GetAnchorType();
+			std::string selected_anchor_type = AnchorTypeToStr_(anchorType);
+
+			const char* anchor_types[] = { "top left", "top right", "bottom left", "bottom right" };
+			if (ImGui::BeginCombo("anchor type", AnchorTypeToStr_(anchorType).c_str()))
+			{
+				for (int n = 0; n < IM_ARRAYSIZE(anchor_types); n++)
+				{
+					bool is_selected = (selected_anchor_type == anchor_types[n]);
+					if (ImGui::Selectable(anchor_types[n], is_selected))
+					{
+						selected_anchor_type = anchor_types[n];
+
+						if (selected_anchor_type == "top left")
+						{
+							rectTransformComp.rect.SetAnchorType(GUI::AnchorType::TOP_LEFT);
+						}
+
+						if (selected_anchor_type == "top right")
+						{
+							rectTransformComp.rect.SetAnchorType(GUI::AnchorType::TOP_RIGHT);
+						}
+						if (selected_anchor_type == "bottom left")
+						{
+							rectTransformComp.rect.SetAnchorType(GUI::AnchorType::BOTTOM_LEFT);
+						}
+						if (selected_anchor_type == "bottom right")
+						{
+							rectTransformComp.rect.SetAnchorType(GUI::AnchorType::BOTTOM_RIGHT);
+						}
+						if (is_selected)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+					}
+				}
+				ImGui::EndCombo();
 			}
 			ImGui::TreePop();
 		}
@@ -1017,6 +1078,17 @@ namespace Akkad {
 		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
 			coloredSprite.color = color;
+		}
+	}
+
+	void PropertyEditorPanel::DrawGUIPanelComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		auto& panel = m_ActiveEntity.GetComponent<GUIPanelComponent>();
+		glm::vec3 color = panel.panel.GetColor();
+		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
+		{
+			panel.panel.SetColor(color);
 		}
 	}
 

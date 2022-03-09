@@ -11,3 +11,4 @@
 #include "GUIButtonComponent.h"
 #include "HingeJoint2DComponent.h"
 #include "LineRendererComponent.h"
+#include "GUIPanelComponent.h"

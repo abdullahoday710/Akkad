@@ -10,3 +10,4 @@
 #include "GUIButtonComponentSerializer.h"
 #include "AnimatedSpriteRendererComponentSerializer.h"
 #include "HingeJoint2DSerializer.h"
+#include "GUIPanelSerializer.h"

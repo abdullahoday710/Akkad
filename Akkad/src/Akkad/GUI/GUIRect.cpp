@@ -82,7 +82,6 @@ namespace Akkad {
 		{
 			switch (type)
 			{
-
 			case ConstraintType::CENTER_CONSTRAINT:
 			{
 				m_Rect.SetX((m_ParentRect.GetMin().x) + (m_ParentRect.GetWidth() / 2));
@@ -91,24 +90,21 @@ namespace Akkad {
 
 			case ConstraintType::RELATIVE_CONSTRAINT:
 			{
-				m_Rect.SetX((m_ParentRect.GetMin().x + xPos) + (m_Rect.GetWidth() / 2));
+				glm::vec2 anchoredPosition = GetAnchoredPosition(true, true);
+				m_Rect.SetX((anchoredPosition.x + xPos));
 				break;
 			}
 
 			case ConstraintType::PIXEL_CONSTRAINT:
 			{
-				m_Rect.SetX((m_Rect.GetWidth() / 2) + xPos);
+				glm::vec2 anchoredPosition = GetAnchoredPosition(true, true);
+				m_Rect.SetX(anchoredPosition.x + xPos);
 				break;
 			}
 
 			case ConstraintType::ASPECT_CONSTRAINT:
 				break;
 
-			case ConstraintType::SNAP_LEFT_CONSTRAINT:
-			{
-				m_Rect.SetX(m_ParentRect.GetMin().x);
-				break;
-			}
 			default:
 				break;
 			}
@@ -127,26 +123,117 @@ namespace Akkad {
 
 			case ConstraintType::RELATIVE_CONSTRAINT:
 			{
-				m_Rect.SetY((m_ParentRect.GetMin().y + yPos) + (m_Rect.GetHeight() / 2));
+				glm::vec2 anchoredPosition = GetAnchoredPosition(true, true);
+				m_Rect.SetY((anchoredPosition.y + yPos));
 				break;
 			}
 
 			case ConstraintType::PIXEL_CONSTRAINT:
 			{
-				m_Rect.SetY((m_Rect.GetHeight() / 2) + yPos);
+				glm::vec2 anchoredPosition = GetAnchoredPosition(true, true);
+				m_Rect.SetY(anchoredPosition.y + yPos);
 				break;
 			}
 
 			case ConstraintType::ASPECT_CONSTRAINT:
 				break;
-			case ConstraintType::SNAP_LEFT_CONSTRAINT:
+
+			default:
+				break;
+			}
+		}
+
+		glm::vec2 GUIRect::GetAnchoredPosition(bool adjustXHeight, bool adjustYHeight)
+		{
+			glm::vec2 anchoredPos;
+			switch (m_AnchorType)
 			{
-				m_Rect.SetX(m_ParentRect.GetMin().y / 2);
+			case Akkad::GUI::AnchorType::TOP_LEFT:
+			{
+				if (adjustXHeight)
+				{
+					anchoredPos.x = m_ParentRect.GetMin().x + (m_Rect.GetWidth() / 2);
+				}
+				else
+				{
+					anchoredPos.x = m_ParentRect.GetMin().x;
+				}
+				if (adjustYHeight)
+				{
+					anchoredPos.y = m_ParentRect.GetMin().y + (m_Rect.GetHeight() / 2);
+				}
+				else
+				{
+					anchoredPos.y = m_ParentRect.GetMin().y;
+				}
+				break;
+			}
+			case Akkad::GUI::AnchorType::TOP_RIGHT:
+			{
+				if (adjustXHeight)
+				{
+					anchoredPos.x = m_ParentRect.GetMax().x - (m_Rect.GetWidth() / 2);
+				}
+				else
+				{
+					anchoredPos.x = m_ParentRect.GetMax().x;
+				}
+				if (adjustYHeight)
+				{
+					anchoredPos.y = m_ParentRect.GetMin().y + (m_Rect.GetHeight() / 2);
+				}
+				else
+				{
+					anchoredPos.y = m_ParentRect.GetMin().y;
+				}
+				
+				break;
+			}
+			case Akkad::GUI::AnchorType::BOTTOM_LEFT:
+			{
+				if (adjustXHeight)
+				{
+					anchoredPos.x = m_ParentRect.GetMin().x + (m_Rect.GetWidth() / 2);
+				}
+				else
+				{
+					anchoredPos.x = m_ParentRect.GetMin().x;
+				}
+				if (adjustYHeight)
+				{
+					anchoredPos.y = m_ParentRect.GetMax().y - (m_Rect.GetHeight() / 2);
+				}
+				else
+				{
+					anchoredPos.y = m_ParentRect.GetMax().y;
+				}
+				break;
+			}
+			case Akkad::GUI::AnchorType::BOTTOM_RIGHT:
+			{
+				if (adjustXHeight)
+				{
+					anchoredPos.x = m_ParentRect.GetMax().x - (m_Rect.GetWidth() / 2);
+				}
+				else
+				{
+					anchoredPos.x = m_ParentRect.GetMax().x;
+				}
+				if (adjustYHeight)
+				{
+					anchoredPos.y = m_ParentRect.GetMax().y - (m_Rect.GetHeight() / 2);
+				}
+				else
+				{
+					anchoredPos.y = m_ParentRect.GetMax().y;
+				}
 				break;
 			}
 			default:
 				break;
 			}
+
+			return anchoredPos;
 		}
 
 		void GUIRect::SetWidthConstraint(Constraint constraint)

@@ -202,7 +202,7 @@ namespace Akkad {
 						entityID += 1;
 
 						glm::vec3 color = { entityID , entityID , entityID };
-						Renderer2D::DrawQuad(color, transform.GetTransformMatrix());
+						Renderer2D::DrawColoredQuadInstanced(color, transform.GetTransformMatrix());
 					}
 
 				}
@@ -220,7 +220,7 @@ namespace Akkad {
 						entityID += 1;
 
 						glm::vec3 color = { entityID , entityID , entityID };
-						Renderer2D::DrawQuad(color, transform.GetTransformMatrix());
+						Renderer2D::DrawColoredQuadInstanced(color, transform.GetTransformMatrix());
 					}
 
 				}
@@ -303,6 +303,11 @@ namespace Akkad {
 					if (current_child.HasComponent<RectTransformComponent>())
 					{
 						auto& rect_transform = current_child.GetComponent<RectTransformComponent>();
+						if (parent.HasComponent<RectTransformComponent>())
+						{
+							auto& parent_rect = parent.GetComponent<RectTransformComponent>();
+							rect_transform.rect.SetParent(parent_rect.rect.m_Rect);
+						}
 						if (Renderer2D::GetGUIDebugDrawState())
 						{
 							if (!pickingPhase)
@@ -373,6 +378,16 @@ namespace Akkad {
 							else
 							{
 								Renderer2D::DrawRect(guibutton.button.GetUIRect().GetRect(), guibutton.button.GetColor(), true, activeContainer.container.GetProjection());
+							}
+						}
+
+						if (current_child.HasComponent<GUIPanelComponent>())
+						{
+							auto& guipanel = current_child.GetComponent<GUIPanelComponent>();
+							guipanel.panel.SetUIRect(rect_transform.rect);
+							if (!pickingPhase)
+							{
+								Renderer2D::DrawRect(guipanel.panel.GetUIRect().GetRect(), guipanel.panel.GetColor(), true, activeContainer.container.GetProjection());
 							}
 						}
 					}

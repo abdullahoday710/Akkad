@@ -16,3 +16,5 @@ build.ninja
 .ninja_deps
 .ninja_log
 **.cmake
+**.a
+**.wasm

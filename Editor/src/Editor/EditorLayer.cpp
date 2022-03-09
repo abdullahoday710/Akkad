@@ -350,6 +350,11 @@ namespace Akkad {
 						
 					}
 
+					if (ImGui::MenuItem("GUI panel"))
+					{
+						GUIFactory::AddGuiPanel();
+					}
+
 					if (ImGui::MenuItem("Rect"))
 					{
 						GUIFactory::AddGuiRect();

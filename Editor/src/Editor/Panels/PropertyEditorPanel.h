@@ -42,6 +42,7 @@ namespace Akkad {
 		void DrawHingeJoint2DComponent();
 		void DrawLineRendererComponent();
 		void DrawColoredSpriteRendererComponent();
+		void DrawGUIPanelComponent();
 
 	};
 }

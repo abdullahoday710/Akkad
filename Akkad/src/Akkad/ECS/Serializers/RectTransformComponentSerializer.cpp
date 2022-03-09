@@ -44,6 +44,46 @@ namespace Akkad {
 		}
 	}
 
+	std::string AnchorTypeToStr(GUI::AnchorType type)
+	{
+		switch (type)
+		{
+		case Akkad::GUI::AnchorType::TOP_LEFT:
+			return "TOP_LEFT";
+		case Akkad::GUI::AnchorType::TOP_RIGHT:
+			return "TOP_RIGHT";
+		case Akkad::GUI::AnchorType::BOTTOM_LEFT:
+			return "BOTTOM_LEFT";
+		case Akkad::GUI::AnchorType::BOTTOM_RIGHT:
+			return "BOTTOM_RIGHT";
+		default:
+			break;
+		}
+	}
+
+	GUI::AnchorType GetAnchorTypeFromStr(std::string str)
+	{
+		if (str == "TOP_LEFT")
+		{
+			return GUI::AnchorType::TOP_LEFT;
+		}
+
+		if (str == "TOP_RIGHT")
+		{
+			return GUI::AnchorType::TOP_RIGHT;
+		}
+
+		if (str == "BOTTOM_LEFT")
+		{
+			return GUI::AnchorType::BOTTOM_LEFT;
+		}
+
+		if (str == "BOTTOM_RIGHT")
+		{
+			return GUI::AnchorType::BOTTOM_RIGHT;
+		}
+	}
+
 	void RectTransformComponentSerializer::Serialize(Entity entity, json& entity_data)
 	{
 		auto& rect_transform = entity.GetComponent<RectTransformComponent>();
@@ -53,6 +93,7 @@ namespace Akkad {
 
 		auto x_constraint = rect_transform.rect.GetXConstraint();
 		auto y_constraint = rect_transform.rect.GetYConstraint();
+		auto anchorType = rect_transform.rect.GetAnchorType();
 		
 		entity_data["RectTransformComponent"]["WidthConstraint"]["Type"] = ConstraintTypeToStr(width_constraint.type);
 		entity_data["RectTransformComponent"]["WidthConstraint"]["Value"] = width_constraint.constraintValue;
@@ -66,6 +107,8 @@ namespace Akkad {
 		entity_data["RectTransformComponent"]["YConstraint"]["Type"] = ConstraintTypeToStr(y_constraint.type);
 		entity_data["RectTransformComponent"]["YConstraint"]["Value"] = y_constraint.constraintValue;
 
+		entity_data["RectTransformComponent"]["AnchorType"] = AnchorTypeToStr(anchorType);
+
 		
 	}
 
@@ -76,6 +119,8 @@ namespace Akkad {
 
 		GUI::Constraint x_constraint;
 		GUI::Constraint y_constraint;
+
+		GUI::AnchorType anchorType;
 
 		width_constraint.type = GetConstraintTypeFromStr(component_data["WidthConstraint"]["Type"]);
 		width_constraint.constraintValue = component_data["WidthConstraint"]["Value"];
@@ -89,7 +134,12 @@ namespace Akkad {
 		y_constraint.type = GetConstraintTypeFromStr(component_data["YConstraint"]["Type"]);
 		y_constraint.constraintValue = component_data["YConstraint"]["Value"];
 
-		entity.RemoveComponent<TransformComponent>();
+		anchorType = GetAnchorTypeFromStr(component_data["AnchorType"]);
+
+		if (entity.HasComponent<TransformComponent>())
+		{
+			entity.RemoveComponent<TransformComponent>();
+		}
 
 		auto& rect_transform = entity.AddComponent<RectTransformComponent>();
 
@@ -98,6 +148,7 @@ namespace Akkad {
 
 		rect_transform.rect.SetXConstraint(x_constraint);
 		rect_transform.rect.SetYConstraint(y_constraint);
+		rect_transform.rect.SetAnchorType(anchorType);
 
 	}
 }

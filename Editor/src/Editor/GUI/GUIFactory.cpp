@@ -83,6 +83,27 @@ namespace Akkad {
 
 	}
 
+	Entity GUIFactory::AddGuiPanel()
+	{
+		auto scene = EditorLayer::GetActiveScene();
+		CheckGuiContainer();
+
+		Entity panel = Entity(scene->m_Registry.create(), scene.get());
+		panel.AddComponent<RelationShipComponent>();
+		panel.AddComponent<GUIPanelComponent>();
+		auto& panelRect = panel.AddComponent<RectTransformComponent>();
+
+		panelRect.rect.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 0.5 });
+		panelRect.rect.SetHeightConstraint({ ConstraintType::ASPECT_CONSTRAINT, 0.2 });
+
+		auto& tag = panel.AddComponent<TagComponent>();
+		tag.Tag = "GUI panel";
+
+		scene->AssignEntityToParent(scene->GetGuiContainer(), panel);
+
+		return panel;
+	}
+
 	void GUIFactory::CheckGuiContainer()
 	{
 		Entity container = EditorLayer::GetActiveScene()->GetGuiContainer();

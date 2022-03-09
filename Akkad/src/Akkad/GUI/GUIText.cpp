@@ -114,6 +114,10 @@ namespace Akkad {
 			current_line_pos.y = m_Lines.back().yOffset;
 			for (c = m_Text.begin(); c != m_Text.end(); c++)
 			{
+				if (current_line_pos.x > current_line.boundingBox.GetRect().GetMax().x)
+				{
+					break;
+				}
 				auto ftchar = m_Font->GetASCIICharacter(*c, current_line_pos.x, current_line_pos.y);
 				current_line.characters.push_back(ftchar);
 			}

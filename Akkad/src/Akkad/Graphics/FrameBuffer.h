@@ -7,13 +7,14 @@ namespace Akkad {
 	namespace Graphics {
 
 		struct FrameBufferDescriptor {
-			int width, height;
+			int width, height = 0;
 
-			bool hasColorAttachment;
-			bool hasDepthAttachment;
-			bool hasStencilAttachment;
+			bool hasColorAttachment = true;
+			bool hasDepthAttachment = false;
+			bool hasStencilAttachment = false;
+			bool usesRenderBuffer = false;
 
-			TextureFormat ColorAttachmentFormat;
+			TextureFormat ColorAttachmentFormat = TextureFormat::R32_FLOAT;
 		};
 
 		class FrameBuffer {

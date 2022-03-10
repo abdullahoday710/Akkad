@@ -21,7 +21,8 @@ namespace Akkad {
 		FrameBufferDescriptor pickingBufferDescriptor;
 		pickingBufferDescriptor.width = 800;
 		pickingBufferDescriptor.height = 800;
-		pickingBufferDescriptor.ColorAttachmentFormat = TextureFormat::RGB32_FLOAT;
+		pickingBufferDescriptor.ColorAttachmentFormat = TextureFormat::R32_FLOAT;
+		pickingBufferDescriptor.usesRenderBuffer = true;
 		if (Application::GetRenderPlatform() != nullptr)
 		{
 			m_PickingBuffer = Application::GetRenderPlatform()->CreateFrameBuffer(pickingBufferDescriptor);
@@ -201,7 +202,8 @@ namespace Akkad {
 
 						entityID += 1;
 
-						glm::vec3 color = { entityID , entityID , entityID };
+						glm::vec3 color;
+						color.r = entityID;
 						Renderer2D::DrawColoredQuadInstanced(color, transform.GetTransformMatrix());
 					}
 
@@ -219,7 +221,8 @@ namespace Akkad {
 
 						entityID += 1;
 
-						glm::vec3 color = { entityID , entityID , entityID };
+						glm::vec3 color;
+						color.r = entityID;
 						Renderer2D::DrawColoredQuadInstanced(color, transform.GetTransformMatrix());
 					}
 
@@ -373,7 +376,9 @@ namespace Akkad {
 							if (pickingPhase)
 							{
 								child_id += 1;
-								Renderer2D::DrawRect(guibutton.button.GetUIRect().GetRect(), {child_id, child_id, child_id}, true, activeContainer.container.GetProjection());
+								glm::vec3 color;
+								color.r = child_id;
+								Renderer2D::DrawRect(guibutton.button.GetUIRect().GetRect(), color, true, activeContainer.container.GetProjection());
 							}
 							else
 							{
@@ -501,6 +506,7 @@ namespace Akkad {
 						int bufferX = mouseX - (int)m_ViewportRect.GetMin().x;
 						int bufferY = mouseY - (int)m_ViewportRect.GetMin().y;
 						auto pixel = m_PickingBuffer->ReadPixels(bufferX, m_ViewportSize.y - bufferY - 1);
+						
 						unsigned int entityID = pixel.x;
 
 						entityID -= 1;

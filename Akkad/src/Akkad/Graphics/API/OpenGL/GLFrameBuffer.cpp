@@ -4,7 +4,6 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <vector>
 namespace Akkad {
 	namespace Graphics {
 
@@ -15,7 +14,14 @@ namespace Akkad {
 			Bind();
 			if (desc.hasColorAttachment)
 			{
-				glGenTextures(1, &m_ColorAttachmentTextureID);
+				if (desc.usesRenderBuffer)
+				{
+					glGenRenderbuffers(1, &m_ColorAttachmentTextureID);
+				}
+				else
+				{
+					glGenTextures(1, &m_ColorAttachmentTextureID);
+				}
 			}
 			UpdateTexture();
 			Unbind();
@@ -30,15 +36,25 @@ namespace Akkad {
 			if (m_desc.hasColorAttachment)
 			{
 				Bind();
-				glBindTexture(GL_TEXTURE_2D, m_ColorAttachmentTextureID);
+				if (m_desc.usesRenderBuffer)
+				{
+					glBindRenderbuffer(GL_RENDERBUFFER, m_ColorAttachmentTextureID);
+					glRenderbufferStorage(GL_RENDERBUFFER, GLTexture::TextureFormatToGLFormat(m_desc.ColorAttachmentFormat), m_desc.width, m_desc.height);
+					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_ColorAttachmentTextureID);
+					glBindRenderbuffer(GL_RENDERBUFFER, 0);
+				}
+				else
+				{
+					glBindTexture(GL_TEXTURE_2D, m_ColorAttachmentTextureID);
+					
+					glTexImage2D(GL_TEXTURE_2D, 0, GLTexture::TextureFormatToGLFormat(m_desc.ColorAttachmentFormat), m_desc.width, m_desc.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-				glTexImage2D(GL_TEXTURE_2D, 0, GLTexture::TextureFormatToGLFormat(m_desc.ColorAttachmentFormat), m_desc.width, m_desc.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorAttachmentTextureID, 0);
 
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorAttachmentTextureID, 0);
-
-				glBindTexture(GL_TEXTURE_2D, 0);
+					glBindTexture(GL_TEXTURE_2D, 0);
+				}
 				Unbind();
 			}
 
@@ -75,7 +91,7 @@ namespace Akkad {
 			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_ResourceID);
 
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			glReadPixels(x, y, 1, 1, GL_RGBA, GL_FLOAT, glm::value_ptr(pixelData));
+			glReadPixels(x, y, 1, 1, GL_RED, GL_FLOAT, glm::value_ptr(pixelData));
 
 			glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 			return pixelData;

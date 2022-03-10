@@ -119,6 +119,8 @@ namespace Akkad {
 				return GL_RGBA16;
 			case TextureFormat::RGBA16_FLOAT:
 				return GL_RGBA16F;
+			case TextureFormat::RGBA_16_INTEGER:
+				return GL_RGBA16I;
 			case TextureFormat::RGBA32_FLOAT:
 				return GL_RGBA32F;
 			case TextureFormat::R8:

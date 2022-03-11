@@ -42,11 +42,11 @@ namespace Akkad {
 
 		sceneManager->GetActiveScene()->Update();
 
+		sceneManager->GetActiveScene()->RenderPickingBuffer2D();
 		sceneManager->GetActiveScene()->BeginRenderer2D((float)window->GetWidth() / (float)window->GetHeight());
 		sceneManager->GetActiveScene()->Render2D();
-		sceneManager->GetActiveScene()->RenderGUI();
-		sceneManager->GetActiveScene()->RenderPickingBuffer2D();
 		Graphics::Renderer2D::EndScene();
+		sceneManager->GetActiveScene()->RenderGUI();
 
 	}
 

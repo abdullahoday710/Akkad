@@ -61,29 +61,34 @@ namespace Akkad {
 	void GameViewPanel::RenderScene()
 	{
 		ViewPortPanel* viewport = (ViewPortPanel*)PanelManager::GetPanel("viewport");
-		m_buffer->Bind();
 
 		if (viewport->IsPlaying)
 		{
 			auto sceneManager = Application::GetSceneManager();
 			sceneManager->GetActiveScene()->SetViewportRect(m_ViewportRect);
+			sceneManager->GetActiveScene()->SetViewportSize({ m_buffer->GetDescriptor().width, m_buffer->GetDescriptor().height });
+			sceneManager->GetActiveScene()->RenderPickingBuffer2D();
+			m_buffer->Bind();
 			sceneManager->GetActiveScene()->BeginRenderer2D(m_AspectRatio);
 			sceneManager->GetActiveScene()->Render2D();
-			sceneManager->GetActiveScene()->RenderGUI();
 			Renderer2D::EndScene();
+			sceneManager->GetActiveScene()->RenderGUI();
+			m_buffer->Unbind();
 
 		}
 
 		else
 		{
 			auto scene = EditorLayer::GetActiveScene();
+			m_buffer->Bind();
 			scene->SetViewportRect(m_ViewportRect);
 			scene->BeginRenderer2D(m_AspectRatio);
 			scene->Render2D();
-			scene->RenderGUI();
 			Renderer2D::EndScene();
+			scene->RenderGUI();
+			m_buffer->Unbind();
 		}
 
-		m_buffer->Unbind();
+		
 	}
 }

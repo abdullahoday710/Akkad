@@ -575,6 +575,12 @@ namespace Akkad {
 				}
 			}
 
+			glm::vec3 color = uitext.color;
+			if (ImGui::ColorEdit3("Text color", glm::value_ptr(color)))
+			{
+				uitext.color = color;
+			}
+
 		ImGui::TreePop();
 		}
 	}

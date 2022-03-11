@@ -65,6 +65,9 @@ namespace Akkad {
 
 		Entity text = AddGuiText();
 		auto& textcomp = text.GetComponent<GUITextComponent>();
+		textcomp.alignment = GUI::GUIText::Alignment::CENTER;
+		textcomp.fittingMode = GUI::GUIText::FittingMode::SCALE_TO_FIT;
+		textcomp.text = "Button";
 
 		textcomp.color = { 0,0,0 };
 
@@ -73,7 +76,7 @@ namespace Akkad {
 		textrect.rect.SetXConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
 		textrect.rect.SetYConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
 
-		textrect.rect.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 0.5 });
+		textrect.rect.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 1 });
 		textrect.rect.SetHeightConstraint({ ConstraintType::ASPECT_CONSTRAINT, 0.2 });
 
 		scene->AssignEntityToParent(button, text);

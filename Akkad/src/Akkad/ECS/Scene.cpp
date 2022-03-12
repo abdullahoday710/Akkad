@@ -266,6 +266,7 @@ namespace Akkad {
 						Graphics::Rect parent;
 						parent.SetBounds({ 0,0 }, container.container.GetScreenSize());
 						rect_transform.rect.SetParent(parent);
+
 					}
 
 					else if (relation_ship.parent.HasComponent<RectTransformComponent>())
@@ -273,6 +274,18 @@ namespace Akkad {
 						auto& parent_rect = relation_ship.parent.GetComponent<RectTransformComponent>();
 
 						rect_transform.rect.SetParent(parent_rect.GetRect());
+
+						if (relation_ship.prev.IsValid())
+						{
+							if (relation_ship.prev.HasComponent<RectTransformComponent>())
+							{
+								auto& prev_rect = relation_ship.prev.GetComponent<RectTransformComponent>();
+								rect_transform.rect.SetPreviousChild(prev_rect.GetRect());
+								auto& prev_tag = relation_ship.prev.GetComponent<TagComponent>();
+								Entity e{ entity, this };
+								auto& tag = e.GetComponent<TagComponent>();
+							}
+						}
 					}
 
 					

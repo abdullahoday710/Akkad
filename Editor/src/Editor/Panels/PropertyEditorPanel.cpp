@@ -605,6 +605,8 @@ namespace Akkad {
 			return "Center";
 		case GUI::ConstraintType::RELATIVE_CONSTRAINT:
 			return "Relative";
+		case GUI::ConstraintType::PREVIOUS_CHILD_CONSTRAINT:
+			return "Previous Child";
 		case GUI::ConstraintType::PIXEL_CONSTRAINT:
 			return "Pixel";
 		case GUI::ConstraintType::ASPECT_CONSTRAINT:
@@ -730,7 +732,7 @@ namespace Akkad {
 
 			ImGui::Separator();
 
-			const char* position_constraints[] = { "Relative", "Pixel", "Center" };
+			const char* position_constraints[] = { "Relative", "Pixel", "Center", "Previous Child" };
 			std::string selected_x_constraint = ConstraintTypeToStr_(xConstraint.type);
 
 			if (ImGui::BeginCombo("X constraint type", selected_x_constraint.c_str()))
@@ -755,6 +757,11 @@ namespace Akkad {
 						if (selected_x_constraint == "Center")
 						{
 							rectTransformComp.rect.SetXConstraint({ GUI::ConstraintType::CENTER_CONSTRAINT, wConstraint.constraintValue });
+						}
+
+						if (selected_x_constraint == "Previous Child")
+						{
+							rectTransformComp.rect.SetXConstraint({ GUI::ConstraintType::PREVIOUS_CHILD_CONSTRAINT, wConstraint.constraintValue });
 						}
 					}
 					if (is_selected)
@@ -796,6 +803,10 @@ namespace Akkad {
 						if (selected_y_constraint == "Center")
 						{
 							rectTransformComp.rect.SetYConstraint({ GUI::ConstraintType::CENTER_CONSTRAINT, wConstraint.constraintValue });
+						}
+						if (selected_y_constraint == "Previous Child")
+						{
+							rectTransformComp.rect.SetYConstraint({ GUI::ConstraintType::PREVIOUS_CHILD_CONSTRAINT, wConstraint.constraintValue });
 						}
 					}
 					if (is_selected)

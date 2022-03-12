@@ -26,6 +26,14 @@ namespace Akkad {
 			}
 		}
 
+		void GUIRect::SetPreviousChild(Graphics::Rect child)
+		{
+			if (m_PreviousChild != child)
+			{
+				m_PreviousChild = child;
+			}
+		}
+
 		void GUIRect::SetWidth(ConstraintType type, float width)
 		{
 			switch (type)
@@ -101,6 +109,12 @@ namespace Akkad {
 				m_Rect.SetX(anchoredPosition.x + xPos);
 				break;
 			}
+			case ConstraintType::PREVIOUS_CHILD_CONSTRAINT:
+			{
+				float previousChildPos = m_PreviousChild.GetPosition().x + (m_PreviousChild.GetWidth() / 2);
+				m_Rect.SetX(previousChildPos + xPos);
+				break;
+			}
 
 			case ConstraintType::ASPECT_CONSTRAINT:
 				break;
@@ -134,7 +148,12 @@ namespace Akkad {
 				m_Rect.SetY(anchoredPosition.y + yPos);
 				break;
 			}
-
+			case ConstraintType::PREVIOUS_CHILD_CONSTRAINT:
+			{
+				glm::vec2 previousChildPos = m_PreviousChild.GetPosition();
+				m_Rect.SetY(previousChildPos.y + yPos);
+				break;
+			}
 			case ConstraintType::ASPECT_CONSTRAINT:
 				break;
 

@@ -4,8 +4,12 @@
 namespace Akkad {
 	class Scene;
 	namespace GUI {
-		enum class ConstraintType { CENTER_CONSTRAINT,
-			RELATIVE_CONSTRAINT, PIXEL_CONSTRAINT, ASPECT_CONSTRAINT};
+		enum class ConstraintType {
+			CENTER_CONSTRAINT,
+			RELATIVE_CONSTRAINT,
+			PIXEL_CONSTRAINT,
+			ASPECT_CONSTRAINT,
+			PREVIOUS_CHILD_CONSTRAINT,};
 
 		enum class AnchorType
 		{
@@ -24,6 +28,7 @@ namespace Akkad {
 			GUIRect();
 
 			void SetParent(Graphics::Rect parent);
+			void SetPreviousChild(Graphics::Rect child);
 
 			void SetWidthConstraint(Constraint constraint);
 			void SetHeightConstraint(Constraint constraint);
@@ -60,6 +65,7 @@ namespace Akkad {
 
 			Graphics::Rect m_Rect;
 			Graphics::Rect m_ParentRect;
+			Graphics::Rect m_PreviousChild;
 
 			friend class ::Akkad::Scene;
 		};

@@ -12,3 +12,4 @@
 #include "HingeJoint2DComponent.h"
 #include "LineRendererComponent.h"
 #include "GUIPanelComponent.h"
+#include "GUICheckBoxComponent.h"

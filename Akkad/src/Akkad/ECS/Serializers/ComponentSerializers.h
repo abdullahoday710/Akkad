@@ -11,3 +11,4 @@
 #include "AnimatedSpriteRendererComponentSerializer.h"
 #include "HingeJoint2DSerializer.h"
 #include "GUIPanelSerializer.h"
+#include "GUICheckBoxComponentSerializer.h"

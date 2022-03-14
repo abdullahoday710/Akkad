@@ -107,6 +107,30 @@ namespace Akkad {
 		return panel;
 	}
 
+	Entity GUIFactory::AddGuiCheckBox()
+	{
+		auto scene = EditorLayer::GetActiveScene();
+		CheckGuiContainer();
+
+		Entity box = Entity(scene->m_Registry.create(), scene.get());
+		box.AddComponent<RelationShipComponent>();
+		auto& rect = box.AddComponent<RectTransformComponent>();
+		auto& checkbox = box.AddComponent<GUICheckBoxComponent>();
+
+		rect.rect.SetXConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
+		rect.rect.SetYConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
+
+		rect.rect.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 0.03 });
+		rect.rect.SetHeightConstraint({ ConstraintType::ASPECT_CONSTRAINT, 1 });
+
+		auto& tag = box.AddComponent<TagComponent>();
+		tag.Tag = "Check box";
+
+		scene->AssignEntityToParent(scene->GetGuiContainer(), box);
+
+		return box;
+	}
+
 	void GUIFactory::CheckGuiContainer()
 	{
 		Entity container = EditorLayer::GetActiveScene()->GetGuiContainer();

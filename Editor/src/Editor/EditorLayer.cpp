@@ -370,6 +370,11 @@ namespace Akkad {
 					{
 						GUIFactory::AddGuiButton();
 					}
+
+					if (ImGui::MenuItem("Check box"))
+					{
+						GUIFactory::AddGuiCheckBox();
+					}
 					ImGui::EndMenu();
 				}
 

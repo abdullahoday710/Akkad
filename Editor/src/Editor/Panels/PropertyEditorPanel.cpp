@@ -121,6 +121,10 @@ namespace Akkad {
 			{
 				DrawGUIPanelComponent();
 			}
+			if (m_ActiveEntity.HasComponent<GUICheckBoxComponent>())
+			{
+				DrawGUICheckBoxComponent();
+			}
 
 			DrawAddComponent();
 		}
@@ -1106,6 +1110,31 @@ namespace Akkad {
 		if (ImGui::ColorEdit3("Color", glm::value_ptr(color)))
 		{
 			panel.panel.SetColor(color);
+		}
+	}
+
+	void PropertyEditorPanel::DrawGUICheckBoxComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		auto& box = m_ActiveEntity.GetComponent<GUICheckBoxComponent>();
+
+		glm::vec3 boxColor = box.box.GetBoxColor();
+		glm::vec3 markColor = box.box.GetMarkColor();
+
+		bool isActive = box.box.IsChecked();
+
+		if (ImGui::ColorEdit3("Box color", glm::value_ptr(boxColor)))
+		{
+			box.box.SetBoxColor(boxColor);
+		}
+		if (ImGui::ColorEdit3("Mark color", glm::value_ptr(markColor)))
+		{
+			box.box.SetMarkColor(markColor);
+		}
+
+		if (ImGui::Checkbox("Is checked", &isActive))
+		{
+			box.box.SetCheckStatus(isActive);
 		}
 	}
 

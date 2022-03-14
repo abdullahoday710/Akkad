@@ -408,6 +408,29 @@ namespace Akkad {
 								Renderer2D::DrawRect(guipanel.panel.GetUIRect().GetRect(), guipanel.panel.GetColor(), true, activeContainer.container.GetProjection());
 							}
 						}
+
+						if (current_child.HasComponent<GUICheckBoxComponent>())
+						{
+							auto& checkbox = current_child.GetComponent<GUICheckBoxComponent>();
+							checkbox.box.SetBoxUIRect(rect_transform.rect);
+
+							if (!pickingPhase)
+							{
+								Renderer2D::DrawRect(checkbox.box.GetBoxUIRect().GetRect(), checkbox.box.GetBoxColor(), true, activeContainer.container.GetProjection());
+								if (checkbox.box.IsChecked())
+								{
+									Renderer2D::DrawRect(checkbox.box.GetMarkUIRect().GetRect(), checkbox.box.GetMarkColor(), true, activeContainer.container.GetProjection());
+								}
+
+							}
+							if (pickingPhase)
+							{
+								child_id += 1;
+								glm::vec3 color;
+								color.r = child_id;
+								Renderer2D::DrawRect(checkbox.box.GetBoxUIRect().GetRect(), color, true, activeContainer.container.GetProjection());
+							}
+						}
 					}
 
 					RenderGUIElement(current_child, pickingPhase); // draw the child elements of the current child
@@ -534,6 +557,12 @@ namespace Akkad {
 								{
 									uibutton.button.m_Callback();
 								}
+							}
+
+							if (PickedEntity.HasComponent<GUICheckBoxComponent>())
+							{
+								auto& checkBox = PickedEntity.GetComponent<GUICheckBoxComponent>();
+								checkBox.box.SetCheckStatus(!checkBox.box.IsChecked());
 							}
 						}
 	

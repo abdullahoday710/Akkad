@@ -43,6 +43,7 @@ namespace Akkad {
 		void DrawLineRendererComponent();
 		void DrawColoredSpriteRendererComponent();
 		void DrawGUIPanelComponent();
+		void DrawGUICheckBoxComponent();
 
 	};
 }

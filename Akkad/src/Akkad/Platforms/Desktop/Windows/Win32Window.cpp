@@ -50,6 +50,7 @@ namespace Akkad {
 
     void Win32Window::OnUpdate()
     {
+        ResetKeyStates();
         MSG msg = { };
         while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
         {
@@ -113,6 +114,14 @@ namespace Akkad {
             m_FullScreen = false;
         }
         
+    }
+
+    void Win32Window::ResetKeyStates()
+    {
+        for (size_t i = 0; i < 3; i++)
+        {
+            m_MouseStates[i] = -1;
+        }
     }
 
 }

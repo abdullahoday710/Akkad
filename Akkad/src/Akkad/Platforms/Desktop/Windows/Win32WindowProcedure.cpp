@@ -100,6 +100,42 @@ namespace Akkad {
             }
             return 0;
         }
+        case WM_LBUTTONDOWN:
+        case WM_RBUTTONDOWN:
+        case WM_MBUTTONDOWN:
+        case WM_XBUTTONDOWN:
+        case WM_LBUTTONUP:
+        case WM_RBUTTONUP:
+        case WM_MBUTTONUP:
+        case WM_XBUTTONUP:
+        {
+            int button = -1;
+            int buttonState = -1;
+
+            if (uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONUP)
+                button = static_cast<int>(MouseButtons::LEFT);
+            else if (uMsg == WM_RBUTTONDOWN || uMsg == WM_RBUTTONUP)
+                button = static_cast<int>(MouseButtons::RIGHT);
+            else if (uMsg == WM_MBUTTONDOWN || uMsg == WM_MBUTTONUP)
+                button = static_cast<int>(MouseButtons::MIDDLE);
+
+            if (uMsg == WM_LBUTTONDOWN || uMsg == WM_RBUTTONDOWN ||
+                uMsg == WM_MBUTTONDOWN || uMsg == WM_XBUTTONDOWN)
+            {
+                buttonState = 0;
+            }
+            else
+            {
+                buttonState = 1;
+            }
+
+            if (button >= 0)
+            {
+                window->m_MouseStates[button] = buttonState;
+            }
+
+            return 0;
+        }
 
         }
         return DefWindowProc(hwnd, uMsg, wParam, lParam);

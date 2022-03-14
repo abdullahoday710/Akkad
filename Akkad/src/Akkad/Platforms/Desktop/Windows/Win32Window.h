@@ -17,6 +17,7 @@ namespace Akkad {
 		virtual void* GetNativeWindow() override { return m_WindowHandle; };
 		virtual void ToggleFullScreen() override;
 		virtual bool IsFullScreen() { return m_FullScreen; };
+		void ResetKeyStates();
 
 		std::function<void(Event&)> m_EventCallback;
 
@@ -27,6 +28,7 @@ namespace Akkad {
 			m_Width = width;
 			m_Height = height;
 		}
+		int m_MouseStates[3] = {};
 	private:
 		bool m_IsClosed = true;
 		bool m_FullScreen = false;
@@ -35,6 +37,7 @@ namespace Akkad {
 		unsigned int m_Height = 0;
 		bool m_VsyncEnabled = true;
 		Graphics::RenderAPI m_RenderAPI;
+
 	};
 
 }

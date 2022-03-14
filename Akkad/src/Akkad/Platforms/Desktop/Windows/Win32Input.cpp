@@ -26,14 +26,24 @@ namespace Akkad {
 	bool Win32Input::GetMouseDown(MouseButtons button)
 	{
 		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
-		if (GetAsyncKeyState(MapMouseButtonsToVKButton(button)) && window->isCursorTracked)
+		
+		int ibutton = static_cast<int>(button);
+		if (window->m_MouseStates[ibutton] == 0)
 		{
 			return true;
 		}
-		else
+		return false;
+	}
+
+	bool Win32Input::GetMouseUp(MouseButtons button)
+	{
+		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
+		int ibutton = static_cast<int>(button);
+		if (window->m_MouseStates[ibutton] == 1)
 		{
-			return false;
+			return true;
 		}
+		return false;
 	}
 
 	int Win32Input::GetMouseX()

@@ -12,6 +12,52 @@ namespace Akkad {
 
 	bool Win32Input::GetKeyDown(unsigned int key)
 	{
+		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
+		if (window->m_KeyStatesFrame[key] == 0)
+		{
+			return true;
+		}
+
+		return false;
+
+	}
+
+	bool Win32Input::GetKeyUp(unsigned int key)
+	{
+		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
+		if (window->m_KeyStatesFrame[key] == 1)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	bool Win32Input::GetMouseDown(MouseButtons button)
+	{
+		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
+		
+		int ibutton = static_cast<int>(button);
+		if (window->m_MouseStatesFrame[ibutton] == 0)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool Win32Input::GetMouseUp(MouseButtons button)
+	{
+		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
+		int ibutton = static_cast<int>(button);
+		if (window->m_MouseStatesFrame[ibutton] == 1)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool Win32Input::IsKeyDown(unsigned int key)
+	{
 		unsigned int scancode = scanCodes[key];
 		if (GetAsyncKeyState(MapVirtualKeyA(scancode, MAPVK_VSC_TO_VK)))
 		{
@@ -23,27 +69,17 @@ namespace Akkad {
 		}
 	}
 
-	bool Win32Input::GetMouseDown(MouseButtons button)
+	bool Win32Input::IsMouseDown(MouseButtons button)
 	{
 		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
-		
-		int ibutton = static_cast<int>(button);
-		if (window->m_MouseStates[ibutton] == 0)
+		if (GetAsyncKeyState(MapMouseButtonsToVKButton(button)) && window->isCursorTracked)
 		{
 			return true;
 		}
-		return false;
-	}
-
-	bool Win32Input::GetMouseUp(MouseButtons button)
-	{
-		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
-		int ibutton = static_cast<int>(button);
-		if (window->m_MouseStates[ibutton] == 1)
+		else
 		{
-			return true;
+			return false;
 		}
-		return false;
 	}
 
 	int Win32Input::GetMouseX()

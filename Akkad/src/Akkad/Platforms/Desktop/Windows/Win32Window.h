@@ -28,7 +28,10 @@ namespace Akkad {
 			m_Width = width;
 			m_Height = height;
 		}
-		int m_MouseStates[3] = {};
+
+		int m_MouseStatesFrame[3] = {};
+		int m_KeyStatesFrame[512] = {};
+
 	private:
 		bool m_IsClosed = true;
 		bool m_FullScreen = false;

@@ -120,7 +120,13 @@ namespace Akkad {
     {
         for (size_t i = 0; i < 3; i++)
         {
-            m_MouseStates[i] = -1;
+            m_MouseStatesFrame[i] = -1;
+           
+        }
+
+        for (size_t i = 0; i < 256; i++)
+        {
+            m_KeyStatesFrame[i] = -1;
         }
     }
 

@@ -32,7 +32,21 @@ namespace Akkad {
             unsigned int code = MapVirtualKeyW(wParam, MAPVK_VK_TO_VSC);
             KeyPressEvent e(keyCodes[code]);
             window->m_EventCallback(e);
+
+            bool repeatFlag = (HIWORD(lParam) & KF_REPEAT) == KF_REPEAT;
+            if (!repeatFlag)
+            {
+                window->m_KeyStatesFrame[keyCodes[code]] = 0;
+            }
             
+            return 0;
+        }
+
+        case WM_KEYUP:
+        {
+            unsigned int code = MapVirtualKeyW(wParam, MAPVK_VK_TO_VSC);
+            window->m_KeyStatesFrame[keyCodes[code]] = 1;
+
             return 0;
         }
 
@@ -131,7 +145,7 @@ namespace Akkad {
 
             if (button >= 0)
             {
-                window->m_MouseStates[button] = buttonState;
+                window->m_MouseStatesFrame[button] = buttonState;
             }
 
             return 0;

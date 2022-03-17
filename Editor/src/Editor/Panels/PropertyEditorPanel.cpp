@@ -125,6 +125,10 @@ namespace Akkad {
 			{
 				DrawGUICheckBoxComponent();
 			}
+			if (m_ActiveEntity.HasComponent<GUISliderComponent>())
+			{
+				DrawGUISliderComponent();
+			}
 
 			DrawAddComponent();
 		}
@@ -1135,6 +1139,24 @@ namespace Akkad {
 		if (ImGui::Checkbox("Is checked", &isActive))
 		{
 			box.box.SetCheckStatus(isActive);
+		}
+	}
+
+	void PropertyEditorPanel::DrawGUISliderComponent()
+	{
+		ImGui::SetNextItemOpen(true);
+		auto& slider = m_ActiveEntity.GetComponent<GUISliderComponent>();
+
+		glm::vec3 sliderColor = slider.slider.GetSliderColor();
+		glm::vec3 knobColor = slider.slider.GetKnobColor();
+
+		if (ImGui::ColorEdit3("Slider color", glm::value_ptr(sliderColor)))
+		{
+			slider.slider.SetSliderColor(sliderColor);
+		}
+		if (ImGui::ColorEdit3("Knob color", glm::value_ptr(knobColor)))
+		{
+			slider.slider.SetKnobColor(knobColor);
 		}
 	}
 

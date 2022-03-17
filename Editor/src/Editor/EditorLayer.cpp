@@ -375,6 +375,10 @@ namespace Akkad {
 					{
 						GUIFactory::AddGuiCheckBox();
 					}
+					if (ImGui::MenuItem("Slider"))
+					{
+						GUIFactory::AddGuiSlider();
+					}
 					ImGui::EndMenu();
 				}
 

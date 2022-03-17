@@ -90,6 +90,10 @@ namespace Akkad {
 		{
 			GUICheckBoxComponentSerializer::Serialize(entity, entity_data);
 		}
+		if (entity.HasComponent<GUISliderComponent>())
+		{
+			GUISliderComponentSerializer::Serialize(entity, entity_data);
+		}
 
 		auto& entity_relation = entity.GetComponent<RelationShipComponent>();
 		Entity current_child = entity_relation.first_child;
@@ -222,6 +226,13 @@ namespace Akkad {
 				GUICheckBoxComponentSerializer::Deserialize(entity, componentData);
 				continue;
 			}
+
+			else if (component.key() == "GUISliderComponent")
+			{
+				GUISliderComponentSerializer::Deserialize(entity, componentData);
+				continue;
+			}
+
 
 			else if (component.key() == "children")
 			{

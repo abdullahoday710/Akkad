@@ -13,3 +13,4 @@
 #include "LineRendererComponent.h"
 #include "GUIPanelComponent.h"
 #include "GUICheckBoxComponent.h"
+#include "GUISliderComponent.h"

@@ -431,6 +431,25 @@ namespace Akkad {
 								Renderer2D::DrawRect(checkbox.box.GetBoxUIRect().GetRect(), color, true, activeContainer.container.GetProjection());
 							}
 						}
+
+						if (current_child.HasComponent<GUISliderComponent>())
+						{
+							auto& slider = current_child.GetComponent<GUISliderComponent>();
+							slider.slider.SetSliderRect(rect_transform.rect);
+
+							if (!pickingPhase)
+							{
+								Renderer2D::DrawRect(slider.slider.GetSliderRect().GetRect(), slider.slider.GetSliderColor(), true, activeContainer.container.GetProjection());
+								Renderer2D::DrawRect(slider.slider.GetKnobRect().GetRect(), slider.slider.GetKnobColor(), true, activeContainer.container.GetProjection());
+							}
+							if (pickingPhase)
+							{
+								child_id += 1;
+								glm::vec3 color;
+								color.r = child_id;
+								Renderer2D::DrawRect(slider.slider.GetSliderRect().GetRect(), color, true, activeContainer.container.GetProjection());
+							}
+						}
 					}
 
 					RenderGUIElement(current_child, pickingPhase); // draw the child elements of the current child
@@ -566,6 +585,48 @@ namespace Akkad {
 							}
 						}
 	
+					}
+				}
+			}
+
+			if (input->IsMouseDown(MouseButtons::LEFT))
+			{
+				int mouseX = input->GetMouseX();
+				int mouseY = input->GetMouseY();
+
+				if (mouseX < m_ViewportRect.GetMax().x && mouseY < m_ViewportRect.GetMax().y)
+				{
+					if (mouseX > m_ViewportRect.GetMin().x && mouseY > m_ViewportRect.GetMin().y)
+					{
+						int bufferX = mouseX - (int)m_ViewportRect.GetMin().x;
+						int bufferY = mouseY - (int)m_ViewportRect.GetMin().y;
+						auto pixel = m_PickingBuffer->ReadPixels(bufferX, m_ViewportSize.y - bufferY - 1);
+
+						unsigned int entityID = pixel.x;
+
+						entityID -= 1;
+						Entity PickedEntity = Entity((entt::entity)entityID, this);
+						if (PickedEntity.IsValid())
+						{
+							if (PickedEntity.HasComponent<GUISliderComponent>())
+							{
+								auto& slider = PickedEntity.GetComponent<GUISliderComponent>();
+								glm::vec2 sliderMin = slider.slider.GetSliderRect().GetRect().GetMin();
+								glm::vec2 sliderMax = slider.slider.GetSliderRect().GetRect().GetMax();
+								if (bufferX < sliderMax.x && bufferY < sliderMax.y)
+								{
+									if (bufferX > sliderMin.x && bufferY > sliderMin.y)
+									{
+										float sliderX = bufferX - slider.slider.GetSliderRect().GetRect().GetMin().x;
+										if (sliderX < sliderMax.x)
+										{
+											slider.slider.SetKnobX(sliderX);
+										}
+									}
+								}
+							}
+						}
+
 					}
 				}
 			}

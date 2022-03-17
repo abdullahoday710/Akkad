@@ -13,6 +13,7 @@ namespace Akkad {
 		static Entity AddGuiButton();
 		static Entity AddGuiPanel();
 		static Entity AddGuiCheckBox();
+		static Entity AddGuiSlider();
 
 	private:
 		static void CheckGuiContainer();

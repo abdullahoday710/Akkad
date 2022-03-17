@@ -131,6 +131,30 @@ namespace Akkad {
 		return box;
 	}
 
+	Entity GUIFactory::AddGuiSlider()
+	{
+		auto scene = EditorLayer::GetActiveScene();
+		CheckGuiContainer();
+
+		Entity sliderEntity = Entity(scene->m_Registry.create(), scene.get());
+		sliderEntity.AddComponent<RelationShipComponent>();
+		auto& sliderRect = sliderEntity.AddComponent<RectTransformComponent>();
+		auto& sliderComponent = sliderEntity.AddComponent<GUISliderComponent>();
+
+		sliderRect.rect.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 0.3 });
+		sliderRect.rect.SetHeightConstraint({ ConstraintType::ASPECT_CONSTRAINT, 0.04 });
+
+		sliderRect.rect.SetXConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
+		sliderRect.rect.SetYConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
+		sliderComponent.slider.SetSliderColor({ 1,1,1 });
+		sliderComponent.slider.SetKnobColor({ 0.18,0.18,0.18 });
+		auto& tag = sliderEntity.AddComponent<TagComponent>();
+		tag.Tag = "Slider";
+
+		scene->AssignEntityToParent(scene->GetGuiContainer(), sliderEntity);
+		return sliderEntity;
+	}
+
 	void GUIFactory::CheckGuiContainer()
 	{
 		Entity container = EditorLayer::GetActiveScene()->GetGuiContainer();

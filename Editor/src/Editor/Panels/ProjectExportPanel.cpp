@@ -208,7 +208,7 @@ namespace Akkad {
 				std::filesystem::remove(jsDestPath);
 			}
 
-			std::filesystem::copy(htmlsrcpath, htmldestpath);
+			//std::filesystem::copy(htmlsrcpath, htmldestpath);
 			std::filesystem::copy(jsSrcPath, jsDestPath);
 			std::filesystem::copy(wasmSrcPath, wasmDestPath);
 		}

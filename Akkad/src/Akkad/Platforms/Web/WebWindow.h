@@ -27,17 +27,23 @@ namespace Akkad {
 	private:
 
 		void MakeWebKeyCodes();
+		void ResetKeyStates();
+
 		static std::function<void(Event&)> m_EventCallbackFN;
 
 		static EM_BOOL EmKeyDownCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData);
 		static EM_BOOL EmKeyUpCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData);
 		static std::map<size_t, uint32_t> m_KeyCodes;
 		static bool m_KeyStates[512];
+		static int m_KeyStatesFrame[512];
 
 		static EM_BOOL EmMouseCallback(int eventType, const EmscriptenMouseEvent* mouseEvent, void* userData);
 		static bool MouseState_Left;
 		static bool MouseState_Right;
 		static bool MouseState_Middle;
+
+		static int m_MouseStatesFrame[3];
+
 		static int MouseX;
 		static int MouseY;
 

@@ -6,6 +6,8 @@ namespace Akkad {
 	std::function<void(Event&)> WebWindow::m_EventCallbackFN;
 	std::map<size_t, uint32_t> WebWindow::m_KeyCodes;
 	bool WebWindow::m_KeyStates[512];
+	int WebWindow::m_MouseStatesFrame[3];
+	int WebWindow::m_KeyStatesFrame[512];
 
 	bool WebWindow::MouseState_Left = false;
 	bool WebWindow::MouseState_Right = false;
@@ -34,6 +36,7 @@ namespace Akkad {
 	void WebWindow::OnUpdate()
 	{
 		#ifndef AK_GAME_ASSEMBLY
+			ResetKeyStates();
 			int width;
 			int height;
 			emscripten_get_canvas_element_size("#canvas", &width, &height);
@@ -78,12 +81,29 @@ namespace Akkad {
 		return ev.isFullscreen;
 	}
 
+	void WebWindow::ResetKeyStates()
+	{
+		for (size_t i = 0; i < 3; i++)
+		{
+			m_MouseStatesFrame[i] = -1;
+		}
+
+		for (size_t i = 0; i < 512; i++)
+		{
+			m_KeyStatesFrame[i] = -1;
+		}
+	}
+
 	EM_BOOL WebWindow::EmKeyDownCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData)
 	{
 		uint32_t code = emscripten_compute_dom_pk_code(keyEvent->code);
 		uint32_t ak_code = m_KeyCodes[code];
 		
 		m_KeyStates[ak_code] = true;
+		if (!keyEvent->repeat)
+		{
+			m_KeyStatesFrame[ak_code] = true;
+		}
 		return true;
 	}
 
@@ -93,6 +113,7 @@ namespace Akkad {
 		uint32_t ak_code = m_KeyCodes[code];
 
 		m_KeyStates[ak_code] = false;
+		m_KeyStatesFrame[ak_code] = false;
 		return true;
 	}
 
@@ -109,10 +130,12 @@ namespace Akkad {
 		{
 			if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN)
 			{
+				m_MouseStatesFrame[0] = true;
 				MouseState_Left = true;
 			}
 			else if (eventType == EMSCRIPTEN_EVENT_MOUSEUP)
 			{
+				m_MouseStatesFrame[0] = false;
 				MouseState_Left = false;
 			}
 		}
@@ -122,10 +145,12 @@ namespace Akkad {
 		{
 			if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN)
 			{
+				m_MouseStatesFrame[1] = true;
 				MouseState_Right = true;
 			}
 			else if (eventType == EMSCRIPTEN_EVENT_MOUSEUP)
 			{
+				m_MouseStatesFrame[1] = false;
 				MouseState_Right = false;
 			}
 		}
@@ -135,10 +160,12 @@ namespace Akkad {
 		{
 			if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN)
 			{
+				m_MouseStatesFrame[2] = true;
 				MouseState_Middle = true;
 			}
 			else if (eventType == EMSCRIPTEN_EVENT_MOUSEUP)
 			{
+				m_MouseStatesFrame[2] = false;
 				MouseState_Middle = false;
 			}
 		}

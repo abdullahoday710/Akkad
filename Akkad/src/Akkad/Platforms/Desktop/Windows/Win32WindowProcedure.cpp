@@ -6,6 +6,7 @@
 #include "Akkad/Application/Application.h"
 
 #include <tchar.h>
+#include <Akkad/Logging.h>
 
 // compile imgui for windows
 #include "backends/imgui_impl_win32.cpp"
@@ -27,6 +28,11 @@ namespace Akkad {
             
             PostQuitMessage(0);
             return 0;
+        case WM_CHAR:
+        {
+            window->m_LastPressedCharacter = (WCHAR)wParam;
+            return 0;
+        }
         case WM_KEYDOWN:
         {
             unsigned int code = MapVirtualKeyW(wParam, MAPVK_VK_TO_VSC);

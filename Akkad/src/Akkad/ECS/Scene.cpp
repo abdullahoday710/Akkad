@@ -36,7 +36,15 @@ namespace Akkad {
 
 	void Scene::Start()
 	{
+		
 		shouldChunkLoaderWork = false;
+		Entity activeContainerEntity = GetGuiContainer();
+		if (activeContainerEntity.IsValid() && activeContainerEntity.HasComponent<GUIContainerComponent>())
+		{
+			auto& container = activeContainerEntity.GetComponent<GUIContainerComponent>();
+			container.container.SetScreenSize(m_ViewportSize);
+			
+		}
 
 		// Initialize physics
 		{
@@ -346,7 +354,7 @@ namespace Akkad {
 							}
 							if (guitext.uitext.IsValid())
 							{
-								guitext.uitext.SetBoundingBox(rect_transform.GetRect());
+								guitext.uitext.SetBoundingBox(rect_transform.rect);
 
 								if (guitext.text != guitext.uitext.GetText())
 								{
@@ -380,6 +388,38 @@ namespace Akkad {
 								}
 							}
 							
+						}
+
+						if (current_child.HasComponent<GUITextInputComponent>())
+						{
+							auto& textinput = current_child.GetComponent<GUITextInputComponent>();
+							if (textinput.textinput.GetTextInputRect() != rect_transform.rect)
+							{
+								textinput.textinput.SetTextInputRect(rect_transform.rect);
+							}
+							
+							if (!textinput.fontAssetID.empty())
+							{
+								auto fontdesc = Application::GetAssetManager()->GetDescriptorByID(textinput.fontAssetID);
+
+								if (fontdesc.absolutePath != textinput.textinput.GetUIText().m_FontFilePath)
+								{
+									textinput.textinput.GetUIText().SetFont(fontdesc.absolutePath);
+								}
+							}
+
+							if (!pickingPhase)
+							{
+								Renderer2D::DrawRect(textinput.textinput.GetTextInputRect().GetRect(), textinput.textinput.GetTextInputColor(), true, activeContainer.container.GetProjection());
+								Renderer2D::RenderText(textinput.textinput.GetUIText(), activeContainer.container.GetProjection());
+							}
+							if (pickingPhase)
+							{
+								child_id += 1;
+								glm::vec3 color;
+								color.r = child_id;
+								Renderer2D::DrawRect(textinput.textinput.GetTextInputRect().GetRect(), color, true, activeContainer.container.GetProjection());
+							}
 						}
 
 						if (current_child.HasComponent<GUIButtonComponent>())
@@ -583,6 +623,15 @@ namespace Akkad {
 								auto& checkBox = PickedEntity.GetComponent<GUICheckBoxComponent>();
 								checkBox.box.SetCheckStatus(!checkBox.box.IsChecked());
 							}
+
+							if (PickedEntity.HasComponent<GUITextInputComponent>())
+							{
+								m_LastPickedEntity = PickedEntity.m_Handle;
+							}
+						}
+						else
+						{
+							m_LastPickedEntity = (entt::entity)-1;
 						}
 	
 					}
@@ -630,7 +679,30 @@ namespace Akkad {
 					}
 				}
 			}
+
+			Entity lastEntity = { m_LastPickedEntity, this };
+			if (lastEntity.IsValid())
+			{
+				if (lastEntity.HasComponent<GUITextInputComponent>())
+				{
+					auto character = input->GetCharacterDown();
+					if (character >= 0 && character < 128)
+					{
+						char c = character;
+						auto& textInput = lastEntity.GetComponent<GUITextInputComponent>();
+						if (c == 8)
+						{
+							textInput.textinput.RemoveCharacter();
+						}
+						else
+						{
+							textInput.textinput.AddCharacter(c);
+						}
+					}
+				}
+			}
 		}
+
 		
 	}
 

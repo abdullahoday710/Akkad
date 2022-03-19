@@ -48,6 +48,15 @@ namespace Akkad {
 
 			Graphics::Rect GetRect() { return m_Rect; }
 			Graphics::Rect GetParentRect() { return m_ParentRect; }
+
+			bool operator!=(GUIRect& other)
+			{
+				if (other.m_Rect != m_Rect)
+				{
+					return true;
+				}
+				return false;
+			}
 		private:
 			void RecalculateRect();
 			void SetWidth(ConstraintType type, float width);

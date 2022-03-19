@@ -129,6 +129,10 @@ namespace Akkad {
 			{
 				DrawGUISliderComponent();
 			}
+			if (m_ActiveEntity.HasComponent<GUITextInputComponent>())
+			{
+				DrawGUITextInputComponent();
+			}
 
 			DrawAddComponent();
 		}
@@ -1158,6 +1162,24 @@ namespace Akkad {
 		{
 			slider.slider.SetKnobColor(knobColor);
 		}
+	}
+
+	void PropertyEditorPanel::DrawGUITextInputComponent()
+	{
+		auto& textinput = m_ActiveEntity.GetComponent<GUITextInputComponent>();
+
+		glm::vec3 textinputColor = textinput.textinput.GetTextInputColor();
+		glm::vec3 textColor = textinput.textinput.GetTextColor();
+
+		if (ImGui::ColorEdit3("Text Input color", glm::value_ptr(textinputColor)))
+		{
+			textinput.textinput.SetTextInputColor(textinputColor);
+		}
+		if (ImGui::ColorEdit3("Text color", glm::value_ptr(textColor)))
+		{
+			textinput.textinput.SetTextColor(textColor);
+		}
+
 	}
 
 }

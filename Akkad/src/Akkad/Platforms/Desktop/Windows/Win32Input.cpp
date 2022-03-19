@@ -56,6 +56,12 @@ namespace Akkad {
 		return false;
 	}
 
+	int Win32Input::GetCharacterDown()
+	{
+		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
+		return window->m_LastPressedCharacter;
+	}
+
 	bool Win32Input::IsKeyDown(unsigned int key)
 	{
 		unsigned int scancode = scanCodes[key];

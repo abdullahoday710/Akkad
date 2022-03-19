@@ -94,6 +94,10 @@ namespace Akkad {
 		{
 			GUISliderComponentSerializer::Serialize(entity, entity_data);
 		}
+		if (entity.HasComponent<GUITextInputComponent>())
+		{
+			GUITextInputComponentSerializer::Serialize(entity, entity_data);
+		}
 
 		auto& entity_relation = entity.GetComponent<RelationShipComponent>();
 		Entity current_child = entity_relation.first_child;
@@ -233,6 +237,11 @@ namespace Akkad {
 				continue;
 			}
 
+			else if (component.key() == "GUITextInputComponent")
+			{
+				GUITextInputComponentSerializer::Deserialize(entity, componentData);
+				continue;
+			}
 
 			else if (component.key() == "children")
 			{

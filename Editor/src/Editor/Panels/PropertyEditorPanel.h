@@ -45,6 +45,7 @@ namespace Akkad {
 		void DrawGUIPanelComponent();
 		void DrawGUICheckBoxComponent();
 		void DrawGUISliderComponent();
+		void DrawGUITextInputComponent();
 
 	};
 }

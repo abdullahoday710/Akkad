@@ -31,7 +31,7 @@ namespace Akkad {
 			}
 		}
 
-		void GUIText::SetBoundingBox(Graphics::Rect boundingBox)
+		void GUIText::SetBoundingBox(GUIRect boundingBox)
 		{
 			if (boundingBox != m_BoundingBox)
 			{
@@ -69,6 +69,10 @@ namespace Akkad {
 
 		void GUIText::RecalculateTextPosition()
 		{
+			if (m_Font == nullptr)
+			{
+				return;
+			}
 			m_Lines.clear();
 			TextLine firstLine;
 			firstLine.yOffset = GetPosition().y + (m_Font->GetFontSize() / 1.5);
@@ -96,7 +100,7 @@ namespace Akkad {
 			std::string::const_iterator c;
 
 			auto& current_line = m_Lines.back();
-			current_line.boundingBox.SetParent(m_BoundingBox);
+			current_line.boundingBox.SetParent(m_BoundingBox.GetRect());
 			current_line.boundingBox.SetXConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
 			current_line.boundingBox.SetYConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 0 });
 
@@ -133,7 +137,7 @@ namespace Akkad {
 			current_line_pos.x = GetPosition().x;
 			current_line_pos.y = m_Lines.back().yOffset;
 
-			m_Lines.back().boundingBox.SetParent(m_BoundingBox);
+			m_Lines.back().boundingBox.SetParent(m_BoundingBox.GetRect());
 			m_Lines.back().boundingBox.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 1 });
 			m_Lines.back().boundingBox.SetHeightConstraint({ ConstraintType::PIXEL_CONSTRAINT, (float)m_OriginalFontSize });
 			m_Lines.back().boundingBox.SetXConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
@@ -146,7 +150,7 @@ namespace Akkad {
 
 				auto ftchar = m_Font->GetASCIICharacter(*c, current_line_pos.x, current_line_pos.y);
 
-				if (ftchar.CharacterRect.GetMax().x < m_BoundingBox.GetMax().x)
+				if (ftchar.CharacterRect.GetMax().x < m_BoundingBox.GetRect().GetMax().x)
 				{
 					current_line.characters.push_back(ftchar);
 					current_line.ApplyAlignment(m_Alignment, m_Font);
@@ -156,12 +160,12 @@ namespace Akkad {
 				{
 					TextLine newline;
 					newline.yOffset = current_line.yOffset + m_Font->GetFontSize();
-					if (newline.yOffset < m_BoundingBox.GetMax().y)
+					if (newline.yOffset < m_BoundingBox.GetRect().GetMax().y)
 					{
 						current_line_pos.x = GetPosition().x;
 						current_line_pos.y = newline.yOffset;
 
-						newline.boundingBox.SetParent(m_BoundingBox);
+						newline.boundingBox.SetParent(m_BoundingBox.GetRect());
 
 						newline.boundingBox.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 1 });
 						newline.boundingBox.SetHeightConstraint({ ConstraintType::PIXEL_CONSTRAINT, (float)m_OriginalFontSize });
@@ -180,7 +184,7 @@ namespace Akkad {
 
 		glm::vec2 GUIText::GetPosition()
 		{
-			return m_BoundingBox.GetMin();
+			return m_BoundingBox.GetRect().GetMin();
 		}
 
 		void GUIText::TextLine::ApplyAlignment(Alignment alignment, SharedPtr<Font> font)

@@ -14,3 +14,4 @@
 #include "GUIPanelComponent.h"
 #include "GUICheckBoxComponent.h"
 #include "GUISliderComponent.h"
+#include "GUITextInputComponent.h"

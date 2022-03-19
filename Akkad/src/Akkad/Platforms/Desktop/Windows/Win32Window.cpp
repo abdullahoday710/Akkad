@@ -128,6 +128,7 @@ namespace Akkad {
         {
             m_KeyStatesFrame[i] = -1;
         }
+        m_LastPressedCharacter = -1;
     }
 
 }

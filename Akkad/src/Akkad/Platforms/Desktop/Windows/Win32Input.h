@@ -9,6 +9,7 @@ namespace Akkad {
 		virtual bool GetKeyUp(unsigned int key) override;
 		virtual bool GetMouseDown(MouseButtons button) override;
 		virtual bool GetMouseUp(MouseButtons button) override;
+		virtual int GetCharacterDown() override;
 
 		virtual bool IsKeyDown(unsigned int key) override;
 		virtual bool IsMouseDown(MouseButtons button) override;

@@ -13,3 +13,4 @@
 #include "GUIPanelSerializer.h"
 #include "GUICheckBoxComponentSerializer.h"
 #include "GUISliderComponentSerializer.h"
+#include "GUITextInputComponentSerializer.h"

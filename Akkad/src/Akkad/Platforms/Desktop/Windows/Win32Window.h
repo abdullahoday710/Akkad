@@ -32,6 +32,8 @@ namespace Akkad {
 		int m_MouseStatesFrame[3] = {};
 		int m_KeyStatesFrame[512] = {};
 
+		int m_LastPressedCharacter = -1;
+
 	private:
 		bool m_IsClosed = true;
 		bool m_FullScreen = false;

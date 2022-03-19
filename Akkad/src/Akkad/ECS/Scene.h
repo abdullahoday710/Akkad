@@ -89,6 +89,8 @@ namespace Akkad {
 		SharedPtr<Graphics::FrameBuffer> m_PickingBuffer;
 		Graphics::Rect m_ViewportRect;
 
+		entt::entity m_LastPickedEntity;
+
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 		friend class PropertyEditorPanel;

@@ -155,6 +155,31 @@ namespace Akkad {
 		return sliderEntity;
 	}
 
+	Entity GUIFactory::AddGuiTextInput()
+	{
+		auto scene = EditorLayer::GetActiveScene();
+		CheckGuiContainer();
+
+		Entity textinputEntity = Entity(scene->m_Registry.create(), scene.get());
+		textinputEntity.AddComponent<RelationShipComponent>();
+		auto& textInputRect = textinputEntity.AddComponent<RectTransformComponent>();
+		auto& textinput = textinputEntity.AddComponent<GUITextInputComponent>();
+
+		textInputRect.rect.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 0.6 });
+		textInputRect.rect.SetHeightConstraint({ ConstraintType::ASPECT_CONSTRAINT, 0.2 });
+
+		textInputRect.rect.SetXConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
+		textInputRect.rect.SetYConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
+		auto assetmanager = Application::GetAssetManager();
+		auto defaultFont = assetmanager->GetFontByName("Roboto-Medium");
+		textinput.fontAssetID = defaultFont.assetID;
+
+		auto& tag = textinputEntity.AddComponent<TagComponent>();
+		tag.Tag = "Text input";
+		scene->AssignEntityToParent(scene->GetGuiContainer(), textinputEntity);
+		return textinputEntity;
+	}
+
 	void GUIFactory::CheckGuiContainer()
 	{
 		Entity container = EditorLayer::GetActiveScene()->GetGuiContainer();

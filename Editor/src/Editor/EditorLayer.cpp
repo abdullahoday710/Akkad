@@ -379,6 +379,10 @@ namespace Akkad {
 					{
 						GUIFactory::AddGuiSlider();
 					}
+					if (ImGui::MenuItem("Text Input"))
+					{
+						GUIFactory::AddGuiTextInput();
+					}
 					ImGui::EndMenu();
 				}
 

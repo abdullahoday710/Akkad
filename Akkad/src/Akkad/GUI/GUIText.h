@@ -32,7 +32,7 @@ namespace Akkad {
 
 			void SetFont(std::string filepath);
 			void SetText(std::string text);
-			void SetBoundingBox(Graphics::Rect boundingBox);
+			void SetBoundingBox(GUIRect boundingBox);
 			void SetColor(glm::vec3 color) { m_Color = color; };
 			void SetAlignment(Alignment alignment);
 			void SetFittingMode(FittingMode mode);
@@ -40,7 +40,7 @@ namespace Akkad {
 			Alignment GetAlignment() { return m_Alignment; }
 			FittingMode GetFittingMode() { return m_FittingMode; }
 
-			Graphics::Rect GetBoundingBox() { return m_BoundingBox; }
+			Graphics::Rect GetBoundingBox() { return m_BoundingBox.GetRect(); }
 			SharedPtr<Font> GetFont() { return m_Font; }
 			std::string GetText() { return m_Text; }
 			std::vector<TextLine> GetLines() { return m_Lines; }
@@ -64,11 +64,12 @@ namespace Akkad {
 			std::string m_Text;
 			std::string m_FontFilePath;
 			std::vector<TextLine> m_Lines;
-			Graphics::Rect m_BoundingBox;
+			GUIRect m_BoundingBox;
 			
 			glm::vec3 m_Color = { 1.0f, 1.0f, 1.0f };
 
 			friend class ::Akkad::Scene;
+			friend class GUITextInput;
 
 		};
 	}

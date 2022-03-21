@@ -32,6 +32,7 @@ namespace Akkad {
 		static std::function<void(Event&)> m_EventCallbackFN;
 
 		static EM_BOOL EmKeyDownCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData);
+		static EM_BOOL EmKeyPressCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData);
 		static EM_BOOL EmKeyUpCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData);
 		static std::map<size_t, uint32_t> m_KeyCodes;
 		static bool m_KeyStates[512];
@@ -43,6 +44,7 @@ namespace Akkad {
 		static bool MouseState_Middle;
 
 		static int m_MouseStatesFrame[3];
+		static int m_LastPressedChar;
 
 		static int MouseX;
 		static int MouseY;

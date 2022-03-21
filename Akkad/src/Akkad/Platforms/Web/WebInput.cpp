@@ -69,6 +69,11 @@ namespace Akkad {
 		}
 	}
 
+	int WebInput::GetCharacterDown()
+	{
+		return WebWindow::m_LastPressedChar;
+	}
+
 	bool WebInput::GetKeyUp(unsigned int key)
 	{
 		if (!WebWindow::m_KeyStatesFrame[key])

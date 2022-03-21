@@ -1,7 +1,11 @@
 #include "WebWindow.h"
+
 #include "Akkad/Application/Application.h"
+#include "Akkad/Logging.h"
+#include "Akkad/Input/KeyCodes.h"
 
 #include <emscripten/key_codes.h>
+
 namespace Akkad {
 	std::function<void(Event&)> WebWindow::m_EventCallbackFN;
 	std::map<size_t, uint32_t> WebWindow::m_KeyCodes;
@@ -14,6 +18,7 @@ namespace Akkad {
 	bool WebWindow::MouseState_Middle = false;
 	int WebWindow::MouseX = 0;
 	int WebWindow::MouseY = 0;
+	int WebWindow::m_LastPressedChar = -1;
 
 	int WebWindow::Init(WindowSettings settings)
 	{
@@ -22,6 +27,7 @@ namespace Akkad {
 		emscripten_set_window_title(settings.title);
 		emscripten_set_canvas_element_size("#canvas", width, height);
 		MakeWebKeyCodes();
+		emscripten_set_keydown_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, WebWindow::EmKeyDownCallback);
 		emscripten_set_keypress_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, WebWindow::EmKeyDownCallback);
 		emscripten_set_keyup_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, WebWindow::EmKeyUpCallback);
 		emscripten_set_mousedown_callback("#canvas", 0, true, WebWindow::EmMouseCallback);
@@ -92,13 +98,37 @@ namespace Akkad {
 		{
 			m_KeyStatesFrame[i] = -1;
 		}
+		m_LastPressedChar = -1;
 	}
 
 	EM_BOOL WebWindow::EmKeyDownCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData)
 	{
 		uint32_t code = emscripten_compute_dom_pk_code(keyEvent->code);
 		uint32_t ak_code = m_KeyCodes[code];
-		
+
+		int key = keyEvent->key[0];
+
+		// checking if the pressed key is not a function key, see Akkad/Input/keyCodes.h....
+		if (ak_code < 256)
+		{
+			// checking if the pressed key is an ASCII printable character
+			if (key >= 32 && key <= 126)
+			{
+				m_LastPressedChar = key;
+			}
+		}
+
+		// and if you have any exceptions for function keys, you can add them here...
+		// P.S. fuck emscripten
+
+		switch (ak_code)
+		{
+		case AK_KEY_BACKSPACE:
+			m_LastPressedChar = 8;
+		default:
+			break;
+		}
+
 		m_KeyStates[ak_code] = true;
 		if (!keyEvent->repeat)
 		{

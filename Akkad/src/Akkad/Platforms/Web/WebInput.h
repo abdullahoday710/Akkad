@@ -14,6 +14,8 @@ namespace Akkad {
 		virtual bool IsKeyDown(unsigned int key) override;
 		virtual bool IsMouseDown(MouseButtons button) override;
 
+		virtual int GetCharacterDown() override;
+
 
 		virtual int GetMouseX() override;
 		virtual int GetMouseY() override;

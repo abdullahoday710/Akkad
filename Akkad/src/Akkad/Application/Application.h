@@ -18,6 +18,10 @@ namespace Akkad {
 		class RenderPlatform;
 		class Renderer2D;
 	}
+
+	namespace NET {
+		class HTTPHandler;
+	}
 	/*----------------------------------*/
 
 	struct ApplicationSettings
@@ -39,6 +43,8 @@ namespace Akkad {
 
 		SharedPtr<AssetManager> m_AssetManager;
 		SharedPtr<SceneManager> m_SceneManager;
+
+		NET::HTTPHandler* m_HttpHandler;
 	};
 
 	class Application {
@@ -64,6 +70,8 @@ namespace Akkad {
 		static SharedPtr<Graphics::RenderPlatform> GetRenderPlatform() { return GetInstance().m_ApplicationComponents.m_platform; }
 		static SharedPtr<AssetManager> GetAssetManager() { return GetInstance().m_ApplicationComponents.m_AssetManager; }
 		static SharedPtr<SceneManager> GetSceneManager() { return GetInstance().m_ApplicationComponents.m_SceneManager; }
+
+		static NET::HTTPHandler* GetHTTPHandler() { return GetInstance().m_ApplicationComponents.m_HttpHandler; }
 		/*------------------*/
 
 		Window* GetWindow() { return m_ApplicationComponents.m_Window; }

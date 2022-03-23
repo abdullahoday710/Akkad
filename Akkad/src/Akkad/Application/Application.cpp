@@ -2,7 +2,7 @@
 #include "TimeManager.h"
 
 #include "Akkad/PlatformMacros.h"
-
+#include "Akkad/Net/HTTP/HTTPHandler.h"
 #ifdef AK_PLATFORM_WINDOWS
 	#include "Akkad/Platforms/Desktop/Windows/Win32Window.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32GameAssembly.h"
@@ -15,6 +15,7 @@
 
 #ifdef AK_PLATFORM_WEB
 	#include "Akkad/Platforms/Web/WebPlatform.h"
+	#include "Akkad/Platforms/Web/WebHTTPHandler.h"
 	#include <emscripten.h>
 #endif
 
@@ -51,10 +52,13 @@ namespace Akkad {
 			window = new WebWindow();
 			input = new WebInput();
 			timeManager = new WebTime();
+
 			#ifndef AK_GAME_ASSEMBLY
 				loadedGameAssembly = new WebGameAssembly();
 			#endif
 			targetRenderAPI = RenderAPI::OPENGLES;
+
+			m_ApplicationComponents.m_HttpHandler = new NET::WebHTTPHandler();
 		#endif // AK_PLATFORM_WEB
 
 
@@ -85,6 +89,7 @@ namespace Akkad {
 			#endif
 			
 		}
+
 	}
 
 	void Application::RunImpl()

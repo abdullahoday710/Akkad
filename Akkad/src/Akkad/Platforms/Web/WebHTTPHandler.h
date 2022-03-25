@@ -7,7 +7,7 @@ namespace Akkad {
 		class WebHTTPHandler : public HTTPHandler
 		{
 		public:
-			virtual void SendRequest(SharedPtr<AsyncHTTPResponse> respObj, std::string url, RequestMethod method, std::string requestdata) override;
+			virtual void SendRequest(std::string url, RequestMethod method, std::string requestdata, std::function<void(AsyncHTTPResponse)> callback) override;
 		};
 
 	}

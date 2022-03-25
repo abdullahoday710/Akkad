@@ -3,10 +3,12 @@
 
 #include <string>
 
+#include <functional>
+
 namespace Akkad {
 	namespace NET {
 		enum class RequestMethod {GET, POST};
-
+		// TODO : Support more request methods and add support for content types....
 		struct AsyncHTTPResponse
 		{
 			bool isValid = false;
@@ -23,8 +25,7 @@ namespace Akkad {
 
 		class HTTPHandler {
 		public:
-			virtual void SendRequest(SharedPtr<AsyncHTTPResponse> respObj, std::string url, RequestMethod method, std::string requestdata = "") = 0;
-
+			virtual void SendRequest(std::string url, RequestMethod method, std::string requestdata, std::function<void(AsyncHTTPResponse)> callback) = 0;
 		};
 	}
 }

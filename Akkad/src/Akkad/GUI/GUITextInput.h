@@ -3,6 +3,15 @@
 #include "GUIText.h"
 namespace Akkad {
 	namespace GUI {
+
+		enum GUITextInputFlags
+		{
+			PasswordField = 1 << 0,
+			//OtherFlag = 1 << 1,
+			//OtherFlag = 1 << 2,
+			//OtherFlag = 1 << 3
+		};
+
 		class GUITextInput
 		{
 		public:
@@ -11,8 +20,11 @@ namespace Akkad {
 			void SetTextInputRect(GUIRect rect);
 			void SetTextAlignment(GUIText::Alignment alignment);
 			void AddCharacter(char characater);
+			void SetText(std::string text);
 			void RemoveCharacter();
+			void SetFlags(unsigned int flags) { m_Flags = flags; }
 
+			unsigned int GetFlags() { return m_Flags; }
 			GUIText& GetUIText() { return m_uitext; }
 			glm::vec3 GetTextInputColor() { return m_TextInputColor; }
 			glm::vec3 GetTextColor() { return m_TextColor; }
@@ -23,7 +35,7 @@ namespace Akkad {
 			glm::vec3 m_TextColor = { 0,0,0 };
 			GUIRect m_TextInputRect;
 			GUIText m_uitext;
-
+			unsigned int m_Flags;
 			std::string m_TextValue;
 
 		};

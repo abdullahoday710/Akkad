@@ -16,16 +16,18 @@ namespace Akkad {
 		void GUITextInput::SetTextInputRect(GUIRect rect)
 		{
 			m_TextInputRect = rect;
-			if (m_uitext.GetFittingMode() != GUIText::FittingMode::KEEP_FONT_SIZE)
+			if (m_uitext.GetFittingMode() != GUIText::FittingMode::SCALE_TO_FIT)
 			{
-				m_uitext.SetFittingMode(GUIText::FittingMode::KEEP_FONT_SIZE);
+				m_uitext.SetFittingMode(GUIText::FittingMode::SCALE_TO_FIT);
 			}
 			m_uitext.m_BoundingBox.SetParent(rect.GetRect());
 			m_uitext.m_BoundingBox.SetWidthConstraint({ ConstraintType::RELATIVE_CONSTRAINT, 0.9 });
-			m_uitext.m_BoundingBox.SetHeightConstraint({ ConstraintType::ASPECT_CONSTRAINT, 0.2 });
+			m_uitext.m_BoundingBox.SetHeightConstraint({ ConstraintType::ASPECT_CONSTRAINT, 0.1 });
 			m_uitext.m_BoundingBox.SetXConstraint({ ConstraintType::CENTER_CONSTRAINT, 0});
 			m_uitext.m_BoundingBox.SetYConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
+			m_uitext.SetOriginalFontSize(32);
 			m_uitext.SetColor(m_TextColor);
+			SetTextAlignment(GUIText::Alignment::CENTER);
 			m_uitext.RecalculateTextPosition();
 		}
 
@@ -37,13 +39,46 @@ namespace Akkad {
 		void GUITextInput::AddCharacter(char characater)
 		{
 			m_TextValue += characater;
+
+			if (m_Flags & GUITextInputFlags::PasswordField)
+			{
+				std::string stars;
+				for (size_t i = 0; i < m_TextValue.size(); i++)
+				{
+					stars += "*";
+				}
+				m_uitext.SetText(stars);
+			}
+			else
+			{
+				m_uitext.SetText(m_TextValue);
+			}
+		}
+
+		void GUITextInput::SetText(std::string text)
+		{
+			m_TextValue = text;
 			m_uitext.SetText(m_TextValue);
 		}
 
 		void GUITextInput::RemoveCharacter()
 		{
 			m_TextValue = m_TextValue.substr(0, m_TextValue.size() - 1);
-			m_uitext.SetText(m_TextValue);
+
+			if (m_Flags & GUITextInputFlags::PasswordField)
+			{
+				std::string stars;
+				for (size_t i = 0; i < m_TextValue.size(); i++)
+				{
+					stars += "*";
+				}
+				m_uitext.SetText(stars);
+			}
+			else
+			{
+
+				m_uitext.SetText(m_TextValue);
+			}
 		}
 		GUIRect GUITextInput::GetTextInputRect()
 		{

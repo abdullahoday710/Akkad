@@ -1180,6 +1180,33 @@ namespace Akkad {
 			textinput.textinput.SetTextColor(textColor);
 		}
 
+		std::string text = textinput.textinput.GetText();
+		if (ImGui::InputText("Text", &text))
+		{
+			textinput.textinput.SetText(text);
+		}
+
+		bool isPasswordField = false;
+		if (textinput.textinput.GetFlags() & GUI::GUITextInputFlags::PasswordField)
+		{
+			isPasswordField = true;
+		}
+
+		if (ImGui::Checkbox("Is password field", &isPasswordField))
+		{
+			auto flags = textinput.textinput.GetFlags();
+
+			if (isPasswordField)
+			{
+				flags |= GUI::GUITextInputFlags::PasswordField;
+			}
+			else
+			{
+				flags &= ~GUI::GUITextInputFlags::PasswordField;
+			}
+			textinput.textinput.SetFlags(flags);
+		}
+
 	}
 
 }

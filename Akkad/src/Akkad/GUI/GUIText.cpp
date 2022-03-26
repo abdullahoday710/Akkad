@@ -108,7 +108,7 @@ namespace Akkad {
 			current_line.boundingBox.SetHeightConstraint({ ConstraintType::ASPECT_CONSTRAINT, 0.15 });
 
 			float current_line_height = current_line.boundingBox.GetRect().GetHeight();
-			if (current_line_height > 12)
+			if (current_line_height > 12 && current_line_height < m_OriginalFontSize)
 			{
 				m_Font->SetFontPixelScaling(current_line.boundingBox.GetRect().GetHeight());
 			}

@@ -15,6 +15,16 @@ namespace Akkad {
 		entity_data["GUITextInputComponent"]["TextColor"][2] = textinput.textinput.GetTextColor().b;
 
 		entity_data["GUITextInputComponent"]["FontAssetID"] = textinput.fontAssetID;
+		entity_data["GUITextInputComponent"]["Text"] = textinput.textinput.GetText();
+
+		auto flags = textinput.textinput.GetFlags();
+
+		entity_data["GUITextInputComponent"]["Flags"]["PasswordField"] = false;
+
+		if (flags & GUI::GUITextInputFlags::PasswordField)
+		{
+			entity_data["GUITextInputComponent"]["Flags"]["PasswordField"] = true;
+		}
 	}
 
 	void GUITextInputComponentSerializer::Deserialize(Entity entity, json& component_data)
@@ -30,11 +40,23 @@ namespace Akkad {
 		textColor.b = component_data["TextColor"][2];
 
 		std::string fontAssetID = component_data["FontAssetID"];
+		std::string text = component_data["Text"];
 
 		auto& textInput = entity.AddComponent<GUITextInputComponent>();
 
 		textInput.textinput.SetTextInputColor(textInputColor);
 		textInput.textinput.SetTextColor(textColor);
 		textInput.fontAssetID = fontAssetID;
+		textInput.textinput.SetText(text);
+
+		unsigned int flags = 0;
+
+		bool passwordField = component_data["Flags"]["PasswordField"];
+		if (passwordField)
+		{
+			flags |= GUI::GUITextInputFlags::PasswordField;
+		}
+
+		textInput.textinput.SetFlags(flags);
 	}
 }

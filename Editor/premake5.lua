@@ -29,6 +29,7 @@ project "Editor"
 		"%{IncludeDir.box2d}",
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.concurrentqueue}",
+		"%{IncludeDir.curl}",
 	}
 		
     postbuildcommands {
@@ -39,18 +40,18 @@ project "Editor"
 	links {
 	"Akkad",
 	"glslang",
-	"ImGuizmo"
+	"ImGuizmo",
 	}
 
 		filter "system:windows"
 		systemversion "latest"
 
 	filter "configurations:Debug"
-		defines "AK_DEBUG"
+		defines {"AK_DEBUG", "CURL_STATICLIB"}
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "AK_RELEASE"
+		defines {"AK_RELEASE"}
 		runtime "Release"
 		optimize "on"

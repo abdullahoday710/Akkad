@@ -32,6 +32,7 @@ project "Akkad"
         "%{IncludeDir.entt}",
         "%{IncludeDir.json}",
         "%{IncludeDir.box2d}",
+        "%{IncludeDir.curl}",
     }
     
     links
@@ -40,6 +41,7 @@ project "Akkad"
         "spdlog",
         "SPIRV-Cross",
         "box2d",
+
     }
     
     filter "system:windows"
@@ -49,6 +51,10 @@ project "Akkad"
             {
                 "opengl32.lib",
                 "Glad",
+                "curl-lib",
+                "Ws2_32.lib",
+                "Wldap32.lib"
+
             }
         end
         files
@@ -59,9 +65,7 @@ project "Akkad"
             "src/Akkad/Graphics/API/OpenGL/**.cpp",
         }
 
-        defines
-        {
-        }
+
     
     configuration "target-emscripten"
     excludes
@@ -83,11 +87,11 @@ project "Akkad"
 
 
 filter "configurations:Debug"
-    defines "AK_DEBUG"
+    defines {"AK_DEBUG", "CURL_STATICLIB"}
     runtime "Debug"
     symbols "on"
 
 filter "configurations:Release"
-    defines "AK_RELEASE"
+    defines {"AK_RELEASE", "CURL_STATICLIB"}
     runtime "Release"
     optimize "on"

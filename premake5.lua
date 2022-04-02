@@ -41,12 +41,15 @@ workspace "Akkad"
     IncludeDir["iconfontcpp"] = "%{wks.location}/3rdparty/iconfontcpp/include"
     IncludeDir["box2d"] = "%{wks.location}/3rdparty/box2d/include"
     IncludeDir["concurrentqueue"] = "%{wks.location}/3rdparty/concurrentqueue"
+    IncludeDir["curl"] = "%{wks.location}/3rdparty/curl/include"
+
 
     group "Dependencies"
       if not _OPTIONS['target-emscripten'] then
         include "3rdparty/glad"
         include "3rdparty/glslang"
         include "3rdparty/ImGuizmo"
+        include "3rdparty/curl"
       end
       include "3rdparty/imgui"
       include "3rdparty/spdlog"

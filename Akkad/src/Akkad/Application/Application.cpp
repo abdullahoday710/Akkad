@@ -8,6 +8,7 @@
 	#include "Akkad/Platforms/Desktop/Windows/Win32GameAssembly.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32Time.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32Input.h"
+	#include "Akkad/Net/HTTP/CurlHTTPHandler.h"
 
 	#undef min
 	#undef max
@@ -46,6 +47,7 @@ namespace Akkad {
 			input = new Win32Input();
 			timeManager = new Win32TimeManager();
 			loadedGameAssembly = new Win32GameAssembly();
+			m_ApplicationComponents.m_HttpHandler = new NET::CurlHTTPHandler();
 		#endif //AK_PLATFORM_WINDOWS
 
 		#ifdef AK_PLATFORM_WEB
@@ -135,6 +137,7 @@ namespace Akkad {
 		GetInstance().m_ApplicationComponents.m_TimeManager->CalculateDeltaTime();
 		GetInstance().m_ApplicationComponents.m_platform->GetRenderContext()->SwapWindowBuffers();
 		GetInstance().m_ApplicationComponents.m_Window->OnUpdate();
+		GetInstance().m_ApplicationComponents.m_HttpHandler->OnUpdate();
 	}
 
 	void Application::OnEvent(Event& e)

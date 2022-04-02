@@ -26,6 +26,7 @@ namespace Akkad {
 		class HTTPHandler {
 		public:
 			virtual void SendRequest(std::string url, RequestMethod method, std::string requestdata, std::function<void(AsyncHTTPResponse)> callback) = 0;
+			virtual void OnUpdate() {};
 		};
 	}
 }

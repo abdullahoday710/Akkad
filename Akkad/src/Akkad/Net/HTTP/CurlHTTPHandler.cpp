@@ -21,26 +21,6 @@ namespace Akkad {
 				}
 			}
 
-			double downloadedSize = 0;
-			curl_easy_getinfo(userdata->ezHandle, CURLINFO_SIZE_DOWNLOAD, &downloadedSize);
-
-			size_t totalSize = size * nmemb;
-			if (downloadedSize == totalSize)
-			{
-				long http_code = 0;
-				curl_easy_getinfo(userdata->ezHandle, CURLINFO_RESPONSE_CODE, &http_code);
-
-				AsyncHTTPResponse response;
-				response.statusCode = http_code;
-				response.responseData = *userdata->buffer;
-
-				userdata->callback(response);
-
-				delete userdata->buffer;
-				delete[] userdata->requestData;
-				delete userdata;
-
-			}
 			return size * nmemb;
 		}
 
@@ -51,17 +31,39 @@ namespace Akkad {
 
 		void CurlHTTPHandler::SendRequest(std::string url, RequestMethod method, std::string requestdata, std::function<void(AsyncHTTPResponse)> callback)
 		{
+			SendRequestImpl(url, method, requestdata, callback);
 
+		}
+
+		void CurlHTTPHandler::SendRequest(std::string url, RequestMethod method, std::string requestdata, std::string authToken, std::function<void(AsyncHTTPResponse)> callback)
+		{
+			std::string authHeader = "Authorization: Token " + authToken;
+			std::vector<std::string> headers;
+			headers.push_back(authHeader);
+
+			SendRequestImpl(url, method, requestdata, callback, headers);
+		}
+		void CurlHTTPHandler::SendRequestImpl(std::string url, RequestMethod method, std::string requestdata, std::function<void(AsyncHTTPResponse)> callback, std::vector<std::string> headers)
+		{
 			CURLUserData* userData = new CURLUserData();
 			userData->buffer = new std::string();
 			userData->ezHandle = curl_easy_init();
 			userData->callback = callback;
 			std::string* buffer = new std::string();
 
-			struct curl_slist* headers = NULL;
-			headers = curl_slist_append(headers, "Content-Type: application/json");
+			struct curl_slist* curlheaders = NULL;
+			curlheaders = curl_slist_append(curlheaders, "Content-Type: application/json");
 
-			curl_easy_setopt(userData->ezHandle, CURLOPT_HTTPHEADER, headers);
+			for (auto header : headers)
+			{
+				if (!header.empty())
+				{
+					curlheaders = curl_slist_append(curlheaders, header.c_str());
+				}
+			}
+
+			curl_easy_setopt(userData->ezHandle, CURLOPT_HTTPHEADER, curlheaders);
+			curl_easy_setopt(userData->ezHandle, CURLOPT_PRIVATE, userData);
 			curl_easy_setopt(userData->ezHandle, CURLOPT_URL, url.c_str());
 			curl_easy_setopt(userData->ezHandle, CURLOPT_WRITEFUNCTION, write_data);
 			curl_easy_setopt(userData->ezHandle, CURLOPT_WRITEDATA, userData);
@@ -78,10 +80,7 @@ namespace Akkad {
 			}
 			curl_multi_add_handle(m_Handle, userData->ezHandle);
 			m_RunningHandles++;
-
-
 		}
-
 		void CurlHTTPHandler::OnUpdate()
 		{
 			// perform requests each frame....
@@ -102,12 +101,33 @@ namespace Akkad {
 				{
 					// cleaning up finished requests....
 					CURL* e = m->easy_handle;
-					m_RunningHandles--;
+					if (m_RunningHandles > 0)
+					{
+						m_RunningHandles--;
+					}
+					CURLUserData* userdata;
+					curl_easy_getinfo(m->easy_handle, CURLINFO_PRIVATE, &userdata);
+
+					long http_code = 0;
+					curl_easy_getinfo(userdata->ezHandle, CURLINFO_RESPONSE_CODE, &http_code);
+
+					AsyncHTTPResponse response;
+					response.statusCode = http_code;
+					response.responseData = *userdata->buffer;
+
+					userdata->callback(response);
+
+					delete userdata->buffer;
+					delete[] userdata->requestData;
+					delete userdata;
+
 					curl_multi_remove_handle(m_Handle, e);
 					curl_easy_cleanup(e);
+					
 				}
 			}
 		}
+
 	}
 }
 

@@ -29,6 +29,12 @@ namespace Akkad {
 			m_Handle = curl_multi_init();
 		}
 
+		CurlHTTPHandler::CurlHTTPHandler(bool initWinSock)
+		{
+			curl_global_init(CURL_GLOBAL_SSL);
+			m_Handle = curl_multi_init();
+		}
+
 		void CurlHTTPHandler::SendRequest(std::string url, RequestMethod method, std::string requestdata, std::function<void(AsyncHTTPResponse)> callback)
 		{
 			SendRequestImpl(url, method, requestdata, callback);
@@ -43,6 +49,7 @@ namespace Akkad {
 
 			SendRequestImpl(url, method, requestdata, callback, headers);
 		}
+
 		void CurlHTTPHandler::SendRequestImpl(std::string url, RequestMethod method, std::string requestdata, std::function<void(AsyncHTTPResponse)> callback, std::vector<std::string> headers)
 		{
 			CURLUserData* userData = new CURLUserData();

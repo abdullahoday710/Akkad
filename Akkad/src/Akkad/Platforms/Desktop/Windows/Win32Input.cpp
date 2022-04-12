@@ -65,7 +65,8 @@ namespace Akkad {
 	bool Win32Input::IsKeyDown(unsigned int key)
 	{
 		unsigned int scancode = scanCodes[key];
-		if (GetAsyncKeyState(MapVirtualKeyA(scancode, MAPVK_VSC_TO_VK)))
+		Win32Window* window = (Win32Window*)Application::GetInstance().GetWindow();
+		if (GetAsyncKeyState(MapVirtualKeyA(scancode, MAPVK_VSC_TO_VK)) && window->m_HasFocus)
 		{
 			return true;
 		}

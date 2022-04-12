@@ -33,6 +33,7 @@ namespace Akkad {
 		int m_KeyStatesFrame[512] = {};
 
 		int m_LastPressedCharacter = -1;
+		bool m_HasFocus = true;
 
 	private:
 		bool m_IsClosed = true;

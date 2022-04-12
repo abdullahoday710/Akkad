@@ -30,19 +30,33 @@ namespace Akkad {
             return 0;
         case WM_CHAR:
         {
-            window->m_LastPressedCharacter = (WCHAR)wParam;
+            if (window->m_HasFocus)
+            {
+                window->m_LastPressedCharacter = (WCHAR)wParam;
+            }
+            return 0;
+        }
+        case WM_ACTIVATEAPP:
+        {
+            if (window != nullptr)
+            {
+                window->m_HasFocus = (bool)wParam;
+            }
             return 0;
         }
         case WM_KEYDOWN:
         {
-            unsigned int code = MapVirtualKeyW(wParam, MAPVK_VK_TO_VSC);
-            KeyPressEvent e(keyCodes[code]);
-            window->m_EventCallback(e);
-
-            bool repeatFlag = (HIWORD(lParam) & KF_REPEAT) == KF_REPEAT;
-            if (!repeatFlag)
+            if (window->m_HasFocus)
             {
-                window->m_KeyStatesFrame[keyCodes[code]] = 0;
+                unsigned int code = MapVirtualKeyW(wParam, MAPVK_VK_TO_VSC);
+                KeyPressEvent e(keyCodes[code]);
+                window->m_EventCallback(e);
+
+                bool repeatFlag = (HIWORD(lParam) & KF_REPEAT) == KF_REPEAT;
+                if (!repeatFlag)
+                {
+                    window->m_KeyStatesFrame[keyCodes[code]] = 0;
+                }
             }
             
             return 0;
@@ -50,8 +64,11 @@ namespace Akkad {
 
         case WM_KEYUP:
         {
-            unsigned int code = MapVirtualKeyW(wParam, MAPVK_VK_TO_VSC);
-            window->m_KeyStatesFrame[keyCodes[code]] = 1;
+            if (window->m_HasFocus)
+            {
+                unsigned int code = MapVirtualKeyW(wParam, MAPVK_VK_TO_VSC);
+                window->m_KeyStatesFrame[keyCodes[code]] = 1;
+            }
 
             return 0;
         }
@@ -129,31 +146,35 @@ namespace Akkad {
         case WM_MBUTTONUP:
         case WM_XBUTTONUP:
         {
-            int button = -1;
-            int buttonState = -1;
-
-            if (uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONUP)
-                button = static_cast<int>(MouseButtons::LEFT);
-            else if (uMsg == WM_RBUTTONDOWN || uMsg == WM_RBUTTONUP)
-                button = static_cast<int>(MouseButtons::RIGHT);
-            else if (uMsg == WM_MBUTTONDOWN || uMsg == WM_MBUTTONUP)
-                button = static_cast<int>(MouseButtons::MIDDLE);
-
-            if (uMsg == WM_LBUTTONDOWN || uMsg == WM_RBUTTONDOWN ||
-                uMsg == WM_MBUTTONDOWN || uMsg == WM_XBUTTONDOWN)
+            if (window->m_HasFocus)
             {
-                buttonState = 0;
-            }
-            else
-            {
-                buttonState = 1;
-            }
+                int button = -1;
+                int buttonState = -1;
 
-            if (button >= 0)
-            {
-                window->m_MouseStatesFrame[button] = buttonState;
-            }
+                if (uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONUP)
+                    button = static_cast<int>(MouseButtons::LEFT);
+                else if (uMsg == WM_RBUTTONDOWN || uMsg == WM_RBUTTONUP)
+                    button = static_cast<int>(MouseButtons::RIGHT);
+                else if (uMsg == WM_MBUTTONDOWN || uMsg == WM_MBUTTONUP)
+                    button = static_cast<int>(MouseButtons::MIDDLE);
 
+                if (uMsg == WM_LBUTTONDOWN || uMsg == WM_RBUTTONDOWN ||
+                    uMsg == WM_MBUTTONDOWN || uMsg == WM_XBUTTONDOWN)
+                {
+                    buttonState = 0;
+                }
+                else
+                {
+                    buttonState = 1;
+                }
+
+                if (button >= 0)
+                {
+                    window->m_MouseStatesFrame[button] = buttonState;
+                }
+
+            }
+            
             return 0;
         }
 

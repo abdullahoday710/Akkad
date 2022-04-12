@@ -55,7 +55,7 @@ namespace Akkad {
 				auto vertexbuffer = platform->CreateVertexBuffer();
 				vertexbuffer->SetLayout(layout);
 				m_LineVB = vertexbuffer;
-				m_LineVB->SetData(0, sizeof(LineVertex) * (MAX_BATCH_VERTS * 2));
+				m_LineVB->SetData(0, sizeof(LineVertex) * (MAX_BATCH_VERTS));
 			}
 
 			UniformBufferLayout scenePropsLayout;
@@ -146,16 +146,14 @@ namespace Akkad {
 
 			m_SceneCameraViewProjection = viewProjection;
 
-			StartBatch();
 			StartLineBatch();
 		}
 
 		void Renderer2D::EndSceneImpl()
 		{
-			//FlushBatch();
-			//FlushLineBatch();
 
 			FlushColoredQuadInstancedImpl();
+			FlushLineBatch();
 		}
 
 		void Renderer2D::DrawQuadImpl(SharedPtr<Texture> texture, glm::mat4& transform)
@@ -425,22 +423,22 @@ namespace Akkad {
 
 		void Renderer2D::DrawLineImpl(glm::vec2 point1, glm::vec2 point2, glm::vec3 color)
 		{
-			//if (m_LineBatchVertexCount >= MAX_BATCH_VERTS)
-			//{
-			//	NewLineBatch();
-			//}
+			if (m_LineBatchVertexCount >= MAX_BATCH_VERTS)
+			{
+				NewLineBatch();
+			}
 
-			//m_LastLineVertexPtr->position = point1;
-			//m_LastLineVertexPtr->color = color;
+			m_LastLineVertexPtr->position = point1;
+			m_LastLineVertexPtr->color = color;
 
-			//m_LastLineVertexPtr++;
+			m_LastLineVertexPtr++;
 
-			//m_LastLineVertexPtr->position = point2;
-			//m_LastLineVertexPtr->color = color;
+			m_LastLineVertexPtr->position = point2;
+			m_LastLineVertexPtr->color = color;
 
-			//m_LastLineVertexPtr++;
+			m_LastLineVertexPtr++;
 
-			//m_LineBatchVertexCount += 2;
+			m_LineBatchVertexCount += 2;
 
 		}
 

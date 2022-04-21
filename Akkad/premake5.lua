@@ -73,6 +73,7 @@ project "Akkad"
         "src/Akkad/Platforms/**.h",
         "src/Akkad/Platforms/**.cpp",
         "src/Akkad/Graphics/API/**",
+        "src/Akkad/Net/HTTP/CurlHTTPHandler.cpp",
     }
     files
     {

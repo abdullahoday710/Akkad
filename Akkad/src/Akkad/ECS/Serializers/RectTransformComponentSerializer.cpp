@@ -16,8 +16,12 @@ namespace Akkad {
 			return "PIXEL_CONSTRAINT";
 		case GUI::ConstraintType::ASPECT_CONSTRAINT:
 			return "ASPECT_CONSTRAINT";
-		case GUI::ConstraintType::PREVIOUS_CHILD_CONSTRAINT:
-			return "PREVIOUS_CHILD_CONSTRAINT";
+		case GUI::ConstraintType::PREVIOUS_CHILD_MAX_CONSTRAINT:
+			return "PREVIOUS_CHILD_MAX_CONSTRAINT";
+		case GUI::ConstraintType::PREVIOUS_CHILD_MIN_CONSTRAINT:
+			return "PREVIOUS_CHILD_MIN_CONSTRAINT";
+		case GUI::ConstraintType::PREVIOUS_CHILD_CENTER_CONSTRAINT:
+			return "PREVIOUS_CHILD_CENTER_CONSTRAINT";
 		default:
 			break;
 		}
@@ -44,9 +48,17 @@ namespace Akkad {
 		{
 			return GUI::ConstraintType::ASPECT_CONSTRAINT;
 		}
-		if (type == "PREVIOUS_CHILD_CONSTRAINT")
+		if (type == "PREVIOUS_CHILD_MAX_CONSTRAINT")
 		{
-			return GUI::ConstraintType::PREVIOUS_CHILD_CONSTRAINT;
+			return GUI::ConstraintType::PREVIOUS_CHILD_MAX_CONSTRAINT;
+		}
+		if (type == "PREVIOUS_CHILD_MIN_CONSTRAINT")
+		{
+			return GUI::ConstraintType::PREVIOUS_CHILD_MIN_CONSTRAINT;
+		}
+		if (type == "PREVIOUS_CHILD_CENTER_CONSTRAINT")
+		{
+			return GUI::ConstraintType::PREVIOUS_CHILD_CENTER_CONSTRAINT;
 		}
 	}
 

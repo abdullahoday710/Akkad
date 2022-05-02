@@ -109,9 +109,23 @@ namespace Akkad {
 				m_Rect.SetX(anchoredPosition.x + xPos);
 				break;
 			}
-			case ConstraintType::PREVIOUS_CHILD_CONSTRAINT:
+			case ConstraintType::PREVIOUS_CHILD_MAX_CONSTRAINT:
 			{
-				float previousChildPos = m_PreviousChild.GetPosition().x + (m_PreviousChild.GetWidth() / 2);
+				float previousChildPos = m_PreviousChild.GetMax().x + (m_PreviousChild.GetWidth() / 2);
+				m_Rect.SetX(previousChildPos + xPos);
+				break;
+			}
+
+			case ConstraintType::PREVIOUS_CHILD_MIN_CONSTRAINT:
+			{
+				float previousChildPos = m_PreviousChild.GetMin().x + (m_PreviousChild.GetWidth() / 2);
+				m_Rect.SetX(previousChildPos + xPos);
+				break;
+			}
+
+			case ConstraintType::PREVIOUS_CHILD_CENTER_CONSTRAINT:
+			{
+				float previousChildPos = m_PreviousChild.GetPosition().x;
 				m_Rect.SetX(previousChildPos + xPos);
 				break;
 			}
@@ -148,10 +162,22 @@ namespace Akkad {
 				m_Rect.SetY(anchoredPosition.y + yPos);
 				break;
 			}
-			case ConstraintType::PREVIOUS_CHILD_CONSTRAINT:
+			case ConstraintType::PREVIOUS_CHILD_MAX_CONSTRAINT:
 			{
-				glm::vec2 previousChildPos = m_PreviousChild.GetPosition();
-				m_Rect.SetY(previousChildPos.y + yPos);
+				float previousChildPos = m_PreviousChild.GetMax().y + (m_PreviousChild.GetHeight() / 2);
+				m_Rect.SetY(previousChildPos + yPos);
+				break;
+			}
+			case ConstraintType::PREVIOUS_CHILD_MIN_CONSTRAINT:
+			{
+				float previousChildPos = m_PreviousChild.GetMin().y + (m_PreviousChild.GetHeight() / 2);
+				m_Rect.SetY(previousChildPos + yPos);
+				break;
+			}
+			case ConstraintType::PREVIOUS_CHILD_CENTER_CONSTRAINT:
+			{
+				float previousChildPos = m_PreviousChild.GetPosition().y;
+				m_Rect.SetY(previousChildPos + yPos);
 				break;
 			}
 			case ConstraintType::ASPECT_CONSTRAINT:

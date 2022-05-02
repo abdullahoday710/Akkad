@@ -617,8 +617,12 @@ namespace Akkad {
 			return "Center";
 		case GUI::ConstraintType::RELATIVE_CONSTRAINT:
 			return "Relative";
-		case GUI::ConstraintType::PREVIOUS_CHILD_CONSTRAINT:
-			return "Previous Child";
+		case GUI::ConstraintType::PREVIOUS_CHILD_MAX_CONSTRAINT:
+			return "Align with previous child max";
+		case GUI::ConstraintType::PREVIOUS_CHILD_MIN_CONSTRAINT:
+			return "Align with previous child min";
+		case GUI::ConstraintType::PREVIOUS_CHILD_CENTER_CONSTRAINT:
+			return "Align with previous child center";
 		case GUI::ConstraintType::PIXEL_CONSTRAINT:
 			return "Pixel";
 		case GUI::ConstraintType::ASPECT_CONSTRAINT:
@@ -744,7 +748,7 @@ namespace Akkad {
 
 			ImGui::Separator();
 
-			const char* position_constraints[] = { "Relative", "Pixel", "Center", "Previous Child" };
+			const char* position_constraints[] = { "Relative", "Pixel", "Center", "Align with previous child max", "Align with previous child min", "Align with previous child center" };
 			std::string selected_x_constraint = ConstraintTypeToStr_(xConstraint.type);
 
 			if (ImGui::BeginCombo("X constraint type", selected_x_constraint.c_str()))
@@ -771,9 +775,17 @@ namespace Akkad {
 							rectTransformComp.rect.SetXConstraint({ GUI::ConstraintType::CENTER_CONSTRAINT, wConstraint.constraintValue });
 						}
 
-						if (selected_x_constraint == "Previous Child")
+						if (selected_x_constraint == "Align with previous child max")
 						{
-							rectTransformComp.rect.SetXConstraint({ GUI::ConstraintType::PREVIOUS_CHILD_CONSTRAINT, wConstraint.constraintValue });
+							rectTransformComp.rect.SetXConstraint({ GUI::ConstraintType::PREVIOUS_CHILD_MAX_CONSTRAINT, wConstraint.constraintValue });
+						}
+						if (selected_x_constraint == "Align with previous child min")
+						{
+							rectTransformComp.rect.SetXConstraint({ GUI::ConstraintType::PREVIOUS_CHILD_MIN_CONSTRAINT, wConstraint.constraintValue });
+						}
+						if (selected_x_constraint == "Align with previous child center")
+						{
+							rectTransformComp.rect.SetXConstraint({ GUI::ConstraintType::PREVIOUS_CHILD_CENTER_CONSTRAINT, wConstraint.constraintValue });
 						}
 					}
 					if (is_selected)
@@ -816,9 +828,17 @@ namespace Akkad {
 						{
 							rectTransformComp.rect.SetYConstraint({ GUI::ConstraintType::CENTER_CONSTRAINT, wConstraint.constraintValue });
 						}
-						if (selected_y_constraint == "Previous Child")
+						if (selected_y_constraint == "Align with previous child max")
 						{
-							rectTransformComp.rect.SetYConstraint({ GUI::ConstraintType::PREVIOUS_CHILD_CONSTRAINT, wConstraint.constraintValue });
+							rectTransformComp.rect.SetYConstraint({ GUI::ConstraintType::PREVIOUS_CHILD_MAX_CONSTRAINT, wConstraint.constraintValue });
+						}
+						if (selected_y_constraint == "Align with previous child min")
+						{
+							rectTransformComp.rect.SetYConstraint({ GUI::ConstraintType::PREVIOUS_CHILD_MIN_CONSTRAINT, wConstraint.constraintValue });
+						}
+						if (selected_y_constraint == "Align with previous child center")
+						{
+							rectTransformComp.rect.SetYConstraint({ GUI::ConstraintType::PREVIOUS_CHILD_CENTER_CONSTRAINT, wConstraint.constraintValue });
 						}
 					}
 					if (is_selected)

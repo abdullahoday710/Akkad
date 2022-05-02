@@ -51,5 +51,5 @@ project "Runtime"
 		filter "configurations:Debug"
 		executable_suffix (".html")
 		buildoptions   {"-O3", "-fPIC", "-pthread"}
-		linkoptions    {"-O3", "--profiling", "-s FETCH=1", "-s LLD_REPORT_UNDEFINED", "-fPIC", "-s TOTAL_MEMORY=1000MB", "-pthread", "-s PTHREAD_POOL_SIZE=3", "-s USE_PTHREADS=1", "-s ALLOW_TABLE_GROWTH", "-s EXPORTED_RUNTIME_METHODS=['FS']", "-s DYNCALLS=1", "-s USE_WEBGL2=1", "-s OFFSCREEN_FRAMEBUFFER=1","-s FORCE_FILESYSTEM=1", "--pre-js=" .. webmodules .. " " .. GameAssembly .. " " .. Common .. " " .. LZ4}
+		linkoptions    {"-O3", "-s PROXY_TO_PTHREAD", "--profiling", "-s FETCH=1", "-s LLD_REPORT_UNDEFINED", "-fPIC", "-s TOTAL_MEMORY=1000MB", "-pthread", "-s PTHREAD_POOL_SIZE=3", "-s USE_PTHREADS=1", "-s ALLOW_TABLE_GROWTH", "-s EXPORTED_RUNTIME_METHODS=['FS']", "-s DYNCALLS=1", "-s USE_WEBGL2=1", "-s OFFSCREEN_FRAMEBUFFER=1","-s FORCE_FILESYSTEM=1", "--pre-js=" .. webmodules .. " " .. GameAssembly .. " " .. Common .. " " .. LZ4}
 	end

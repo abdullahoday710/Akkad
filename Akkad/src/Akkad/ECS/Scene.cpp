@@ -355,11 +355,7 @@ namespace Akkad {
 							if (guitext.uitext.IsValid())
 							{
 								guitext.uitext.SetBoundingBox(rect_transform.rect);
-
-								if (guitext.text != guitext.uitext.GetText())
-								{
-									guitext.uitext.SetText(guitext.text);
-								}
+								guitext.uitext.SetText(guitext.text);
 
 
 								if (guitext.uitext.GetColor() != guitext.color)

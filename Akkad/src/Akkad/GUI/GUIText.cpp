@@ -24,11 +24,8 @@ namespace Akkad {
 
 		void GUIText::SetText(std::string text)
 		{
-			if (m_Text != text)
-			{
-				m_Text = text;
-				RecalculateTextPosition();
-			}
+			m_Text = text;
+			RecalculateTextPosition();
 		}
 
 		void GUIText::SetBoundingBox(GUIRect boundingBox)

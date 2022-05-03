@@ -365,14 +365,16 @@ namespace Akkad {
 		ImGui::SetNextItemOpen(true);
 		if (ImGui::TreeNode("Camera"))
 		{
-			if (DrawComponentContextMenu<CameraComponent>(m_ActiveEntity))
-			{
-				ImGui::TreePop();
-				return;
-			}
+
 			auto& camera = m_ActiveEntity.GetComponent<CameraComponent>();
 			ImGui::Text("Camera :");
 			ImGui::Checkbox("Active", &camera.isActive);
+			auto clearColor = camera.camera.GetClearColor();
+			if (ImGui::ColorEdit3("clear color", glm::value_ptr(clearColor)))
+			{
+				camera.camera.SetClearColor(clearColor);
+			}
+		
 			ImGui::TreePop();
 		}
 	}

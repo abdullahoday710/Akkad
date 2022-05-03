@@ -17,11 +17,16 @@ namespace Akkad {
 			entity_data["CameraComponent"]["Camera"]["Projection"] = "Perspective";
 			break;
 		}
+
+		entity_data["CameraComponent"]["Camera"]["ClearColor"]["R"] = camera.GetClearColor().r;
+		entity_data["CameraComponent"]["Camera"]["ClearColor"]["G"] = camera.GetClearColor().g;
+		entity_data["CameraComponent"]["Camera"]["ClearColor"]["B"] = camera.GetClearColor().b;
 	}
 
 	void CameraComponentSerializer::Deserialize(Entity entity, json& component_data)
 	{
 		CameraProjection projtype;
+		glm::vec3 clearColor = {};
 		if (component_data["Camera"]["Projection"] == "Orthographic")
 		{
 			projtype = CameraProjection::Orthographic;
@@ -32,6 +37,11 @@ namespace Akkad {
 			projtype = CameraProjection::Perspective;
 		}
 
-		entity.AddComponent<CameraComponent>(projtype);
+		clearColor.r = component_data["Camera"]["ClearColor"]["R"];
+		clearColor.g = component_data["Camera"]["ClearColor"]["G"];
+		clearColor.b = component_data["Camera"]["ClearColor"]["B"];
+
+		auto& camera = entity.AddComponent<CameraComponent>(projtype);
+		camera.camera.SetClearColor(clearColor);
 	}
 }

@@ -62,8 +62,11 @@ namespace Akkad {
 		CameraProjection GetProjectionType() { return m_ProjectionType; }
 		
 		float m_ZoomLevel = 0.0f;
+		glm::vec3 GetClearColor() { return m_ClearColor; }
+		void SetClearColor(glm::vec3 color) { m_ClearColor = color; }
 	private:
 		float m_AspectRatio = 0.0f;
+		glm::vec3 m_ClearColor = { 0,0,0 };
 		glm::mat4 m_ProjectionMatrix = glm::mat4(1.0f);
 		CameraProjection m_ProjectionType;
 	};

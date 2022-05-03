@@ -22,7 +22,6 @@ namespace Akkad {
                 response.responseData += fetch->data[i];
             }
             response.isValid = true;
-            AK_INFO(response.responseData);
             userdata->callback(response); // call the user provided lambda or function...
             emscripten_fetch_close(fetch); // Free data associated with the fetch.
             free(userdata->requestData);
@@ -72,7 +71,6 @@ namespace Akkad {
         }
         void WebHTTPHandler::SendRequest(std::string url, RequestMethod method, std::string requestdata, std::string authToken, std::function<void(AsyncHTTPResponse)> callback)
         {
-            AK_INFO(url);
             emscripten_fetch_attr_t attr;
             emscripten_fetch_attr_init(&attr);
 

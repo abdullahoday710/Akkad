@@ -34,6 +34,7 @@ namespace Akkad {
 		static EM_BOOL EmKeyDownCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData);
 		static EM_BOOL EmKeyPressCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData);
 		static EM_BOOL EmKeyUpCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData);
+		static EM_BOOL EmWindowResizeCallback(int eventType, const EmscriptenUiEvent* uiEvent, void* userData);
 		static std::map<size_t, uint32_t> m_KeyCodes;
 		static bool m_KeyStates[512];
 		static int m_KeyStatesFrame[512];

@@ -22,10 +22,11 @@ namespace Akkad {
 
 	int WebWindow::Init(WindowSettings settings)
 	{
-		int width = settings.width;
-		int height = settings.height;
-		emscripten_set_window_title(settings.title);
+		double width;
+		double height;
+		emscripten_get_element_css_size("#canvas", &width, &height);
 		emscripten_set_canvas_element_size("#canvas", width, height);
+		emscripten_set_window_title(settings.title);
 		MakeWebKeyCodes();
 		emscripten_set_keydown_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, WebWindow::EmKeyDownCallback);
 		emscripten_set_keypress_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, WebWindow::EmKeyDownCallback);
@@ -33,7 +34,7 @@ namespace Akkad {
 		emscripten_set_mousedown_callback("#canvas", 0, true, WebWindow::EmMouseCallback);
 		emscripten_set_mouseup_callback("#canvas", 0, true, WebWindow::EmMouseCallback);
 		emscripten_set_mousemove_callback("#canvas", 0, true, WebWindow::EmMouseCallback);
-
+		emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, true, WebWindow::EmWindowResizeCallback);
 		m_Width = width;
 		m_Height = height;
 		return 0;
@@ -144,6 +145,17 @@ namespace Akkad {
 
 		m_KeyStates[ak_code] = false;
 		m_KeyStatesFrame[ak_code] = false;
+		return true;
+	}
+
+	EM_BOOL WebWindow::EmWindowResizeCallback(int eventType, const EmscriptenUiEvent* uiEvent, void* userData)
+	{
+		double width;
+		double height;
+		emscripten_get_element_css_size("#canvas", &width, &height);
+		emscripten_set_canvas_element_size("#canvas", width, height);
+		WindowResizeEvent e(width, height);
+		m_EventCallbackFN(e);
 		return true;
 	}
 

@@ -103,12 +103,8 @@ namespace Akkad {
 		auto colorView = m_Registry.view<TransformComponent, ColoredSpriteRendererComponent>();
 		auto scriptView = m_Registry.view<ScriptComponent>();
 		auto lineView = m_Registry.view<LineRendererComponent>();
-		if (GetActiveCamera().IsValid())
-		{
-			glm::vec3 clearColor = GetActiveCamera().GetComponent<CameraComponent>().camera.GetClearColor();
-			command->SetClearColor(clearColor.r, clearColor.g, clearColor.b);
-		}
 
+		command->SetClearColor(1, 1, 1);
 		command->Clear();
 
 		for (auto it : SortingLayer2DHandler::GetRegisteredLayers())

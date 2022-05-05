@@ -440,7 +440,7 @@ namespace Akkad {
 						{
 							auto& guipanel = current_child.GetComponent<GUIPanelComponent>();
 							guipanel.panel.SetUIRect(rect_transform.rect);
-							if (!pickingPhase)
+							if (!pickingPhase && !guipanel.panel.IsTransparent())
 							{
 								Renderer2D::DrawRect(guipanel.panel.GetUIRect().GetRect(), guipanel.panel.GetColor(), true, activeContainer.container.GetProjection());
 							}
@@ -605,6 +605,8 @@ namespace Akkad {
 						Entity PickedEntity = Entity((entt::entity)entityID, this);
 						if (PickedEntity.IsValid())
 						{
+							m_LastPickedEntity = (entt::entity) - 1;
+
 							if (PickedEntity.HasComponent<GUIButtonComponent>())
 							{
 								auto& uibutton = PickedEntity.GetComponent<GUIButtonComponent>();

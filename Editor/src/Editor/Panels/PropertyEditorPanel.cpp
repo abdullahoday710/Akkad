@@ -1141,6 +1141,13 @@ namespace Akkad {
 		{
 			panel.panel.SetColor(color);
 		}
+
+		bool transparent = panel.panel.IsTransparent();
+
+		if (ImGui::Checkbox("Is transparent", &transparent))
+		{
+			panel.panel.SetTransparent(transparent);
+		}
 	}
 
 	void PropertyEditorPanel::DrawGUICheckBoxComponent()
@@ -1209,9 +1216,15 @@ namespace Akkad {
 		}
 
 		bool isPasswordField = false;
+		bool isNumbersOnly = false;
 		if (textinput.textinput.GetFlags() & GUI::GUITextInputFlags::PasswordField)
 		{
 			isPasswordField = true;
+		}
+
+		if (textinput.textinput.GetFlags() & GUI::GUITextInputFlags::NumbersOnly)
+		{
+			isNumbersOnly = true;
 		}
 
 		if (ImGui::Checkbox("Is password field", &isPasswordField))
@@ -1225,6 +1238,21 @@ namespace Akkad {
 			else
 			{
 				flags &= ~GUI::GUITextInputFlags::PasswordField;
+			}
+			textinput.textinput.SetFlags(flags);
+		}
+
+		if (ImGui::Checkbox("Allow numbers only", &isNumbersOnly))
+		{
+			auto flags = textinput.textinput.GetFlags();
+
+			if (isNumbersOnly)
+			{
+				flags |= GUI::GUITextInputFlags::NumbersOnly;
+			}
+			else
+			{
+				flags &= ~GUI::GUITextInputFlags::NumbersOnly;
 			}
 			textinput.textinput.SetFlags(flags);
 		}

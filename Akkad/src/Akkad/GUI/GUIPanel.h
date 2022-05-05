@@ -12,10 +12,12 @@ namespace Akkad {
 
 			glm::vec3 GetColor() { return m_Color; }
 			GUIRect GetUIRect() { return m_UIRect; }
-
+			void SetTransparent(bool transparent) { m_IsTransparent = transparent; };
+			bool IsTransparent() { return m_IsTransparent; };
 		private:
 			GUIRect m_UIRect;
 			glm::vec3 m_Color = { 1 ,1, 1 };
+			bool m_IsTransparent = false;
 		};
 	}
 }

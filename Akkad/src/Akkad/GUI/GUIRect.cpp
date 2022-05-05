@@ -118,7 +118,7 @@ namespace Akkad {
 
 			case ConstraintType::PREVIOUS_CHILD_MIN_CONSTRAINT:
 			{
-				float previousChildPos = m_PreviousChild.GetMin().x + (m_PreviousChild.GetWidth() / 2);
+				float previousChildPos = m_PreviousChild.GetMin().x - (m_PreviousChild.GetWidth() / 2);
 				m_Rect.SetX(previousChildPos + xPos);
 				break;
 			}

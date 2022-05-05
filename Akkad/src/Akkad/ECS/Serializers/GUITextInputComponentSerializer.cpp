@@ -19,11 +19,14 @@ namespace Akkad {
 
 		auto flags = textinput.textinput.GetFlags();
 
-		entity_data["GUITextInputComponent"]["Flags"]["PasswordField"] = false;
-
 		if (flags & GUI::GUITextInputFlags::PasswordField)
 		{
 			entity_data["GUITextInputComponent"]["Flags"]["PasswordField"] = true;
+		}
+
+		if (flags & GUI::GUITextInputFlags::NumbersOnly)
+		{
+			entity_data["GUITextInputComponent"]["Flags"]["NumbersOnly"] = true;
 		}
 	}
 
@@ -50,12 +53,30 @@ namespace Akkad {
 		textInput.textinput.SetText(text);
 
 		unsigned int flags = 0;
-
-		bool passwordField = component_data["Flags"]["PasswordField"];
-		if (passwordField)
+		if (component_data.contains("Flags"))
 		{
-			flags |= GUI::GUITextInputFlags::PasswordField;
+			auto jsonflags = component_data["Flags"];
+
+			if (jsonflags.contains("PasswordField"))
+			{
+				bool passwordField = component_data["Flags"]["PasswordField"];
+				if (passwordField)
+				{
+					flags |= GUI::GUITextInputFlags::PasswordField;
+				}
+			}
+
+			if (jsonflags.contains("NumbersOnly"))
+			{
+				bool numbersOnly = component_data["Flags"]["NumbersOnly"];
+				if (numbersOnly)
+				{
+					flags |= GUI::GUITextInputFlags::NumbersOnly;
+				}
+			}
+
 		}
+
 
 		textInput.textinput.SetFlags(flags);
 	}

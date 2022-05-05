@@ -1,4 +1,8 @@
 #include "GUITextInput.h"
+
+#include "Akkad/Logging.h"
+#include <ctype.h>
+
 namespace Akkad {
 	namespace GUI {
 
@@ -25,7 +29,7 @@ namespace Akkad {
 			m_uitext.m_BoundingBox.SetHeightConstraint({ ConstraintType::ASPECT_CONSTRAINT, 0.1 });
 			m_uitext.m_BoundingBox.SetXConstraint({ ConstraintType::CENTER_CONSTRAINT, 0});
 			m_uitext.m_BoundingBox.SetYConstraint({ ConstraintType::CENTER_CONSTRAINT, 0 });
-			m_uitext.SetOriginalFontSize(32);
+			m_uitext.SetOriginalFontSize(64);
 			m_uitext.SetColor(m_TextColor);
 			SetTextAlignment(GUIText::Alignment::CENTER);
 			m_uitext.RecalculateTextPosition();
@@ -38,16 +42,29 @@ namespace Akkad {
 
 		void GUITextInput::AddCharacter(char characater)
 		{
-			m_TextValue += characater;
 
 			if (m_Flags & GUITextInputFlags::PasswordField)
 			{
+				m_TextValue += characater;
 				std::string stars;
 				for (size_t i = 0; i < m_TextValue.size(); i++)
 				{
 					stars += "*";
 				}
 				m_uitext.SetText(stars);
+			}
+			if (m_Flags & GUITextInputFlags::NumbersOnly)
+			{
+				if (characater == '-' && m_TextValue.size() == 0)
+				{
+					m_TextValue += characater;
+					m_uitext.SetText(m_TextValue);
+				}
+				if (isdigit(characater))
+				{
+					m_TextValue += characater;
+					m_uitext.SetText(m_TextValue);
+				}
 			}
 			else
 			{
@@ -79,6 +96,14 @@ namespace Akkad {
 
 				m_uitext.SetText(m_TextValue);
 			}
+		}
+		int GUITextInput::GetNumber()
+		{
+			if (m_Flags & GUITextInputFlags::NumbersOnly)
+			{
+				return std::stoi(m_TextValue);
+			}
+			return 0;
 		}
 		GUIRect GUITextInput::GetTextInputRect()
 		{

@@ -7,7 +7,7 @@ namespace Akkad {
 		enum GUITextInputFlags
 		{
 			PasswordField = 1 << 0,
-			//OtherFlag = 1 << 1,
+			NumbersOnly = 1 << 1,
 			//OtherFlag = 1 << 2,
 			//OtherFlag = 1 << 3
 		};
@@ -23,6 +23,8 @@ namespace Akkad {
 			void SetText(std::string text);
 			void RemoveCharacter();
 			void SetFlags(unsigned int flags) { m_Flags = flags; }
+
+			int GetNumber();
 
 			unsigned int GetFlags() { return m_Flags; }
 			GUIText& GetUIText() { return m_uitext; }

@@ -50,8 +50,8 @@ namespace Akkad {
 		static int MouseX;
 		static int MouseY;
 
-		unsigned int m_Width = 0;
-		unsigned int m_Height = 0;
+		static int m_Width;
+		static int m_Height;
 
 		friend class WebInput;
 	};

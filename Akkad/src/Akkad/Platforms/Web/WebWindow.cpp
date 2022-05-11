@@ -20,12 +20,15 @@ namespace Akkad {
 	int WebWindow::MouseY = 0;
 	int WebWindow::m_LastPressedChar = -1;
 
+	int WebWindow::m_Width = 0;
+	int WebWindow::m_Height = 0;
+
 	int WebWindow::Init(WindowSettings settings)
 	{
 		double width;
 		double height;
 		emscripten_get_element_css_size("#canvas", &width, &height);
-		emscripten_set_canvas_element_size("#canvas", width, height);
+		emscripten_set_canvas_element_size("#canvas", (int)width, (int)height);
 		emscripten_set_window_title(settings.title);
 		MakeWebKeyCodes();
 		emscripten_set_keydown_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, true, WebWindow::EmKeyDownCallback);
@@ -44,11 +47,6 @@ namespace Akkad {
 	{
 		#ifndef AK_GAME_ASSEMBLY
 			ResetKeyStates();
-			int width;
-			int height;
-			emscripten_get_canvas_element_size("#canvas", &width, &height);
-			m_Width = width;
-			m_Height = height;
 		#endif
 	}
 
@@ -71,7 +69,7 @@ namespace Akkad {
 	}
 	glm::vec2 WebWindow::GetWindowRectMax()
 	{
-		return {GetWidth(), GetHeight()};
+		return {m_Width, m_Height};
 	}
 	void* WebWindow::GetNativeWindow()
 	{
@@ -150,12 +148,19 @@ namespace Akkad {
 
 	EM_BOOL WebWindow::EmWindowResizeCallback(int eventType, const EmscriptenUiEvent* uiEvent, void* userData)
 	{
-		double width;
-		double height;
-		emscripten_get_element_css_size("#canvas", &width, &height);
+		double csswidth;
+		double cssheight;
+
+
+		emscripten_get_element_css_size("#canvas", &csswidth, &cssheight);
+		int width = csswidth;
+		int height = cssheight;
 		emscripten_set_canvas_element_size("#canvas", width, height);
 		WindowResizeEvent e(width, height);
 		m_EventCallbackFN(e);
+
+		m_Width = width;
+		m_Height = height;
 		return true;
 	}
 

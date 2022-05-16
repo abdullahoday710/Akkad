@@ -155,12 +155,14 @@ namespace Akkad {
 		emscripten_get_element_css_size("#canvas", &csswidth, &cssheight);
 		int width = csswidth;
 		int height = cssheight;
+
+		m_Width = width;
+		m_Height = height;
+
 		emscripten_set_canvas_element_size("#canvas", width, height);
 		WindowResizeEvent e(width, height);
 		m_EventCallbackFN(e);
 
-		m_Width = width;
-		m_Height = height;
 		return true;
 	}
 

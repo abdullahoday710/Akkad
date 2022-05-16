@@ -48,8 +48,12 @@ project "Runtime"
 		Common = path.getabsolute("gameassembly/libCommon.a")
 		LZ4 = path.getabsolute("gameassembly/liblz4.a")
 		executable_suffix (".html")
-		filter "configurations:Debug"
-		executable_suffix (".html")
-		buildoptions   {"-O3", "-fPIC", "-pthread"}
-		linkoptions    {"-O3", "-s PROXY_TO_PTHREAD", "--profiling", "-s FETCH=1", "-s LLD_REPORT_UNDEFINED", "-fPIC", "-s TOTAL_MEMORY=1000MB", "-pthread", "-s PTHREAD_POOL_SIZE=3", "-s USE_PTHREADS=1", "-s ALLOW_TABLE_GROWTH", "-s EXPORTED_RUNTIME_METHODS=['FS']", "-s DYNCALLS=1", "-s USE_WEBGL2=1", "-s OFFSCREEN_FRAMEBUFFER=1","-s FORCE_FILESYSTEM=1", "--pre-js=" .. webmodules .. " " .. GameAssembly .. " " .. Common .. " " .. LZ4}
+		if _OPTIONS['em-debug'] then
+			buildoptions   {"-O0", "-fPIC", "-pthread","-s NO_DISABLE_EXCEPTION_CATCHING", "--profiling", "-s ASSERTIONS=1"}
+			linkoptions    {"-O0", "-s EXCEPTION_DEBUG=1", "-s PROXY_TO_PTHREAD", "-s ASSERTIONS=1","-s NO_DISABLE_EXCEPTION_CATCHING", "--profiling", "-s FETCH=1", "-fPIC", "-s TOTAL_MEMORY=1999MB", "-pthread", "-s PTHREAD_POOL_SIZE=3", "-s USE_PTHREADS=1", "-s ALLOW_TABLE_GROWTH", "-s EXPORTED_RUNTIME_METHODS=['FS']", "-s EXPORTED_FUNCTIONS=['_InitGameAssembly','_main']", "-s DYNCALLS=1", "-s USE_WEBGL2=1", "-s OFFSCREEN_FRAMEBUFFER=1","-s FORCE_FILESYSTEM=1", "--pre-js=" .. webmodules .. " " .. GameAssembly .. " " .. Common .. " " .. LZ4}
+		else
+			buildoptions   {"-O3", "-fPIC", "-pthread"}
+			linkoptions    {"-O3", "-s PROXY_TO_PTHREAD", "-s FETCH=1", "-fPIC", "-s TOTAL_MEMORY=1999MB", "-pthread", "-s PTHREAD_POOL_SIZE=3", "-s USE_PTHREADS=1", "-s ALLOW_TABLE_GROWTH", "-s EXPORTED_RUNTIME_METHODS=['FS']", "-s EXPORTED_FUNCTIONS=['_InitGameAssembly','_main']", "-s DYNCALLS=1", "-s USE_WEBGL2=1", "-s OFFSCREEN_FRAMEBUFFER=1","-s FORCE_FILESYSTEM=1", "--pre-js=" .. webmodules .. " " .. GameAssembly .. " " .. Common .. " " .. LZ4}
+		end
+
 	end

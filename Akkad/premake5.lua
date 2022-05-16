@@ -82,8 +82,13 @@ project "Akkad"
         "src/Akkad/Graphics/API/OpenGLES/**"
     }
     
-    buildoptions{"-fPIC -g -pthread -O3"};
-    linkoptions{"-fPIC -g -pthread -O3"};
+    if _OPTIONS['em-debug'] then
+        buildoptions{"-fPIC -pthread", "-s NO_DISABLE_EXCEPTION_CATCHING", "--profiling"};
+        linkoptions{"-fPIC -pthread", "-s NO_DISABLE_EXCEPTION_CATCHING", "--profiling"};
+	else
+        buildoptions{"-fPIC -pthread -O3"};
+        linkoptions{"-fPIC -pthread -O3"};
+	end
 
 
 

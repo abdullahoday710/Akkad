@@ -27,7 +27,6 @@
 #error "Android is not supported!"
 #elif defined(__linux__)
 #define AK_PLATFORM_LINUX
-#error "Linux is not supported!"
 
 /* Web / emscripten */
 #elif defined(__EMSCRIPTEN__)

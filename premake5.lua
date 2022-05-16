@@ -13,6 +13,11 @@ workspace "Akkad"
       description = "Target emscripten platform"
    }
 
+   newoption {
+		trigger     = "em-debug",
+		description = "set emscripten build options to debug"
+	 }
+
     configurations
 	{
 		"Debug",

@@ -531,28 +531,6 @@ namespace Akkad {
 
 	void Scene::Update()
 	{
-		// Update scripts
-		{
-			auto view = m_Registry.view<ScriptComponent>();
-
-			for (auto entity : view)
-			{
-				auto& script = view.get<ScriptComponent>(entity);
-				if (script.Instance != nullptr)
-				{
-					try
-					{
-						script.Instance->OnUpdate();
-					}
-					catch (const std::exception& e)
-					{
-						AK_ERROR(e.what());
-					}
-					
-				}
-				
-			}
-		}
 
 		// Update physics
 		{
@@ -615,6 +593,7 @@ namespace Akkad {
 								{
 									uibutton.button.m_Callback();
 								}
+								m_LastPickedEntity = PickedEntity.m_Handle;
 							}
 
 							if (PickedEntity.HasComponent<GUICheckBoxComponent>())
@@ -658,6 +637,7 @@ namespace Akkad {
 						{
 							if (PickedEntity.HasComponent<GUISliderComponent>())
 							{
+								m_LastPickedEntity = (entt::entity)entityID;
 								auto& slider = PickedEntity.GetComponent<GUISliderComponent>();
 								glm::vec2 sliderMin = slider.slider.GetSliderRect().GetRect().GetMin();
 								glm::vec2 sliderMax = slider.slider.GetSliderRect().GetRect().GetMax();
@@ -702,7 +682,28 @@ namespace Akkad {
 			}
 		}
 
-		
+		// Update scripts
+		{
+		auto view = m_Registry.view<ScriptComponent>();
+
+		for (auto entity : view)
+		{
+			auto& script = view.get<ScriptComponent>(entity);
+			if (script.Instance != nullptr)
+			{
+				try
+				{
+					script.Instance->OnUpdate();
+				}
+				catch (const std::exception& e)
+				{
+					AK_ERROR(e.what());
+				}
+
+			}
+
+		}
+		}
 	}
 
 	void Scene::Stop()

@@ -49,6 +49,8 @@ namespace Akkad {
 		std::mutex m_mutex;
 		bool shouldChunkLoaderWork = false;
 
+		entt::entity GetLastPickedEntity() { return m_LastPickedEntity; };
+
 
 	private:
 		void Start();

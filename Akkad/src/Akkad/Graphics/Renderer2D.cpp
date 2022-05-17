@@ -55,6 +55,7 @@ namespace Akkad {
 				auto vertexbuffer = platform->CreateVertexBuffer();
 				vertexbuffer->SetLayout(layout);
 				m_LineVB = vertexbuffer;
+				glm::vec3 dummyvertex = { 0,0,0 };
 				m_LineVB->SetData(0, sizeof(LineVertex) * (MAX_BATCH_VERTS));
 			}
 
@@ -515,9 +516,9 @@ namespace Akkad {
 
 			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
 			m_LineShader->Bind();
-			m_LineVB->SetSubData(0, m_LineBatchData, m_LineBatchVertexCount * sizeof(LineVertex));
-			m_LineVB->Bind();
-			command->DrawArrays(PrimitiveType::LINE, m_LineBatchVertexCount);
+			//m_LineVB->SetSubData(0, m_LineBatchData, m_LineBatchVertexCount * sizeof(LineVertex));
+			//m_LineVB->Bind();
+			//command->DrawArrays(PrimitiveType::LINE, m_LineBatchVertexCount);
 		}
 
 		void Renderer2D::DrawImpl(SharedPtr<VertexBuffer> vb, SharedPtr<Shader> shader, unsigned int vertexCount)
@@ -605,7 +606,8 @@ namespace Akkad {
 				vbLayout.Push(ShaderDataType::FLOAT, 2); // texture coords
 				m_RectVB = platform->CreateVertexBuffer();
 				m_RectVB->SetLayout(vbLayout);
-				m_RectVB->SetData(0, 5 * GetSizeOfType(ShaderDataType::FLOAT3) * GetSizeOfType(ShaderDataType::FLOAT2));
+				glm::vec3 dummyvertex = { 0,0,0 };
+				m_RectVB->SetData(glm::value_ptr(dummyvertex), 5 * GetSizeOfType(ShaderDataType::FLOAT3) * GetSizeOfType(ShaderDataType::FLOAT2));
 			}
 
 			{
@@ -654,7 +656,7 @@ namespace Akkad {
 			m_SceneProps->SetData("sys_viewProjection", m_SceneCameraViewProjection);
 
 			uint32_t dataSize = (uint32_t)((uint8_t*)m_LastQuadInstancePtr - (uint8_t*)m_QuadInstanceData);
-			m_InstanceVB->SetSubData(0, m_QuadInstanceData, dataSize);
+			m_InstanceVB->SetSubData(0, m_QuadInstanceData, MAX_BATCH_QUADS * sizeof(QuadInstance));
 
 			m_BatchVB->Bind();
 			m_QuadIB->Bind();

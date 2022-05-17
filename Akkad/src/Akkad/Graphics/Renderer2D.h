@@ -121,7 +121,7 @@ namespace Akkad {
 			SharedPtr<VertexBuffer> m_QuadVB;
 			SharedPtr<IndexBuffer> m_QuadIB;
 
-			enum {MAX_BATCH_QUADS = 10000, MAX_BATCH_VERTS = MAX_BATCH_QUADS * 4, MAX_BATCH_INDICES = MAX_BATCH_QUADS * 6};
+			enum {MAX_BATCH_QUADS = 1000, MAX_BATCH_VERTS = MAX_BATCH_QUADS * 4, MAX_BATCH_INDICES = MAX_BATCH_QUADS * 6};
 			SharedPtr<VertexBuffer> m_BatchVB;
 			SharedPtr<IndexBuffer> m_BatchIB;
 

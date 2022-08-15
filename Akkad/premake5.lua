@@ -67,6 +67,20 @@ project "Akkad"
 
 
     
+    filter "system:linux"
+        systemversion "latest"
+        excludes
+        {
+         "src/**.h",
+         "src/**.cpp",
+        }
+        files
+        {
+            "src/Akkad/Net/HTTP/**.h",
+            "src/Akkad/Net/HTTP/**.cpp",
+        }
+        links {"curl-lib"}
+        
     configuration "target-emscripten"
     excludes
     {

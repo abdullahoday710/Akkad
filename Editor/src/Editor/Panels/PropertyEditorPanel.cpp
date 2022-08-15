@@ -4,10 +4,8 @@
 
 #include "Editor/EditorLayer.h"
 #include "Editor/Serializers/MaterialSerializer.h"
-#include "Editor/Scripting/GameAssemblyHandler.h"
 
 #include <Akkad/Application/Application.h>
-#include <Akkad/Scripting/LoadedGameAssembly.h>
 #include <Akkad/ECS/Components/Components.h>
 #include <Akkad/Asset/AssetManager.h>
 #include <Akkad/Graphics/SortingLayer2D.h>
@@ -384,16 +382,16 @@ namespace Akkad {
 		ImGui::SetNextItemOpen(true);
 		if (ImGui::TreeNode("Script"))
 		{
-			if (GameAssemblyHandler::HasLoadedGameAssembly())
+			if (true)
 			{
 
 				auto gameAssembly = Application::GetGameAssembly();
 				std::vector<std::string> scriptNames;
 
-				for (auto it : gameAssembly->GetScripts())
-				{
-					scriptNames.push_back(it);
-				}
+				//for (auto it : gameAssembly->GetScripts())
+				//{
+				//	scriptNames.push_back(it);
+				//}
 
 				static int item_current_idx = 0;
 				const char* combo_label = scriptNames[item_current_idx].c_str();

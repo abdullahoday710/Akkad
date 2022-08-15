@@ -51,21 +51,6 @@ def copy_runtime_files():
     copytree(web_runtime_src_path, web_runtime_dest_path, ignore=include_patterns('*.html', '*.js', '*.wasm'))
 
 
-def copy_base_game_assembly_files():
-    game_assembly_src_path = workspace_location + "/GameAssembly/src"
-
-    copy_tree(game_assembly_src_path, game_assembly_dst_path + "/src")
-
-    game_assembly_build_src_path = workspace_location + "/GameAssembly/Build/premake5.lua"
-    copyfile(game_assembly_build_src_path, game_assembly_dst_path + "/premake5.lua")
-
-def copy_akkad_include_files():
-    akkad_src_path = workspace_location + "/Akkad/"
-    akkad_dest_path = game_assembly_dst_path + "/Engine/Akkad/"
-    if(os.path.isdir(akkad_dest_path)):
-        rmtree(akkad_dest_path)
-    copytree(akkad_src_path, akkad_dest_path, ignore=include_patterns('*.h', '*.cpp', '*.lua', '*.hpp'))
-
 def copy_resource_files():
     res_src_path = workspace_location + "/" + project_name + "/res"
     res_dest_path = workspace_location + "/bin/" + project_output_dir + "/" + project_name + "/res"
@@ -131,11 +116,7 @@ def copy_header_only_dependencies():
 
 
 if __name__ == "__main__":
-    copy_base_game_assembly_files()
-    copy_akkad_include_files()
     copy_resource_files()
-    copy_dependencies()
-    copy_header_only_dependencies()
     copy_runtime_files()
 
 

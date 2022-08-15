@@ -8,7 +8,6 @@
 #include "Akkad/Input/Input.h"
 #include "Akkad/Graphics/Renderer2D.h"
 #include "Akkad/Asset/AssetManager.h"
-#include "Akkad/Scripting/LoadedGameAssembly.h"
 #include "Akkad/Graphics/SortingLayer2D.h"
 #include "Akkad/Application/TimeManager.h"
 
@@ -36,8 +35,6 @@ namespace Akkad {
 
 	void Scene::Start()
 	{
-		
-		shouldChunkLoaderWork = false;
 		Entity activeContainerEntity = GetGuiContainer();
 		if (activeContainerEntity.IsValid() && activeContainerEntity.HasComponent<GUIContainerComponent>())
 		{
@@ -86,25 +83,16 @@ namespace Akkad {
 		}
 
 		UpdateTransforms();
-
-		std::lock_guard<std::mutex> lck(m_mutex);
-		shouldChunkLoaderWork = true;
-		m_conditionalVar.notify_one();
 	}
 
 	void Scene::Render2D()
 	{
-		std::lock_guard<std::mutex> lck(m_mutex);
-		shouldChunkLoaderWork = false;
-
 		auto command = Application::GetRenderPlatform()->GetRenderCommand();
 		auto view = m_Registry.view<TransformComponent, SpriteRendererComponent>();
 		auto animatedView = m_Registry.view<TransformComponent, AnimatedSpriteRendererComponent>();
 		auto colorView = m_Registry.view<TransformComponent, ColoredSpriteRendererComponent>();
 		auto scriptView = m_Registry.view<ScriptComponent>();
 		auto lineView = m_Registry.view<LineRendererComponent>();
-
-		command->SetClearColor(1, 1, 1);
 		command->Clear();
 
 		for (auto it : SortingLayer2DHandler::GetRegisteredLayers())
@@ -180,10 +168,6 @@ namespace Akkad {
 			m_PhysicsDebugDraw2D.SetFlags(b2Draw::e_shapeBit | b2Draw::e_jointBit);
 			m_PhysicsWorld2D.m_World->DebugDraw();
 		}
-
-
-		shouldChunkLoaderWork = true;
-		m_conditionalVar.notify_one();
 
 	}
 
@@ -740,9 +724,6 @@ namespace Akkad {
 
 	void Scene::UpdateTransforms()
 	{
-		std::lock_guard<std::mutex> lck(m_mutex);
-		shouldChunkLoaderWork = false;
-
 		auto view = m_Registry.view<TransformComponent, RelationShipComponent>();
 		if (view)
 		{
@@ -773,10 +754,6 @@ namespace Akkad {
 				
 			}
 		}
-
-		
-		shouldChunkLoaderWork = true;
-		m_conditionalVar.notify_one();
 
 	}
 
@@ -840,9 +817,8 @@ namespace Akkad {
 
 			if (script.Instance == nullptr)
 			{
-				auto gameAssembly = Application::GetGameAssembly();
-				const char* name = script.ScriptName.c_str();
-				script.Instance = gameAssembly->InstantiateScript(name);
+				//TODO : REPLACE GAME ASSEMBLY SYSTEM WITH A STATIC ONE
+				script.Instance = nullptr;
 				script.Instance->m_Entity = entity;
 
 				try

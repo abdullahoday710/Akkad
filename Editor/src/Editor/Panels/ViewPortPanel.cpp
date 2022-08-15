@@ -2,7 +2,6 @@
 #include "PropertyEditorPanel.h"
 
 #include "Editor/EditorLayer.h"
-#include "Editor/Scripting/GameAssemblyHandler.h"
 
 #include <Akkad/Graphics/FrameBuffer.h>
 #include <Akkad/ECS/SceneManager.h>
@@ -220,23 +219,13 @@ namespace Akkad {
 
 	void ViewPortPanel::OnScenePlay()
 	{
-		if (GameAssemblyHandler::HasLoadedGameAssembly())
-		{
+
 			PropertyEditorPanel::SetActiveEntity({});
 			EditorLayer::SaveActiveScene();
-			//EditorLayer::ReloadGameAssembly();
 			IsPlaying = true;
-
 			auto sceneManager = Application::GetSceneManager();
-
 			sceneManager->LoadSceneEditor(EditorLayer::GetActiveScenePath());
 			sceneManager->GetActiveScene()->Start();
-		}
-
-		else
-		{
-			AK_ERROR("Can't start the scene without a game assembly !, maybe the assembly was never compiled or it was deleted.");
-		}
 
 	}
 

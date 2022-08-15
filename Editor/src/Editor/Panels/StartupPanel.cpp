@@ -36,8 +36,6 @@ namespace Akkad
 				PanelManager::AddPanel(new AssetBrowserPanel());
 				PanelManager::AddPanel(new ViewPortPanel());
 				PanelManager::AddPanel(new GameViewPanel());
-				
-				EditorLayer::ReloadGameAssembly();
 
 
 				showPanel = false;

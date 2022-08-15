@@ -27,8 +27,6 @@ namespace Akkad {
 		static void SetActiveProject(ProjectDescriptor& desc) { s_ActiveProject = desc; }
 		static void SaveActiveProject() { ProjectSerializer::SaveProject(s_ActiveProject); }
 		static void SaveActiveScene();
-		static void ReloadGameAssembly();
-		static void CompileGameAssembly();
 		static void CompileShaders();
 
 		static std::string GetActiveScenePath() { return GetActiveProject().GetScenePath(s_ActiveScene->m_Name); }

@@ -5,7 +5,6 @@
 #include "Akkad/Net/HTTP/HTTPHandler.h"
 #ifdef AK_PLATFORM_WINDOWS
 	#include "Akkad/Platforms/Desktop/Windows/Win32Window.h"
-	#include "Akkad/Platforms/Desktop/Windows/Win32GameAssembly.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32Time.h"
 	#include "Akkad/Platforms/Desktop/Windows/Win32Input.h"
 	#include "Akkad/Net/HTTP/CurlHTTPHandler.h"
@@ -38,7 +37,6 @@ namespace Akkad {
 		Window* window;
 		Input* input;
 		TimeManager* timeManager;
-		LoadedGameAssembly* loadedGameAssembly;
 		EventFN event_cb = std::bind(&Application::OnEvent, this, std::placeholders::_1);
 		RenderAPI targetRenderAPI = RenderAPI::OPENGL;
 
@@ -46,7 +44,6 @@ namespace Akkad {
 			window = new Win32Window();
 			input = new Win32Input();
 			timeManager = new Win32TimeManager();
-			loadedGameAssembly = new Win32GameAssembly();
 			m_ApplicationComponents.m_HttpHandler = new NET::CurlHTTPHandler();
 		#endif //AK_PLATFORM_WINDOWS
 
@@ -55,9 +52,6 @@ namespace Akkad {
 			input = new WebInput();
 			timeManager = new WebTime();
 
-			#ifndef AK_GAME_ASSEMBLY
-				loadedGameAssembly = new WebGameAssembly();
-			#endif
 			targetRenderAPI = RenderAPI::OPENGLES;
 
 			m_ApplicationComponents.m_HttpHandler = new NET::WebHTTPHandler();
@@ -70,7 +64,6 @@ namespace Akkad {
 		m_ApplicationComponents.m_Window = window;
 		m_ApplicationComponents.m_InputManager = input;
 		m_ApplicationComponents.m_TimeManager = timeManager;
-		m_LoadedGameAssembly = loadedGameAssembly;
 			
 		m_ApplicationComponents.m_platform = RenderPlatform::Create(targetRenderAPI);
 		m_ApplicationComponents.m_platform->Init();

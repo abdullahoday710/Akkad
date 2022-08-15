@@ -1,6 +1,5 @@
 #include "EditorLayer.h"
 #include "ShaderHandler.h"
-#include "Scripting/GameAssemblyHandler.h"
 #include "GUI/GUIFactory.h"
 
 #include "Panels/SceneHierarchyPanel.h"
@@ -25,7 +24,6 @@
 #include <Akkad/ECS/Serializers/SceneSerializer.h>
 #include <Akkad/ECS/SceneManager.h>
 #include <Akkad/Asset/AssetManager.h>
-#include <Akkad/Scripting/LoadedGameAssembly.h>
 #include <Akkad/Graphics/Material.h>
 #include <Akkad/Graphics/SortingLayer2D.h>
 #include <Akkad/Graphics/Renderer2D.h>
@@ -60,44 +58,10 @@ namespace Akkad {
 		PanelManager::AddPanel(new StartupPanel());
 	}
 
-	void EditorLayer::PatchProjectEngineFiles()
-	{
-		std::string path = s_ActiveProject.GetProjectDirectory().string();
-		path += "GameAssembly/Engine/Akkad/src";
-
-		std::filesystem::remove_all(path);
-
-		// path relative to the Editor exe directory !
-		std::string srcpath = "GameAssembly/Engine/Akkad/src";
-		std::filesystem::copy(srcpath, path, std::filesystem::copy_options::recursive);
-	}
-
 	void EditorLayer::SaveActiveScene()
 	{
 		std::string path = s_ActiveProject.GetAssetsPath().append("scenes/").string() + s_ActiveScene->m_Name + ".AKSCENE";
 		SceneSerializer::Serialize(s_ActiveScene, path);
-	}
-
-	void EditorLayer::ReloadGameAssembly()
-	{
-		std::string path = s_ActiveProject.GetProjectDirectory().string();
-		path += "GameAssembly/build/GameAssembly";
-
-		GameAssemblyHandler::FreeGameAssembly();
-		
-		GameAssemblyHandler::LoadGameAssembly(path.c_str());
-	}
-
-	void EditorLayer::CompileGameAssembly()
-	{
-		GameAssemblyHandler::FreeGameAssembly();
-
-		std::string buildpPath = s_ActiveProject.GetProjectDirectory().string();
-		buildpPath += "GameAssembly/";
-
-		GameAssemblyHandler::CompileGameAssembly(buildpPath);
-		ReloadGameAssembly();
-
 	}
 
 	void EditorLayer::CompileShaders()
@@ -286,22 +250,6 @@ namespace Akkad {
 					
 				}
 
-				if (ImGui::MenuItem("Reload Game Assembly"))
-				{
-					ReloadGameAssembly();
-				}
-
-				if (ImGui::MenuItem("Compile Game Assembly"))
-				{
-					
-					CompileGameAssembly();
-				}
-
-				if (ImGui::MenuItem("Unload Game Assembly"))
-				{
-					GameAssemblyHandler::FreeGameAssembly();
-				}
-
 				if (ImGui::MenuItem("Save", "ctrl + s"))
 				{
 					SaveActiveScene();
@@ -447,17 +395,6 @@ namespace Akkad {
 
 				ImGui::EndMenu();
 			}
-
-			#ifdef AK_DEBUG
-			if (ImGui::BeginMenu("Debug"))
-			{
-				if (ImGui::MenuItem("Patch engine code for project"))
-				{
-					PatchProjectEngineFiles();
-				}
-				ImGui::EndMenu();
-			}
-			#endif
 
 			ImGui::EndMainMenuBar();
 		}

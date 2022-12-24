@@ -163,6 +163,7 @@ namespace Akkad {
 	{
 		m_Running = false;
 cout<<"shite";
+cout<<"good bye world";
 		return true;
 	}
 }

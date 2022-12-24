@@ -162,7 +162,7 @@ namespace Akkad {
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_Running = false;
-
+cout<<"shite";
 		return true;
 	}
 }
